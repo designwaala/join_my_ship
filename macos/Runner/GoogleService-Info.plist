@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>696639212337-08pevmu3r9kf8sui1l1gd1gcg15pnf6b.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.696639212337-08pevmu3r9kf8sui1l1gd1gcg15pnf6b</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>696639212337-fsigsr17f2p7jsfg5d5741sktocc5i10.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBI_vCsu4DC1wmb2TKvn6Ac6FZ1sNGba14</string>
+	<key>GCM_SENDER_ID</key>
+	<string>696639212337</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.joinMpShip</string>
+	<key>PROJECT_ID</key>
+	<string>joinmyship-91b39</string>
+	<key>STORAGE_BUCKET</key>
+	<string>joinmyship-91b39.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:696639212337:ios:8df67abab6491c9a7bbe10</string>
+</dict>
+</plist>
