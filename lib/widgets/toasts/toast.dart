@@ -28,10 +28,15 @@ Widget errorToast(String text) => Container(
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            8.horizontalSpace,
             Icon(Icons.info, color: Colors.white),
             16.horizontalSpace,
-            Text(text,
-                style: Get.textTheme.bodyMedium?.copyWith(color: Colors.white)),
+            Flexible(
+              child: Text(text,
+                  style:
+                      Get.textTheme.bodyMedium?.copyWith(color: Colors.white),
+                  maxLines: 2),
+            ),
             8.horizontalSpace
           ],
         ),

@@ -12,6 +12,6 @@ class InfoController extends GetxController {
       carouselController.animateToPage(currentIndex.value);
       return;
     }
-    Get.toNamed(Routes.CHOOSE_USER);
+    Get.toNamed(Routes.CREW_SIGN_IN_EMAIL);
   }
 }

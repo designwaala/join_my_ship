@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 
 import '../controllers/choose_user_controller.dart';
@@ -36,7 +37,7 @@ class ChooseUserView extends GetView<ChooseUserController> {
             const Text("www.joinmyship.com"),
             72.verticalSpace,
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: Text("Continue as",
                   style: Get.textTheme.titleLarge
                       ?.copyWith(fontWeight: FontWeight.bold)),
@@ -61,7 +62,10 @@ class ChooseUserView extends GetView<ChooseUserController> {
             ].mapIndexed((index, e) => InkWell(
                   onTap: () {
                     if (index == 0) {
-                      Get.toNamed(Routes.CREW_SIGN_IN_EMAIL);
+                      Get.toNamed(Routes.SIGN_UP_EMAIL,
+                          arguments: const SignUpEmailArguments(signUpType: SignUpType.crew));
+                    } else {
+                      Get.toNamed(Routes.CHOOSE_EMPLOYER);
                     }
                   },
                   child: Container(

@@ -24,7 +24,7 @@ class CrewSignInController extends GetxController {
   verify() async {
     isVerifying.value = true;
     try {
-      await FirebaseAuth.instance.signOut();
+      // await FirebaseAuth.instance.signOut();
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
     } on FirebaseAuthException catch (e) {

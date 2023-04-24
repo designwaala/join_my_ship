@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -6,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:pinput/pinput.dart';
 
-import '../controllers/crew_sign_in_mobile_controller.dart';
+import '../controllers/sign_up_phone_number_controller.dart';
 
-class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
-  const CrewSignInMobileView({Key? key}) : super(key: key);
+class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
+  const SignUpPhoneNumberView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,28 +106,13 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                                     ? "VERIFY"
                                     : "SEND OTP")),
                       ),
-                      38.verticalSpace,
-                      Center(child: Text("Or sign in with")),
-                      14.verticalSpace,
-                      InkWell(
-                        onTap: () {
-                          Get.offNamed(Routes.CREW_SIGN_IN_EMAIL);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.black)),
-                          child: Icon(
-                            Icons.email,
-                            size: 32,
-                          ),
-                        ),
-                      ),
-                      4.verticalSpace,
-                      Center(child: Text('Email Id')),
+                      32.verticalSpace,
                       Spacer(),
+                      Center(
+                          child: Text("Already have an account?",
+                              style: Get.textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.grey))),
+                      32.verticalSpace,
                       SizedBox(
                         width: double.maxFinite,
                         height: 64.h,
@@ -137,9 +121,9 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(64))),
                             onPressed: () {
-                              Get.toNamed(Routes.CHOOSE_USER);
+                              Get.toNamed(Routes.SIGN_UP_EMAIL);
                             },
-                            child: Text("CREATE ACCOUNT")),
+                            child: Text("LOGIN")),
                       )
                     ],
                   ),
