@@ -9,6 +9,9 @@ abstract class Routes {
   static const CHOOSE_USER = _Paths.CHOOSE_USER;
   static const CREW_SIGN_IN_EMAIL = _Paths.CREW_SIGN_IN_EMAIL;
   static const CREW_SIGN_IN_MOBILE = _Paths.CREW_SIGN_IN_MOBILE;
+  static const SIGN_UP_EMAIL = _Paths.SIGN_UP_EMAIL;
+  static const CHOOSE_EMPLOYER = _Paths.CHOOSE_EMPLOYER;
+  static const SIGN_UP_PHONE_NUMBER = _Paths.SIGN_UP_PHONE_NUMBER;
 }
 
 abstract class _Paths {
@@ -19,4 +22,7 @@ abstract class _Paths {
   static const CHOOSE_USER = '/choose-user';
   static const CREW_SIGN_IN_EMAIL = '/crew-sign-in-email';
   static const CREW_SIGN_IN_MOBILE = '/crew-sign-in-mobile';
+  static const SIGN_UP_EMAIL = '/sign-up-email';
+  static const CHOOSE_EMPLOYER = '/choose-employer';
+  static const SIGN_UP_PHONE_NUMBER = '/sign-up-phone-number';
 }

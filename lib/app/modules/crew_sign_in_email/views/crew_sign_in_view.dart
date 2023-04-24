@@ -17,7 +17,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
         backgroundColor: Color(0xFFFbF6FF),
         appBar: AppBar(
           toolbarHeight: 70,
-          title: Text('CREW',
+          title: Text('JOIN MY SHIP',
               style: Get.theme.textTheme.headlineSmall?.copyWith(
                   color: Colors.black,
                   fontSize: 20,
@@ -143,7 +143,9 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(64))),
-                            onPressed: null,
+                            onPressed: () {
+                              Get.toNamed(Routes.CHOOSE_USER);
+                            },
                             child: Text("CREATE ACCOUNT")),
                       )
                     ],

@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/choose_employer/bindings/choose_employer_binding.dart';
+import '../modules/choose_employer/views/choose_employer_view.dart';
 import '../modules/choose_user/bindings/choose_user_binding.dart';
 import '../modules/choose_user/views/choose_user_view.dart';
 import '../modules/crew_sign_in_email/bindings/crew_sign_in_binding.dart';
@@ -10,6 +12,10 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/info/bindings/info_binding.dart';
 import '../modules/info/views/info_view.dart';
+import '../modules/sign_up_email/bindings/sign_up_email_binding.dart';
+import '../modules/sign_up_email/views/sign_up_email_view.dart';
+import '../modules/sign_up_phone_number/bindings/sign_up_phone_number_binding.dart';
+import '../modules/sign_up_phone_number/views/sign_up_phone_number_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 
@@ -50,6 +56,21 @@ class AppPages {
       name: _Paths.CREW_SIGN_IN_MOBILE,
       page: () => const CrewSignInMobileView(),
       binding: CrewSignInMobileBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGN_UP_EMAIL,
+      page: () => const SignUpEmailView(),
+      binding: SignUpEmailBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHOOSE_EMPLOYER,
+      page: () => const ChooseEmployerView(),
+      binding: ChooseEmployerBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGN_UP_PHONE_NUMBER,
+      page: () => const SignUpPhoneNumberView(),
+      binding: SignUpPhoneNumberBinding(),
     ),
   ];
 }

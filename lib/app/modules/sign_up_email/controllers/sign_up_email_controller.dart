@@ -1,0 +1,122 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
+
+class SignUpEmailController extends GetxController {
+  SignUpEmailArguments? args;
+  SignUpType? signUpType = SignUpType.crew;
+
+  final parentKey = GlobalKey();
+
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController websiteController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  RxBool shouldObscure = true.obs;
+  RxBool isAdding = false.obs;
+
+  FToast fToast = FToast();
+
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void onInit() {
+    if (Get.arguments is SignUpEmailArguments) {
+      args = (Get.arguments as SignUpEmailArguments);
+      signUpType = args?.signUpType;
+    }
+
+    super.onInit();
+  }
+
+  @override
+  onReady() {
+    super.onReady();
+    fToast.init(parentKey.currentContext!);
+  }
+
+  addEmail() async {
+    if (formKey.currentState?.validate() != true) {
+      return;
+    }
+    isAdding.value = true;
+    try {
+      // final credential =
+      //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      //   email: emailController.text,
+      //   password: passwordController.text,
+      // );
+      await FirebaseAuth.instance.currentUser?.linkWithCredential(
+          EmailAuthProvider.credential(
+              email: emailController.text, password: passwordController.text));
+      await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+
+      showDialog(
+          context: Get.context!,
+          builder: (context) {
+            return Dialog(
+                shadowColor: Color.fromRGBO(64, 24, 157, 0.15),
+                backgroundColor: Colors.white,
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    32.verticalSpace,
+                    Text("Verification email sent!",
+                        style: Get.textTheme.bodyMedium?.copyWith(
+                            color: Get.theme.primaryColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500)),
+                    24.verticalSpace,
+                    Text(
+                      "This action requires email verification. Please check your inbox and follow the instructions.",
+                      textAlign: TextAlign.center,
+                    ),
+                    32.verticalSpace,
+                    SizedBox(
+                      width: 190.w,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(64))),
+                          onPressed: Get.back,
+                          child: Text("OK")),
+                    ),
+                    32.verticalSpace
+                  ],
+                ));
+          });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        fToast.showToast(child: errorToast("Password is too weak"));
+      } else if (e.code == 'email-already-in-use') {
+        fToast.showToast(
+            child: errorToast("The account already exists for that email."));
+      }
+    } catch (e) {
+      fToast.showToast(child: errorToast("Unable to process your request."));
+    }
+    isAdding.value = false;
+  }
+}
+
+enum SignUpType {
+  crew,
+  employerITF,
+  employerManagementCompany,
+  employerCrewingAgent;
+}
+
+class SignUpEmailArguments {
+  final String? verificationId;
+  final String? smsCode;
+  final SignUpType signUpType;
+  const SignUpEmailArguments(
+      {this.smsCode, this.verificationId, required this.signUpType});
+}
