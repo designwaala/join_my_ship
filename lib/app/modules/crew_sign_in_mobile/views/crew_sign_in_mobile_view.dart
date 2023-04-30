@@ -83,6 +83,9 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                               Pinput(
                                 length: 6,
                                 controller: controller.otpController,
+                                onCompleted: (_) {
+                                  controller.verify();
+                                },
                               ),
                               24.verticalSpace,
                             ],

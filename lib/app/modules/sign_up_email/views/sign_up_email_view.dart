@@ -22,19 +22,21 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                   fontSize: 20,
                   fontWeight: FontWeight.w600)),
           backgroundColor: Colors.white,
-          leading: InkWell(
-            onTap: Get.back,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-              child: Icon(
-                Icons.keyboard_backspace_rounded,
-                color: Colors.black,
-              ),
-            ),
-          ),
+          leading: Navigator.of(context).canPop()
+              ? InkWell(
+                  onTap: Get.back,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Color(0xFFF3F3F3), shape: BoxShape.circle),
+                    child: Icon(
+                      Icons.keyboard_backspace_rounded,
+                      color: Colors.black,
+                    ),
+                  ),
+                )
+              : null,
           centerTitle: false,
         ),
         body: Obx(() {
