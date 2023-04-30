@@ -82,6 +82,9 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                               Pinput(
                                 length: 6,
                                 controller: controller.otpController,
+                                onCompleted: (_) {
+                                  controller.verify();
+                                },
                               ),
                               24.verticalSpace,
                             ],

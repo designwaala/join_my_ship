@@ -44,6 +44,10 @@ class CrewSignInMobileController extends GetxController {
         verificationId: verificationId!, smsCode: otpController.text);
     UserCredential userCred =
         await FirebaseAuth.instance.signInWithCredential(credential);
+    if (FirebaseAuth.instance.currentUser?.emailVerified != true) {
+      await FirebaseAuth.instance.signOut();
+      fToast.showToast(child: errorToast("Email not Verified"));
+    }
     if (FirebaseAuth.instance.currentUser != null) {
       Get.offAllNamed(Routes.HOME);
       fToast.showToast(child: successToast("Authentication Successful"));
