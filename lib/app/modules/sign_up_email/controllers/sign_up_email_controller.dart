@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 class SignUpEmailController extends GetxController {
@@ -45,21 +46,29 @@ class SignUpEmailController extends GetxController {
     }
     isAdding.value = true;
     try {
-      // final credential =
-      //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      //   email: emailController.text,
-      //   password: passwordController.text,
-      // );
-      await FirebaseAuth.instance.currentUser?.linkWithCredential(
-          EmailAuthProvider.credential(
-              email: emailController.text, password: passwordController.text));
+      if (FirebaseAuth.instance.currentUser == null) {
+        final credential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        await FirebaseAuth.instance.currentUser
+            ?.updateDisplayName(fullNameController.text);
+      } else {
+        await FirebaseAuth.instance.currentUser?.linkWithCredential(
+            EmailAuthProvider.credential(
+                email: emailController.text,
+                password: passwordController.text));
+      }
+
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
 
-      showDialog(
+      Get.toNamed(Routes.EMAIL_VERIFICATION_WAITING);
+      /* showDialog(
           context: Get.context!,
           builder: (context) {
             return Dialog(
-                shadowColor: Color.fromRGBO(64, 24, 157, 0.15),
+                shadowColor: const Color.fromRGBO(64, 24, 157, 0.15),
                 backgroundColor: Colors.white,
                 elevation: 8,
                 shape: RoundedRectangleBorder(
@@ -74,7 +83,7 @@ class SignUpEmailController extends GetxController {
                             fontSize: 20,
                             fontWeight: FontWeight.w500)),
                     24.verticalSpace,
-                    Text(
+                    const Text(
                       "This action requires email verification. Please check your inbox and follow the instructions.",
                       textAlign: TextAlign.center,
                     ),
@@ -86,12 +95,12 @@ class SignUpEmailController extends GetxController {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(64))),
                           onPressed: Get.back,
-                          child: Text("OK")),
+                          child: const Text("OK")),
                     ),
                     32.verticalSpace
                   ],
                 ));
-          });
+          }); */
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         fToast.showToast(child: errorToast("Password is too weak"));
@@ -110,7 +119,7 @@ enum SignUpType {
   crew,
   employerITF,
   employerManagementCompany,
-  employerCrewingAgent;
+  employerCrewingAgent
 }
 
 class SignUpEmailArguments {

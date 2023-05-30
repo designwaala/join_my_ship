@@ -1,0 +1,7 @@
+{
+    "message": "Login Successfully.",
+    "data": {
+        "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY4NTM1NDE3OCwiaWF0IjoxNjg1MjY3Nzc4LCJqdGkiOiI5NmM1NGM2Y2EyZGQ0NzZiYTMzNTM4MTk4Y2FhNGI4YyIsInVzZXJfaWQiOjIwfQ.gCFAsEMlQF1Z08ghFxld3cRZ6ZVPvw2NKRFJHFgyHSM",
+        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg1MjY4MDc4LCJpYXQiOjE2ODUyNjc3NzgsImp0aSI6IjIzOTRjZDk1ZWUzMjQ2M2U4NGRiOTllZWNhNWQ0ZjYxIiwidXNlcl9pZCI6MjB9.YMIGc8x9teUKr7p-mzv4T9nGOw9C1G6GBa0QITiymE8"
+    }
+}

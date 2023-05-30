@@ -1,13 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
+import '../modules/account_under_verification/views/account_under_verification_view.dart';
 import '../modules/choose_employer/bindings/choose_employer_binding.dart';
 import '../modules/choose_employer/views/choose_employer_view.dart';
 import '../modules/choose_user/bindings/choose_user_binding.dart';
 import '../modules/choose_user/views/choose_user_view.dart';
+import '../modules/crew-onboarding/bindings/crew_onboarding_binding.dart';
+import '../modules/crew-onboarding/views/crew_onboarding_view.dart';
 import '../modules/crew_sign_in_email/bindings/crew_sign_in_binding.dart';
 import '../modules/crew_sign_in_email/views/crew_sign_in_view.dart';
 import '../modules/crew_sign_in_mobile/bindings/crew_sign_in_mobile_binding.dart';
 import '../modules/crew_sign_in_mobile/views/crew_sign_in_mobile_view.dart';
+import '../modules/email_verification_waiting/bindings/email_verification_waiting_binding.dart';
+import '../modules/email_verification_waiting/views/email_verification_waiting_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/info/bindings/info_binding.dart';
@@ -71,6 +78,21 @@ class AppPages {
       name: _Paths.SIGN_UP_PHONE_NUMBER,
       page: () => const SignUpPhoneNumberView(),
       binding: SignUpPhoneNumberBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREW_ONBOARDING,
+      page: () => const CrewOnboardingView(),
+      binding: CrewOnboardingBinding(),
+    ),
+    GetPage(
+      name: _Paths.EMAIL_VERIFICATION_WAITING,
+      page: () => const EmailVerificationWaitingView(),
+      binding: EmailVerificationWaitingBinding(),
+    ),
+    GetPage(
+      name: _Paths.ACCOUNT_UNDER_VERIFICATION,
+      page: () => const AccountUnderVerificationView(),
+      binding: AccountUnderVerificationBinding(),
     ),
   ];
 }

@@ -1,0 +1,18 @@
+{
+    "first_name": "abc",
+    "last_name": "abc1",
+    "password": "123456",
+    "email": "arslanmohd196@gmail.com",
+    "profilePic": null,
+    "resume": null,
+    "address_line1": "abc fasda sasd asdad",
+    "pincode": "226021",
+    "dob": "1997-03-02",
+    "marital_status": 1,
+    "country": 1,
+    "rank_id": 1,
+    "user_type_key": 2,
+    "address_line2": "sadsad",
+    "address_city": "lucknow",
+    "state": 1
+}

@@ -1,0 +1,318 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+
+class AddARecord extends GetView<CrewOnboardingController> {
+  final ScrollController scrollController;
+  const AddARecord({Key? key, required this.scrollController})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      controller: scrollController,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          14.verticalSpace,
+          Center(
+            child: Container(
+              width: 32,
+              height: 4,
+              decoration: BoxDecoration(
+                  color: Colors.grey, borderRadius: BorderRadius.circular(64)),
+            ),
+          ),
+          16.verticalSpace,
+          Text("Add a record",
+              style: Get.textTheme.bodyMedium
+                  ?.copyWith(fontSize: 22, fontWeight: FontWeight.bold)),
+          16.verticalSpace,
+          Text("Company Name", style: _headingStyle),
+          16.verticalSpace,
+          TextFormField(
+              controller: controller.recordCompanyName,
+              decoration: InputDecoration(
+                  hintText: "Company Name",
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  isDense: true,
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Get.theme.primaryColor),
+                      borderRadius: BorderRadius.circular(64)))),
+          16.verticalSpace,
+          Text("ship name", style: _headingStyle),
+          16.verticalSpace,
+          TextFormField(
+              controller: controller.recordShipName,
+              decoration: InputDecoration(
+                  hintText: "Ship Name",
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  isDense: true,
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Get.theme.primaryColor),
+                      borderRadius: BorderRadius.circular(64)))),
+          20.verticalSpace,
+          Row(
+            children: [
+              Text("IMO Number", style: _headingStyle),
+              Spacer(),
+              SizedBox(
+                width: 146.w,
+                child: TextFormField(
+                    controller: controller.recordShipName,
+                    decoration: InputDecoration(
+                        hintText: "Ship Name",
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        isDense: true,
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Get.theme.primaryColor),
+                            borderRadius: BorderRadius.circular(64)))),
+              ),
+            ],
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Text("Rank", style: _headingStyle),
+              Spacer(),
+              SizedBox(
+                width: 146.w,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton2<String>(
+                    value: controller.recordRank.value,
+                    isExpanded: true,
+                    items: controller.ranks
+                        ?.map((e) => DropdownMenuItem(value: e.name, child: Text(e.name ?? "")))
+                        .toList() ?? [],
+                    onChanged: (value) {
+                      controller.recordRank.value = value;
+                    },
+                    hint: const Text("Select Rank"),
+                    buttonStyleData: ButtonStyleData(
+                        height: 40,
+                        width: 160,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(64),
+                          border: Border.all(color: Get.theme.primaryColor),
+                        )),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Text("Flag Name", style: _headingStyle),
+              Spacer(),
+              SizedBox(
+                width: 146.w,
+                child: TextFormField(
+                    controller: controller.recordFlagName,
+                    decoration: InputDecoration(
+                        hintText: "Flag Name",
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        isDense: true,
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Get.theme.primaryColor),
+                            borderRadius: BorderRadius.circular(64)))),
+              ),
+            ],
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Text("GRT", style: _headingStyle),
+              Spacer(),
+              SizedBox(
+                width: 146.w,
+                child: TextFormField(
+                    controller: controller.recordGrt,
+                    decoration: InputDecoration(
+                        hintText: "Enter GRT",
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        isDense: true,
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Get.theme.primaryColor),
+                            borderRadius: BorderRadius.circular(64)))),
+              ),
+            ],
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Text("Vessel Type", style: _headingStyle),
+              Spacer(),
+              SizedBox(
+                width: 146.w,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton2<String>(
+                    value: controller.recordVesselType.value,
+                    isExpanded: true,
+                    items: controller.ranks
+                        ?.map((e) => DropdownMenuItem(value: e.name, child: Text(e.name ?? "")))
+                        .toList() ?? [],
+                    onChanged: (value) {
+                      controller.recordVesselType.value = value;
+                    },
+                    hint: const Text("Select Vessel"),
+                    buttonStyleData: ButtonStyleData(
+                        height: 40,
+                        width: 160,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(64),
+                          border: Border.all(color: Get.theme.primaryColor),
+                        )),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Text("Sign-On Date", style: _headingStyle),
+              Spacer(),
+              SizedBox(
+                width: 146.w,
+                child: TextFormField(
+                    controller: controller.recordSignOnDate,
+                    onTap: () async {
+                      await showDatePicker(
+                          context: Get.context!,
+                          initialDate: DateTime.parse("1990-01-01"),
+                          firstDate: DateTime.parse("1990-01-01"),
+                          lastDate: DateTime.now());
+                    },
+                    decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: "dd/mm/yy",
+                        isDense: true,
+                        suffixIcon: const Padding(
+                          padding: EdgeInsets.only(right: 16),
+                          child: Icon(
+                            Icons.calendar_month,
+                          ),
+                        ),
+                        suffixIconConstraints:
+                            const BoxConstraints(maxHeight: 32, maxWidth: 32),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Get.theme.primaryColor),
+                            borderRadius: BorderRadius.circular(64)))),
+              ),
+            ],
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Text("Sign-Off Date", style: _headingStyle),
+              Spacer(),
+              SizedBox(
+                width: 146.w,
+                child: TextFormField(
+                    controller: controller.recordSignOffDate,
+                    onTap: () async {
+                      await showDatePicker(
+                          context: Get.context!,
+                          initialDate: DateTime.parse("1990-01-01"),
+                          firstDate: DateTime.parse("1990-01-01"),
+                          lastDate: DateTime.now());
+                    },
+                    decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: "dd/mm/yy",
+                        isDense: true,
+                        suffixIcon: const Padding(
+                          padding: EdgeInsets.only(right: 16),
+                          child: Icon(
+                            Icons.calendar_month,
+                          ),
+                        ),
+                        suffixIconConstraints:
+                            const BoxConstraints(maxHeight: 32, maxWidth: 32),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Get.theme.primaryColor),
+                            borderRadius: BorderRadius.circular(64)))),
+              ),
+            ],
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Text("Contract Duration", style: _headingStyle),
+              Spacer(),
+              SizedBox(
+                width: 146.w,
+                child: TextFormField(
+                    controller: controller.recordContarctDuration,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        hintText: "In Years",
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        isDense: true,
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Get.theme.primaryColor),
+                            borderRadius: BorderRadius.circular(64)))),
+              ),
+            ],
+          ),
+          24.verticalSpace,
+          Divider(thickness: 2),
+          16.verticalSpace,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              OutlinedButton(
+                onPressed: () {
+                  controller.step.value = 3;
+                },
+                style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: Get.theme.primaryColor),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(64))),
+                child: const Text("CANCEL"),
+              ),
+              20.horizontalSpace,
+              ElevatedButton(
+                onPressed: () {
+                  controller.step.value = 3;
+                },
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(64))),
+                child: const Text("SAVE"),
+              ),
+            ],
+          ),
+          28.verticalSpace
+        ],
+      ),
+    );
+  }
+
+  TextStyle? get _headingStyle =>
+      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
+}

@@ -52,12 +52,12 @@ class ChooseUserView extends GetView<ChooseUserController> {
               [
                 "CREW",
                 "Finding a job here never been easier than before",
-                "assets/images/choose_user/crew.svg"
+                "assets/images/choose_user/crew.png"
               ],
               [
                 "EMPLOYER",
                 "Let’s recruit your great candidate faster here ",
-                "assets/images/choose_user/employer.svg"
+                "assets/images/choose_user/employer.png"
               ]
             ].mapIndexed((index, e) => InkWell(
                   onTap: () {
@@ -82,7 +82,7 @@ class ChooseUserView extends GetView<ChooseUserController> {
                         ]),
                     child: Row(
                       children: [
-                        SvgPicture.asset(
+                        Image.asset(
                           e[2],
                           height: 77.h,
                           width: 77.h,
