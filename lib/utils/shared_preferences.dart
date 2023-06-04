@@ -10,14 +10,18 @@ class PreferencesHelper {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 
-  String ACCESS_TOKEN = 'access-token', REFRESH_TOKEN = "refresh-token";
+  String _ACCESS_TOKEN = 'access-token', _REFRESH_TOKEN = "refresh-token";
 
-  set accessToken(String? value) =>
-      value == null ? null : _sharedPreferences?.setString(ACCESS_TOKEN, value);
-  String get accessToken => _sharedPreferences?.getString(ACCESS_TOKEN) ?? "";
+  Future<void> setAccessToken(String? value) =>
+      value == null || _sharedPreferences == null
+          ? Future.value(null)
+          : _sharedPreferences!.setString(_ACCESS_TOKEN, value);
+  String get accessToken => _sharedPreferences?.getString(_ACCESS_TOKEN) ?? "";
 
-  set refreshToken(String? value) => value == null
-      ? null
-      : _sharedPreferences?.setString(REFRESH_TOKEN, value);
-  String get refreshToken => _sharedPreferences?.getString(REFRESH_TOKEN) ?? "";
+  Future<void> setRefreshToken(String? value) =>
+      value == null || _sharedPreferences == null
+          ? Future.value(null)
+          : _sharedPreferences!.setString(_REFRESH_TOKEN, value);
+  String get refreshToken =>
+      _sharedPreferences?.getString(_REFRESH_TOKEN) ?? "";
 }

@@ -56,8 +56,9 @@ class EmailVerificationWaitingView
                     style: Get.textTheme.bodyMedium
                         ?.copyWith(fontWeight: FontWeight.w600, fontSize: 20)),
                 16.verticalSpace,
-                Text(
-                    """
+                Text(FirebaseAuth.instance.currentUser?.email ?? ""),
+                16.verticalSpace,
+                Text("""
             This action requires email 
             verification. Please check your 
             inbox and follow the 

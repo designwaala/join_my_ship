@@ -1,0 +1,187 @@
+[
+    {
+        "country": 1,
+        "state_code": "WB",
+        "state_name": "West Bengal"
+    },
+    {
+        "country": 1,
+        "state_code": "UT",
+        "state_name": "Uttarakhand"
+    },
+    {
+        "country": 1,
+        "state_code": "UP",
+        "state_name": "Uttar Pradesh"
+    },
+    {
+        "country": 1,
+        "state_code": "TR",
+        "state_name": "Tripura"
+    },
+    {
+        "country": 1,
+        "state_code": "TE",
+        "state_name": "Telangana"
+    },
+    {
+        "country": 1,
+        "state_code": "TN",
+        "state_name": "Tamil Nadu"
+    },
+    {
+        "country": 1,
+        "state_code": "SI",
+        "state_name": "Sikkim"
+    },
+    {
+        "country": 1,
+        "state_code": "RJ",
+        "state_name": "Rajasthan"
+    },
+    {
+        "country": 1,
+        "state_code": "PJ",
+        "state_name": "Punjab"
+    },
+    {
+        "country": 1,
+        "state_code": "OD",
+        "state_name": "Odisha"
+    },
+    {
+        "country": 1,
+        "state_code": "NG",
+        "state_name": "Nagaland"
+    },
+    {
+        "country": 1,
+        "state_code": "MI",
+        "state_name": "Mizoram"
+    },
+    {
+        "country": 1,
+        "state_code": "ME",
+        "state_name": "Meghalaya"
+    },
+    {
+        "country": 1,
+        "state_code": "MA",
+        "state_name": "Manipur"
+    },
+    {
+        "country": 1,
+        "state_code": "MH",
+        "state_name": "Maharastra"
+    },
+    {
+        "country": 1,
+        "state_code": "MP",
+        "state_name": "Madhya Pradesh"
+    },
+    {
+        "country": 1,
+        "state_code": "KE",
+        "state_name": "Kerala"
+    },
+    {
+        "country": 1,
+        "state_code": "KA",
+        "state_name": "Karnataka"
+    },
+    {
+        "country": 1,
+        "state_code": "JH",
+        "state_name": "Jharkhand"
+    },
+    {
+        "country": 1,
+        "state_code": "HP",
+        "state_name": "Himachal Pradesh"
+    },
+    {
+        "country": 1,
+        "state_code": "HR",
+        "state_name": "Haryana"
+    },
+    {
+        "country": 1,
+        "state_code": "GJ",
+        "state_name": "Gujarat"
+    },
+    {
+        "country": 1,
+        "state_code": "GO",
+        "state_name": "Goa"
+    },
+    {
+        "country": 1,
+        "state_code": "CH",
+        "state_name": "Chhattisgarh"
+    },
+    {
+        "country": 1,
+        "state_code": "BH",
+        "state_name": "Bihar"
+    },
+    {
+        "country": 1,
+        "state_code": "AS",
+        "state_name": "Assam"
+    },
+    {
+        "country": 1,
+        "state_code": "AP",
+        "state_name": "Arunachal Pradesh"
+    },
+    {
+        "country": 1,
+        "state_code": "AP",
+        "state_name": "Andhra Pradesh"
+    },
+    {
+        "country": 1,
+        "state_code": "JK",
+        "state_name": "Jammu and Kashmir"
+    },
+    {
+        "country": 1,
+        "state_code": "PU",
+        "state_name": "Puducherry"
+    },
+    {
+        "country": 1,
+        "state_code": "LA",
+        "state_name": "Lakshadweep"
+    },
+    {
+        "country": 1,
+        "state_code": "LA",
+        "state_name": "Ladakh"
+    },
+    {
+        "country": 1,
+        "state_code": "DL",
+        "state_name": "Delhi"
+    },
+    {
+        "country": 1,
+        "state_code": "DD",
+        "state_name": "Daman and Diu"
+    },
+    {
+        "country": 1,
+        "state_code": "DN",
+        "state_name": "Dadra and Nagar Haveli"
+    },
+    {
+        "country": 1,
+        "state_code": "CH",
+        "state_name": "Chandigarh"
+    },
+    {
+        "country": 1,
+        "state_code": "AN",
+        "state_name": "Andaman and Nicobar Islands"
+    }
+]

@@ -34,9 +34,6 @@ class CrewSignInController extends GetxController {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       login = await getIt<LoginProvider>().login();
-      PreferencesHelper.instance
-        ..accessToken = login?.data?.access
-        ..refreshToken = login?.data?.refresh;
       print(await FirebaseAuth.instance.currentUser?.getIdToken());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

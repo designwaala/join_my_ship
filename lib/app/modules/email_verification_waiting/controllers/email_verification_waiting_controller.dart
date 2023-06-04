@@ -6,16 +6,16 @@ import 'package:join_mp_ship/app/routes/app_pages.dart';
 
 class EmailVerificationWaitingController extends GetxController {
   RxBool isResendingEmail = false.obs;
-  Timer? _timer;
+  // Timer? _timer;
 
   @override
   void onInit() {
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
-      await FirebaseAuth.instance.currentUser?.reload();
-      if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
-        Get.offNamed(Routes.CREW_ONBOARDING);
-      }
-    });
+    // _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
+    //   await FirebaseAuth.instance.currentUser?.reload();
+    //   if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
+    //     Get.offNamed(Routes.CREW_ONBOARDING);
+    //   }
+    // });
     super.onInit();
   }
 
@@ -33,6 +33,6 @@ class EmailVerificationWaitingController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    _timer?.cancel();
+    // _timer?.cancel();
   }
 }
