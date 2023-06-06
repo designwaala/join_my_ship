@@ -15,8 +15,21 @@ class UserDetailsProvider extends WrapperConnect {
   }
 
   Future<UserDetails?> postUserDetails(UserDetails userDetails) async {
-    final response = await post('crew/crew_details_create', userDetails);
+    final response =
+        await post('crew/crew_details_create', FormData(userDetails.toJson()),
+            decoder: (map) {
+      print(map);
+      return UserDetails.fromJson(map);
+    });
     return response.body;
   }
 
+  Future<UserDetails?> getUserDetails(int userId) async {
+    final response =
+        await get("crew/crew_details_list/$userId", decoder: (map) {
+          if(map.isNotEmpty)
+      {return UserDetails.fromJson(map.first);}
+    });
+    return response.body;
+  }
 }

@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
+import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
 import '../../../main.dart';
 import '../models/crew_user_model.dart';
 import 'package:http/http.dart' as http;
 
-class CrewUserProvider extends GetConnect {
+class CrewUserProvider extends WrapperConnect {
   CrewUserProvider() {
     httpClient.defaultDecoder = (map) {
       if (map is Map<String, dynamic>) return CrewUser.fromJson(map);
@@ -34,6 +35,10 @@ class CrewUserProvider extends GetConnect {
       request.files
           .add(await http.MultipartFile.fromPath('profilePic', profilePicPath));
     }
+
+    request.headers.addAll({
+      "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>"
+    });
 
     http.StreamedResponse response = await request.send();
     if (response.statusCode < 300) {

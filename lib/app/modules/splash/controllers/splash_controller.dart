@@ -28,7 +28,7 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
 
   redirection() async {
     await Future.wait([
-      getIt<LoginProvider>().login(),
+      // getIt<LoginProvider>().login(),
       Future.delayed(const Duration(seconds: 3))
     ]);
 

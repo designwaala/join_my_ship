@@ -93,42 +93,6 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                 },
                 child: Text("Add a reference")),
             16.verticalSpace,
-            Text("Upload Resume *", style: _headingStyle),
-            16.verticalSpace,
-            Center(
-              child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                          color: Get.theme.primaryColor,
-                          style: BorderStyle.solid),
-                      foregroundColor: Get.theme.primaryColor,
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: Get.theme.primaryColor,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(64))),
-                  onPressed: () async {
-                    FilePickerResult? result =
-                        await FilePicker.platform.pickFiles();
-
-                    if (result?.files.single.path != null) {
-                      File file = File(result!.files.single.path!);
-                    } else {
-                      // User canceled the picker
-                    }
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.upload),
-                      4.horizontalSpace,
-                      Text("UPLOAD",
-                          style: Get.textTheme.bodyMedium
-                              ?.copyWith(color: Get.theme.primaryColor))
-                    ],
-                  )),
-            ),
-            8.verticalSpace,
             Center(
               child: Text(
                   "Supported file formats Doc, Docx, pdf | Maximum file size 2 MB",

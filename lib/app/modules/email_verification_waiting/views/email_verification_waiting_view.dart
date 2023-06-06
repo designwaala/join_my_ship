@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 
 import '../controllers/email_verification_waiting_controller.dart';
+import 'package:lottie/lottie.dart';
 
 class EmailVerificationWaitingView
     extends GetView<EmailVerificationWaitingController> {
@@ -46,12 +47,13 @@ class EmailVerificationWaitingView
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Spacer(),
-                Image.asset(
-                  "assets/images/email_verification/arrow.png",
-                  width: 118,
-                  height: 58,
+                SizedBox(
+                  width: Get.width,
+                  height: 200,
+                  child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Lottie.asset('assets/arrow_animation.json')),
                 ),
-                56.verticalSpace,
                 Text("Confirm Your Email Address",
                     style: Get.textTheme.bodyMedium
                         ?.copyWith(fontWeight: FontWeight.w600, fontSize: 20)),
@@ -59,10 +61,9 @@ class EmailVerificationWaitingView
                 Text(FirebaseAuth.instance.currentUser?.email ?? ""),
                 16.verticalSpace,
                 Text("""
-            This action requires email 
-            verification. Please check your 
-            inbox and follow the 
-            instructions.
+This action requires email 
+verification. Please check your 
+inbox and follow the instructions.
             """,
                     textAlign: TextAlign.center,
                     style: Get.textTheme.bodyMedium

@@ -10,7 +10,13 @@ class PreferencesHelper {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 
-  String _ACCESS_TOKEN = 'access-token', _REFRESH_TOKEN = "refresh-token";
+  Future<bool>? clearAll() {
+    return _sharedPreferences?.clear();
+  }
+
+  String _ACCESS_TOKEN = 'access-token',
+      _REFRESH_TOKEN = "refresh-token",
+      _USER_CREATED = "user-created";
 
   Future<void> setAccessToken(String? value) =>
       value == null || _sharedPreferences == null
@@ -24,4 +30,8 @@ class PreferencesHelper {
           : _sharedPreferences!.setString(_REFRESH_TOKEN, value);
   String get refreshToken =>
       _sharedPreferences?.getString(_REFRESH_TOKEN) ?? "";
+
+  bool? get userCreated => _sharedPreferences?.getBool(_USER_CREATED);
+  Future<bool>? setUserCreated(value) =>
+      _sharedPreferences?.setBool(_USER_CREATED, value);
 }

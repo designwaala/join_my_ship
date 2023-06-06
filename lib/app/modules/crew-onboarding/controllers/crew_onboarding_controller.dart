@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,10 +18,17 @@ import 'package:join_mp_ship/app/data/providers/service_record_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 import 'package:join_mp_ship/utils/secure_storage.dart';
 import 'package:join_mp_ship/app/data/models/state_model.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
-Map<String, int> maritalStatuses = {"Single": 1, "Married": 2, "Divorced": 3};
+Map<int, String> maritalStatuses = {1: "Single", 2: "Married", 3: "Divorced"};
+Map<String, int> reverseMaritalStatuses = {
+  "Single": 1,
+  "Married": 2,
+  "Divorced": 3
+};
 
 enum Step1FormMiss {
   didNotSelectProfilePic,
@@ -40,8 +46,24 @@ enum Step2FormMiss {
   watchKeepingIssuingAuthority,
 }
 
+class FormCustomization {
+  final String rank;
+  final int rankId;
+  final bool coc;
+  final bool cop;
+  final bool watchKeeping;
+
+  const FormCustomization(
+      {required this.rank,
+      required this.rankId,
+      required this.coc,
+      required this.cop,
+      required this.watchKeeping});
+}
+
 class CrewOnboardingController extends GetxController {
   CrewUser? crewUser;
+  UserDetails? userDetails;
   RxBool isLoading = false.obs;
   RxBool isUpdating = false.obs;
   FToast fToast = FToast();
@@ -53,8 +75,9 @@ class CrewOnboardingController extends GetxController {
   Rxn<StateModel> state = Rxn();
   Rxn<Country> country = Rxn();
   RxBool isLookingForPromotion = false.obs;
+  RxnString uploadedImagePath = RxnString();
   //______________STEP 2__________________
-  RxList<String> stcwIssuingAuthority = RxList.empty();
+  // RxList<String> stcwIssuingAuthority = RxList.empty();
   RxnBool isHoldingValidCOC = RxnBool(false);
   RxnBool isHoldingValidCOP = RxnBool(false);
   RxnBool isHoldingWatchKeeping = RxnBool(false);
@@ -62,9 +85,9 @@ class CrewOnboardingController extends GetxController {
   //______________________________________
   RxBool declaration1 = false.obs;
   RxBool declaration2 = false.obs;
-  RxList<String> cocIssuingAuthority = RxList.empty();
-  RxList<String> copIssuingAuthority = RxList.empty();
-  RxList<String> watchKeepingIssuingAuthority = RxList.empty();
+  // RxList<String> cocIssuingAuthority = RxList.empty();
+  // RxList<String> copIssuingAuthority = RxList.empty();
+  // RxList<String> watchKeepingIssuingAuthority = RxList.empty();
 
   final Rxn<XFile> pickedImage = Rxn();
 
@@ -88,10 +111,6 @@ class CrewOnboardingController extends GetxController {
   TextEditingController passportNumber = TextEditingController();
   TextEditingController passportValidTill = TextEditingController();
   //
-  TextEditingController stcwDetailValidTill = TextEditingController();
-  TextEditingController cocValidTill = TextEditingController();
-  TextEditingController copValidTill = TextEditingController();
-  TextEditingController watchKeepingValidTill = TextEditingController();
   TextEditingController usVisaValidTill = TextEditingController();
   //__________________________
 
@@ -129,6 +148,13 @@ class CrewOnboardingController extends GetxController {
   RxList<PreviousEmployerReference> previousEmployerReferences = RxList.empty();
 
   RxBool isAddingBottomSheet = false.obs;
+
+  RxList<IssuingAuthority> stcwIssuingAuthorities = RxList.empty();
+  RxList<IssuingAuthority> cocIssuingAuthorities = RxList.empty();
+  RxList<IssuingAuthority> copIssuingAuthorities = RxList.empty();
+  RxList<IssuingAuthority> watchKeepingIssuingAuthorities = RxList.empty();
+
+  int? userId;
 
 /*   List<String> ranks = [
     "Master/Captain",
@@ -182,12 +208,51 @@ class CrewOnboardingController extends GetxController {
     ranks = await getIt<RanksProvider>().getRankList();
     countries = (await getIt<CountryProvider>().getCountry()) ?? [];
     crewUser = await getIt<CrewUserProvider>().getCrewUser();
-    if (crewUser == null) {
+
+    await setStep1Fields();
+    if (crewUser?.id == null) {
       step.value = 1;
     } else {
+      userDetails =
+          await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
+      setStep2Fields();
       step.value = 2;
     }
     isLoading.value = false;
+  }
+
+  Future<void> setStep2Fields() async {
+    indosNumber.text = userDetails?.iNDOSNumber ?? "";
+    cdcNumber.text = userDetails?.cDCNumber ?? "";
+    cdcNumberValidTill.text = userDetails?.cDCNumberValidTill ?? "";
+    cdcSeamanNumber.text = userDetails?.cDCNumber ?? "";
+    cdcSeamanNumberValidTill.text = userDetails?.cDCNumberValidTill ?? "";
+    passportNumber.text = userDetails?.passportNumber ?? "";
+    passportValidTill.text = userDetails?.passportNumberValidTill ?? "";
+    usVisaValidTill.text = userDetails?.validUSVisaValidTill ?? "";
+
+    stcwIssuingAuthorities = RxList.empty();
+    cocIssuingAuthorities = RxList.empty();
+    copIssuingAuthorities = RxList.empty();
+    watchKeepingIssuingAuthorities = RxList.empty();
+  }
+
+  Future<void> setStep1Fields() async {
+    selectedRank.value =
+        ranks?.firstWhereOrNull((e) => e.id == crewUser?.rankId);
+    addressLine1.text = crewUser?.addressLine1 ?? "";
+    addressLine2.text = crewUser?.addressLine2 ?? "";
+    city.text = crewUser?.addressCity ?? "";
+    dateOfBirth.text = crewUser?.dob ?? "";
+    userId = crewUser?.id;
+    isLookingForPromotion.value = crewUser?.promotionApplied == true;
+    zipCode.text = crewUser?.pincode ?? "";
+    maritalStatus.value = crewUser?.maritalStatus;
+    uploadedImagePath.value = "$baseURL/${crewUser?.profilePic}";
+    country.value =
+        countries.firstWhereOrNull((e) => e.id == crewUser?.country);
+    await getStates();
+    state.value = states.firstWhereOrNull((e) => e.id == crewUser?.state);
   }
 
   getStates() async {
@@ -285,50 +350,62 @@ class CrewOnboardingController extends GetxController {
             addressLine2: addressLine2.text,
             addressCity: city.text,
             state: 1,
+            promotionApplied: isLookingForPromotion.value,
             authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
         profilePicPath: pickedImage.value?.path,
         resumePath: pickedResume.value?.path);
     isUpdating.value = false;
+    if (statusCode == 201) {
+      fToast.showToast(
+          child: successToast("Your account was successfully created."));
+    } else {
+      fToast.showToast(child: errorToast("Error creating your account"));
+    }
     return statusCode == 201;
   }
 
   Future<bool> postStep2() async {
-    if (stcwIssuingAuthority.isEmpty) {
+    step2FormMisses.clear();
+    if (stcwIssuingAuthorities.isEmpty) {
       step2FormMisses.add(Step2FormMiss.stcwIssuingAuthority);
     }
-    if (![
-          "Deck Cadet",
-          "Trainee Electrical Cadet",
-          "Engine Cadet",
-          "Trainee Ordinary Seaman",
-          "Trainee Wiper"
-        ].contains(selectedRank.value?.name) &&
+    if (selectedRank.value?.coc == true &&
+        // ![
+        //     "Deck Cadet",
+        //     "Trainee Electrical Cadet",
+        //     "Engine Cadet",
+        //     "Trainee Ordinary Seaman",
+        //     "Trainee Wiper"
+        //   ].contains(selectedRank.value?.name) &&
         isHoldingValidCOC.value == true &&
-        cocIssuingAuthority.isEmpty) {
+        cocIssuingAuthorities.isEmpty) {
       step2FormMisses.add(Step2FormMiss.cocIssuingAuthority);
     }
     if (isHoldingValidCOC.value != true &&
-        ![
-          "Mess boy / GS / Steward",
-          "Second Cook / 2nd Cook",
-          "Chief Cook",
-          "Trainee Electrical Cadet",
-          "ETO / Electrician",
-        ].contains(selectedRank.value?.name) &&
+        selectedRank.value?.cop == true &&
+        // ![
+        //   "Mess boy / GS / Steward",
+        //   "Second Cook / 2nd Cook",
+        //   "Chief Cook",
+        //   "Trainee Electrical Cadet",
+        //   "ETO / Electrician",
+        // ].contains(selectedRank.value?.name) &&
+
         isHoldingValidCOP.value == true &&
-        copIssuingAuthority.isEmpty) {
+        copIssuingAuthorities.isEmpty) {
       step2FormMisses.add(Step2FormMiss.copIssuingAuthority);
     }
     if (isHoldingValidCOC.value != true &&
-        ![
-          "Mess boy / GS / Steward",
-          "Second Cook / 2nd Cook",
-          "Chief Cook",
-          "Trainee Electrical Cadet",
-          "ETO / Electrician",
-        ].contains(selectedRank.value?.name) &&
+        selectedRank.value?.watchKeeping == true &&
+        // ![
+        //   "Mess boy / GS / Steward",
+        //   "Second Cook / 2nd Cook",
+        //   "Chief Cook",
+        //   "Trainee Electrical Cadet",
+        //   "ETO / Electrician",
+        // ].contains(selectedRank.value?.name) &&
         isHoldingWatchKeeping.value == true &&
-        watchKeepingIssuingAuthority.isEmpty) {
+        watchKeepingIssuingAuthorities.isEmpty) {
       step2FormMisses.add(Step2FormMiss.watchKeepingIssuingAuthority);
     }
     if (formKeyStep2.currentState?.validate() != true) {
@@ -338,21 +415,37 @@ class CrewOnboardingController extends GetxController {
       return false;
     }
     isUpdating.value = true;
-    await getIt<UserDetailsProvider>().postUserDetails(UserDetails(
-        iNDOSNumber: indosNumber.text,
-        cDCNumber: cdcNumber.text,
-        cDCNumberValidTill: cdcNumberValidTill.text,
-        passportNumber: passportNumber.text,
-        passportNumberValidTill: passportValidTill.text,
-        sTCWIssuingAuthority: "",
-        sTCWIssuingAuthorityValidTill: stcwDetailValidTill.text,
-        validCOCIssuingAuthority: "",
-        validCOCIssuingAuthorityValidTill: cocValidTill.text,
-        validCOPIssuingAuthority: "",
-        validCOPIssuingAuthorityValidTill: copValidTill.text,
-        validWatchKeepingIssuingAuthority: "",
-        validWatchKeepingIssuingAuthorityValidTill: watchKeepingValidTill.text,
-        validUSVisaValidTill: usVisaValidTill.text));
+    UserDetails? userDetails;
+    try {
+      userDetails = await getIt<UserDetailsProvider>().postUserDetails(
+          UserDetails(
+              userId: userId,
+              iNDOSNumber: indosNumber.text.nullIfEmpty(),
+              cDCNumber: cdcNumber.text.nullIfEmpty(),
+              cDCNumberValidTill: cdcNumberValidTill.text.nullIfEmpty(),
+              cDCSeamanBookNumber: cdcSeamanNumber.text.nullIfEmpty(),
+              cDCSeamanBookNumberValidTill:
+                  cdcNumberValidTill.text.nullIfEmpty(),
+              passportNumber: passportNumber.text.nullIfEmpty(),
+              passportNumberValidTill: passportValidTill.text.nullIfEmpty(),
+              validUSVisa: usVisaValidTill.text.isNotEmpty,
+              sTCWIssuingAuthority: stcwIssuingAuthorities.nullIfEmpty(),
+              validCOCIssuingAuthority: cocIssuingAuthorities.nullIfEmpty(),
+              validCOPIssuingAuthority: copIssuingAuthorities.nullIfEmpty(),
+              validWatchKeepingIssuingAuthority:
+                  watchKeepingIssuingAuthorities.nullIfEmpty(),
+              validUSVisaValidTill: usVisaValidTill.text.nullIfEmpty()));
+    } catch (e) {
+      print("$e");
+    }
+
+    if (userDetails?.userId != null) {
+      fToast.showToast(child: successToast("Details uploaded"));
+    } else {
+      fToast.showToast(
+          child:
+              errorToast("Some error occurred while uploading your details"));
+    }
     isUpdating.value = false;
     return true;
   }

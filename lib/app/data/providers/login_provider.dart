@@ -16,12 +16,14 @@ class LoginProvider extends GetConnect {
   }
 
   Future<Login?> login() async {
-    final response = await post<Login?>('myadmin_api/log_in/', {},
-        headers: {
-          "Authorization":
-              "Bearer ${await FirebaseAuth.instance.currentUser?.getIdToken()}"
-        },
-        decoder: (map) => Login.fromJson(map));
+    print(await FirebaseAuth.instance.currentUser?.getIdToken());
+    final response = await post<Login?>('myadmin_api/log_in/', {}, headers: {
+      "Authorization":
+          "Bearer ${await FirebaseAuth.instance.currentUser?.getIdToken()}"
+    }, decoder: (map) {
+      print(map);
+      return Login.fromJson(map);
+    });
     await Future.wait([
       PreferencesHelper.instance.setAccessToken(response.body?.data?.access),
       PreferencesHelper.instance.setRefreshToken(response.body?.data?.refresh)

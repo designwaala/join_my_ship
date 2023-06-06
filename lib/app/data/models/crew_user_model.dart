@@ -131,10 +131,10 @@ class CrewUser {
   Map<String, String> toJson() {
     final data = <String, String?>{};
     data['id'] = id?.toString();
-    data['password'] = password;
+    data['password'] = "Demo@123" ?? password;
     data['last_login'] = lastLogin;
     data['is_superuser'] = isSuperuser?.toString();
-    data['username'] = username;
+    data['username'] = email ?? username;
     data['first_name'] = firstName;
     data['last_name'] = lastName;
     data['is_staff'] = isStaff?.toString();
@@ -150,7 +150,7 @@ class CrewUser {
     data['mobile_verified'] = mobileVerified?.toString();
     data['promotion_applied'] = promotionApplied?.toString();
     data['email_verified'] = emailVerified?.toString();
-    data['website'] = website;
+    data['website'] = "_"??website;
     data['number'] = number;
     data['designation'] = designation;
     data['alternate_number'] = alternateNumber;

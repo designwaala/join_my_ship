@@ -13,6 +13,7 @@ import 'package:join_mp_ship/app/data/providers/previous_employer_reference_prov
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/service_record_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
+import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/firebase_options.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/toasts/unfocus_gesture.dart';
@@ -53,5 +54,6 @@ void main() async {
     ..registerSingleton(CountryProvider())
     ..registerSingleton(StateProvider())
     ..registerSingleton(ServiceRecordProvider())
-    ..registerSingleton(PreviousEmployerReferenceProvider());
+    ..registerSingleton(PreviousEmployerReferenceProvider())
+    ..registerSingleton(UserDetailsProvider());
 }

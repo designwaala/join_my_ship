@@ -1,19 +1,19 @@
+import 'dart:convert';
+
 class UserDetails {
   int? userId;
   String? iNDOSNumber;
   String? cDCNumber;
   String? cDCNumberValidTill;
+  String? cDCSeamanBookNumber;
+  String? cDCSeamanBookNumberValidTill;
   String? passportNumber;
   String? passportNumberValidTill;
-  String? sTCWIssuingAuthority;
-  String? sTCWIssuingAuthorityValidTill;
-  String? validCOCIssuingAuthority;
-  String? validCOCIssuingAuthorityValidTill;
-  String? validCOPIssuingAuthority;
-  String? validCOPIssuingAuthorityValidTill;
-  String? validWatchKeepingIssuingAuthority;
-  String? validWatchKeepingIssuingAuthorityValidTill;
-  String? validUSVisa;
+  List<IssuingAuthority>? sTCWIssuingAuthority;
+  List<IssuingAuthority>? validCOCIssuingAuthority;
+  List<IssuingAuthority>? validCOPIssuingAuthority;
+  List<IssuingAuthority>? validWatchKeepingIssuingAuthority;
+  bool? validUSVisa;
   String? validUSVisaValidTill;
 
   UserDetails(
@@ -21,16 +21,14 @@ class UserDetails {
       this.iNDOSNumber,
       this.cDCNumber,
       this.cDCNumberValidTill,
+      this.cDCSeamanBookNumber,
+      this.cDCSeamanBookNumberValidTill,
       this.passportNumber,
       this.passportNumberValidTill,
       this.sTCWIssuingAuthority,
-      this.sTCWIssuingAuthorityValidTill,
       this.validCOCIssuingAuthority,
-      this.validCOCIssuingAuthorityValidTill,
       this.validCOPIssuingAuthority,
-      this.validCOPIssuingAuthorityValidTill,
       this.validWatchKeepingIssuingAuthority,
-      this.validWatchKeepingIssuingAuthorityValidTill,
       this.validUSVisa,
       this.validUSVisaValidTill});
 
@@ -39,20 +37,34 @@ class UserDetails {
     iNDOSNumber = json['INDOS_number'];
     cDCNumber = json['CDC_number'];
     cDCNumberValidTill = json['CDC_number_valid_till'];
+    cDCSeamanBookNumber = json['CDC_seaman_book'];
+    cDCNumberValidTill = json['CDC_seaman_book_valid_till'];
     passportNumber = json['Passport_number'];
     passportNumberValidTill = json['Passport_number_valid_till'];
-    sTCWIssuingAuthority = json['STCW_Issuing_Authority'];
-    sTCWIssuingAuthorityValidTill = json['STCW_Issuing_Authority_valid_till'];
-    validCOCIssuingAuthority = json['valid_COC_Issuing_Authority'];
-    validCOCIssuingAuthorityValidTill =
-        json['valid_COC_Issuing_Authority_valid_till'];
-    validCOPIssuingAuthority = json['valid_COP_Issuing_Authority'];
-    validCOPIssuingAuthorityValidTill =
-        json['valid_COP_Issuing_Authority_valid_till'];
+    sTCWIssuingAuthority = json['STCW_Issuing_Authority'] == null
+        ? null
+        : List<IssuingAuthority>.from(jsonDecode(json['STCW_Issuing_Authority'])
+            ?.map((e) => IssuingAuthority.fromJson(e)));
+    validCOCIssuingAuthority = json['valid_COC_Issuing_Authority'] == null ||
+            jsonDecode(json['valid_COC_Issuing_Authority']) is! Map
+        ? null
+        : List<IssuingAuthority>.from(
+            jsonDecode(json['valid_COC_Issuing_Authority'])
+                ?.map((e) => IssuingAuthority.fromJson(e)));
+    validCOPIssuingAuthority = json['valid_COP_Issuing_Authority'] == null ||
+            jsonDecode(json['valid_COP_Issuing_Authority']) is! Map
+        ? null
+        : List<IssuingAuthority>.from(
+            jsonDecode(json['valid_COP_Issuing_Authority'])
+                ?.map((e) => IssuingAuthority.fromJson(e)));
     validWatchKeepingIssuingAuthority =
-        json['valid_Watch_keeping_Issuing_Authority'];
-    validWatchKeepingIssuingAuthorityValidTill =
-        json['valid_Watch_keeping_Issuing_Authority_valid_till'];
+        json['valid_Watch_keeping_Issuing_Authority'] == null ||
+                jsonDecode(json['valid_Watch_keeping_Issuing_Authority'])
+                    is! Map
+            ? null
+            : List<IssuingAuthority>.from(
+                jsonDecode(json['valid_Watch_keeping_Issuing_Authority'])
+                    ?.map((e) => IssuingAuthority.fromJson(e)));
     validUSVisa = json['valid_US_Visa'];
     validUSVisaValidTill = json['valid_US_Visa_valid_till'];
   }
@@ -63,22 +75,37 @@ class UserDetails {
     data['INDOS_number'] = iNDOSNumber;
     data['CDC_number'] = cDCNumber;
     data['CDC_number_valid_till'] = cDCNumberValidTill;
+    data['CDC_seaman_book'] = cDCSeamanBookNumber;
+    data['CDC_seaman_book_valid_till'] = cDCSeamanBookNumberValidTill;
     data['Passport_number'] = passportNumber;
     data['Passport_number_valid_till'] = passportNumberValidTill;
-    data['STCW_Issuing_Authority'] = sTCWIssuingAuthority;
-    data['STCW_Issuing_Authority_valid_till'] = sTCWIssuingAuthorityValidTill;
-    data['valid_COC_Issuing_Authority'] = validCOCIssuingAuthority;
-    data['valid_COC_Issuing_Authority_valid_till'] =
-        validCOCIssuingAuthorityValidTill;
-    data['valid_COP_Issuing_Authority'] = validCOPIssuingAuthority;
-    data['valid_COP_Issuing_Authority_valid_till'] =
-        validCOPIssuingAuthorityValidTill;
+    data['STCW_Issuing_Authority'] =
+        sTCWIssuingAuthority?.map((e) => e.toJson()).toList();
+    data['valid_COC_Issuing_Authority'] =
+        validCOCIssuingAuthority?.map((e) => e.toJson()).toList();
+    data['valid_COP_Issuing_Authority'] =
+        validCOPIssuingAuthority?.map((e) => e.toJson()).toList();
     data['valid_Watch_keeping_Issuing_Authority'] =
-        validWatchKeepingIssuingAuthority;
-    data['valid_Watch_keeping_Issuing_Authority_valid_till'] =
-        validWatchKeepingIssuingAuthorityValidTill;
+        validWatchKeepingIssuingAuthority?.map((e) => e.toJson()).toList();
     data['valid_US_Visa'] = validUSVisa;
     data['valid_US_Visa_valid_till'] = validUSVisaValidTill;
+    data.removeWhere((key, value) => value == null);
     return data;
   }
+}
+
+class IssuingAuthority {
+  String? issuingAuthority;
+  String? validTill;
+
+  IssuingAuthority({this.issuingAuthority, this.validTill});
+
+  factory IssuingAuthority.fromJson(Map<String, dynamic> json) {
+    return IssuingAuthority(
+        issuingAuthority: json['issuing_authority'],
+        validTill: json['valid_till']);
+  }
+
+  Map<String, dynamic> toJson() =>
+      {"issuing_authority": issuingAuthority, "valid_till": validTill};
 }

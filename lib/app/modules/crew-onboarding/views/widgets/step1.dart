@@ -52,7 +52,8 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               24.verticalSpace,
               InkWell(
                 onTap: controller.pickSource,
-                child: controller.pickedImage.value != null
+                child: controller.pickedImage.value != null ||
+                        controller.uploadedImagePath.value != null
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -62,9 +63,15 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                    image: Image.file(File(
-                                            controller.pickedImage.value!.path))
-                                        .image,
+                                    image: controller.uploadedImagePath.value ==
+                                            null
+                                        ? Image.file(File(controller
+                                                .pickedImage.value!.path))
+                                            .image
+                                        : Image.network(controller
+                                                    .uploadedImagePath.value ??
+                                                "")
+                                            .image,
                                     fit: BoxFit.cover)),
                           )
                         ],
@@ -126,9 +133,13 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     child: DropdownButton2<Rank>(
                       value: controller.selectedRank.value,
                       isExpanded: true,
+                      style: Get.textTheme.bodyMedium,
                       items: controller.ranks
                               ?.map((e) => DropdownMenuItem<Rank>(
-                                  value: e, child: Text(e.name ?? "")))
+                                  value: e,
+                                  child: Text(e.name ?? "",
+                                      style: Get.textTheme.bodySmall
+                                          ?.copyWith(color: Colors.black))))
                               .toList() ??
                           [],
                       onChanged: (value) {
@@ -137,7 +148,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                       hint: const Text("Select Rank"),
                       buttonStyleData: ButtonStyleData(
                           height: 50,
-                          width: 160,
+                          width: 200,
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(64),
@@ -186,7 +197,9 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                           isExpanded: true,
                           items: controller.ranks
                               ?.map((e) => DropdownMenuItem(
-                                  value: e.name, child: Text(e.name ?? "")))
+                                  value: e.name,
+                                  child: Text(e.name ?? "",
+                                      style: Get.textTheme.bodySmall)))
                               .toList(),
                           onChanged: (value) {
                             controller.promotionRank.value = value;
@@ -302,11 +315,13 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                           isExpanded: true,
                           items: controller.countries
                               .map((e) => DropdownMenuItem(
-                                  value: e,
-                                  child: Text(e.countryName ?? "")))
+                                  value: e, child: Text(e.countryName ?? "")))
                               .toList(),
                           onChanged: (value) {
-                            controller.country.value = value;
+                            controller
+                              ..country.value = value
+                              ..states.clear()
+                              ..getStates();
                           },
                           hint: const Text("Country"),
                           buttonStyleData: ButtonStyleData(
@@ -339,13 +354,17 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   Column(
                     children: [
                       DropdownButtonHideUnderline(
-                        child: DropdownButton2<StateModel>(
+                        child: DropdownButton2<StateModel?>(
                           value: controller.state.value,
                           isExpanded: true,
                           items: controller.states
                               .map((e) => DropdownMenuItem(
                                   value: e,
-                                  child: Text(e.stateName ?? "")))
+                                  child: Text(
+                                    e.stateName ?? "",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  )))
                               .toList(),
                           onChanged: (value) {
                             controller.state.value = value;
@@ -409,6 +428,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
+                          readOnly: true,
                           onTap: () async {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
@@ -423,10 +443,11 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                               filled: true,
                               hintText: "dd/mm/yyyy",
                               isDense: true,
-                              suffixIcon: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.only(right: 16),
                                 child: Icon(
                                   Icons.calendar_month,
+                                  color: Get.theme.primaryColor,
                                 ),
                               ),
                               suffixIconConstraints: const BoxConstraints(
@@ -441,7 +462,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               ),
               16.verticalSpace,
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                       child: Column(
@@ -457,15 +478,17 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   )),
                   8.horizontalSpace,
                   DropdownButtonHideUnderline(
-                    child: DropdownButton2<int>(
+                    child: DropdownButton2<String>(
                       value: maritalStatuses[controller.maritalStatus.value],
                       isExpanded: true,
                       items: maritalStatuses.keys
-                          .map((e) => DropdownMenuItem<int>(
-                              value: maritalStatuses[e], child: Text(e)))
+                          .map((e) => DropdownMenuItem<String>(
+                              value: maritalStatuses[e],
+                              child: Text(maritalStatuses[e] ?? "")))
                           .toList(),
                       onChanged: (value) {
-                        controller.maritalStatus.value = maritalStatuses[value];
+                        controller.maritalStatus.value =
+                            reverseMaritalStatuses[value];
                       },
                       hint: const Text("Select"),
                       buttonStyleData: ButtonStyleData(
@@ -481,6 +504,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               24.verticalSpace,
+              Text("Upload Resume *", style: _headingStyle),
               Center(
                 child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
@@ -533,20 +557,31 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      bool shouldContinue = await controller.postStep1();
-                      if (shouldContinue == true) {
-                        controller.step.value = 2;
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(64))),
-                    child: controller.isUpdating.value
-                        ? CircularProgressIndicator()
-                        : const Text("SAVE & CONTINUE"),
-                  ),
+                  controller.crewUser?.id == null
+                      ? controller.isUpdating.value
+                          ? CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: () async {
+                                bool shouldContinue =
+                                    await controller.postStep1();
+                                if (shouldContinue == true) {
+                                  controller.step.value = 2;
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(64))),
+                              child: const Text("SAVE & CONTINUE"),
+                            )
+                      : ElevatedButton(
+                          onPressed: () async {
+                            controller.step.value = 2;
+                          },
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(64))),
+                          child: const Text("NEXT"),
+                        ),
                 ],
               ),
               24.verticalSpace
