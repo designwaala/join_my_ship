@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class UserDetails {
+  int? id;
   int? userId;
   String? iNDOSNumber;
   String? cDCNumber;
@@ -17,7 +18,8 @@ class UserDetails {
   String? validUSVisaValidTill;
 
   UserDetails(
-      {this.userId,
+      {this.id,
+      this.userId,
       this.iNDOSNumber,
       this.cDCNumber,
       this.cDCNumberValidTill,
@@ -33,6 +35,7 @@ class UserDetails {
       this.validUSVisaValidTill});
 
   UserDetails.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     userId = json['user_id'];
     iNDOSNumber = json['INDOS_number'];
     cDCNumber = json['CDC_number'];
@@ -43,8 +46,14 @@ class UserDetails {
     passportNumberValidTill = json['Passport_number_valid_till'];
     sTCWIssuingAuthority = json['STCW_Issuing_Authority'] == null
         ? null
-        : List<IssuingAuthority>.from(jsonDecode(json['STCW_Issuing_Authority'])
-            ?.map((e) => IssuingAuthority.fromJson(e)));
+        : (jsonDecode(json['STCW_Issuing_Authority']) is Map<String, dynamic>
+            ? [
+                IssuingAuthority.fromJson(
+                    jsonDecode(json['STCW_Issuing_Authority']))
+              ]
+            : List<IssuingAuthority>.from(
+                jsonDecode(json['STCW_Issuing_Authority'])
+                    ?.map((e) => IssuingAuthority.fromJson(e))));
     validCOCIssuingAuthority = json['valid_COC_Issuing_Authority'] == null ||
             jsonDecode(json['valid_COC_Issuing_Authority']) is! Map
         ? null
@@ -71,6 +80,7 @@ class UserDetails {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
+    data['id'] = id;
     data['user_id'] = userId;
     data['INDOS_number'] = iNDOSNumber;
     data['CDC_number'] = cDCNumber;
@@ -79,14 +89,21 @@ class UserDetails {
     data['CDC_seaman_book_valid_till'] = cDCSeamanBookNumberValidTill;
     data['Passport_number'] = passportNumber;
     data['Passport_number_valid_till'] = passportNumberValidTill;
-    data['STCW_Issuing_Authority'] =
-        sTCWIssuingAuthority?.map((e) => e.toJson()).toList();
-    data['valid_COC_Issuing_Authority'] =
-        validCOCIssuingAuthority?.map((e) => e.toJson()).toList();
-    data['valid_COP_Issuing_Authority'] =
-        validCOPIssuingAuthority?.map((e) => e.toJson()).toList();
+    data['STCW_Issuing_Authority'] = sTCWIssuingAuthority == null
+        ? null
+        : jsonEncode(sTCWIssuingAuthority?.map((e) => e.toJson()).toList());
+    data['valid_COC_Issuing_Authority'] = validCOCIssuingAuthority == null
+        ? null
+        : jsonEncode(validCOCIssuingAuthority?.map((e) => e.toJson()).toList());
+    data['valid_COP_Issuing_Authority'] = validCOPIssuingAuthority == null
+        ? null
+        : jsonEncode(validCOPIssuingAuthority?.map((e) => e.toJson()).toList());
     data['valid_Watch_keeping_Issuing_Authority'] =
-        validWatchKeepingIssuingAuthority?.map((e) => e.toJson()).toList();
+        validWatchKeepingIssuingAuthority == null
+            ? null
+            : jsonEncode(validWatchKeepingIssuingAuthority
+                ?.map((e) => e.toJson())
+                .toList());
     data['valid_US_Visa'] = validUSVisa;
     data['valid_US_Visa_valid_till'] = validUSVisaValidTill;
     data.removeWhere((key, value) => value == null);

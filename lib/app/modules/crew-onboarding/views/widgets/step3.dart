@@ -51,8 +51,42 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             16.verticalSpace,
             Text("Please enter last two vessel records"),
             8.verticalSpace,
+            ...controller.serviceRecords.map((serviceRecord) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(serviceRecord.companyName ?? ""),
+                    controller.serviceRecordDeletingId.value == serviceRecord.id
+                        ? CircularProgressIndicator()
+                        : TextButton(
+                            onPressed: () {
+                              if (serviceRecord.id == null) {
+                                return;
+                              }
+                              controller.deleteServiceRecord(serviceRecord.id!);
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+                                4.horizontalSpace,
+                                Text("DELETE",
+                                    style: Get.textTheme.bodyMedium
+                                        ?.copyWith(color: Colors.red))
+                              ],
+                            ))
+                  ],
+                )),
+            if (controller.step3FormMisses
+                .contains(Step3FormMiss.lessThan2SeaServiceRecords)) ...[
+              Text("Please provide at least 2 Sea Service Records",
+                  style: Get.textTheme.bodyMedium?.copyWith(color: Colors.red)),
+              4.verticalSpace
+            ],
             OutlinedButton(
                 onPressed: () {
+                  controller.prepareRecordBottomSheet();
                   showModalBottomSheet(
                       shape: RoundedRectangleBorder(
                           borderRadius:
@@ -74,6 +108,43 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             16.verticalSpace,
             Text("Please enter your reference details"),
             8.verticalSpace,
+            ...controller.previousEmployerReferences
+                .map((previousEmployerRef) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(previousEmployerRef.companyName ?? ""),
+                        controller.previousEmployerReferenceDeletingId.value ==
+                                previousEmployerRef.id
+                            ? CircularProgressIndicator()
+                            : TextButton(
+                                onPressed: () {
+                                  if (previousEmployerRef.id == null) {
+                                    return;
+                                  }
+                                  controller
+                                      .deleteReferenceFromPreviousEmployer(
+                                          previousEmployerRef.id!);
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                    4.horizontalSpace,
+                                    Text("DELETE",
+                                        style: Get.textTheme.bodyMedium
+                                            ?.copyWith(color: Colors.red))
+                                  ],
+                                ))
+                      ],
+                    )),
+            if (controller.step3FormMisses.contains(
+                Step3FormMiss.referenceFromPreviousEmployerNotProvided)) ...[
+              Text("Please provide at least 1 Reference from past employer",
+                  style: Get.textTheme.bodyMedium?.copyWith(color: Colors.red)),
+              4.verticalSpace
+            ],
             OutlinedButton(
                 onPressed: () {
                   showModalBottomSheet(
@@ -142,13 +213,17 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
               ],
             ),
             16.verticalSpace,
+            if (controller.step3FormMisses
+                .contains(Step3FormMiss.didNotAgreeToTermsAndCondition)) ...[
+              Text("Please agree to the aforementioned terms.",
+                  style: Get.textTheme.bodyMedium?.copyWith(color: Colors.red)),
+              4.verticalSpace
+            ],
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
-                  },
+                  onPressed: controller.step3SubmitOnPress,
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(64))),

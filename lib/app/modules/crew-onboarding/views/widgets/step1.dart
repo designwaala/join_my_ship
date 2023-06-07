@@ -351,45 +351,49 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton2<StateModel?>(
-                          value: controller.state.value,
-                          isExpanded: true,
-                          items: controller.states
-                              .map((e) => DropdownMenuItem(
-                                  value: e,
-                                  child: Text(
-                                    e.stateName ?? "",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  )))
-                              .toList(),
-                          onChanged: (value) {
-                            controller.state.value = value;
-                          },
-                          hint: const Text("State"),
-                          buttonStyleData: ButtonStyleData(
-                              height: 40,
-                              width: 160,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(64),
-                                border:
-                                    Border.all(color: Get.theme.primaryColor),
-                              )),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2<int?>(
+                            value: controller.state.value?.id,
+                            isExpanded: true,
+                            items: controller.states
+                                .map((e) => DropdownMenuItem(
+                                    value: e.id,
+                                    child: Text(
+                                      e.stateName ?? "",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )))
+                                .toList(),
+                            onChanged: (value) {
+                              controller.state.value = controller.states
+                                  .firstWhereOrNull(
+                                      (state) => state.id == value);
+                            },
+                            hint: const Text("State"),
+                            buttonStyleData: ButtonStyleData(
+                                height: 40,
+                                width: 160,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(64),
+                                  border:
+                                      Border.all(color: Get.theme.primaryColor),
+                                )),
+                          ),
                         ),
-                      ),
-                      if (controller.step1FormMisses
-                          .contains(Step1FormMiss.didNotSelectState)) ...[
-                        4.verticalSpace,
-                        Text("Please select your State",
-                            style: Get.textTheme.bodySmall
-                                ?.copyWith(color: Colors.red)),
-                      ]
-                    ],
+                        if (controller.step1FormMisses
+                            .contains(Step1FormMiss.didNotSelectState)) ...[
+                          4.verticalSpace,
+                          Text("Please select your State",
+                              style: Get.textTheme.bodySmall
+                                  ?.copyWith(color: Colors.red)),
+                        ]
+                      ],
+                    ),
                   ),
                   16.horizontalSpace,
                   Expanded(

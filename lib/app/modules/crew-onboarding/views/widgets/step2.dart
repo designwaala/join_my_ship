@@ -296,15 +296,15 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                 if (controller.selectedRank.value?.coc == true)
                   const COCDetails(),
                 if (controller.isHoldingValidCOC.value != true
-                    // &&
-                    //     ![
-                    //       "Mess boy / GS / Steward",
-                    //       "Second Cook / 2nd Cook",
-                    //       "Chief Cook",
-                    //       "Trainee Electrical Cadet",
-                    //       "ETO / Electrician",
-                    //     ].contains(controller.selectedRank.value?.name)
-                    ) ...[
+                // &&
+                //     ![
+                //       "Mess boy / GS / Steward",
+                //       "Second Cook / 2nd Cook",
+                //       "Chief Cook",
+                //       "Trainee Electrical Cadet",
+                //       "ETO / Electrician",
+                //     ].contains(controller.selectedRank.value?.name)
+                ) ...[
                   if (controller.selectedRank.value?.cop == true) ...[
                     const COPDetails(),
                     16.verticalSpace,
@@ -388,19 +388,30 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    controller.isUpdating.value
-                        ? const CircularProgressIndicator()
+                    controller.userDetails?.id == null
+                        ? controller.isUpdating.value
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
+                                onPressed: () async {
+                                  // controller.step.value = 3;
+                                  if (await controller.postStep2()) {
+                                    controller.step.value = 3;
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(64))),
+                                child: const Text("SAVE & CONTINUE"),
+                              )
                         : ElevatedButton(
                             onPressed: () async {
-                              // controller.step.value = 3;
-                              if (await controller.postStep2()) {
-                                controller.step.value = 3;
-                              }
+                              controller.step.value = 3;
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(64))),
-                            child: const Text("SAVE & CONTINUE"),
+                            child: const Text("NEXT"),
                           ),
                   ],
                 ),

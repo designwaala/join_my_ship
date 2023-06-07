@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,16 +8,23 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:join_mp_ship/app/data/models/country_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/previous_employer_model.dart';
 import 'package:join_mp_ship/app/data/models/previous_employer_reference_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
 import 'package:join_mp_ship/app/data/models/service_record_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
+import 'package:join_mp_ship/app/data/models/vessel_type_model.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
 import 'package:join_mp_ship/app/data/providers/service_record_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
+import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 import 'package:join_mp_ship/utils/secure_storage.dart';
@@ -46,19 +54,10 @@ enum Step2FormMiss {
   watchKeepingIssuingAuthority,
 }
 
-class FormCustomization {
-  final String rank;
-  final int rankId;
-  final bool coc;
-  final bool cop;
-  final bool watchKeeping;
-
-  const FormCustomization(
-      {required this.rank,
-      required this.rankId,
-      required this.coc,
-      required this.cop,
-      required this.watchKeeping});
+enum Step3FormMiss {
+  lessThan2SeaServiceRecords,
+  referenceFromPreviousEmployerNotProvided,
+  didNotAgreeToTermsAndCondition
 }
 
 class CrewOnboardingController extends GetxController {
@@ -137,6 +136,7 @@ class CrewOnboardingController extends GetxController {
 
   RxList<Step1FormMiss> step1FormMisses = RxList.empty();
   RxList<Step2FormMiss> step2FormMisses = RxList.empty();
+  RxList<Step3FormMiss> step3FormMisses = RxList.empty();
 
   GlobalKey<FormState> formKeyStep1 = GlobalKey<FormState>();
   GlobalKey<FormState> formKeyStep2 = GlobalKey<FormState>();
@@ -144,7 +144,7 @@ class CrewOnboardingController extends GetxController {
   List<Country> countries = [];
   RxList<StateModel> states = RxList.empty();
 
-  RxList<ServiceRecord> serviceRecords = RxList.empty();
+  RxList<SeaServiceRecord> serviceRecords = RxList.empty();
   RxList<PreviousEmployerReference> previousEmployerReferences = RxList.empty();
 
   RxBool isAddingBottomSheet = false.obs;
@@ -155,6 +155,9 @@ class CrewOnboardingController extends GetxController {
   RxList<IssuingAuthority> watchKeepingIssuingAuthorities = RxList.empty();
 
   int? userId;
+
+  List<VesselType> vesselTypes = [];
+  RxBool isPreparingRecordBottomSheet = false.obs;
 
 /*   List<String> ranks = [
     "Master/Captain",
@@ -193,6 +196,9 @@ class CrewOnboardingController extends GetxController {
 
   RxnInt maritalStatus = RxnInt();
 
+  RxInt serviceRecordDeletingId = (-1).obs;
+  RxInt previousEmployerReferenceDeletingId = (-1).obs;
+
   @override
   void onInit() {
     CrewOnboardingArguments? args =
@@ -207,16 +213,35 @@ class CrewOnboardingController extends GetxController {
     isLoading.value = true;
     ranks = await getIt<RanksProvider>().getRankList();
     countries = (await getIt<CountryProvider>().getCountry()) ?? [];
-    crewUser = await getIt<CrewUserProvider>().getCrewUser();
-
-    await setStep1Fields();
+    crewUser = await getIt<CrewUserProvider>().getCrewUser(softRefresh: true);
     if (crewUser?.id == null) {
       step.value = 1;
     } else {
+      await setStep1Fields();
       userDetails =
           await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
       setStep2Fields();
-      step.value = 2;
+      if (userDetails?.id == null) {
+        step.value = 2;
+      } else {
+        serviceRecords.value =
+            (await getIt<SeaServiceProvider>().getSeaServices(crewUser!.id!)) ??
+                [];
+        previousEmployerReferences.value =
+            (await getIt<PreviousEmployerProvider>()
+                    .getPreviousEmployer(crewUser!.id!)) ??
+                [];
+        step.value = 3;
+
+        if (serviceRecords.length >= 2 &&
+            previousEmployerReferences.isNotEmpty) {
+          if (crewUser?.isVerified == 1) {
+            Get.toNamed(Routes.HOME);
+          } else {
+            Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+          }
+        }
+      }
     }
     isLoading.value = false;
   }
@@ -230,11 +255,15 @@ class CrewOnboardingController extends GetxController {
     passportNumber.text = userDetails?.passportNumber ?? "";
     passportValidTill.text = userDetails?.passportNumberValidTill ?? "";
     usVisaValidTill.text = userDetails?.validUSVisaValidTill ?? "";
-
-    stcwIssuingAuthorities = RxList.empty();
-    cocIssuingAuthorities = RxList.empty();
-    copIssuingAuthorities = RxList.empty();
-    watchKeepingIssuingAuthorities = RxList.empty();
+    stcwIssuingAuthorities.value = userDetails?.sTCWIssuingAuthority ?? [];
+    cocIssuingAuthorities.value = userDetails?.validCOCIssuingAuthority ?? [];
+    copIssuingAuthorities.value = userDetails?.validCOPIssuingAuthority ?? [];
+    watchKeepingIssuingAuthorities.value =
+        userDetails?.validWatchKeepingIssuingAuthority ?? [];
+    isHoldingValidCOC.value = cocIssuingAuthorities.isNotEmpty;
+    isHoldingValidCOP.value = copIssuingAuthorities.isNotEmpty;
+    isHoldingWatchKeeping.value = watchKeepingIssuingAuthorities.isNotEmpty;
+    isHoldingValidUSVisa.value = userDetails?.validUSVisaValidTill != null;
   }
 
   Future<void> setStep1Fields() async {
@@ -256,7 +285,23 @@ class CrewOnboardingController extends GetxController {
   }
 
   getStates() async {
-    states.value = (await getIt<StateProvider>().getStates(countryId: 1)) ?? [];
+    if (country.value?.id == null) {
+      return;
+    }
+    states.value = (await getIt<StateProvider>()
+            .getStates(countryId: country.value!.id!)) ??
+        [];
+    states.add(
+        StateModel(id: 58, country: 00, stateCode: "00", stateName: "Others"));
+  }
+
+  prepareRecordBottomSheet() async {
+    if (vesselTypes.isNotEmpty) {
+      return;
+    }
+    isPreparingRecordBottomSheet.value = true;
+    vesselTypes = (await getIt<VesselTypeProvider>().getVesselTypes()) ?? [];
+    isPreparingRecordBottomSheet.value = false;
   }
 
   @override
@@ -450,10 +495,29 @@ class CrewOnboardingController extends GetxController {
     return true;
   }
 
+  step3SubmitOnPress() {
+    step3FormMisses.clear();
+    if (serviceRecords.length < 2) {
+      step3FormMisses.add(Step3FormMiss.lessThan2SeaServiceRecords);
+    }
+    if (previousEmployerReferences.isEmpty) {
+      step3FormMisses
+          .add(Step3FormMiss.referenceFromPreviousEmployerNotProvided);
+    }
+    if (!declaration1.value || !declaration2.value) {
+      step3FormMisses.add(Step3FormMiss.didNotAgreeToTermsAndCondition);
+    }
+
+    if (step3FormMisses.isNotEmpty) {
+      return;
+    }
+    Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+  }
+
   Future<bool> addServiceRecord() async {
     isAddingBottomSheet.value = true;
-    ServiceRecord? newRecord = await getIt<ServiceRecordProvider>()
-        .postServiceRecord(ServiceRecord(
+    SeaServiceRecord? newRecord = await getIt<SeaServiceProvider>()
+        .postSeaService(SeaServiceRecord(
             companyName: recordCompanyName.text,
             shipName: recordShipName.text,
             iMONumber: recordIMONumber.text,
@@ -472,6 +536,53 @@ class CrewOnboardingController extends GetxController {
     } else {
       return false;
     }
+  }
+
+  Future<void> deleteServiceRecord(int id) async {
+    serviceRecordDeletingId.value = id;
+    Response resp = await getIt<SeaServiceProvider>().deleteSeaService(id);
+    if (resp.statusCode == 204) {
+      serviceRecords.removeWhere((serviceRecord) => serviceRecord.id == id);
+    } else {
+      fToast.showToast(
+          child: errorToast(
+              "There was an issue deleting your Sea Service Record"));
+    }
+    serviceRecordDeletingId.value = -1;
+  }
+
+  Future<bool> addReferenceFromPreviousEmployer() async {
+    isAddingBottomSheet.value = true;
+    PreviousEmployerReference? newPreviousEmployerReference =
+        await getIt<PreviousEmployerProvider>()
+            .postPreviousEmployer(PreviousEmployerReference(
+      userId: userId,
+      companyName: referenceCompanyName.text,
+      referenceName: referenceReferenceName.text,
+      contactNumber: referenceContactNumber.text,
+    ));
+    isAddingBottomSheet.value = false;
+    if (newPreviousEmployerReference != null) {
+      previousEmployerReferences.add(newPreviousEmployerReference);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  deleteReferenceFromPreviousEmployer(int id) async {
+    previousEmployerReferenceDeletingId.value = id;
+    final resp =
+        await getIt<PreviousEmployerProvider>().deletePreviousEmployer(id);
+    if (resp.statusCode == 204) {
+      previousEmployerReferences.removeWhere(
+          (previousEmployerReference) => previousEmployerReference.id == id);
+    } else {
+      fToast.showToast(
+          child: errorToast(
+              "There was an issue deleting your Employer Reference"));
+    }
+    previousEmployerReferenceDeletingId.value = -1;
   }
 }
 

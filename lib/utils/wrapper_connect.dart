@@ -4,18 +4,24 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/login_model.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class WrapperConnect extends GetConnect {
+  _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    await PreferencesHelper.instance.clearAll();
+    Get.offAllNamed(Routes.INFO);
+  }
+
   @override
-  Future<Response<T>> get<T>(
-    String url, {
-    Map<String, String>? headers,
-    String? contentType,
-    Map<String, dynamic>? query,
-    Decoder<T>? decoder,
-  }) async {
+  Future<Response<T>> get<T>(String url,
+      {Map<String, String>? headers,
+      String? contentType,
+      Map<String, dynamic>? query,
+      Decoder<T>? decoder,
+      bool softRefresh = false}) async {
     print(PreferencesHelper.instance.accessToken);
     // if (PreferencesHelper.instance.userCreated != true) {
     //   return await super.get<T>(
@@ -32,7 +38,10 @@ class WrapperConnect extends GetConnect {
     // }
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
-      await getAccessTokens();
+      bool didGetAccessTokens = await getAccessTokens();
+      if (!didGetAccessTokens && softRefresh) {
+        return Response<T>();
+      }
     }
     var response = await super.get<T>(
       url,
@@ -71,24 +80,34 @@ class WrapperConnect extends GetConnect {
           query: query,
           decoder: decoder,
         );
+        if (response.statusCode == 401) {
+          _signOut();
+        }
       }
     }
 
     return response;
   }
 
-  Future<void> getAccessTokens() async {
+  Future<bool> getAccessTokens() async {
     String? idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
     final response = await super.post(
       "myadmin_api/log_in/",
       {},
       headers: {"Authorization": "Bearer $idToken"},
-      decoder: (map) => Login.fromJson(map),
+      decoder: (map) {
+        try {
+          return Login.fromJson(map);
+        } catch (e) {
+          print("$e");
+        }
+      },
     );
     await Future.wait([
       PreferencesHelper.instance.setAccessToken(response.body?.data?.access),
       PreferencesHelper.instance.setRefreshToken(response.body?.data?.refresh)
     ]);
+    return response.body != null;
   }
 
   Future<void> refreshAccessToken() async {
@@ -111,7 +130,6 @@ class WrapperConnect extends GetConnect {
     Progress? uploadProgress,
   }) async {
     print(PreferencesHelper.instance.accessToken);
-    print(await FirebaseAuth.instance.currentUser?.getIdToken());
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
       await getAccessTokens();
@@ -158,6 +176,67 @@ class WrapperConnect extends GetConnect {
           decoder: decoder,
           uploadProgress: uploadProgress,
         );
+        if (response.statusCode == 401) {
+          _signOut();
+        }
+      }
+    }
+    return response;
+  }
+
+  @override
+  Future<Response<T>> delete<T>(
+    String url, {
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+  }) async {
+    print(PreferencesHelper.instance.accessToken);
+    if (PreferencesHelper.instance.accessToken.isEmpty) {
+      print("Access Token not found, getting them");
+      await getAccessTokens();
+    }
+    var response = await super.delete(
+      url,
+      headers: headers ??
+          {"Authorization": "Bearer ${PreferencesHelper.instance.accessToken}"},
+      contentType: contentType,
+      query: query,
+      decoder: decoder,
+    );
+
+    if (response.statusCode == 401) {
+      print("Refreshing Access Token");
+      await refreshAccessToken();
+      response = await super.delete(
+        url,
+        headers: headers ??
+            {
+              "Authorization":
+                  "Bearer ${PreferencesHelper.instance.accessToken}"
+            },
+        contentType: contentType,
+        query: query,
+        decoder: decoder,
+      );
+      if (response.statusCode == 401) {
+        print("Refreshing Access Token didnt work, getting new Tokens");
+        await getAccessTokens();
+        response = await super.delete(
+          url,
+          headers: headers ??
+              {
+                "Authorization":
+                    "Bearer ${PreferencesHelper.instance.accessToken}"
+              },
+          contentType: contentType,
+          query: query,
+          decoder: decoder,
+        );
+        if (response.statusCode == 401) {
+          _signOut();
+        }
       }
     }
     return response;

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
@@ -27,9 +29,11 @@ class UserDetailsProvider extends WrapperConnect {
   Future<UserDetails?> getUserDetails(int userId) async {
     final response =
         await get("crew/crew_details_list/$userId", decoder: (map) {
-          if(map.isNotEmpty)
-      {return UserDetails.fromJson(map.first);}
-    });
+      if (map.isEmpty) {
+        return null;
+      }
+      return UserDetails.fromJson(map.first);
+    }, contentType: "");
     return response.body;
   }
 }

@@ -15,8 +15,8 @@ class CrewUserProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
-  Future<CrewUser?> getCrewUser() async {
-    final response = await get('crew/get_user');
+  Future<CrewUser?> getCrewUser({bool softRefresh = false}) async {
+    final response = await get('crew/get_user', softRefresh: softRefresh);
     return response.body;
   }
 

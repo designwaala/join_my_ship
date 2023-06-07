@@ -52,14 +52,17 @@ class CrewSignInController extends GetxController {
     bool? emailVerified = FirebaseAuth.instance.currentUser?.emailVerified;
     if (emailVerified == true) {
       fToast.showToast(child: successToast("Authentication Successful"));
-      if (login?.data?.access == null || login?.data?.refresh == null) {
-        Get.offAllNamed(Routes.CREW_ONBOARDING,
-            arguments: CrewOnboardingArguments(
-                email: emailController.text,
-                password: passwordController.text));
-      } else {
-        Get.offAllNamed(Routes.HOME);
-      }
+      Get.offAllNamed(Routes.CREW_ONBOARDING,
+          arguments: CrewOnboardingArguments(
+              email: emailController.text, password: passwordController.text));
+      // if (login?.data?.access == null || login?.data?.refresh == null) {
+      //   Get.offAllNamed(Routes.CREW_ONBOARDING,
+      //       arguments: CrewOnboardingArguments(
+      //           email: emailController.text,
+      //           password: passwordController.text));
+      // } else {
+      //   Get.offAllNamed(Routes.HOME);
+      // }
       SecureStorage.instance.password = passwordController.text;
     } else if (emailVerified == false) {
       // await FirebaseAuth.instance.signOut();

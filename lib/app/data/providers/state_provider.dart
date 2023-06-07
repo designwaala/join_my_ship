@@ -4,7 +4,7 @@ import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
 import '../models/state_model.dart';
 
-class StateProvider extends WrapperConnect {
+class StateProvider extends GetConnect {
   StateProvider() {
     httpClient.defaultDecoder = (map) {
       if (map is Map<String, dynamic>) return StateModel.fromJson(map);
@@ -16,7 +16,7 @@ class StateProvider extends WrapperConnect {
 
   Future<List<StateModel>?> getStates({required int countryId}) async {
     final response = await get('employer/state_list/$countryId',
-    headers: {},
+        headers: {},
         decoder: (map) =>
             List<StateModel>.from(map.map((e) => StateModel.fromJson(e))));
     return response.body;

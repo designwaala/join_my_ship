@@ -96,16 +96,22 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                       SizedBox(
                         width: double.maxFinite,
                         height: 64.h,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(64))),
-                            onPressed: controller.isOTPSent.value
-                                ? controller.verify
-                                : controller.sendOTP,
-                            child: controller.isVerifying.value
-                                ? CircularProgressIndicator()
-                                : Text(controller.isOTPSent.value
+                        child: controller.isVerifying.value
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(),
+                                ],
+                              )
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(64))),
+                                onPressed: controller.isOTPSent.value
+                                    ? controller.verify
+                                    : controller.sendOTP,
+                                child: Text(controller.isOTPSent.value
                                     ? "VERIFY"
                                     : "SEND OTP")),
                       ),

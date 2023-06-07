@@ -138,14 +138,21 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                         SizedBox(
                           width: double.maxFinite,
                           height: 64.h,
-                          child: ElevatedButton(
+                          child: 
+                          controller.isAdding.value
+                                  ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircularProgressIndicator(),
+                                    ],
+                                  )
+                                  :
+                          ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(64))),
                               onPressed: controller.addEmail,
-                              child: controller.isAdding.value
-                                  ? CircularProgressIndicator()
-                                  : Text("SIGN UP")),
+                              child:  Text("SIGN UP")),
                         ),
                         Spacer(),
                         32.verticalSpace,

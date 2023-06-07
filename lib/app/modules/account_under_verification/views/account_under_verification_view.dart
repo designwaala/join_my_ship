@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 
 import '../controllers/account_under_verification_controller.dart';
 
@@ -28,20 +29,20 @@ class AccountUnderVerificationView
                   fontWeight: FontWeight.bold,
                   fontSize: 20)),
           16.verticalSpace,
-          Text(
-              """
+          Text("""
 Your account is under 
 verification, and we will notify 
 you as soon as the verification 
 process is complete.
-""",
-              textAlign: TextAlign.center, style: Get.textTheme.bodyMedium),
+""", textAlign: TextAlign.center, style: Get.textTheme.bodyMedium),
           38.verticalSpace,
           Text("Note: Verification process may take up to 48 hours.",
               style: Get.textTheme.bodyMedium?.copyWith(fontSize: 12)),
           38.verticalSpace,
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed(Routes.HOME);
+            },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(64))),
