@@ -1,0 +1,14 @@
+{
+    "id": 4,
+    "user_id": 39,
+    "company_name": "ship services",
+    "ship_name": "ship 1",
+    "IMO_number": "5165654465",
+    "Rank_id": 1,
+    "Flag": "1",
+    "GRT": "65654654asd4645",
+    "VesselType": 1,
+    "signon_date": "2009-01-01",
+    "signoff_date": "2011-05-05",
+    "contract_duration": 28
+}

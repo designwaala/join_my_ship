@@ -9,7 +9,6 @@ class SplashView extends GetView<SplashController> {
   const SplashView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    controller;
     return Scaffold(
         backgroundColor: Get.theme.primaryColor,
         body: Column(

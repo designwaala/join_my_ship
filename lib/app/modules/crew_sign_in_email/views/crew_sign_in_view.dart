@@ -89,14 +89,20 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                       SizedBox(
                         width: double.maxFinite,
                         height: 64.h,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(64))),
-                            onPressed: controller.verify,
-                            child: controller.isVerifying.value
-                                ? CircularProgressIndicator()
-                                : Text("LOGIN")),
+                        child: controller.isVerifying.value
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(),
+                                ],
+                              )
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(64))),
+                                onPressed: controller.verify,
+                                child: Text("LOGIN")),
                       ),
                       18.verticalSpace,
                       RichText(

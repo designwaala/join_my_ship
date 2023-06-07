@@ -12,6 +12,9 @@ abstract class Routes {
   static const SIGN_UP_EMAIL = _Paths.SIGN_UP_EMAIL;
   static const CHOOSE_EMPLOYER = _Paths.CHOOSE_EMPLOYER;
   static const SIGN_UP_PHONE_NUMBER = _Paths.SIGN_UP_PHONE_NUMBER;
+  static const CREW_ONBOARDING = _Paths.CREW_ONBOARDING;
+  static const EMAIL_VERIFICATION_WAITING = _Paths.EMAIL_VERIFICATION_WAITING;
+  static const ACCOUNT_UNDER_VERIFICATION = _Paths.ACCOUNT_UNDER_VERIFICATION;
 }
 
 abstract class _Paths {
@@ -25,4 +28,7 @@ abstract class _Paths {
   static const SIGN_UP_EMAIL = '/sign-up-email';
   static const CHOOSE_EMPLOYER = '/choose-employer';
   static const SIGN_UP_PHONE_NUMBER = '/sign-up-phone-number';
+  static const CREW_ONBOARDING = '/crew-onboarding';
+  static const EMAIL_VERIFICATION_WAITING = '/email-verification-waiting';
+  static const ACCOUNT_UNDER_VERIFICATION = '/account-under-verification';
 }

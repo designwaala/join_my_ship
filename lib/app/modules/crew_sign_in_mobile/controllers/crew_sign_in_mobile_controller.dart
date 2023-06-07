@@ -47,9 +47,8 @@ class CrewSignInMobileController extends GetxController {
     if (FirebaseAuth.instance.currentUser?.emailVerified != true) {
       await FirebaseAuth.instance.signOut();
       fToast.showToast(child: errorToast("Email not Verified"));
-    }
-    if (FirebaseAuth.instance.currentUser != null) {
-      Get.offAllNamed(Routes.HOME);
+    } else if (FirebaseAuth.instance.currentUser != null) {
+      Get.offAllNamed(Routes.CREW_ONBOARDING);
       fToast.showToast(child: successToast("Authentication Successful"));
     } else {
       fToast.showToast(child: errorToast("Authentication Failed"));

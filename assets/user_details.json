@@ -1,0 +1,18 @@
+{
+    "user_id": 39,
+    "INDOS_number": "65165156",
+    "CDC_number": "516115165",
+    "CDC_number_valid_till": "2001-01-01",
+    "Passport_number": "54656565",
+    "Passport_number_valid_till": "2001-01-01",
+    "STCW_Issuing_Authority": "54656565",
+    "STCW_Issuing_Authority_valid_till": "2001-01-01",
+    "valid_COC_Issuing_Authority": "54656565",
+    "valid_COC_Issuing_Authority_valid_till": "2001-01-01",
+    "valid_COP_Issuing_Authority": "54656565",
+    "valid_COP_Issuing_Authority_valid_till": "2001-01-01",
+    "valid_Watch_keeping_Issuing_Authority": "54656565",
+    "valid_Watch_keeping_Issuing_Authority_valid_till": "2001-01-01",
+    "valid_US_Visa": "54656565",
+    "valid_US_Visa_valid_till": "2001-01-01"
+}
