@@ -163,13 +163,6 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                           }));
                 },
                 child: Text("Add a reference")),
-            16.verticalSpace,
-            Center(
-              child: Text(
-                  "Supported file formats Doc, Docx, pdf | Maximum file size 2 MB",
-                  style: Get.textTheme.bodyMedium
-                      ?.copyWith(fontSize: 8.sp, color: Colors.grey)),
-            ),
             24.verticalSpace,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +180,9 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                 8.horizontalSpace,
                 Flexible(
                   child: Text(
-                      "I hereby declare that all the details provided are true to the best of my knowledge."),
+                    "I hereby declare that all the details provided are true to the best of my knowledge.",
+                    textAlign: TextAlign.justify,
+                  ),
                 )
               ],
             ),
@@ -208,7 +203,9 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                 8.horizontalSpace,
                 Flexible(
                   child: Text(
-                      "I authorize Join My Ship to save and share my profile to employers when required."),
+                    "I authorize Join My Ship to save and share my profile to employers when required.",
+                    textAlign: TextAlign.justify,
+                  ),
                 )
               ],
             ),
