@@ -41,7 +41,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Text("Add a record",
                       style: Get.textTheme.bodyMedium?.copyWith(
-                          fontSize: 22, fontWeight: FontWeight.bold)),
+                          fontSize: 20, fontWeight: FontWeight.bold)),
                   16.verticalSpace,
                   Text("Company Name", style: headingStyle),
                   16.verticalSpace,
