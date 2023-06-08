@@ -78,6 +78,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                         width: 146.w,
                         child: TextFormField(
                             controller: controller.recordIMONumber,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                                 hintText: "Ship Name",
                                 contentPadding: EdgeInsets.symmetric(
@@ -155,6 +156,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                         width: 146.w,
                         child: TextFormField(
                             controller: controller.recordGrt,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                                 hintText: "Enter GRT",
                                 contentPadding: EdgeInsets.symmetric(
@@ -223,7 +225,8 @@ class AddARecord extends GetView<CrewOnboardingController> {
                             decoration: InputDecoration(
                                 fillColor: Colors.white,
                                 filled: true,
-                                hintText: "dd/mm/yy",
+                                hintText: "yyyy/mm/dd",
+                                hintStyle: Get.textTheme.bodySmall,
                                 isDense: true,
                                 suffixIcon: const Padding(
                                   padding: EdgeInsets.only(right: 16),
@@ -263,7 +266,8 @@ class AddARecord extends GetView<CrewOnboardingController> {
                             decoration: InputDecoration(
                                 fillColor: Colors.white,
                                 filled: true,
-                                hintText: "dd/mm/yy",
+                                hintText: "yyyy/mm/dd",
+                                hintStyle: Get.textTheme.bodySmall,
                                 isDense: true,
                                 suffixIcon: const Padding(
                                   padding: EdgeInsets.only(right: 16),

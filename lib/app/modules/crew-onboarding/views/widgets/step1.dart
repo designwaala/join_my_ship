@@ -463,7 +463,8 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
-                              hintText: "dd/mm/yyyy",
+                              hintText: "yyyy/mm/dd",
+                              hintStyle: Get.textTheme.bodySmall,
                               isDense: true,
                               suffixIcon: Padding(
                                 padding: const EdgeInsets.only(right: 16),
