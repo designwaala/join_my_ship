@@ -53,7 +53,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("INDOS NO.  *", style: _headingStyle),
+                    Text("INDOS NO.  *", style: headingStyle),
                     48.horizontalSpace,
                     Expanded(
                       child: TextFormField(
@@ -79,7 +79,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                   ],
                 ),
                 8.verticalSpace,
-                Text("CDC Number *", style: _headingStyle),
+                Text("CDC Number *", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +147,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                   ],
                 ),
                 16.verticalSpace,
-                Text("CDC / Seaman Book Details *", style: _headingStyle),
+                Text("CDC / Seaman Book Details *", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +215,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                   ],
                 ),
                 16.verticalSpace,
-                Text("Passport Details *", style: _headingStyle),
+                Text("Passport Details *", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +314,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                     16.verticalSpace
                   ]
                 ],
-                Text("Are you holding valid US Visa? *", style: _headingStyle),
+                Text("Are you holding valid US Visa? *", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,7 +421,4 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
           ),
         ));
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

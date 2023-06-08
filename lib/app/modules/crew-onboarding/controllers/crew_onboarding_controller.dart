@@ -60,6 +60,9 @@ enum Step3FormMiss {
   didNotAgreeToTermsAndCondition
 }
 
+TextStyle? get headingStyle =>
+    Get.textTheme.titleSmall?.copyWith(color: Get.theme.primaryColor);
+
 class CrewOnboardingController extends GetxController {
   CrewUser? crewUser;
   UserDetails? userDetails;

@@ -16,7 +16,7 @@ class COCDetails extends GetView<CrewOnboardingController> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Are you holding valid COC? *", style: _headingStyle),
+          Text("Are you holding valid COC? *", style: headingStyle),
           8.verticalSpace,
           Row(
             children: [
@@ -207,7 +207,4 @@ class COCDetails extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

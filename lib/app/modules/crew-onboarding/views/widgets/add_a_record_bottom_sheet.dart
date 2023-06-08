@@ -42,7 +42,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                       style: Get.textTheme.bodyMedium?.copyWith(
                           fontSize: 22, fontWeight: FontWeight.bold)),
                   16.verticalSpace,
-                  Text("Company Name", style: _headingStyle),
+                  Text("Company Name", style: headingStyle),
                   16.verticalSpace,
                   TextFormField(
                       controller: controller.recordCompanyName,
@@ -56,7 +56,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                                   BorderSide(color: Get.theme.primaryColor),
                               borderRadius: BorderRadius.circular(64)))),
                   16.verticalSpace,
-                  Text("ship name", style: _headingStyle),
+                  Text("ship name", style: headingStyle),
                   16.verticalSpace,
                   TextFormField(
                       controller: controller.recordShipName,
@@ -72,7 +72,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   20.verticalSpace,
                   Row(
                     children: [
-                      Text("IMO Number", style: _headingStyle),
+                      Text("IMO Number", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -93,7 +93,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Rank", style: _headingStyle),
+                      Text("Rank", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -128,7 +128,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Flag Name", style: _headingStyle),
+                      Text("Flag Name", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -149,7 +149,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("GRT", style: _headingStyle),
+                      Text("GRT", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -170,7 +170,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Vessel Type", style: _headingStyle),
+                      Text("Vessel Type", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -204,7 +204,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Sign-On Date", style: _headingStyle),
+                      Text("Sign-On Date", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -245,7 +245,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Sign-Off Date", style: _headingStyle),
+                      Text("Sign-Off Date", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -285,7 +285,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Contract Duration", style: _headingStyle),
+                      Text("Contract Duration", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -342,7 +342,4 @@ class AddARecord extends GetView<CrewOnboardingController> {
             );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

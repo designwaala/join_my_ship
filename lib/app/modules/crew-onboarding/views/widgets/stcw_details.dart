@@ -16,7 +16,7 @@ class STCWDetails extends GetView<CrewOnboardingController> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("STCW Details *", style: _headingStyle),
+          Text("STCW Details *", style: headingStyle),
           16.verticalSpace,
           Row(
             children: [
@@ -170,7 +170,4 @@ class STCWDetails extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

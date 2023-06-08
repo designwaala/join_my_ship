@@ -47,7 +47,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             Text("Please complete your profile",
                 style: Get.textTheme.bodyMedium?.copyWith(color: Colors.grey)),
             16.verticalSpace,
-            Text("Sea Service Record *", style: _headingStyle),
+            Text("Sea Service Record *", style: headingStyle),
             16.verticalSpace,
             Text("Please enter last two vessel records"),
             8.verticalSpace,
@@ -104,7 +104,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                 },
                 child: Text("Add a record")),
             16.verticalSpace,
-            Text("Reference from Your Previous Employer", style: _headingStyle),
+            Text("Reference from Your Previous Employer", style: headingStyle),
             16.verticalSpace,
             Text("Please enter your reference details"),
             8.verticalSpace,
@@ -237,7 +237,4 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

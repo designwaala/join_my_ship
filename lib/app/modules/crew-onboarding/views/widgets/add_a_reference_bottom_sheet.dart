@@ -36,7 +36,7 @@ class AddAReference extends GetView<CrewOnboardingController> {
               children: [
                 Icon(Icons.business_sharp, color: Get.theme.primaryColor),
                 8.horizontalSpace,
-                Text("Company Name", style: _headingStyle)
+                Text("Company Name", style: headingStyle)
               ],
             ),
             16.verticalSpace,
@@ -56,7 +56,7 @@ class AddAReference extends GetView<CrewOnboardingController> {
                 Icon(Icons.account_circle_outlined,
                     color: Get.theme.primaryColor),
                 8.horizontalSpace,
-                Text("Reference name", style: _headingStyle)
+                Text("Reference name", style: headingStyle)
               ],
             ),
             16.verticalSpace,
@@ -75,7 +75,7 @@ class AddAReference extends GetView<CrewOnboardingController> {
               children: [
                 Icon(Icons.phone, color: Get.theme.primaryColor),
                 8.horizontalSpace,
-                Text("Contact Number", style: _headingStyle)
+                Text("Contact Number", style: headingStyle)
               ],
             ),
             16.verticalSpace,
@@ -128,7 +128,4 @@ class AddAReference extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

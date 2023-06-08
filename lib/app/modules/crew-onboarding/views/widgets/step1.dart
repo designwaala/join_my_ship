@@ -45,7 +45,9 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               22.verticalSpace,
-              Text("Create Profile", style: Get.theme.textTheme.headlineSmall),
+              Text("Create Profile",
+                  style: Get.theme.textTheme.headlineSmall
+                      ?.copyWith(fontSize: 20)),
               8.verticalSpace,
               Text("Please complete your profile",
                   style:
@@ -131,7 +133,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Current Rank", style: _headingStyle),
+                        Text("Current Rank", style: headingStyle),
                         if (controller.step1FormMisses.contains(
                             Step1FormMiss.didNotChooseCurrentRank)) ...[
                           2.verticalSpace,
@@ -184,7 +186,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 "Trainee Ordinary Seaman",
                 "Trainee Wiper",
               ].contains(controller.selectedRank.value?.name)) ...[
-                Text("Are you looking for Promotion?", style: _headingStyle),
+                Text("Are you looking for Promotion?", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   children: [
@@ -239,7 +241,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               ],
               Row(
                 children: [
-                  Text("Gender", style: _headingStyle),
+                  Text("Gender", style: headingStyle),
                   24.horizontalSpace,
                   Radio<Gender?>(
                       value: controller.gender.value,
@@ -259,7 +261,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               20.verticalSpace,
-              Text("Communication address", style: _headingStyle),
+              Text("Communication address", style: headingStyle),
               16.verticalSpace,
               TextFormField(
                   controller: controller.addressLine1,
@@ -438,7 +440,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               16.verticalSpace,
               Row(
                 children: [
-                  Expanded(child: Text("Date of birth", style: _headingStyle)),
+                  Expanded(child: Text("Date of birth", style: headingStyle)),
                   Expanded(
                       child: TextFormField(
                           controller: controller.dateOfBirth,
@@ -488,7 +490,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Marital Status", style: _headingStyle),
+                      Text("Marital Status", style: headingStyle),
                       if (controller.step1FormMisses
                           .contains(Step1FormMiss.didNotSelectMaritalStatus))
                         Text("Please select your Marital Status",
@@ -524,7 +526,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               24.verticalSpace,
-              Text("Upload Resume *", style: _headingStyle),
+              Text("Upload Resume *", style: headingStyle),
               Center(
                 child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
@@ -611,7 +613,4 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }
