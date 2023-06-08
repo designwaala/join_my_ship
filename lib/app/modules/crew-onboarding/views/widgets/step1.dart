@@ -161,7 +161,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                       },
                       hint: const Text("Select Rank"),
                       buttonStyleData: ButtonStyleData(
-                          height: 50,
+                          height: 40,
                           width: 200,
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(
@@ -220,7 +220,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                           },
                           hint: const Text("Select Rank"),
                           buttonStyleData: ButtonStyleData(
-                              height: 50,
+                              height: 40,
                               width: 160,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
