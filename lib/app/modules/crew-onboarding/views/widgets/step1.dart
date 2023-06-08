@@ -385,6 +385,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   Expanded(
                     child: CustomTextFormField(
                         controller: controller.zipCode,
+                        keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Please enter your zip code";
@@ -472,7 +473,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               ),
               24.verticalSpace,
               Text("Upload Resume *", style: headingStyle),
-              8.verticalSpace,
+              16.verticalSpace,
               Center(
                 child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
@@ -488,8 +489,11 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     onPressed: () async {
                       FilePickerResult? result =
                           await FilePicker.platform.pickFiles();
-                      if (![".doc", ".docx", ".pdf"]
-                          .contains(result?.files.single.extension ?? "")) {
+                      if (result == null) {
+                        return;
+                      }
+                      if (!["doc", "docx", "pdf"]
+                          .contains(result.files.single.extension ?? "")) {
                         controller.fToast.showToast(
                             child: errorToast(
                                 "Please pick your resume in supported file format"));
@@ -509,19 +513,28 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                             children: [
                               const Icon(Icons.check),
                               4.horizontalSpace,
-                              const Text("Resume picked")
+                              const Text("Resume Uploaded")
                             ],
                           )
-                        : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.upload),
-                              4.horizontalSpace,
-                              Text("UPLOAD",
-                                  style: Get.textTheme.bodyMedium?.copyWith(
-                                      color: Get.theme.primaryColor)),
-                            ],
-                          )),
+                        : controller.pickedResume.value != null
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.check),
+                                  4.horizontalSpace,
+                                  const Text("Resume picked")
+                                ],
+                              )
+                            : Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.upload),
+                                  4.horizontalSpace,
+                                  Text("UPLOAD",
+                                      style: Get.textTheme.bodyMedium?.copyWith(
+                                          color: Get.theme.primaryColor)),
+                                ],
+                              )),
               ),
               if (controller.step1FormMisses
                   .contains(Step1FormMiss.didNotSelectResume))
