@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -57,23 +58,36 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: controller.uploadedImagePath.value ==
-                                            null
-                                        ? Image.file(File(controller
-                                                .pickedImage.value!.path))
-                                            .image
-                                        : Image.network(controller
-                                                    .uploadedImagePath.value ??
-                                                "")
-                                            .image,
-                                    fit: BoxFit.cover)),
-                          )
+                          controller.uploadedImagePath.value != null
+                              ? CachedNetworkImage(
+                                  height: 100,
+                                  width: 100,
+                                  imageUrl:
+                                      controller.uploadedImagePath.value ?? "",
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(controller
+                                                        .uploadedImagePath
+                                                        .value ??
+                                                    ""))),
+                                        height: 100,
+                                        width: 100,
+                                      ))
+                              : Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: Image.file(File(controller
+                                                  .pickedImage.value!.path))
+                                              .image,
+                                          fit: BoxFit.cover)),
+                                )
                         ],
                       )
                     : Center(
