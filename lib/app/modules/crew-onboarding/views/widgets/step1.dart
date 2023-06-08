@@ -209,11 +209,13 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                         child: DropdownButton2<String>(
                           value: controller.promotionRank.value,
                           isExpanded: true,
+                          style: Get.textTheme.bodyMedium,
                           items: controller.ranks
                               ?.map((e) => DropdownMenuItem(
                                   value: e.name,
                                   child: Text(e.name ?? "",
-                                      style: Get.textTheme.bodySmall)))
+                                      style: Get.textTheme.bodySmall
+                                          ?.copyWith(color: Colors.black))))
                               .toList(),
                           onChanged: (value) {
                             controller.promotionRank.value = value;
