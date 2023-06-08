@@ -47,7 +47,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             Text("Please complete your profile",
                 style: Get.textTheme.bodyMedium?.copyWith(color: Colors.grey)),
             16.verticalSpace,
-            Text("Sea Service Record *", style: _headingStyle),
+            Text("Sea Service Record *", style: headingStyle),
             16.verticalSpace,
             Text("Please enter last two vessel records"),
             8.verticalSpace,
@@ -104,7 +104,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                 },
                 child: Text("Add a record")),
             16.verticalSpace,
-            Text("Reference from Your Previous Employer", style: _headingStyle),
+            Text("Reference from Your Previous Employer", style: headingStyle),
             16.verticalSpace,
             Text("Please enter your reference details"),
             8.verticalSpace,
@@ -163,13 +163,6 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                           }));
                 },
                 child: Text("Add a reference")),
-            16.verticalSpace,
-            Center(
-              child: Text(
-                  "Supported file formats Doc, Docx, pdf | Maximum file size 2 MB",
-                  style: Get.textTheme.bodyMedium
-                      ?.copyWith(fontSize: 8.sp, color: Colors.grey)),
-            ),
             24.verticalSpace,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +180,9 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                 8.horizontalSpace,
                 Flexible(
                   child: Text(
-                      "I hereby declare that all the details provided are true to the best of my knowledge."),
+                    "I hereby declare that all the details provided are true to the best of my knowledge.",
+                    textAlign: TextAlign.justify,
+                  ),
                 )
               ],
             ),
@@ -208,7 +203,9 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                 8.horizontalSpace,
                 Flexible(
                   child: Text(
-                      "I authorize Join My Ship to save and share my profile to employers when required."),
+                    "I authorize Join My Ship to save and share my profile to employers when required.",
+                    textAlign: TextAlign.justify,
+                  ),
                 )
               ],
             ),
@@ -237,7 +234,4 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

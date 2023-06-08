@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/utils/extensions/date_time.dart';
+import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 
 class AddARecord extends GetView<CrewOnboardingController> {
   final ScrollController scrollController;
@@ -40,60 +41,37 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Text("Add a record",
                       style: Get.textTheme.bodyMedium?.copyWith(
-                          fontSize: 22, fontWeight: FontWeight.bold)),
+                          fontSize: 20, fontWeight: FontWeight.bold)),
                   16.verticalSpace,
-                  Text("Company Name", style: _headingStyle),
+                  Text("Company Name", style: headingStyle),
                   16.verticalSpace,
-                  TextFormField(
+                  CustomTextFormField(
                       controller: controller.recordCompanyName,
-                      decoration: InputDecoration(
-                          hintText: "Company Name",
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          isDense: true,
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Get.theme.primaryColor),
-                              borderRadius: BorderRadius.circular(64)))),
+                      hintText: "Company Name"),
                   16.verticalSpace,
-                  Text("ship name", style: _headingStyle),
+                  Text("ship name", style: headingStyle),
                   16.verticalSpace,
-                  TextFormField(
+                  CustomTextFormField(
                       controller: controller.recordShipName,
-                      decoration: InputDecoration(
-                          hintText: "Ship Name",
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          isDense: true,
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Get.theme.primaryColor),
-                              borderRadius: BorderRadius.circular(64)))),
+                      hintText: "Ship Name"),
                   20.verticalSpace,
                   Row(
                     children: [
-                      Text("IMO Number", style: _headingStyle),
+                      Text("IMO Number", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
-                        child: TextFormField(
+                        child: CustomTextFormField(
                             controller: controller.recordIMONumber,
-                            decoration: InputDecoration(
-                                hintText: "Ship Name",
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                isDense: true,
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Get.theme.primaryColor),
-                                    borderRadius: BorderRadius.circular(64)))),
+                            keyboardType: TextInputType.number,
+                            hintText: "Ship Name"),
                       ),
                     ],
                   ),
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Rank", style: _headingStyle),
+                      Text("Rank", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -101,9 +79,12 @@ class AddARecord extends GetView<CrewOnboardingController> {
                           child: DropdownButton2<Rank>(
                             value: controller.recordRank.value,
                             isExpanded: true,
+                            style: Get.textTheme.bodySmall,
                             items: controller.ranks
                                     ?.map((e) => DropdownMenuItem(
-                                        value: e, child: Text(e.name ?? "")))
+                                        value: e,
+                                        child: Text(e.name ?? "",
+                                            style: Get.textTheme.titleMedium)))
                                     .toList() ??
                                 [],
                             onChanged: (value) {
@@ -128,49 +109,34 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Flag Name", style: _headingStyle),
+                      Text("Flag Name", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
-                        child: TextFormField(
+                        child: CustomTextFormField(
                             controller: controller.recordFlagName,
-                            decoration: InputDecoration(
-                                hintText: "Flag Name",
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                isDense: true,
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Get.theme.primaryColor),
-                                    borderRadius: BorderRadius.circular(64)))),
+                            hintText: "Flag Name"),
                       ),
                     ],
                   ),
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("GRT", style: _headingStyle),
+                      Text("GRT", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
-                        child: TextFormField(
+                        child: CustomTextFormField(
                             controller: controller.recordGrt,
-                            decoration: InputDecoration(
-                                hintText: "Enter GRT",
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                isDense: true,
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Get.theme.primaryColor),
-                                    borderRadius: BorderRadius.circular(64)))),
+                            keyboardType: TextInputType.number,
+                            hintText: "Enter GRT"),
                       ),
                     ],
                   ),
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Vessel Type", style: _headingStyle),
+                      Text("Vessel Type", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
@@ -178,9 +144,12 @@ class AddARecord extends GetView<CrewOnboardingController> {
                           child: DropdownButton2<String>(
                             value: controller.recordVesselType.value,
                             isExpanded: true,
+                            style: Get.textTheme.bodySmall,
                             items: controller.vesselTypes
                                 .map((e) => DropdownMenuItem(
-                                    value: e.name, child: Text(e.name ?? "")))
+                                    value: e.name,
+                                    child: Text(e.name ?? "",
+                                        style: Get.textTheme.titleMedium)))
                                 .toList(),
                             onChanged: (value) {
                               controller.recordVesselType.value = value;
@@ -204,11 +173,11 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Sign-On Date", style: _headingStyle),
+                      Text("Sign-On Date", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
-                        child: TextFormField(
+                        child: CustomTextFormField(
                             controller: controller.recordSignOnDate,
                             onTap: () async {
                               DateTime? selectedDateTime = await showDatePicker(
@@ -220,87 +189,52 @@ class AddARecord extends GetView<CrewOnboardingController> {
                               controller.recordSignOnDate.text =
                                   selectedDateTime?.getServerDate() ?? "";
                             },
-                            decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                hintText: "dd/mm/yy",
-                                isDense: true,
-                                suffixIcon: const Padding(
-                                  padding: EdgeInsets.only(right: 16),
-                                  child: Icon(
-                                    Icons.calendar_month,
-                                  ),
-                                ),
-                                suffixIconConstraints: const BoxConstraints(
-                                    maxHeight: 32, maxWidth: 32),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Get.theme.primaryColor),
-                                    borderRadius: BorderRadius.circular(64)))),
+                            icon: Icon(
+                              Icons.calendar_month,
+                            ),
+                            readOnly: true,
+                            hintText: "yyyy/mm/dd"),
                       ),
                     ],
                   ),
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Sign-Off Date", style: _headingStyle),
+                      Text("Sign-Off Date", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
-                        child: TextFormField(
-                            controller: controller.recordSignOffDate,
-                            onTap: () async {
-                              DateTime? selectedDateTime = await showDatePicker(
-                                  context: Get.context!,
-                                  initialDate: DateTime.parse("1990-01-01"),
-                                  firstDate: DateTime.parse("1990-01-01"),
-                                  lastDate: DateTime.now());
-                              controller.recordSignOffDate.text =
-                                  selectedDateTime?.getServerDate() ?? "";
-                            },
-                            decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                hintText: "dd/mm/yy",
-                                isDense: true,
-                                suffixIcon: const Padding(
-                                  padding: EdgeInsets.only(right: 16),
-                                  child: Icon(
-                                    Icons.calendar_month,
-                                  ),
-                                ),
-                                suffixIconConstraints: const BoxConstraints(
-                                    maxHeight: 32, maxWidth: 32),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Get.theme.primaryColor),
-                                    borderRadius: BorderRadius.circular(64)))),
+                        child: CustomTextFormField(
+                          controller: controller.recordSignOffDate,
+                          onTap: () async {
+                            DateTime? selectedDateTime = await showDatePicker(
+                                context: Get.context!,
+                                initialDate: DateTime.parse("1990-01-01"),
+                                firstDate: DateTime.parse("1990-01-01"),
+                                lastDate: DateTime.now());
+                            controller.recordSignOffDate.text =
+                                selectedDateTime?.getServerDate() ?? "";
+                          },
+                          readOnly: true,
+                          hintText: "yyyy/mm/dd",
+                          icon: const Icon(
+                            Icons.calendar_month,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                   16.verticalSpace,
                   Row(
                     children: [
-                      Text("Contract Duration", style: _headingStyle),
+                      Text("Contract Duration", style: headingStyle),
                       Spacer(),
                       SizedBox(
                         width: 146.w,
-                        child: TextFormField(
+                        child: CustomTextFormField(
                             controller: controller.recordContarctDuration,
                             keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                hintText: "In Years",
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                isDense: true,
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Get.theme.primaryColor),
-                                    borderRadius: BorderRadius.circular(64)))),
+                            hintText: "In Years"),
                       ),
                     ],
                   ),
@@ -342,7 +276,4 @@ class AddARecord extends GetView<CrewOnboardingController> {
             );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

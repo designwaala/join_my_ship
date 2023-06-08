@@ -16,7 +16,7 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Are you holding Watch keeping? *", style: _headingStyle),
+          Text("Are you holding Watch keeping? *", style: headingStyle),
           8.verticalSpace,
           Row(
             children: [
@@ -220,7 +220,4 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

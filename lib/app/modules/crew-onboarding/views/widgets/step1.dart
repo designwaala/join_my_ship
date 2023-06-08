@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,9 @@ import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/state_model.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/utils/extensions/date_time.dart';
+import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
+import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
   const CrewonboardingStep1({Key? key}) : super(key: key);
@@ -44,7 +48,9 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               22.verticalSpace,
-              Text("Create Profile", style: Get.theme.textTheme.headlineSmall),
+              Text("Create Profile",
+                  style: Get.theme.textTheme.headlineSmall
+                      ?.copyWith(fontSize: 20)),
               8.verticalSpace,
               Text("Please complete your profile",
                   style:
@@ -57,23 +63,36 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: controller.uploadedImagePath.value ==
-                                            null
-                                        ? Image.file(File(controller
-                                                .pickedImage.value!.path))
-                                            .image
-                                        : Image.network(controller
-                                                    .uploadedImagePath.value ??
-                                                "")
-                                            .image,
-                                    fit: BoxFit.cover)),
-                          )
+                          controller.uploadedImagePath.value != null
+                              ? CachedNetworkImage(
+                                  height: 100,
+                                  width: 100,
+                                  imageUrl:
+                                      controller.uploadedImagePath.value ?? "",
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(controller
+                                                        .uploadedImagePath
+                                                        .value ??
+                                                    ""))),
+                                        height: 100,
+                                        width: 100,
+                                      ))
+                              : Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: Image.file(File(controller
+                                                  .pickedImage.value!.path))
+                                              .image,
+                                          fit: BoxFit.cover)),
+                                )
                         ],
                       )
                     : Center(
@@ -117,7 +136,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Current Rank", style: _headingStyle),
+                        Text("Current Rank", style: headingStyle),
                         if (controller.step1FormMisses.contains(
                             Step1FormMiss.didNotChooseCurrentRank)) ...[
                           2.verticalSpace,
@@ -133,13 +152,14 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     child: DropdownButton2<Rank>(
                       value: controller.selectedRank.value,
                       isExpanded: true,
-                      style: Get.textTheme.bodyMedium,
+                      style: Get.textTheme.bodySmall,
                       items: controller.ranks
                               ?.map((e) => DropdownMenuItem<Rank>(
                                   value: e,
                                   child: Text(e.name ?? "",
-                                      style: Get.textTheme.bodySmall
-                                          ?.copyWith(color: Colors.black))))
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Get.textTheme.titleMedium)))
                               .toList() ??
                           [],
                       onChanged: (value) {
@@ -147,13 +167,10 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                       },
                       hint: const Text("Select Rank"),
                       buttonStyleData: ButtonStyleData(
-                          height: 50,
+                          height: 40,
                           width: 200,
                           padding: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(64),
-                            border: Border.all(color: Get.theme.primaryColor),
-                          )),
+                          decoration: DropdownDecoration()),
                     ),
                   )
                 ],
@@ -170,7 +187,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 "Trainee Ordinary Seaman",
                 "Trainee Wiper",
               ].contains(controller.selectedRank.value?.name)) ...[
-                Text("Are you looking for Promotion?", style: _headingStyle),
+                Text("Are you looking for Promotion?", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   children: [
@@ -190,40 +207,38 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                         }),
                     const Text("Yes"),
                     const Spacer(),
-                    if (controller.isLookingForPromotion.value)
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton2<String>(
-                          value: controller.promotionRank.value,
-                          isExpanded: true,
-                          items: controller.ranks
-                              ?.map((e) => DropdownMenuItem(
-                                  value: e.name,
-                                  child: Text(e.name ?? "",
-                                      style: Get.textTheme.bodySmall)))
-                              .toList(),
-                          onChanged: (value) {
-                            controller.promotionRank.value = value;
-                          },
-                          hint: const Text("Select Rank"),
-                          buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              width: 160,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(64),
-                                border:
-                                    Border.all(color: Get.theme.primaryColor),
-                              )),
-                        ),
-                      )
+                    // if (controller.isLookingForPromotion.value)
+                    //   DropdownButtonHideUnderline(
+                    //     child: DropdownButton2<String>(
+                    //       value: controller.promotionRank.value,
+                    //       isExpanded: true,
+                    //       style: Get.textTheme.bodySmall,
+                    //       items: controller.ranks
+                    //           ?.map((e) => DropdownMenuItem(
+                    //               value: e.name,
+                    //               child: Text(e.name ?? "",
+                    //                   style: Get.textTheme.bodyMedium
+                    //                       ?.copyWith(color: Colors.black))))
+                    //           .toList(),
+                    //       onChanged: (value) {
+                    //         controller.promotionRank.value = value;
+                    //       },
+                    //       hint: const Text("Select Rank"),
+                    //       buttonStyleData: ButtonStyleData(
+                    //           height: 40,
+                    //           width: 160,
+                    //           padding:
+                    //               const EdgeInsets.symmetric(horizontal: 8),
+                    //           decoration: DropdownDecoration()),
+                    //     ),
+                    //   )
                   ],
                 ),
                 18.verticalSpace,
               ],
               Row(
                 children: [
-                  Text("Gender", style: _headingStyle),
+                  Text("Gender", style: headingStyle),
                   24.horizontalSpace,
                   Radio<Gender?>(
                       value: controller.gender.value,
@@ -243,9 +258,9 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               20.verticalSpace,
-              Text("Communication address", style: _headingStyle),
+              Text("Communication address", style: headingStyle),
               16.verticalSpace,
-              TextFormField(
+              CustomTextFormField(
                   controller: controller.addressLine1,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -253,18 +268,9 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     }
                     return null;
                   },
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      hintText: "Address Line 1",
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Get.theme.primaryColor),
-                          borderRadius: BorderRadius.circular(64)))),
+                  hintText: "Address Line 1"),
               16.verticalSpace,
-              TextFormField(
+              CustomTextFormField(
                   controller: controller.addressLine2,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -272,78 +278,60 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     }
                     return null;
                   },
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: "Address Line 2",
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Get.theme.primaryColor),
-                          borderRadius: BorderRadius.circular(64)))),
+                  hintText: "Address Line 2"),
               16.verticalSpace,
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: TextFormField(
+                    child: CustomTextFormField(
                         controller: controller.city,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Please enter your city";
                           }
                         },
-                        decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            hintText: "City",
-                            isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Get.theme.primaryColor),
-                                borderRadius: BorderRadius.circular(64)))),
+                        hintText: "City"),
                   ),
-                  16.horizontalSpace,
-                  Column(
-                    children: [
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton2<Country>(
-                          value: controller.country.value,
-                          isExpanded: true,
-                          items: controller.countries
-                              .map((e) => DropdownMenuItem(
-                                  value: e, child: Text(e.countryName ?? "")))
-                              .toList(),
-                          onChanged: (value) {
-                            controller
-                              ..country.value = value
-                              ..states.clear()
-                              ..getStates();
-                          },
-                          hint: const Text("Country"),
-                          buttonStyleData: ButtonStyleData(
-                              height: 40,
-                              width: 160,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(64),
-                                border:
-                                    Border.all(color: Get.theme.primaryColor),
-                              )),
+                  20.horizontalSpace,
+                  Expanded(
+                    child: Column(
+                      children: [
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2<Country>(
+                            value: controller.country.value,
+                            isExpanded: true,
+                            style: Get.textTheme.bodySmall,
+                            items: controller.countries
+                                .map((e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e.countryName ?? "",
+                                        style: Get.textTheme.titleMedium)))
+                                .toList(),
+                            onChanged: (value) {
+                              controller
+                                ..country.value = value
+                                ..states.clear()
+                                ..getStates();
+                            },
+                            hint: const Text("Country"),
+                            buttonStyleData: ButtonStyleData(
+                                height: 40,
+                                width: 160,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                decoration: DropdownDecoration()),
+                          ),
                         ),
-                      ),
-                      if (controller.step1FormMisses
-                          .contains(Step1FormMiss.didNotSelectCountry)) ...[
-                        4.verticalSpace,
-                        Text("Please select your Country",
-                            style: Get.textTheme.bodySmall
-                                ?.copyWith(color: Colors.red)),
-                      ]
-                    ],
+                        if (controller.step1FormMisses
+                            .contains(Step1FormMiss.didNotSelectCountry)) ...[
+                          4.verticalSpace,
+                          Text("Please select your Country",
+                              style: Get.textTheme.bodySmall
+                                  ?.copyWith(color: Colors.red)),
+                        ]
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -363,10 +351,12 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                     value: e.id,
                                     child: Text(
                                       e.stateName ?? "",
+                                      style: Get.textTheme.titleMedium,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     )))
                                 .toList(),
+                            style: Get.textTheme.bodySmall,
                             onChanged: (value) {
                               controller.state.value = controller.states
                                   .firstWhereOrNull(
@@ -378,11 +368,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                 width: 160,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(64),
-                                  border:
-                                      Border.all(color: Get.theme.primaryColor),
-                                )),
+                                decoration: DropdownDecoration()),
                           ),
                         ),
                         if (controller.step1FormMisses
@@ -397,7 +383,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   ),
                   16.horizontalSpace,
                   Expanded(
-                    child: TextFormField(
+                    child: CustomTextFormField(
                         controller: controller.zipCode,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -405,26 +391,17 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                           }
                           return null;
                         },
-                        decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            hintText: "Zip Code",
-                            isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Get.theme.primaryColor),
-                                borderRadius: BorderRadius.circular(64)))),
+                        hintText: "Zip Code"),
                   ),
                 ],
               ),
               16.verticalSpace,
               Row(
                 children: [
-                  Expanded(child: Text("Date of birth", style: _headingStyle)),
+                  Expanded(child: Text("Date of birth", style: headingStyle)),
+                  20.horizontalSpace,
                   Expanded(
-                      child: TextFormField(
+                      child: CustomTextFormField(
                           controller: controller.dateOfBirth,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -442,26 +419,11 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                             controller.dateOfBirth.text =
                                 selectedDateTime?.getServerDate() ?? "";
                           },
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: "dd/mm/yyyy",
-                              isDense: true,
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.only(right: 16),
-                                child: Icon(
-                                  Icons.calendar_month,
-                                  color: Get.theme.primaryColor,
-                                ),
-                              ),
-                              suffixIconConstraints: const BoxConstraints(
-                                  maxHeight: 32, maxWidth: 32),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Get.theme.primaryColor),
-                                  borderRadius: BorderRadius.circular(64)))))
+                          hintText: "yyyy/mm/dd",
+                          icon: Icon(
+                            Icons.calendar_month,
+                            color: Get.theme.primaryColor,
+                          )))
                 ],
               ),
               16.verticalSpace,
@@ -472,7 +434,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Marital Status", style: _headingStyle),
+                      Text("Marital Status", style: headingStyle),
                       if (controller.step1FormMisses
                           .contains(Step1FormMiss.didNotSelectMaritalStatus))
                         Text("Please select your Marital Status",
@@ -480,35 +442,37 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                 ?.copyWith(color: Colors.red)),
                     ],
                   )),
-                  8.horizontalSpace,
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2<String>(
-                      value: maritalStatuses[controller.maritalStatus.value],
-                      isExpanded: true,
-                      items: maritalStatuses.keys
-                          .map((e) => DropdownMenuItem<String>(
-                              value: maritalStatuses[e],
-                              child: Text(maritalStatuses[e] ?? "")))
-                          .toList(),
-                      onChanged: (value) {
-                        controller.maritalStatus.value =
-                            reverseMaritalStatuses[value];
-                      },
-                      hint: const Text("Select"),
-                      buttonStyleData: ButtonStyleData(
-                          height: 40,
-                          width: 176,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(64),
-                            border: Border.all(color: Get.theme.primaryColor),
-                          )),
+                  20.horizontalSpace,
+                  Expanded(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2<String>(
+                        value: maritalStatuses[controller.maritalStatus.value],
+                        isExpanded: true,
+                        style: Get.textTheme.bodySmall,
+                        items: maritalStatuses.keys
+                            .map((e) => DropdownMenuItem<String>(
+                                value: maritalStatuses[e],
+                                child: Text(maritalStatuses[e] ?? "",
+                                    style: Get.textTheme.titleMedium)))
+                            .toList(),
+                        onChanged: (value) {
+                          controller.maritalStatus.value =
+                              reverseMaritalStatuses[value];
+                        },
+                        hint: const Text("Select"),
+                        buttonStyleData: ButtonStyleData(
+                            height: 40,
+                            width: 176,
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            decoration: DropdownDecoration()),
+                      ),
                     ),
                   )
                 ],
               ),
               24.verticalSpace,
-              Text("Upload Resume *", style: _headingStyle),
+              Text("Upload Resume *", style: headingStyle),
+              8.verticalSpace,
               Center(
                 child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
@@ -524,6 +488,13 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     onPressed: () async {
                       FilePickerResult? result =
                           await FilePicker.platform.pickFiles();
+                      if (![".doc", ".docx", ".pdf"]
+                          .contains(result?.files.single.extension ?? "")) {
+                        controller.fToast.showToast(
+                            child: errorToast(
+                                "Please pick your resume in supported file format"));
+                        return;
+                      }
 
                       if (result?.files.single.path != null) {
                         controller.pickedResume.value =
@@ -532,16 +503,25 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                         // User canceled the picker
                       }
                     },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.upload),
-                        4.horizontalSpace,
-                        Text("UPLOAD",
-                            style: Get.textTheme.bodyMedium
-                                ?.copyWith(color: Get.theme.primaryColor)),
-                      ],
-                    )),
+                    child: controller.uploadedResumePath.value != null
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.check),
+                              4.horizontalSpace,
+                              const Text("Resume picked")
+                            ],
+                          )
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.upload),
+                              4.horizontalSpace,
+                              Text("UPLOAD",
+                                  style: Get.textTheme.bodyMedium?.copyWith(
+                                      color: Get.theme.primaryColor)),
+                            ],
+                          )),
               ),
               if (controller.step1FormMisses
                   .contains(Step1FormMiss.didNotSelectResume))
@@ -563,7 +543,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 children: [
                   controller.crewUser?.id == null
                       ? controller.isUpdating.value
-                          ? CircularProgressIndicator()
+                          ? const CircularProgressIndicator()
                           : ElevatedButton(
                               onPressed: () async {
                                 bool shouldContinue =
@@ -595,7 +575,4 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

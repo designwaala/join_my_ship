@@ -76,6 +76,6 @@ class CrewOnboardingView extends GetView<CrewOnboardingController> {
     });
   }
 
-  TextStyle? get _headingStyle =>
+  TextStyle? get headingStyle =>
       Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

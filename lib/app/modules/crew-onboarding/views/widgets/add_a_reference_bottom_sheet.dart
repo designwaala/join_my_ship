@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 
 class AddAReference extends GetView<CrewOnboardingController> {
   final ScrollController scrollController;
@@ -36,59 +37,38 @@ class AddAReference extends GetView<CrewOnboardingController> {
               children: [
                 Icon(Icons.business_sharp, color: Get.theme.primaryColor),
                 8.horizontalSpace,
-                Text("Company Name", style: _headingStyle)
+                Text("Company Name", style: headingStyle)
               ],
             ),
             16.verticalSpace,
-            TextFormField(
+            CustomTextFormField(
                 controller: controller.referenceCompanyName,
-                decoration: InputDecoration(
-                    hintText: "Company Name",
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Get.theme.primaryColor),
-                        borderRadius: BorderRadius.circular(64)))),
+                hintText: "Company Name"),
             16.verticalSpace,
             Row(
               children: [
                 Icon(Icons.account_circle_outlined,
                     color: Get.theme.primaryColor),
                 8.horizontalSpace,
-                Text("Reference name", style: _headingStyle)
+                Text("Reference name", style: headingStyle)
               ],
             ),
             16.verticalSpace,
-            TextFormField(
+            CustomTextFormField(
                 controller: controller.referenceReferenceName,
-                decoration: InputDecoration(
-                    hintText: "Reference Name",
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Get.theme.primaryColor),
-                        borderRadius: BorderRadius.circular(64)))),
+                hintText: "Reference Name"),
             16.verticalSpace,
             Row(
               children: [
                 Icon(Icons.phone, color: Get.theme.primaryColor),
                 8.horizontalSpace,
-                Text("Contact Number", style: _headingStyle)
+                Text("Contact Number", style: headingStyle)
               ],
             ),
             16.verticalSpace,
-            TextFormField(
+            CustomTextFormField(
                 controller: controller.referenceContactNumber,
-                decoration: InputDecoration(
-                    hintText: "Contact Number",
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Get.theme.primaryColor),
-                        borderRadius: BorderRadius.circular(64)))),
+                hintText: "Contact Number"),
             36.verticalSpace,
             Divider(thickness: 2),
             18.verticalSpace,
@@ -128,7 +108,4 @@ class AddAReference extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

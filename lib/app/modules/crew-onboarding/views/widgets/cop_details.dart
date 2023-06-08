@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/date_time.dart';
 
@@ -16,7 +17,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Are you holding valid COP? *", style: _headingStyle),
+          Text("Are you holding valid COP? *", style: headingStyle),
           8.verticalSpace,
           Row(
             children: [
@@ -52,6 +53,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                   child: DropdownButton2<String>(
                     value: null,
                     isExpanded: true,
+                    style: Get.textTheme.bodySmall,
                     items: ["Indian", "Panama", "Others"]
                         .map((e) => DropdownMenuItem(
                             value: e,
@@ -101,7 +103,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                                   "You can select only 2 issuing authorities."));
                                         }
                                       }),
-                                  Text(e),
+                                  Text(e, style: Get.textTheme.titleMedium),
                                 ],
                               );
                             })))
@@ -152,7 +154,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                               TextEditingController();
                           textEditingController.text =
                               issuingAuthority.validTill ?? "";
-                          return TextFormField(
+                          return CustomTextFormField(
                               controller: textEditingController,
                               validator: (value) {
                                 if (value == null || value.isEmpty == true) {
@@ -177,26 +179,11 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                 textEditingController.text =
                                     selectedDateTime?.getServerDate() ?? "";
                               },
-                              decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  hintText: "Valid Till",
-                                  isDense: true,
-                                  suffixIcon: const Padding(
-                                    padding: EdgeInsets.only(right: 16),
-                                    child: Icon(
-                                      Icons.calendar_month,
-                                    ),
-                                  ),
-                                  suffixIconConstraints: const BoxConstraints(
-                                      maxHeight: 32, maxWidth: 32),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Get.theme.primaryColor),
-                                      borderRadius:
-                                          BorderRadius.circular(64))));
+                              readOnly: true,
+                              hintText: "Valid Till",
+                              icon: Icon(
+                                Icons.calendar_month,
+                              ));
                         }),
                       ),
                     ],
@@ -207,7 +194,4 @@ class COPDetails extends GetView<CrewOnboardingController> {
       );
     });
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }

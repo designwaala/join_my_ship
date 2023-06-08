@@ -29,6 +29,7 @@ import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 import 'package:join_mp_ship/utils/secure_storage.dart';
 import 'package:join_mp_ship/app/data/models/state_model.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 Map<int, String> maritalStatuses = {1: "Single", 2: "Married", 3: "Divorced"};
@@ -60,6 +61,9 @@ enum Step3FormMiss {
   didNotAgreeToTermsAndCondition
 }
 
+TextStyle? get headingStyle =>
+    Get.textTheme.titleSmall?.copyWith(color: Get.theme.primaryColor);
+
 class CrewOnboardingController extends GetxController {
   CrewUser? crewUser;
   UserDetails? userDetails;
@@ -75,6 +79,7 @@ class CrewOnboardingController extends GetxController {
   Rxn<Country> country = Rxn();
   RxBool isLookingForPromotion = false.obs;
   RxnString uploadedImagePath = RxnString();
+  RxnString uploadedResumePath = RxnString();
   //______________STEP 2__________________
   // RxList<String> stcwIssuingAuthority = RxList.empty();
   RxnBool isHoldingValidCOC = RxnBool(false);
@@ -212,14 +217,18 @@ class CrewOnboardingController extends GetxController {
   instantiate() async {
     isLoading.value = true;
     ranks = await getIt<RanksProvider>().getRankList();
+    UserStates.instance.ranks = ranks;
     countries = (await getIt<CountryProvider>().getCountry()) ?? [];
+    UserStates.instance.countries = countries;
     crewUser = await getIt<CrewUserProvider>().getCrewUser(softRefresh: true);
+    UserStates.instance.crewUser = crewUser;
     if (crewUser?.id == null) {
       step.value = 1;
     } else {
       await setStep1Fields();
       userDetails =
           await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
+      UserStates.instance.userDetails = userDetails;
       setStep2Fields();
       if (userDetails?.id == null) {
         step.value = 2;
@@ -227,10 +236,13 @@ class CrewOnboardingController extends GetxController {
         serviceRecords.value =
             (await getIt<SeaServiceProvider>().getSeaServices(crewUser!.id!)) ??
                 [];
+        UserStates.instance.serviceRecords = serviceRecords;
         previousEmployerReferences.value =
             (await getIt<PreviousEmployerProvider>()
                     .getPreviousEmployer(crewUser!.id!)) ??
                 [];
+        UserStates.instance.previousEmployerReferences =
+            previousEmployerReferences;
         step.value = 3;
 
         if (serviceRecords.length >= 2 &&
@@ -278,6 +290,7 @@ class CrewOnboardingController extends GetxController {
     zipCode.text = crewUser?.pincode ?? "";
     maritalStatus.value = crewUser?.maritalStatus;
     uploadedImagePath.value = "$baseURL/${crewUser?.profilePic}";
+    uploadedResumePath.value = "$baseURL/${crewUser?.resume}";
     country.value =
         countries.firstWhereOrNull((e) => e.id == crewUser?.country);
     await getStates();

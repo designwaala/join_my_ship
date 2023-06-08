@@ -14,9 +14,9 @@ class Rank {
     name = json['name'];
     rankPriority = json['rank_priority'];
     forOtheroption = json['for_otheroption'];
-    coc = true ?? json['coc'];
-    cop = true ?? json['cop'];
-    watchKeeping = true ?? json['watch_keeping'];
+    coc = json['coc'];
+    cop = json['cop'];
+    watchKeeping = json['watch_keeping'];
   }
 
   Map<String, dynamic> toJson() {

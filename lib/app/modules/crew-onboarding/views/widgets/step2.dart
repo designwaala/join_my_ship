@@ -8,6 +8,7 @@ import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/coc_detai
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/cop_details.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/stcw_details.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/watch_keeping_details.dart';
+import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/date_time.dart';
 
@@ -51,12 +52,15 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                         Get.textTheme.bodyMedium?.copyWith(color: Colors.grey)),
                 24.verticalSpace,
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("INDOS NO.  *", style: _headingStyle),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text("INDOS NO.  *", style: headingStyle),
+                    ),
                     48.horizontalSpace,
                     Expanded(
-                      child: TextFormField(
+                      child: CustomTextFormField(
                           controller: controller.indosNumber,
                           validator: (value) {
                             if (value == null || value.isEmpty == true) {
@@ -64,28 +68,18 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              isDense: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              hintText: "INDOS Number",
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Get.theme.primaryColor),
-                                  borderRadius: BorderRadius.circular(64)))),
+                          hintText: "INDOS Number"),
                     ),
                   ],
                 ),
                 8.verticalSpace,
-                Text("CDC Number *", style: _headingStyle),
+                Text("CDC Number *", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: TextFormField(
+                      child: CustomTextFormField(
                           controller: controller.cdcNumber,
                           validator: (value) {
                             if (value == null || value.isEmpty == true) {
@@ -93,67 +87,42 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              isDense: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              hintText: "CDC Number",
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Get.theme.primaryColor),
-                                  borderRadius: BorderRadius.circular(64)))),
+                          hintText: "CDC Number"),
                     ),
                     20.horizontalSpace,
                     Expanded(
-                      child: TextFormField(
-                          controller: controller.cdcNumberValidTill,
-                          validator: (value) {
-                            if (value == null || value.isEmpty == true) {
-                              return "Please enter this field";
-                            }
-                            return null;
-                          },
-                          onTap: () async {
-                            DateTime? selectedDateTime = await showDatePicker(
-                                context: Get.context!,
-                                initialDate: DateTime.parse("1990-01-01"),
-                                firstDate: DateTime.parse("1990-01-01"),
-                                lastDate: DateTime.now());
-                            controller.cdcNumberValidTill.text =
-                                selectedDateTime?.getServerDate() ?? "";
-                          },
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: "Valid Till",
-                              isDense: true,
-                              suffixIcon: const Padding(
-                                padding: EdgeInsets.only(right: 16),
-                                child: Icon(
-                                  Icons.calendar_month,
-                                ),
-                              ),
-                              suffixIconConstraints: const BoxConstraints(
-                                  maxHeight: 32, maxWidth: 32),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Get.theme.primaryColor),
-                                  borderRadius: BorderRadius.circular(64)))),
+                      child: CustomTextFormField(
+                        controller: controller.cdcNumberValidTill,
+                        validator: (value) {
+                          if (value == null || value.isEmpty == true) {
+                            return "Please enter this field";
+                          }
+                          return null;
+                        },
+                        readOnly: true,
+                        onTap: () async {
+                          DateTime? selectedDateTime = await showDatePicker(
+                              context: Get.context!,
+                              initialDate: DateTime.parse("1990-01-01"),
+                              firstDate: DateTime.parse("1990-01-01"),
+                              lastDate: DateTime.now());
+                          controller.cdcNumberValidTill.text =
+                              selectedDateTime?.getServerDate() ?? "";
+                        },
+                        hintText: "Valid Till",
+                        icon: const Icon(Icons.calendar_month),
+                      ),
                     ),
                   ],
                 ),
                 16.verticalSpace,
-                Text("CDC / Seaman Book Details *", style: _headingStyle),
+                Text("CDC / Seaman Book Details *", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: TextFormField(
+                      child: CustomTextFormField(
                           controller: controller.cdcSeamanNumber,
                           validator: (value) {
                             if (value == null || value.isEmpty == true) {
@@ -161,21 +130,11 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              isDense: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              hintText: "CDC Number",
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Get.theme.primaryColor),
-                                  borderRadius: BorderRadius.circular(64)))),
+                          hintText: "CDC Number"),
                     ),
                     20.horizontalSpace,
                     Expanded(
-                      child: TextFormField(
+                      child: CustomTextFormField(
                           controller: controller.cdcSeamanNumberValidTill,
                           validator: (value) {
                             if (value == null || value.isEmpty == true) {
@@ -183,6 +142,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
+                          readOnly: true,
                           onTap: () async {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
@@ -192,36 +152,21 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             controller.cdcSeamanNumberValidTill.text =
                                 selectedDateTime?.getServerDate() ?? "";
                           },
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: "Valid Till",
-                              isDense: true,
-                              suffixIcon: const Padding(
-                                padding: EdgeInsets.only(right: 16),
-                                child: Icon(
-                                  Icons.calendar_month,
-                                ),
-                              ),
-                              suffixIconConstraints: const BoxConstraints(
-                                  maxHeight: 32, maxWidth: 32),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Get.theme.primaryColor),
-                                  borderRadius: BorderRadius.circular(64)))),
+                          hintText: "Valid Till",
+                          icon: Icon(
+                            Icons.calendar_month,
+                          )),
                     ),
                   ],
                 ),
                 16.verticalSpace,
-                Text("Passport Details *", style: _headingStyle),
+                Text("Passport Details *", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: TextFormField(
+                      child: CustomTextFormField(
                           controller: controller.passportNumber,
                           validator: (value) {
                             if (value == null || value.isEmpty == true) {
@@ -229,21 +174,11 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              isDense: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              hintText: "Passport Number",
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Get.theme.primaryColor),
-                                  borderRadius: BorderRadius.circular(64)))),
+                          hintText: "Passport Number"),
                     ),
                     20.horizontalSpace,
                     Expanded(
-                      child: TextFormField(
+                      child: CustomTextFormField(
                           controller: controller.passportValidTill,
                           validator: (value) {
                             if (value == null || value.isEmpty == true) {
@@ -251,6 +186,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
+                          readOnly: true,
                           onTap: () async {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
@@ -261,25 +197,10 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             controller.passportValidTill.text =
                                 selectedDateTime?.getServerDate() ?? "";
                           },
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: "Valid Till",
-                              isDense: true,
-                              suffixIcon: const Padding(
-                                padding: EdgeInsets.only(right: 16),
-                                child: Icon(
-                                  Icons.calendar_month,
-                                ),
-                              ),
-                              suffixIconConstraints: const BoxConstraints(
-                                  maxHeight: 32, maxWidth: 32),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Get.theme.primaryColor),
-                                  borderRadius: BorderRadius.circular(64)))),
+                          hintText: "Valid Till",
+                          icon: Icon(
+                            Icons.calendar_month,
+                          )),
                     ),
                   ],
                 ),
@@ -314,7 +235,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                     16.verticalSpace
                   ]
                 ],
-                Text("Are you holding valid US Visa? *", style: _headingStyle),
+                Text("Are you holding valid US Visa? *", style: headingStyle),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,7 +266,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                     20.horizontalSpace,
                     if (controller.isHoldingValidUSVisa.value == true)
                       Expanded(
-                        child: TextFormField(
+                        child: CustomTextFormField(
                             controller: controller.usVisaValidTill,
                             validator: (value) {
                               if (value == null || value.isEmpty == true) {
@@ -362,25 +283,11 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                               controller.usVisaValidTill.text =
                                   selectedDateTime?.getServerDate() ?? "";
                             },
-                            decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                hintText: "Valid Till",
-                                isDense: true,
-                                suffixIcon: const Padding(
-                                  padding: EdgeInsets.only(right: 16),
-                                  child: Icon(
-                                    Icons.calendar_month,
-                                  ),
-                                ),
-                                suffixIconConstraints: const BoxConstraints(
-                                    maxHeight: 32, maxWidth: 32),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Get.theme.primaryColor),
-                                    borderRadius: BorderRadius.circular(64)))),
+                            readOnly: true,
+                            hintText: "Valid Till",
+                            icon: Icon(
+                              Icons.calendar_month,
+                            )),
                       ),
                   ],
                 ),
@@ -421,7 +328,4 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
           ),
         ));
   }
-
-  TextStyle? get _headingStyle =>
-      Get.textTheme.bodyMedium?.copyWith(color: Get.theme.primaryColor);
 }
