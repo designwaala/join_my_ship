@@ -78,6 +78,7 @@ class CrewOnboardingController extends GetxController {
   Rxn<Country> country = Rxn();
   RxBool isLookingForPromotion = false.obs;
   RxnString uploadedImagePath = RxnString();
+  RxnString uploadedResumePath = RxnString();
   //______________STEP 2__________________
   // RxList<String> stcwIssuingAuthority = RxList.empty();
   RxnBool isHoldingValidCOC = RxnBool(false);
@@ -281,6 +282,7 @@ class CrewOnboardingController extends GetxController {
     zipCode.text = crewUser?.pincode ?? "";
     maritalStatus.value = crewUser?.maritalStatus;
     uploadedImagePath.value = "$baseURL/${crewUser?.profilePic}";
+    uploadedResumePath.value = "$baseURL/${crewUser?.resume}";
     country.value =
         countries.firstWhereOrNull((e) => e.id == crewUser?.country);
     await getStates();
