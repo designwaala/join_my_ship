@@ -530,18 +530,23 @@ class CrewOnboardingController extends GetxController {
 
   Future<bool> addServiceRecord() async {
     isAddingBottomSheet.value = true;
-    SeaServiceRecord? newRecord = await getIt<SeaServiceProvider>()
-        .postSeaService(SeaServiceRecord(
-            companyName: recordCompanyName.text,
-            shipName: recordShipName.text,
-            iMONumber: recordIMONumber.text,
-            rankId: recordRank.value?.rankPriority,
-            flag: recordFlagName.text,
-            gRT: recordGrt.text,
-            vesselType: 1,
-            signonDate: recordSignOnDate.text,
-            signoffDate: recordSignOffDate.text,
-            contractDuration: int.tryParse(recordContarctDuration.text)));
+    SeaServiceRecord? newRecord;
+    try {
+      newRecord = await getIt<SeaServiceProvider>().postSeaService(
+          SeaServiceRecord(
+              companyName: recordCompanyName.text,
+              shipName: recordShipName.text,
+              iMONumber: recordIMONumber.text,
+              rankId: recordRank.value?.rankPriority,
+              flag: recordFlagName.text,
+              gRT: recordGrt.text,
+              vesselType: 1,
+              signonDate: recordSignOnDate.text,
+              signoffDate: recordSignOffDate.text,
+              contractDuration: int.tryParse(recordContarctDuration.text)));
+    } catch (e) {
+      print("$e");
+    }
 
     isAddingBottomSheet.value = false;
     if (newRecord != null) {
@@ -567,14 +572,18 @@ class CrewOnboardingController extends GetxController {
 
   Future<bool> addReferenceFromPreviousEmployer() async {
     isAddingBottomSheet.value = true;
-    PreviousEmployerReference? newPreviousEmployerReference =
-        await getIt<PreviousEmployerProvider>()
-            .postPreviousEmployer(PreviousEmployerReference(
-      userId: userId,
-      companyName: referenceCompanyName.text,
-      referenceName: referenceReferenceName.text,
-      contactNumber: referenceContactNumber.text,
-    ));
+    PreviousEmployerReference? newPreviousEmployerReference;
+    try {
+      newPreviousEmployerReference = await getIt<PreviousEmployerProvider>()
+          .postPreviousEmployer(PreviousEmployerReference(
+        userId: userId,
+        companyName: referenceCompanyName.text,
+        referenceName: referenceReferenceName.text,
+        contactNumber: referenceContactNumber.text,
+      ));
+    } catch (e) {
+      print("$e");
+    }
     isAddingBottomSheet.value = false;
     if (newPreviousEmployerReference != null) {
       previousEmployerReferences.add(newPreviousEmployerReference);
@@ -597,6 +606,25 @@ class CrewOnboardingController extends GetxController {
               "There was an issue deleting your Employer Reference"));
     }
     previousEmployerReferenceDeletingId.value = -1;
+  }
+
+  resetRecordBottomSheet() {
+    recordCompanyName.clear();
+    recordShipName.clear();
+    recordIMONumber.clear();
+    recordFlagName.clear();
+    recordGrt.clear();
+    recordSignOnDate.clear();
+    recordSignOffDate.clear();
+    recordContarctDuration.clear();
+    recordRank.value = null;
+    recordVesselType.value = null;
+  }
+
+  resetReferenceBottomSheet() {
+    referenceCompanyName.clear();
+    referenceReferenceName.clear();
+    referenceContactNumber.clear();
   }
 }
 

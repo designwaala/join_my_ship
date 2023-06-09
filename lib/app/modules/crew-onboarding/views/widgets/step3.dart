@@ -48,16 +48,16 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             Text("Please complete your profile",
                 style: Get.textTheme.bodyMedium?.copyWith(color: Colors.grey)),
             16.verticalSpace,
-            AsterixText("Sea Service Record"),
+            const AsterixText("Sea Service Record"),
             16.verticalSpace,
-            Text("Please enter last two vessel records"),
+            const Text("Please enter last two vessel records"),
             8.verticalSpace,
             ...controller.serviceRecords.map((serviceRecord) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(serviceRecord.companyName ?? ""),
                     controller.serviceRecordDeletingId.value == serviceRecord.id
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : TextButton(
                             onPressed: () {
                               if (serviceRecord.id == null) {
@@ -67,7 +67,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                             },
                             child: Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.delete,
                                   color: Colors.red,
                                 ),
@@ -88,8 +88,9 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             OutlinedButton(
                 onPressed: () {
                   controller.prepareRecordBottomSheet();
+                  controller.resetRecordBottomSheet();
                   showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(16))),
                       context: context,
@@ -103,11 +104,11 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                             return AddARecord(scrollController: controller);
                           }));
                 },
-                child: Text("Add a record")),
+                child: const Text("Add a record")),
             16.verticalSpace,
-            AsterixText("Reference from Your Previous Employer"),
+            const AsterixText("Reference from Your Previous Employer"),
             16.verticalSpace,
-            Text("Please enter your reference details"),
+            const Text("Please enter your reference details"),
             8.verticalSpace,
             ...controller.previousEmployerReferences
                 .map((previousEmployerRef) => Row(
@@ -116,7 +117,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                         Text(previousEmployerRef.companyName ?? ""),
                         controller.previousEmployerReferenceDeletingId.value ==
                                 previousEmployerRef.id
-                            ? CircularProgressIndicator()
+                            ? const CircularProgressIndicator()
                             : TextButton(
                                 onPressed: () {
                                   if (previousEmployerRef.id == null) {
@@ -128,7 +129,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                                 },
                                 child: Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.delete,
                                       color: Colors.red,
                                     ),
@@ -148,8 +149,9 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             ],
             OutlinedButton(
                 onPressed: () {
+                  controller.resetReferenceBottomSheet();
                   showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(16))),
                       context: context,
@@ -163,7 +165,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                             return AddAReference(scrollController: controller);
                           }));
                 },
-                child: Text("Add a reference")),
+                child: const Text("Add a reference")),
             24.verticalSpace,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,7 +181,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                       }),
                 ),
                 8.horizontalSpace,
-                Flexible(
+                const Flexible(
                   child: Text(
                     "I hereby declare that all the details provided are true to the best of my knowledge.",
                     textAlign: TextAlign.justify,
@@ -202,7 +204,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                       }),
                 ),
                 8.horizontalSpace,
-                Flexible(
+                const Flexible(
                   child: Text(
                     "I authorize Join My Ship to save and share my profile to employers when required.",
                     textAlign: TextAlign.justify,
