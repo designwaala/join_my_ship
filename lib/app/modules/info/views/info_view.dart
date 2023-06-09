@@ -52,7 +52,7 @@ class InfoView extends GetView<InfoController> {
                         height: 245.h,
                       ),
                       Spacer(),
-                      Text('It’s easy to find\n your employees\n here with uss',
+                      Text('It’s easy to find\n your employees\n here with us',
                           textAlign: TextAlign.center,
                           style: Get.theme.textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.bold,
