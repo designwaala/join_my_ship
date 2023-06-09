@@ -41,7 +41,7 @@ class UserDetails {
     cDCNumber = json['CDC_number'];
     cDCNumberValidTill = json['CDC_number_valid_till'];
     cDCSeamanBookNumber = json['CDC_seaman_book'];
-    cDCNumberValidTill = json['CDC_seaman_book_valid_till'];
+    cDCSeamanBookNumberValidTill = json['CDC_seaman_book_valid_till'];
     passportNumber = json['Passport_number'];
     passportNumberValidTill = json['Passport_number_valid_till'];
     sTCWIssuingAuthority = json['STCW_Issuing_Authority'] == null

@@ -11,6 +11,7 @@ import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/state_model.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/utils/extensions/date_time.dart';
+import 'package:join_mp_ship/widgets/astrix_text.dart';
 import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
@@ -136,7 +137,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Current Rank", style: headingStyle),
+                        const AsterixText("Current Rank"),
                         if (controller.step1FormMisses.contains(
                             Step1FormMiss.didNotChooseCurrentRank)) ...[
                           2.verticalSpace,
@@ -187,7 +188,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 "Trainee Ordinary Seaman",
                 "Trainee Wiper",
               ].contains(controller.selectedRank.value?.name)) ...[
-                Text("Are you looking for Promotion?", style: headingStyle),
+                const AsterixText("Are you looking for Promotion?"),
                 16.verticalSpace,
                 Row(
                   children: [
@@ -238,7 +239,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               ],
               Row(
                 children: [
-                  Text("Gender", style: headingStyle),
+                  const AsterixText("Gender"),
                   24.horizontalSpace,
                   Radio<Gender?>(
                       value: controller.gender.value,
@@ -258,7 +259,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               20.verticalSpace,
-              Text("Communication address", style: headingStyle),
+              const AsterixText("Communication address"),
               16.verticalSpace,
               CustomTextFormField(
                   controller: controller.addressLine1,
@@ -399,7 +400,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               16.verticalSpace,
               Row(
                 children: [
-                  Expanded(child: Text("Date of birth", style: headingStyle)),
+                  const Expanded(child: AsterixText("Date of birth")),
                   20.horizontalSpace,
                   Expanded(
                       child: CustomTextFormField(
@@ -435,7 +436,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Marital Status", style: headingStyle),
+                      const AsterixText("Marital Status"),
                       if (controller.step1FormMisses
                           .contains(Step1FormMiss.didNotSelectMaritalStatus))
                         Text("Please select your Marital Status",
@@ -472,7 +473,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               24.verticalSpace,
-              Text("Upload Resume *", style: headingStyle),
+              const AsterixText("Upload Resume"),
               16.verticalSpace,
               Center(
                 child: OutlinedButton(

@@ -44,10 +44,16 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
     //   }
     // }
 
-    Get.toNamed(FirebaseAuth.instance.currentUser == null
+    Get.offAllNamed(FirebaseAuth.instance.currentUser == null
         ? Routes.INFO
         : FirebaseAuth.instance.currentUser?.emailVerified == true
             ? Routes.CREW_ONBOARDING
             : Routes.EMAIL_VERIFICATION_WAITING);
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 }

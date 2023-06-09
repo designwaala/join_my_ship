@@ -68,6 +68,7 @@ class AddAReference extends GetView<CrewOnboardingController> {
             16.verticalSpace,
             CustomTextFormField(
                 controller: controller.referenceContactNumber,
+                keyboardType: TextInputType.phone,
                 hintText: "Contact Number"),
             36.verticalSpace,
             Divider(thickness: 2),

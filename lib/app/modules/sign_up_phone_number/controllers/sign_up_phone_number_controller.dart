@@ -9,7 +9,8 @@ import 'package:join_mp_ship/widgets/toasts/toast.dart';
 class SignUpPhoneNumberController extends GetxController {
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
-
+  RxString selectedCountryCode = "+91".obs;
+  
   RxBool isOTPSent = false.obs;
   RxBool isVerifying = false.obs;
 
@@ -27,7 +28,7 @@ class SignUpPhoneNumberController extends GetxController {
   sendOTP() async {
     isVerifying.value = true;
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: "+91${phoneController.text}",
+        phoneNumber: "${selectedCountryCode.value}${phoneController.text}",
         verificationCompleted: (phoneAuthCredential) {},
         verificationFailed: (error) {},
         codeSent: (verificationId, forceResendingToken) {

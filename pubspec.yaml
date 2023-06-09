@@ -1,5 +1,5 @@
 name: join_mp_ship
-version: 1.0.0+1
+version: 1.0.4+4
 publish_to: none
 description: A new Flutter project.
 environment: 
@@ -29,6 +29,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   lottie: 
   cached_network_image: ^3.2.3
+  country_picker: ^2.0.20
 
 dev_dependencies: 
   flutter_lints: ^2.0.0

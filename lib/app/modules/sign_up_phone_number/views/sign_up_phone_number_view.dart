@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -56,18 +57,34 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                       20.verticalSpace,
                       TextFormField(
                         controller: controller.phoneController,
+                        keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
                             hintText: "Mobile Number",
-                            prefixIcon: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("+91",
-                                    style: Get.theme.textTheme.bodyMedium
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.bold)),
-                              ],
+                            prefixIcon: InkWell(
+                              onTap: () {
+                                showCountryPicker(
+                                  context: context,
+                                  showPhoneCode:
+                                      true, // optional. Shows phone code before the country name.
+                                  onSelect: (Country country) {
+                                    print(
+                                        'Select country: ${country.displayName}');
+                                    controller.selectedCountryCode.value =
+                                        "+${country.phoneCode}";
+                                  },
+                                );
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(controller.selectedCountryCode.value,
+                                      style: Get.theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold)),
+                                ],
+                              ),
                             ),
                             border: OutlineInputBorder(
                                 borderSide: BorderSide.none,

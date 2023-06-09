@@ -64,7 +64,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                         child: CustomTextFormField(
                             controller: controller.recordIMONumber,
                             keyboardType: TextInputType.number,
-                            hintText: "Ship Name"),
+                            hintText: "IMO Number"),
                       ),
                     ],
                   ),
@@ -83,8 +83,12 @@ class AddARecord extends GetView<CrewOnboardingController> {
                             items: controller.ranks
                                     ?.map((e) => DropdownMenuItem(
                                         value: e,
-                                        child: Text(e.name ?? "",
-                                            style: Get.textTheme.titleMedium)))
+                                        child: Text(
+                                          e.name ?? "",
+                                          style: Get.textTheme.titleMedium,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        )))
                                     .toList() ??
                                 [],
                             onChanged: (value) {

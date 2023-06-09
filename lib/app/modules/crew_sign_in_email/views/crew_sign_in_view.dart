@@ -123,21 +123,26 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                       38.verticalSpace,
                       Center(child: Text("Or sign in with")),
                       14.verticalSpace,
-                      InkWell(
-                        onTap: () {
-                          Get.toNamed(Routes.CREW_SIGN_IN_MOBILE);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.black)),
-                          child: Icon(
-                            Icons.phone_android_sharp,
-                            size: 32,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Get.offAllNamed(Routes.CREW_SIGN_IN_MOBILE);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.black)),
+                              child: Icon(
+                                Icons.phone_android_sharp,
+                                size: 32,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                       4.verticalSpace,
                       Center(child: Text('Mobile Number')),

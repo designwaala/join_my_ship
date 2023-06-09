@@ -106,8 +106,8 @@ class CrewOnboardingController extends GetxController {
   TextEditingController zipCode = TextEditingController();
   TextEditingController indosNumber = TextEditingController();
   //
-  TextEditingController cdcNumber = TextEditingController();
-  TextEditingController cdcNumberValidTill = TextEditingController();
+/*   TextEditingController cdcNumber = TextEditingController();
+  TextEditingController cdcNumberValidTill = TextEditingController(); */
   //
   TextEditingController cdcSeamanNumber = TextEditingController();
   TextEditingController cdcSeamanNumberValidTill = TextEditingController();
@@ -260,10 +260,10 @@ class CrewOnboardingController extends GetxController {
 
   Future<void> setStep2Fields() async {
     indosNumber.text = userDetails?.iNDOSNumber ?? "";
-    cdcNumber.text = userDetails?.cDCNumber ?? "";
-    cdcNumberValidTill.text = userDetails?.cDCNumberValidTill ?? "";
-    cdcSeamanNumber.text = userDetails?.cDCNumber ?? "";
-    cdcSeamanNumberValidTill.text = userDetails?.cDCNumberValidTill ?? "";
+/*     cdcNumber.text = userDetails?.cDCNumber ?? "";
+    cdcNumberValidTill.text = userDetails?.cDCNumberValidTill ?? ""; */
+    cdcSeamanNumber.text = userDetails?.cDCSeamanBookNumber ?? "";
+    cdcSeamanNumberValidTill.text = userDetails?.cDCSeamanBookNumberValidTill ?? "";
     passportNumber.text = userDetails?.passportNumber ?? "";
     passportValidTill.text = userDetails?.passportNumberValidTill ?? "";
     usVisaValidTill.text = userDetails?.validUSVisaValidTill ?? "";
@@ -301,6 +301,7 @@ class CrewOnboardingController extends GetxController {
     if (country.value?.id == null) {
       return;
     }
+    state.value = null;
     states.value = (await getIt<StateProvider>()
             .getStates(countryId: country.value!.id!)) ??
         [];
@@ -479,11 +480,11 @@ class CrewOnboardingController extends GetxController {
           UserDetails(
               userId: userId,
               iNDOSNumber: indosNumber.text.nullIfEmpty(),
-              cDCNumber: cdcNumber.text.nullIfEmpty(),
-              cDCNumberValidTill: cdcNumberValidTill.text.nullIfEmpty(),
+/*               cDCNumber: cdcNumber.text.nullIfEmpty(),
+              cDCNumberValidTill: cdcNumberValidTill.text.nullIfEmpty(), */
               cDCSeamanBookNumber: cdcSeamanNumber.text.nullIfEmpty(),
               cDCSeamanBookNumberValidTill:
-                  cdcNumberValidTill.text.nullIfEmpty(),
+                  cdcSeamanNumberValidTill.text.nullIfEmpty(),
               passportNumber: passportNumber.text.nullIfEmpty(),
               passportNumberValidTill: passportValidTill.text.nullIfEmpty(),
               validUSVisa: usVisaValidTill.text.isNotEmpty,
@@ -529,18 +530,23 @@ class CrewOnboardingController extends GetxController {
 
   Future<bool> addServiceRecord() async {
     isAddingBottomSheet.value = true;
-    SeaServiceRecord? newRecord = await getIt<SeaServiceProvider>()
-        .postSeaService(SeaServiceRecord(
-            companyName: recordCompanyName.text,
-            shipName: recordShipName.text,
-            iMONumber: recordIMONumber.text,
-            rankId: recordRank.value?.rankPriority,
-            flag: recordFlagName.text,
-            gRT: recordGrt.text,
-            vesselType: 1,
-            signonDate: recordSignOnDate.text,
-            signoffDate: recordSignOffDate.text,
-            contractDuration: int.tryParse(recordContarctDuration.text)));
+    SeaServiceRecord? newRecord;
+    try {
+      newRecord = await getIt<SeaServiceProvider>().postSeaService(
+          SeaServiceRecord(
+              companyName: recordCompanyName.text,
+              shipName: recordShipName.text,
+              iMONumber: recordIMONumber.text,
+              rankId: recordRank.value?.rankPriority,
+              flag: recordFlagName.text,
+              gRT: recordGrt.text,
+              vesselType: 1,
+              signonDate: recordSignOnDate.text,
+              signoffDate: recordSignOffDate.text,
+              contractDuration: int.tryParse(recordContarctDuration.text)));
+    } catch (e) {
+      print("$e");
+    }
 
     isAddingBottomSheet.value = false;
     if (newRecord != null) {
@@ -566,14 +572,18 @@ class CrewOnboardingController extends GetxController {
 
   Future<bool> addReferenceFromPreviousEmployer() async {
     isAddingBottomSheet.value = true;
-    PreviousEmployerReference? newPreviousEmployerReference =
-        await getIt<PreviousEmployerProvider>()
-            .postPreviousEmployer(PreviousEmployerReference(
-      userId: userId,
-      companyName: referenceCompanyName.text,
-      referenceName: referenceReferenceName.text,
-      contactNumber: referenceContactNumber.text,
-    ));
+    PreviousEmployerReference? newPreviousEmployerReference;
+    try {
+      newPreviousEmployerReference = await getIt<PreviousEmployerProvider>()
+          .postPreviousEmployer(PreviousEmployerReference(
+        userId: userId,
+        companyName: referenceCompanyName.text,
+        referenceName: referenceReferenceName.text,
+        contactNumber: referenceContactNumber.text,
+      ));
+    } catch (e) {
+      print("$e");
+    }
     isAddingBottomSheet.value = false;
     if (newPreviousEmployerReference != null) {
       previousEmployerReferences.add(newPreviousEmployerReference);
@@ -596,6 +606,25 @@ class CrewOnboardingController extends GetxController {
               "There was an issue deleting your Employer Reference"));
     }
     previousEmployerReferenceDeletingId.value = -1;
+  }
+
+  resetRecordBottomSheet() {
+    recordCompanyName.clear();
+    recordShipName.clear();
+    recordIMONumber.clear();
+    recordFlagName.clear();
+    recordGrt.clear();
+    recordSignOnDate.clear();
+    recordSignOffDate.clear();
+    recordContarctDuration.clear();
+    recordRank.value = null;
+    recordVesselType.value = null;
+  }
+
+  resetReferenceBottomSheet() {
+    referenceCompanyName.clear();
+    referenceReferenceName.clear();
+    referenceContactNumber.clear();
   }
 }
 
