@@ -301,6 +301,7 @@ class CrewOnboardingController extends GetxController {
     if (country.value?.id == null) {
       return;
     }
+    state.value = null;
     states.value = (await getIt<StateProvider>()
             .getStates(countryId: country.value!.id!)) ??
         [];
@@ -479,11 +480,11 @@ class CrewOnboardingController extends GetxController {
           UserDetails(
               userId: userId,
               iNDOSNumber: indosNumber.text.nullIfEmpty(),
-              cDCNumber: cdcNumber.text.nullIfEmpty(),
-              cDCNumberValidTill: cdcNumberValidTill.text.nullIfEmpty(),
+/*               cDCNumber: cdcNumber.text.nullIfEmpty(),
+              cDCNumberValidTill: cdcNumberValidTill.text.nullIfEmpty(), */
               cDCSeamanBookNumber: cdcSeamanNumber.text.nullIfEmpty(),
               cDCSeamanBookNumberValidTill:
-                  cdcNumberValidTill.text.nullIfEmpty(),
+                  cdcSeamanNumberValidTill.text.nullIfEmpty(),
               passportNumber: passportNumber.text.nullIfEmpty(),
               passportNumberValidTill: passportValidTill.text.nullIfEmpty(),
               validUSVisa: usVisaValidTill.text.isNotEmpty,

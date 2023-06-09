@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/add_a_record_bottom_sheet.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/add_a_reference_bottom_sheet.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/widgets/astrix_text.dart';
 
 class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
   const CrewOnboardingStep3({Key? key}) : super(key: key);
@@ -41,13 +42,13 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             ),
             22.verticalSpace,
             Text("Create Profile",
-                style: Get.textTheme.headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.bold)),
+                style:
+                    Get.theme.textTheme.headlineSmall?.copyWith(fontSize: 20)),
             8.verticalSpace,
             Text("Please complete your profile",
                 style: Get.textTheme.bodyMedium?.copyWith(color: Colors.grey)),
             16.verticalSpace,
-            Text("Sea Service Record *", style: headingStyle),
+            AsterixText("Sea Service Record"),
             16.verticalSpace,
             Text("Please enter last two vessel records"),
             8.verticalSpace,
@@ -104,7 +105,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                 },
                 child: Text("Add a record")),
             16.verticalSpace,
-            Text("Reference from Your Previous Employer", style: headingStyle),
+            AsterixText("Reference from Your Previous Employer"),
             16.verticalSpace,
             Text("Please enter your reference details"),
             8.verticalSpace,

@@ -8,6 +8,7 @@ import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/coc_detai
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/cop_details.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/stcw_details.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/watch_keeping_details.dart';
+import 'package:join_mp_ship/widgets/astrix_text.dart';
 import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/date_time.dart';
@@ -45,7 +46,8 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                 ),
                 22.verticalSpace,
                 Text("Create Profile",
-                    style: Get.theme.textTheme.headlineSmall),
+                    style: Get.theme.textTheme.headlineSmall
+                        ?.copyWith(fontSize: 20)),
                 8.verticalSpace,
                 Text("Please complete your profile",
                     style:
@@ -56,24 +58,24 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
-                      child: Text("INDOS NO.  *", style: headingStyle),
+                      child: Text("INDOS NO.", style: headingStyle),
                     ),
                     48.horizontalSpace,
                     Expanded(
                       child: CustomTextFormField(
                           controller: controller.indosNumber,
-                          validator: (value) {
+                          /* validator: (value) {
                             if (value == null || value.isEmpty == true) {
                               return "Please enter this field";
                             }
                             return null;
-                          },
+                          }, */
                           hintText: "INDOS Number"),
                     ),
                   ],
                 ),
-                8.verticalSpace,
-                Text("CDC Number *", style: headingStyle),
+                /* 8.verticalSpace,
+                 AsterixText("CDC Number"),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,9 +116,9 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                       ),
                     ),
                   ],
-                ),
+                ), */
                 16.verticalSpace,
-                Text("CDC / Seaman Book Details *", style: headingStyle),
+                AsterixText("CDC / Seaman Book Details"),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +162,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                   ],
                 ),
                 16.verticalSpace,
-                Text("Passport Details *", style: headingStyle),
+                AsterixText("Passport Details"),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +237,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                     16.verticalSpace
                   ]
                 ],
-                Text("Are you holding valid US Visa? *", style: headingStyle),
+                AsterixText("Are you holding valid US Visa?"),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
