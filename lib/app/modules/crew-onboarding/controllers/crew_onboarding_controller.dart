@@ -106,8 +106,8 @@ class CrewOnboardingController extends GetxController {
   TextEditingController zipCode = TextEditingController();
   TextEditingController indosNumber = TextEditingController();
   //
-  TextEditingController cdcNumber = TextEditingController();
-  TextEditingController cdcNumberValidTill = TextEditingController();
+/*   TextEditingController cdcNumber = TextEditingController();
+  TextEditingController cdcNumberValidTill = TextEditingController(); */
   //
   TextEditingController cdcSeamanNumber = TextEditingController();
   TextEditingController cdcSeamanNumberValidTill = TextEditingController();
@@ -260,10 +260,10 @@ class CrewOnboardingController extends GetxController {
 
   Future<void> setStep2Fields() async {
     indosNumber.text = userDetails?.iNDOSNumber ?? "";
-    cdcNumber.text = userDetails?.cDCNumber ?? "";
-    cdcNumberValidTill.text = userDetails?.cDCNumberValidTill ?? "";
-    cdcSeamanNumber.text = userDetails?.cDCNumber ?? "";
-    cdcSeamanNumberValidTill.text = userDetails?.cDCNumberValidTill ?? "";
+/*     cdcNumber.text = userDetails?.cDCNumber ?? "";
+    cdcNumberValidTill.text = userDetails?.cDCNumberValidTill ?? ""; */
+    cdcSeamanNumber.text = userDetails?.cDCSeamanBookNumber ?? "";
+    cdcSeamanNumberValidTill.text = userDetails?.cDCSeamanBookNumberValidTill ?? "";
     passportNumber.text = userDetails?.passportNumber ?? "";
     passportValidTill.text = userDetails?.passportNumberValidTill ?? "";
     usVisaValidTill.text = userDetails?.validUSVisaValidTill ?? "";
