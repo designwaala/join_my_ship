@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +15,7 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: controller.parentKey,
-        backgroundColor: Color(0xFFFbF6FF),
+        backgroundColor: const Color(0xFFFbF6FF),
         appBar: AppBar(
           toolbarHeight: 60,
           title: Text('JOIN MY SHIP',
@@ -28,9 +29,9 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
             child: Container(
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-              child: Icon(
+              child: const Icon(
                 Icons.keyboard_backspace_rounded,
                 color: Colors.black,
               ),
@@ -53,22 +54,39 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                       Text("Sign In",
                           style: Get.theme.textTheme.headlineSmall
                               ?.copyWith(fontWeight: FontWeight.bold)),
-                      Text("Please sign in to your registered mobile number"),
+                      const Text(
+                          "Please sign in to your registered mobile number"),
                       20.verticalSpace,
                       TextFormField(
                         controller: controller.phoneController,
+                        keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
                             hintText: "Mobile Number",
-                            prefixIcon: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("+91",
-                                    style: Get.theme.textTheme.bodyMedium
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.bold)),
-                              ],
+                            prefixIcon: InkWell(
+                              onTap: () {
+                                showCountryPicker(
+                                  context: context,
+                                  showPhoneCode:
+                                      true, // optional. Shows phone code before the country name.
+                                  onSelect: (Country country) {
+                                    print(
+                                        'Select country: ${country.displayName}');
+                                    controller.selectedCountryCode.value =
+                                        "+${country.phoneCode}";
+                                  },
+                                );
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(controller.selectedCountryCode.value,
+                                      style: Get.theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold)),
+                                ],
+                              ),
                             ),
                             border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
@@ -76,7 +94,7 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                       ),
                       24.verticalSpace,
                       AnimatedCrossFade(
-                          firstChild: SizedBox(),
+                          firstChild: const SizedBox(),
                           secondChild: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -101,7 +119,7 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  CircularProgressIndicator(),
+                                  const CircularProgressIndicator(),
                                 ],
                               )
                             : ElevatedButton(
@@ -116,28 +134,45 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                                     ? "VERIFY"
                                     : "SEND OTP")),
                       ),
-                      38.verticalSpace,
-                      Center(child: Text("Or sign in with")),
-                      14.verticalSpace,
-                      InkWell(
-                        onTap: () {
-                          Get.offNamed(Routes.CREW_SIGN_IN_EMAIL);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.black)),
-                          child: Icon(
-                            Icons.email,
-                            size: 32,
+                      24.verticalSpace,
+                      if (controller.showResendOTP.value) ...[
+                        Center(
+                            child: TextButton(
+                                onPressed: controller.sendOTP,
+                                child: Text("Resend OTP"))),
+                        24.verticalSpace,
+                      ] else if (controller.isOTPSent.value) ...[
+                        Center(
+                            child: Text(
+                                "Resend OTP in ${30 - controller.timePassed.value} seconds")),
+                        24.verticalSpace
+                      ],
+                      const Center(child: Text("Or sign in with")),
+                      20.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Get.offAllNamed(Routes.CREW_SIGN_IN_EMAIL);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.black)),
+                              child: const Icon(
+                                Icons.email,
+                                size: 32,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                       4.verticalSpace,
-                      Center(child: Text('Email Id')),
-                      Spacer(),
+                      const Center(child: Text('Email Id')),
+                      const Spacer(),
                       SizedBox(
                         width: double.maxFinite,
                         height: 64.h,
@@ -148,7 +183,7 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                             onPressed: () {
                               Get.toNamed(Routes.CHOOSE_USER);
                             },
-                            child: Text("CREATE ACCOUNT")),
+                            child: const Text("CREATE ACCOUNT")),
                       )
                     ],
                   ),
