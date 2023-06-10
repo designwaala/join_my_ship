@@ -19,6 +19,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/info/bindings/info_binding.dart';
 import '../modules/info/views/info_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
 import '../modules/sign_up_email/bindings/sign_up_email_binding.dart';
 import '../modules/sign_up_email/views/sign_up_email_view.dart';
 import '../modules/sign_up_phone_number/bindings/sign_up_phone_number_binding.dart';
@@ -37,7 +39,7 @@ class AppPages {
     GetPage(
       name: _Paths.HOME,
       page: () => const HomeView(),
-      binding: HomeBinding(),
+      bindings: [HomeBinding(), ProfileBinding()],
     ),
     GetPage(
       name: _Paths.SPLASH,
@@ -93,6 +95,11 @@ class AppPages {
       name: _Paths.ACCOUNT_UNDER_VERIFICATION,
       page: () => const AccountUnderVerificationView(),
       binding: AccountUnderVerificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

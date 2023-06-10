@@ -263,7 +263,8 @@ class CrewOnboardingController extends GetxController {
 /*     cdcNumber.text = userDetails?.cDCNumber ?? "";
     cdcNumberValidTill.text = userDetails?.cDCNumberValidTill ?? ""; */
     cdcSeamanNumber.text = userDetails?.cDCSeamanBookNumber ?? "";
-    cdcSeamanNumberValidTill.text = userDetails?.cDCSeamanBookNumberValidTill ?? "";
+    cdcSeamanNumberValidTill.text =
+        userDetails?.cDCSeamanBookNumberValidTill ?? "";
     passportNumber.text = userDetails?.passportNumber ?? "";
     passportValidTill.text = userDetails?.passportNumberValidTill ?? "";
     usVisaValidTill.text = userDetails?.validUSVisaValidTill ?? "";
@@ -410,6 +411,7 @@ class CrewOnboardingController extends GetxController {
             addressCity: city.text,
             state: 1,
             promotionApplied: isLookingForPromotion.value,
+            screenCheck: 1,
             authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
         profilePicPath: pickedImage.value?.path,
         resumePath: pickedResume.value?.path);

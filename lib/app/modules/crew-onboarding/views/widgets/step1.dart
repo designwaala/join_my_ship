@@ -177,84 +177,73 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               16.verticalSpace,
-              if (![
-                "Master/Captain",
-                "Cheif Officer",
-                "ETO / Electrician",
-                "Chief Cook",
-                "Deck Cadet",
-                "Trainee Electrical Cadet",
-                "Engine Cadet",
-                "Trainee Ordinary Seaman",
-                "Trainee Wiper",
-              ].contains(controller.selectedRank.value?.name)) ...[
+              if (controller.selectedRank.value?.isPromotable == true) ...[
                 const AsterixText("Are you looking for Promotion?"),
                 16.verticalSpace,
                 Row(
                   children: [
-                    Radio(
-                        value: controller.isLookingForPromotion.value,
-                        groupValue: false,
-                        onChanged: (_) {
-                          controller.isLookingForPromotion.value = false;
-                        }),
+                    SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: Radio(
+                          value: controller.isLookingForPromotion.value,
+                          groupValue: false,
+                          onChanged: (_) {
+                            controller.isLookingForPromotion.value = false;
+                          }),
+                    ),
+                    8.horizontalSpace,
                     const Text("No"),
                     16.horizontalSpace,
-                    Radio(
-                        value: controller.isLookingForPromotion.value,
-                        groupValue: true,
-                        onChanged: (_) {
-                          controller.isLookingForPromotion.value = true;
-                        }),
+                    SizedBox(
+                      height: 16,
+                      width: 16,
+                      child: Radio(
+                          value: controller.isLookingForPromotion.value,
+                          groupValue: true,
+                          onChanged: (_) {
+                            controller.isLookingForPromotion.value = true;
+                          }),
+                    ),
+                    8.horizontalSpace,
                     const Text("Yes"),
                     const Spacer(),
-                    // if (controller.isLookingForPromotion.value)
-                    //   DropdownButtonHideUnderline(
-                    //     child: DropdownButton2<String>(
-                    //       value: controller.promotionRank.value,
-                    //       isExpanded: true,
-                    //       style: Get.textTheme.bodySmall,
-                    //       items: controller.ranks
-                    //           ?.map((e) => DropdownMenuItem(
-                    //               value: e.name,
-                    //               child: Text(e.name ?? "",
-                    //                   style: Get.textTheme.bodyMedium
-                    //                       ?.copyWith(color: Colors.black))))
-                    //           .toList(),
-                    //       onChanged: (value) {
-                    //         controller.promotionRank.value = value;
-                    //       },
-                    //       hint: const Text("Select Rank"),
-                    //       buttonStyleData: ButtonStyleData(
-                    //           height: 40,
-                    //           width: 160,
-                    //           padding:
-                    //               const EdgeInsets.symmetric(horizontal: 8),
-                    //           decoration: DropdownDecoration()),
-                    //     ),
-                    //   )
                   ],
                 ),
-                18.verticalSpace,
+                8.verticalSpace,
+                if (controller.isLookingForPromotion.value)
+                  Text(
+                      "You would be promoted to ${controller.ranks?.firstWhereOrNull((rank) => rank.id == controller.selectedRank.value?.promotedTo)?.name}")
               ],
+              16.verticalSpace,
               Row(
                 children: [
                   const AsterixText("Gender"),
                   24.horizontalSpace,
-                  Radio<Gender?>(
-                      value: controller.gender.value,
-                      groupValue: Gender.male,
-                      onChanged: (_) {
-                        controller.gender.value = Gender.male;
-                      }),
+                  SizedBox(
+                    height: 16,
+                    width: 16,
+                    child: Radio<Gender?>(
+                        value: controller.gender.value,
+                        groupValue: Gender.male,
+                        onChanged: (_) {
+                          controller.gender.value = Gender.male;
+                        }),
+                  ),
+                  8.horizontalSpace,
                   const Text("Male"),
                   16.horizontalSpace,
-                  Radio<Gender?>(
-                      value: controller.gender.value,
-                      groupValue: Gender.female,
-                      onChanged: (_) {
-                        controller.gender.value = Gender.female;
-                      }),
+                  SizedBox(
+                    height: 16,
+                    width: 16,
+                    child: Radio<Gender?>(
+                        value: controller.gender.value,
+                        groupValue: Gender.female,
+                        onChanged: (_) {
+                          controller.gender.value = Gender.female;
+                        }),
+                  ),
+                  8.horizontalSpace,
                   const Text("Female"),
                 ],
               ),
