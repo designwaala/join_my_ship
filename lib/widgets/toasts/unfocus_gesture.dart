@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
@@ -34,9 +35,25 @@ class _UnFocusGestureState extends State<UnFocusGesture> {
           if (!node.hasFocus) FocusScope.of(context).requestFocus(node);
         },
         onLongPress: () async {
-          await FirebaseAuth.instance.signOut();
-          await PreferencesHelper.instance.clearAll();
-          Get.offAllNamed(Routes.SPLASH);
+          showDialog(
+              context: Get.context!,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Would you like to sign out"),
+                  actions: [
+                    OutlinedButton(
+                        onPressed: () async {
+                          await FirebaseAuth.instance.signOut();
+                          await PreferencesHelper.instance.clearAll();
+                          Get.offAllNamed(Routes.SPLASH);
+                        },
+                        child: Text("Yes")),
+                    8.horizontalSpace,
+                    OutlinedButton(onPressed: Get.back, child: Text("No")),
+                    8.horizontalSpace,
+                  ],
+                );
+              });
         },
         child: widget.child,
       );
