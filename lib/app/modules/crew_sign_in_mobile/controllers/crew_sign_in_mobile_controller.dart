@@ -24,6 +24,14 @@ class CrewSignInMobileController extends GetxController {
   RxInt timePassed = 0.obs;
   Timer? timer;
 
+  Function? redirection;
+
+  @override
+  void onInit() {
+    redirection = Get.arguments;
+    super.onInit();
+  }
+
   @override
   void onReady() {
     super.onReady();
@@ -74,8 +82,10 @@ class CrewSignInMobileController extends GetxController {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId!, smsCode: otpController.text);
     try {
-      UserCredential userCred =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential? userCred = FirebaseAuth.instance.currentUser == null
+          ? await FirebaseAuth.instance.signInWithCredential(credential)
+          : await FirebaseAuth.instance.currentUser
+              ?.linkWithCredential(credential);
     } catch (e) {
       fToast.showToast(child: errorToast("$e"));
       isVerifying.value = false;
@@ -85,7 +95,11 @@ class CrewSignInMobileController extends GetxController {
       await FirebaseAuth.instance.signOut();
       fToast.showToast(child: errorToast("Email not Verified"));
     } else if (FirebaseAuth.instance.currentUser != null) {
-      Get.offAllNamed(Routes.CREW_ONBOARDING);
+      if (redirection != null) {
+        redirection!();
+      } else {
+        Get.offAllNamed(Routes.CREW_ONBOARDING);
+      }
       fToast.showToast(child: successToast("Authentication Successful"));
     } else {
       fToast.showToast(child: errorToast("Authentication Failed"));

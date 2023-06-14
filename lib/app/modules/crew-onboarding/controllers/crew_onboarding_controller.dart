@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide State;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -64,7 +65,7 @@ enum Step3FormMiss {
 TextStyle? get headingStyle =>
     Get.textTheme.titleSmall?.copyWith(color: Get.theme.primaryColor);
 
-class CrewOnboardingController extends GetxController {
+class CrewOnboardingController extends GetxController with PickImage {
   CrewUser? crewUser;
   UserDetails? userDetails;
   RxBool isLoading = false.obs;
@@ -93,8 +94,6 @@ class CrewOnboardingController extends GetxController {
   // RxList<String> copIssuingAuthority = RxList.empty();
   // RxList<String> watchKeepingIssuingAuthority = RxList.empty();
 
-  final Rxn<XFile> pickedImage = Rxn();
-
   ///_________Step 1_____________
   TextEditingController addressLine1 = TextEditingController();
   TextEditingController addressLine2 = TextEditingController();
@@ -117,8 +116,6 @@ class CrewOnboardingController extends GetxController {
   //
   TextEditingController usVisaValidTill = TextEditingController();
   //__________________________
-
-  final ImagePicker imagePicker = ImagePicker();
 
   //Add a record bottom sheet
   TextEditingController recordCompanyName = TextEditingController();
@@ -263,7 +260,8 @@ class CrewOnboardingController extends GetxController {
 /*     cdcNumber.text = userDetails?.cDCNumber ?? "";
     cdcNumberValidTill.text = userDetails?.cDCNumberValidTill ?? ""; */
     cdcSeamanNumber.text = userDetails?.cDCSeamanBookNumber ?? "";
-    cdcSeamanNumberValidTill.text = userDetails?.cDCSeamanBookNumberValidTill ?? "";
+    cdcSeamanNumberValidTill.text =
+        userDetails?.cDCSeamanBookNumberValidTill ?? "";
     passportNumber.text = userDetails?.passportNumber ?? "";
     passportValidTill.text = userDetails?.passportNumberValidTill ?? "";
     usVisaValidTill.text = userDetails?.validUSVisaValidTill ?? "";
@@ -324,40 +322,6 @@ class CrewOnboardingController extends GetxController {
     fToast.init(parentKey.currentContext!);
   }
 
-  pickSource() async {
-    showDialog(
-        context: Get.context!,
-        builder: (context) => AlertDialog(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Pick Image from"),
-                  IconButton(onPressed: Get.back, icon: Icon(Icons.close))
-                ],
-              ),
-              actionsAlignment: MainAxisAlignment.center,
-              actionsPadding: EdgeInsets.symmetric(vertical: 16),
-              titlePadding: EdgeInsets.only(left: 16, right: 16, top: 16),
-              actions: [
-                ElevatedButton(
-                    onPressed: () async {
-                      Get.back();
-                      pickedImage.value = await imagePicker.pickImage(
-                          source: ImageSource.gallery);
-                    },
-                    child: Text("Gallery")),
-                // Spacer(),
-                ElevatedButton(
-                    onPressed: () async {
-                      Get.back();
-                      pickedImage.value = await imagePicker.pickImage(
-                          source: ImageSource.camera);
-                    },
-                    child: Text("Image"))
-              ],
-            ));
-  }
-
   Future<bool> postStep1() async {
     step1FormMisses.clear();
     if (pickedImage.value?.path == null) {
@@ -410,6 +374,7 @@ class CrewOnboardingController extends GetxController {
             addressCity: city.text,
             state: 1,
             promotionApplied: isLookingForPromotion.value,
+            screenCheck: 1,
             authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
         profilePicPath: pickedImage.value?.path,
         resumePath: pickedResume.value?.path);
@@ -636,3 +601,80 @@ class CrewOnboardingArguments {
 }
 
 enum Gender { male, female }
+
+mixin PickImage {
+  final Rxn<XFile> pickedImage = Rxn();
+  final ImagePicker imagePicker = ImagePicker();
+
+  Future<void> pickSource() async {
+    return showDialog(
+        context: Get.context!,
+        builder: (context) => AlertDialog(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Pick Image from"),
+                  IconButton(onPressed: Get.back, icon: Icon(Icons.close))
+                ],
+              ),
+              actionsAlignment: MainAxisAlignment.center,
+              actionsPadding: EdgeInsets.symmetric(vertical: 16),
+              titlePadding: EdgeInsets.only(left: 16, right: 16, top: 16),
+              actions: [
+                ElevatedButton(
+                    onPressed: () async {
+                      pickedImage.value = await imagePicker.pickImage(
+                          source: ImageSource.gallery);
+                      Get.back();
+                    },
+                    child: Text("Gallery")),
+                // Spacer(),
+                ElevatedButton(
+                    onPressed: () async {
+                      Get.back();
+                      pickedImage.value = await imagePicker.pickImage(
+                          source: ImageSource.camera);
+                    },
+                    child: Text("Image"))
+              ],
+            ));
+  }
+
+  Future<bool?> confirmUpdate() {
+    return showDialog<bool>(
+        context: Get.context!,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Are you sure you want to update to this image?"),
+            content: Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: Image.file(File(pickedImage.value!.path)).image,
+                      fit: BoxFit.cover)),
+            ),
+            actions: [
+              OutlinedButton(
+                  onPressed: () async {
+                    Get.back(result: true);
+                  },
+                  child: Text("Yes")),
+              8.horizontalSpace,
+              OutlinedButton(
+                  onPressed: () {
+                    pickedImage.value = null;
+                    Get.back(result: false);
+                  },
+                  child: Text("No")),
+              8.horizontalSpace,
+            ],
+          );
+        });
+  }
+}
+
+mixin PickResume {
+  
+}

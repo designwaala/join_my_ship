@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
 import '../models/user_details_model.dart';
@@ -34,6 +35,7 @@ class UserDetailsProvider extends WrapperConnect {
       }
       return UserDetails.fromJson(map.first);
     }, contentType: "");
+    UserStates.instance.userDetails = response.body;
     return response.body;
   }
 }

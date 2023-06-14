@@ -38,6 +38,7 @@ class CrewUser {
   int? state;
   List<int>? groups;
   String? authKey;
+  int? screenCheck;
 
   CrewUser(
       {this.id,
@@ -78,7 +79,8 @@ class CrewUser {
       this.country,
       this.state,
       this.groups,
-      this.authKey});
+      this.authKey,
+      this.screenCheck});
 
   CrewUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -120,6 +122,7 @@ class CrewUser {
     state = json['state'];
     groups = json['groups']?.cast<int>();
     authKey = json['auth_key'];
+    screenCheck = json['screen_check'];
     // if (json['user_permissions'] != null) {
     //   userPermissions = <Null>[];
     //   json['user_permissions'].forEach((v) {
@@ -150,7 +153,7 @@ class CrewUser {
     data['mobile_verified'] = mobileVerified?.toString();
     data['promotion_applied'] = promotionApplied?.toString();
     data['email_verified'] = emailVerified?.toString();
-    data['website'] = "_"??website;
+    data['website'] = website;
     data['number'] = number;
     data['designation'] = designation;
     data['alternate_number'] = alternateNumber;
@@ -168,7 +171,9 @@ class CrewUser {
     data['country'] = country?.toString();
     data['state'] = state?.toString();
     data['auth_key'] = authKey;
+    data['screen_check'] = screenCheck?.toString();
     data.removeWhere((key, value) => value == null);
+    print(data);
     return data.map((key, value) => MapEntry(key, value!));
   }
 }

@@ -15,6 +15,7 @@ abstract class Routes {
   static const CREW_ONBOARDING = _Paths.CREW_ONBOARDING;
   static const EMAIL_VERIFICATION_WAITING = _Paths.EMAIL_VERIFICATION_WAITING;
   static const ACCOUNT_UNDER_VERIFICATION = _Paths.ACCOUNT_UNDER_VERIFICATION;
+  static const PROFILE = _Paths.PROFILE;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const CREW_ONBOARDING = '/crew-onboarding';
   static const EMAIL_VERIFICATION_WAITING = '/email-verification-waiting';
   static const ACCOUNT_UNDER_VERIFICATION = '/account-under-verification';
+  static const PROFILE = '/profile';
 }
