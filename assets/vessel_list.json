@@ -1,0 +1,138 @@
+{
+    "Dry Cargo Ships": [
+        {
+            "id": 1,
+            "name": "Bulk Carriers",
+            "vessels_id_id": 1,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:44:24.110Z",
+            "modified_at": "2023-06-10T13:44:24.110Z"
+        },
+        {
+            "id": 2,
+            "name": "General Cargo Vessels",
+            "vessels_id_id": 1,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:44:39.837Z",
+            "modified_at": "2023-06-10T13:44:39.837Z"
+        },
+        {
+            "id": 3,
+            "name": "Container Vessels",
+            "vessels_id_id": 1,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:44:53.021Z",
+            "modified_at": "2023-06-10T13:44:53.021Z"
+        },
+        {
+            "id": 4,
+            "name": "Reefer Vessels",
+            "vessels_id_id": 1,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:45:07.122Z",
+            "modified_at": "2023-06-10T13:45:07.122Z"
+        },
+        {
+            "id": 5,
+            "name": "Ro-Ro Vessels",
+            "vessels_id_id": 1,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:45:23.722Z",
+            "modified_at": "2023-06-10T13:45:23.722Z"
+        }
+    ],
+    "Liquid Cargo Ships": [
+        {
+            "id": 6,
+            "name": "Crude Carriers",
+            "vessels_id_id": 2,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:45:47.351Z",
+            "modified_at": "2023-06-10T13:45:47.351Z"
+        },
+        {
+            "id": 7,
+            "name": "Product Carriers",
+            "vessels_id_id": 2,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:45:59.845Z",
+            "modified_at": "2023-06-10T13:45:59.845Z"
+        },
+        {
+            "id": 8,
+            "name": "Chemical Carriers",
+            "vessels_id_id": 2,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:46:15.247Z",
+            "modified_at": "2023-06-10T13:46:15.247Z"
+        },
+        {
+            "id": 9,
+            "name": "Liquefied Gas Carriers",
+            "vessels_id_id": 2,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:46:31.209Z",
+            "modified_at": "2023-06-10T13:46:31.210Z"
+        }
+    ],
+    "Specialised Cargo Ships": [
+        {
+            "id": 10,
+            "name": "Passenger Vessels",
+            "vessels_id_id": 3,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:46:46.832Z",
+            "modified_at": "2023-06-10T13:46:46.832Z"
+        },
+        {
+            "id": 11,
+            "name": "Livestock Carriers",
+            "vessels_id_id": 3,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:47:00.308Z",
+            "modified_at": "2023-06-10T13:47:00.308Z"
+        },
+        {
+            "id": 12,
+            "name": "Heavy-lift/Project Cargo Vessels",
+            "vessels_id_id": 3,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:47:26.244Z",
+            "modified_at": "2023-06-10T13:47:26.245Z"
+        },
+        {
+            "id": 13,
+            "name": "Tugs",
+            "vessels_id_id": 3,
+            "is_active": true,
+            "created_by": "1",
+            "modified_by": "1",
+            "created_at": "2023-06-10T13:47:36.689Z",
+            "modified_at": "2023-06-10T13:47:36.689Z"
+        }
+    ]
+}

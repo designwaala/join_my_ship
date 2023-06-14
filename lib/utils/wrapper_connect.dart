@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/login_model.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -182,6 +183,59 @@ class WrapperConnect extends GetConnect {
       }
     }
     return response;
+  }
+
+  @override
+  Future<Map<String, dynamic>> httpPatch<T>(
+    String? url,
+    dynamic body, {
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
+  }) async {
+    print(PreferencesHelper.instance.accessToken);
+    if (PreferencesHelper.instance.accessToken.isEmpty) {
+      print("Access Token not found, getting them");
+      await getAccessTokens();
+    }
+
+    var response = await http.patch(Uri.parse("$baseURL/$url"),
+        body: jsonEncode(body),
+        headers: headers ??
+            {
+              "Authorization":
+                  "Bearer ${PreferencesHelper.instance.accessToken}"
+            });
+    if (response.statusCode == 401) {
+      print("Refreshing Access Token");
+      await refreshAccessToken();
+      response = await http.patch(Uri.parse("$baseURL/$url"),
+          body: jsonEncode(body),
+          headers: headers ??
+              {
+                "Authorization":
+                    "Bearer ${PreferencesHelper.instance.accessToken}"
+              });
+
+      if (response.statusCode == 401) {
+        print("Refreshing Access Token didnt work, getting new Tokens");
+        await getAccessTokens();
+        response = await http.patch(Uri.parse("$baseURL/$url"),
+            body: jsonEncode(body),
+            headers: headers ??
+                {
+                  "Authorization":
+                      "Bearer ${PreferencesHelper.instance.accessToken}"
+                });
+
+        if (response.statusCode == 401) {
+          _signOut();
+        }
+      }
+    }
+    return jsonDecode(response.body);
   }
 
   @override

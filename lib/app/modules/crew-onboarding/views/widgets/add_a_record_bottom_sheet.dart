@@ -49,33 +49,24 @@ class AddARecord extends GetView<CrewOnboardingController> {
                       controller: controller.recordCompanyName,
                       hintText: "Company Name"),
                   16.verticalSpace,
-                  Text("ship name", style: headingStyle),
+                  Text("Ship Name", style: headingStyle),
                   16.verticalSpace,
                   CustomTextFormField(
                       controller: controller.recordShipName,
                       hintText: "Ship Name"),
                   20.verticalSpace,
-                  Row(
+                  Table(
                     children: [
-                      Text("IMO Number", style: headingStyle),
-                      Spacer(),
-                      SizedBox(
-                        width: 146.w,
-                        child: CustomTextFormField(
+                      TableRow(children: [
+                        Text("IMO Number", style: headingStyle),
+                        CustomTextFormField(
                             controller: controller.recordIMONumber,
                             keyboardType: TextInputType.number,
                             hintText: "IMO Number"),
-                      ),
-                    ],
-                  ),
-                  16.verticalSpace,
-                  Row(
-                    children: [
-                      Text("Rank", style: headingStyle),
-                      Spacer(),
-                      SizedBox(
-                        width: 146.w,
-                        child: DropdownButtonHideUnderline(
+                      ]),
+                      TableRow(children: [
+                        Text("Rank", style: headingStyle),
+                        DropdownButtonHideUnderline(
                           child: DropdownButton2<Rank>(
                             value: controller.recordRank.value,
                             isExpanded: true,
@@ -107,61 +98,68 @@ class AddARecord extends GetView<CrewOnboardingController> {
                                 )),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  16.verticalSpace,
-                  Row(
-                    children: [
-                      Text("Flag Name", style: headingStyle),
-                      Spacer(),
-                      SizedBox(
-                        width: 146.w,
-                        child: CustomTextFormField(
+                      ]),
+                      TableRow(children: [
+                        Text("Flag Name", style: headingStyle),
+                        CustomTextFormField(
                             controller: controller.recordFlagName,
                             hintText: "Flag Name"),
-                      ),
-                    ],
-                  ),
-                  16.verticalSpace,
-                  Row(
-                    children: [
-                      Text("GRT", style: headingStyle),
-                      Spacer(),
-                      SizedBox(
-                        width: 146.w,
-                        child: CustomTextFormField(
+                      ]),
+                      TableRow(children: [
+                        Text("GRT", style: headingStyle),
+                        CustomTextFormField(
                             controller: controller.recordGrt,
                             keyboardType: TextInputType.number,
                             hintText: "Enter GRT"),
-                      ),
-                    ],
-                  ),
-                  16.verticalSpace,
-                  Row(
-                    children: [
-                      Text("Vessel Type", style: headingStyle),
-                      Spacer(),
-                      SizedBox(
-                        width: 146.w,
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton2<String>(
+                      ]),
+                      TableRow(children: [
+                        Text("Vessel Type", style: headingStyle),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2<int>(
                             value: controller.recordVesselType.value,
                             isExpanded: true,
                             style: Get.textTheme.bodySmall,
-                            items: controller.vesselTypes
-                                .map((e) => DropdownMenuItem(
-                                    value: e.name,
-                                    child: Text(e.name ?? "",
-                                        style: Get.textTheme.titleMedium)))
-                                .toList(),
+                            items: controller.vesselList?.vessels
+                                    ?.map((e) => [
+                                          DropdownMenuItem<int>(
+                                              enabled: false,
+                                              child: Text(
+                                                e.vesselName ?? "",
+                                                maxLines: 1,
+                                                style: Get.textTheme.titleSmall
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                overflow: TextOverflow.ellipsis,
+                                              )),
+                                          ...?e.subVessels?.map((e) =>
+                                              DropdownMenuItem<int>(
+                                                  value: e.id,
+                                                  child: Text(e.name ?? "",
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: Get
+                                                          .textTheme.bodyMedium
+                                                          ?.copyWith(
+                                                              fontSize: 12))))
+                                        ])
+                                    .expand((element) => element)
+                                    .toList() ??
+                                [],
+
+                            // .map((e) => DropdownMenuItem(
+                            //     value: e.name,
+                            //     child: Text(e.name ?? "",
+                            //         style: Get.textTheme.titleMedium)))
+                            // .toList(),
                             onChanged: (value) {
                               controller.recordVesselType.value = value;
                             },
                             hint: const Text("Select Vessel"),
                             buttonStyleData: ButtonStyleData(
                                 height: 40,
-                                width: 160,
+                                width: 200,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8),
                                 decoration: BoxDecoration(
@@ -171,10 +169,16 @@ class AddARecord extends GetView<CrewOnboardingController> {
                                 )),
                           ),
                         ),
-                      ),
-                    ],
+                      ])
+                    ]
+                        .map((e) => [
+                              e,
+                              TableRow(
+                                  children: [16.verticalSpace, 0.verticalSpace])
+                            ])
+                        .expand((element) => element)
+                        .toList(),
                   ),
-                  16.verticalSpace,
                   Row(
                     children: [
                       Text("Sign-On Date", style: headingStyle),

@@ -22,6 +22,14 @@ class SeaServiceProvider extends WrapperConnect {
   Future<SeaServiceRecord?> postSeaService(SeaServiceRecord seaservice) async =>
       (await post('crew/sea_services_create', FormData(seaservice.toJson())))
           .body;
+
+  Future<SeaServiceRecord?> updateSeaService(
+      SeaServiceRecord seaService) async {
+    final response = await httpPatch(
+        "crew/sea_services_update/${seaService.id}", seaService.toJson());
+    return SeaServiceRecord.fromJson(response);
+  }
+
   Future<Response> deleteSeaService(int id) async =>
       await delete('crew/sea_services_destroy/$id/');
 }

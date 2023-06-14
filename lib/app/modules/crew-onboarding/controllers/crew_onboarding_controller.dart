@@ -15,6 +15,7 @@ import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
 import 'package:join_mp_ship/app/data/models/service_record_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
+import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_type_model.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
@@ -24,6 +25,7 @@ import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
 import 'package:join_mp_ship/app/data/providers/service_record_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
+import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
@@ -124,11 +126,11 @@ class CrewOnboardingController extends GetxController with PickImage {
   Rxn<Rank> recordRank = Rxn<Rank>();
   TextEditingController recordFlagName = TextEditingController();
   TextEditingController recordGrt = TextEditingController();
-  RxnString recordVesselType = RxnString();
+  RxnInt recordVesselType = RxnInt();
   TextEditingController recordSignOnDate = TextEditingController();
   TextEditingController recordSignOffDate = TextEditingController();
   TextEditingController recordContarctDuration = TextEditingController();
-
+  SeaServiceRecord? selectedSeaServiceRecord;
   //Add a reference bottom sheet
   TextEditingController referenceCompanyName = TextEditingController();
   TextEditingController referenceReferenceName = TextEditingController();
@@ -158,7 +160,8 @@ class CrewOnboardingController extends GetxController with PickImage {
 
   int? userId;
 
-  List<VesselType> vesselTypes = [];
+  // List<VesselType> vesselTypes = [];
+  VesselList? vesselList;
   RxBool isPreparingRecordBottomSheet = false.obs;
 
 /*   List<String> ranks = [
@@ -219,39 +222,33 @@ class CrewOnboardingController extends GetxController with PickImage {
     UserStates.instance.countries = countries;
     crewUser = await getIt<CrewUserProvider>().getCrewUser(softRefresh: true);
     UserStates.instance.crewUser = crewUser;
-    if (crewUser?.id == null) {
-      step.value = 1;
-    } else {
+    if (crewUser?.id != null) {
       await setStep1Fields();
+    }
+    if (crewUser?.screenCheck == 1) {
       userDetails =
           await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
       UserStates.instance.userDetails = userDetails;
-      setStep2Fields();
-      if (userDetails?.id == null) {
-        step.value = 2;
+      await setStep2Fields();
+    } else if (crewUser?.screenCheck == 2) {
+      serviceRecords.value =
+          (await getIt<SeaServiceProvider>().getSeaServices(crewUser!.id!)) ??
+              [];
+      UserStates.instance.serviceRecords = serviceRecords;
+      previousEmployerReferences.value =
+          (await getIt<PreviousEmployerProvider>()
+                  .getPreviousEmployer(crewUser!.id!)) ??
+              [];
+      UserStates.instance.previousEmployerReferences =
+          previousEmployerReferences;
+    } else if (crewUser?.screenCheck == 3) {
+      if (crewUser?.isVerified == 1) {
+        Get.toNamed(Routes.HOME);
       } else {
-        serviceRecords.value =
-            (await getIt<SeaServiceProvider>().getSeaServices(crewUser!.id!)) ??
-                [];
-        UserStates.instance.serviceRecords = serviceRecords;
-        previousEmployerReferences.value =
-            (await getIt<PreviousEmployerProvider>()
-                    .getPreviousEmployer(crewUser!.id!)) ??
-                [];
-        UserStates.instance.previousEmployerReferences =
-            previousEmployerReferences;
-        step.value = 3;
-
-        if (serviceRecords.length >= 2 &&
-            previousEmployerReferences.isNotEmpty) {
-          if (crewUser?.isVerified == 1) {
-            Get.toNamed(Routes.HOME);
-          } else {
-            Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
-          }
-        }
+        Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
       }
     }
+    step.value = (crewUser?.screenCheck ?? 0) + 1;
     isLoading.value = false;
   }
 
@@ -308,11 +305,11 @@ class CrewOnboardingController extends GetxController with PickImage {
   }
 
   prepareRecordBottomSheet() async {
-    if (vesselTypes.isNotEmpty) {
+    if (vesselList != null) {
       return;
     }
     isPreparingRecordBottomSheet.value = true;
-    vesselTypes = (await getIt<VesselTypeProvider>().getVesselTypes()) ?? [];
+    vesselList = await getIt<VesselListProvider>().getVesselList();
     isPreparingRecordBottomSheet.value = false;
   }
 
@@ -367,12 +364,12 @@ class CrewOnboardingController extends GetxController with PickImage {
             pincode: zipCode.text,
             dob: dateOfBirth.text,
             maritalStatus: maritalStatus.value,
-            country: 1,
+            country: country.value?.id,
             rankId: selectedRank.value?.rankPriority,
             userTypeKey: 2,
             addressLine2: addressLine2.text,
             addressCity: city.text,
-            state: 1,
+            state: state.value?.id,
             promotionApplied: isLookingForPromotion.value,
             screenCheck: 1,
             authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
@@ -459,6 +456,8 @@ class CrewOnboardingController extends GetxController with PickImage {
               validWatchKeepingIssuingAuthority:
                   watchKeepingIssuingAuthorities.nullIfEmpty(),
               validUSVisaValidTill: usVisaValidTill.text.nullIfEmpty()));
+      await getIt<CrewUserProvider>().updateCrewUser(
+          crewId: crewUser?.id ?? -1, crewUser: CrewUser(screenCheck: 2));
     } catch (e) {
       print("$e");
     }
@@ -474,7 +473,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     return true;
   }
 
-  step3SubmitOnPress() {
+  step3SubmitOnPress() async {
     step3FormMisses.clear();
     if (serviceRecords.length < 2) {
       step3FormMisses.add(Step3FormMiss.lessThan2SeaServiceRecords);
@@ -490,32 +489,58 @@ class CrewOnboardingController extends GetxController with PickImage {
     if (step3FormMisses.isNotEmpty) {
       return;
     }
+    isUpdating.value = true;
+    await getIt<CrewUserProvider>().updateCrewUser(
+        crewId: crewUser?.id ?? -1, crewUser: CrewUser(screenCheck: 3));
+    isUpdating.value = false;
     Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
   }
 
   Future<bool> addServiceRecord() async {
     isAddingBottomSheet.value = true;
     SeaServiceRecord? newRecord;
+    SeaServiceRecord? updatedRecord;
     try {
-      newRecord = await getIt<SeaServiceProvider>().postSeaService(
-          SeaServiceRecord(
-              companyName: recordCompanyName.text,
-              shipName: recordShipName.text,
-              iMONumber: recordIMONumber.text,
-              rankId: recordRank.value?.rankPriority,
-              flag: recordFlagName.text,
-              gRT: recordGrt.text,
-              vesselType: 1,
-              signonDate: recordSignOnDate.text,
-              signoffDate: recordSignOffDate.text,
-              contractDuration: int.tryParse(recordContarctDuration.text)));
+      if (selectedSeaServiceRecord?.id == null) {
+        newRecord = await getIt<SeaServiceProvider>().postSeaService(
+            SeaServiceRecord(
+                companyName: recordCompanyName.text,
+                shipName: recordShipName.text,
+                iMONumber: recordIMONumber.text,
+                rankId: recordRank.value?.rankPriority,
+                flag: recordFlagName.text,
+                gRT: recordGrt.text,
+                vesselType: recordVesselType.value,
+                signonDate: recordSignOnDate.text,
+                signoffDate: recordSignOffDate.text,
+                contractDuration: int.tryParse(recordContarctDuration.text)));
+      } else {
+        updatedRecord = await getIt<SeaServiceProvider>().updateSeaService(
+            SeaServiceRecord(
+                id: selectedSeaServiceRecord?.id,
+                companyName: recordCompanyName.text,
+                shipName: recordShipName.text,
+                iMONumber: recordIMONumber.text,
+                rankId: recordRank.value?.rankPriority,
+                flag: recordFlagName.text,
+                gRT: recordGrt.text,
+                vesselType: recordVesselType.value,
+                signonDate: recordSignOnDate.text,
+                signoffDate: recordSignOffDate.text,
+                contractDuration: int.tryParse(recordContarctDuration.text)));
+      }
     } catch (e) {
       print("$e");
     }
 
     isAddingBottomSheet.value = false;
-    if (newRecord != null) {
+    if (newRecord != null && newRecord.id != null) {
       serviceRecords.add(newRecord);
+      return true;
+    } else if (updatedRecord != null && updatedRecord.id != null) {
+      serviceRecords
+        ..removeWhere((record) => record.id == updatedRecord?.id)
+        ..add(updatedRecord);
       return true;
     } else {
       return false;
@@ -584,12 +609,27 @@ class CrewOnboardingController extends GetxController with PickImage {
     recordContarctDuration.clear();
     recordRank.value = null;
     recordVesselType.value = null;
+    selectedSeaServiceRecord = null;
   }
 
   resetReferenceBottomSheet() {
     referenceCompanyName.clear();
     referenceReferenceName.clear();
     referenceContactNumber.clear();
+  }
+
+  setRecordBottomSheet(SeaServiceRecord record) {
+    selectedSeaServiceRecord = record;
+    recordCompanyName.text = record.companyName ?? "";
+    recordShipName.text = record.shipName ?? "";
+    recordIMONumber.text = record.iMONumber ?? "";
+    recordRank.value = ranks?.firstWhere((rank) => rank.id == record.rankId);
+    recordFlagName.text = record.flag ?? "";
+    recordGrt.text = record.gRT ?? "";
+    recordVesselType.value = record.vesselType;
+    recordSignOnDate.text = record.signonDate ?? "";
+    recordSignOffDate.text = record.signoffDate ?? "";
+    recordContarctDuration.text = record.contractDuration?.toString() ?? "";
   }
 }
 
@@ -675,6 +715,4 @@ mixin PickImage {
   }
 }
 
-mixin PickResume {
-  
-}
+mixin PickResume {}

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,11 +34,38 @@ class HomeView extends GetView<HomeController> {
         bottomNavigationBar: CurvedNavigationBar(
           height: 64,
           backgroundColor: Colors.transparent,
-          buttonBackgroundColor: Colors.white ?? Get.theme.primaryColor,
-          items: bottomIcons.map((e) => e.icon).toList(),
+          buttonBackgroundColor: Colors.white,
+          items: bottomIcons
+              .mapIndexed(
+                  (index, e) => index == controller.currentIndex.value - 1
+                      ? e.icon
+                      : ColorFiltered(
+                          colorFilter: const ColorFilter.matrix([
+                            0.2126,
+                            0.7152,
+                            0.0722,
+                            0,
+                            0,
+                            0.2126,
+                            0.7152,
+                            0.0722,
+                            0,
+                            0,
+                            0.2126,
+                            0.7152,
+                            0.0722,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            1,
+                            0,
+                          ]),
+                          child: e.icon))
+              .toList(),
           onTap: (index) {
             controller.currentIndex.value = index + 1;
-            //Handle button tap
           },
         ),
       );
@@ -54,7 +82,7 @@ _buildBody() {
             clipper:
                 CustomShape(), // this is my own class which extendsCustomClipper
             child: Container(
-              height: 240,
+              height: 210,
               decoration: const BoxDecoration(
                   gradient: LinearGradient(colors: [
                 Color.fromRGBO(1, 66, 211, 1),
@@ -63,7 +91,7 @@ _buildBody() {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  (Get.statusBarHeight).verticalSpace,
+                  (Get.mediaQuery.viewPadding.top + 26).verticalSpace,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,12 +104,12 @@ _buildBody() {
                         children: const [
                           Text("Welcome",
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white)),
                           Text("Ashutosh Mehta",
                               style: TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white))
                         ],
@@ -115,7 +143,7 @@ _buildBody() {
       Expanded(
           child: ListView(
         children: [
-          32.verticalSpace,
+          // 16.verticalSpace,
           Stack(
             children: [
               Container(
@@ -125,6 +153,12 @@ _buildBody() {
                 height: 95.h,
                 width: double.maxFinite,
                 decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.shade500,
+                          blurRadius: 4,
+                          offset: const Offset(4, 4))
+                    ],
                     borderRadius: BorderRadius.circular(22.r),
                     gradient: const LinearGradient(colors: [
                       Color.fromRGBO(1, 66, 211, 1),
@@ -164,9 +198,9 @@ _buildBody() {
           Row(
             children: [
               28.horizontalSpace,
-              Text("Top Listed Companies",
+              Text("Featured Companies",
                   style: Get.textTheme.bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w600)),
+                      ?.copyWith(fontWeight: FontWeight.w600, fontSize: 18.sp)),
               const Spacer(),
               Text("More",
                   style: Get.textTheme.bodyMedium
@@ -353,10 +387,10 @@ List<BottomIcon> bottomIcons = [
         width: 20,
       ),
       text: "Discover"),
-  const BottomIcon(
+  BottomIcon(
       icon: Icon(
         Icons.add,
-        color: Colors.grey,
+        color: Get.theme.primaryColor,
       ),
       text: "Add"),
   BottomIcon(

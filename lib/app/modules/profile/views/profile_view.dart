@@ -87,32 +87,34 @@ class ProfileView extends GetView<ProfileController> {
                                         color: Colors.grey.withOpacity(0.2),
                                         shape: BoxShape.circle),
                                     child: Icon(
-                                      Icons.camera_alt,
-                                      size: 18.sp,
+                                      Icons.edit,
+                                      size: 20.sp,
                                     )))
                           ],
                         ),
                       ),
-                      28.verticalSpace,
+                      16.verticalSpace,
                       Center(
                         child: Text(
                             FirebaseAuth.instance.currentUser?.displayName ??
                                 "",
                             style: Get.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            )),
+                                fontWeight: FontWeight.w700, fontSize: 18)),
                       ),
                       4.verticalSpace,
                       Center(
                         child: Text(controller.rank,
                             style: Get.textTheme.bodyMedium?.copyWith(
-                                fontSize: 12,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.grey)),
                       ),
                       24.verticalSpace,
                       if (FirebaseAuth.instance.currentUser?.phoneNumber ==
-                          null) ...[
+                              null ||
+                          FirebaseAuth
+                                  .instance.currentUser?.phoneNumber?.isEmpty ==
+                              true) ...[
                         InkWell(
                           onTap: () async {
                             await Get.toNamed(Routes.CREW_SIGN_IN_MOBILE);

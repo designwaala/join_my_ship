@@ -55,7 +55,28 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             ...controller.serviceRecords.map((serviceRecord) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(serviceRecord.companyName ?? ""),
+                    InkWell(
+                        onTap: () async {
+                          controller.prepareRecordBottomSheet();
+                          controller.setRecordBottomSheet(serviceRecord);
+                          await showModalBottomSheet(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(16))),
+                              context: context,
+                              isScrollControlled: true,
+                              builder: (context) => DraggableScrollableSheet(
+                                  initialChildSize: 0.9,
+                                  minChildSize: 0.25,
+                                  maxChildSize: 0.9,
+                                  expand: false,
+                                  builder: (context, controller) {
+                                    return AddARecord(
+                                        scrollController: controller);
+                                  }));
+                          controller.resetRecordBottomSheet();
+                        },
+                        child: Text(serviceRecord.companyName ?? "")),
                     controller.serviceRecordDeletingId.value == serviceRecord.id
                         ? const CircularProgressIndicator()
                         : TextButton(
@@ -86,10 +107,10 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
               4.verticalSpace
             ],
             OutlinedButton(
-                onPressed: () {
+                onPressed: () async {
                   controller.prepareRecordBottomSheet();
                   controller.resetRecordBottomSheet();
-                  showModalBottomSheet(
+                  await showModalBottomSheet(
                       shape: const RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(16))),
@@ -103,6 +124,7 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                           builder: (context, controller) {
                             return AddARecord(scrollController: controller);
                           }));
+                  controller.resetRecordBottomSheet();
                 },
                 child: const Text("Add a record")),
             16.verticalSpace,
@@ -222,13 +244,15 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: controller.step3SubmitOnPress,
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(64))),
-                  child: const Text("SUBMIT"),
-                ),
+                controller.isUpdating.value
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: controller.step3SubmitOnPress,
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(64))),
+                        child: const Text("SUBMIT"),
+                      ),
               ],
             ),
             16.verticalSpace

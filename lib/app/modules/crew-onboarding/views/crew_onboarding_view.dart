@@ -19,10 +19,10 @@ class CrewOnboardingView extends GetView<CrewOnboardingController> {
     return Obx(() {
       return WillPopScope(
         onWillPop: () async {
-          if (controller.step.value > 1) {
+          /* if (controller.step.value > 1) {
             controller.step.value = controller.step.value - 1;
             return false;
-          }
+          } */
           return true;
         },
         child: Scaffold(

@@ -16,6 +16,7 @@ import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
 import 'package:join_mp_ship/app/data/providers/service_record_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
+import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
 import 'package:join_mp_ship/firebase_options.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
@@ -61,5 +62,6 @@ void main() async {
     ..registerSingleton(UserDetailsProvider())
     ..registerSingleton(VesselTypeProvider())
     ..registerSingleton(SeaServiceProvider())
-    ..registerSingleton(PreviousEmployerProvider());
+    ..registerSingleton(PreviousEmployerProvider())
+    ..registerSingleton(VesselListProvider());
 }
