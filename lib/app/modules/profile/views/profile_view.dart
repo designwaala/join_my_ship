@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 import '../controllers/profile_controller.dart';
@@ -263,29 +264,36 @@ class ProfileView extends GetView<ProfileController> {
                               ],
                             ),
                           )),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 16.h, horizontal: 14.h),
-                        margin: EdgeInsets.symmetric(vertical: 8.h),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16.r)),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              "assets/images/profile/sign_out.png",
-                              height: 24.h,
-                              width: 24.h,
-                            ),
-                            18.horizontalSpace,
-                            Text("Log Out",
-                                style: Get.textTheme.bodyMedium?.copyWith(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.red)),
-                            Spacer(),
-                            Icon(Icons.keyboard_arrow_right)
-                          ],
+                      InkWell(
+                        onTap: () async {
+                          await FirebaseAuth.instance.signOut();
+                          await PreferencesHelper.instance.clearAll();
+                          Get.offAllNamed(Routes.SPLASH);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16.h, horizontal: 14.h),
+                          margin: EdgeInsets.symmetric(vertical: 8.h),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16.r)),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                "assets/images/profile/sign_out.png",
+                                height: 24.h,
+                                width: 24.h,
+                              ),
+                              18.horizontalSpace,
+                              Text("Log Out",
+                                  style: Get.textTheme.bodyMedium?.copyWith(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.red)),
+                              Spacer(),
+                              Icon(Icons.keyboard_arrow_right)
+                            ],
+                          ),
                         ),
                       ),
                       36.verticalSpace,
