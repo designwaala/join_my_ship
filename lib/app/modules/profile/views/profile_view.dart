@@ -28,7 +28,7 @@ class ProfileView extends GetView<ProfileController> {
         ),
         body: Obx(() {
           return controller.isLoading.value
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Column(
@@ -82,7 +82,7 @@ class ProfileView extends GetView<ProfileController> {
                                 bottom: 0,
                                 right: 0,
                                 child: Container(
-                                    padding: EdgeInsets.all(4),
+                                    padding: const EdgeInsets.all(4),
                                     decoration: BoxDecoration(
                                         color: Colors.grey.withOpacity(0.2),
                                         shape: BoxShape.circle),
@@ -121,31 +121,31 @@ class ProfileView extends GetView<ProfileController> {
                             controller.refresh();
                           },
                           child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 4.w),
+                            margin: EdgeInsets.symmetric(horizontal: 16.w),
                             padding: EdgeInsets.symmetric(horizontal: 4.w),
                             height: 48.h,
                             decoration: BoxDecoration(
                                 border:
                                     Border.all(color: Get.theme.primaryColor),
                                 borderRadius: BorderRadius.circular(16.r),
-                                color: Color.fromRGBO(59, 61, 146, 0.15)),
+                                color: const Color.fromRGBO(59, 61, 146, 0.15)),
                             child: Row(
                               children: [
-                                16.horizontalSpace,
+                                const Spacer(),
                                 Icon(
                                   Icons.info,
                                   color: Get.theme.primaryColor,
                                 ),
-                                12.horizontalSpace,
+                                const Spacer(),
                                 Text("Please update your contact details first",
                                     style: Get.textTheme.bodyMedium?.copyWith(
                                         color: Get.theme.primaryColor,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 12)),
-                                Spacer(),
+                                const Spacer(),
                                 Icon(Icons.arrow_forward_sharp,
                                     color: Get.theme.primaryColor),
-                                12.horizontalSpace
+                                const Spacer()
                               ],
                             ),
                           ),
@@ -209,7 +209,7 @@ class ProfileView extends GetView<ProfileController> {
                                 ),
                               ),
                               4.horizontalSpace,
-                              Icon(Icons.file_open, color: Colors.white)
+                              const Icon(Icons.file_open, color: Colors.white)
                             ],
                           ),
                         ),
@@ -261,8 +261,8 @@ class ProfileView extends GetView<ProfileController> {
                                       fontWeight: FontWeight.w500,
                                       fontSize: 14.sp,
                                     )),
-                                Spacer(),
-                                Icon(Icons.keyboard_arrow_right)
+                                const Spacer(),
+                                const Icon(Icons.keyboard_arrow_right)
                               ],
                             ),
                           )),
@@ -292,8 +292,8 @@ class ProfileView extends GetView<ProfileController> {
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.red)),
-                              Spacer(),
-                              Icon(Icons.keyboard_arrow_right)
+                              const Spacer(),
+                              const Icon(Icons.keyboard_arrow_right)
                             ],
                           ),
                         ),

@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 
 class EmailVerificationWaitingController extends GetxController {
   RxBool isResendingEmail = false.obs;
+  RxBool isSigningOut = false.obs;
   // Timer? _timer;
 
   @override
@@ -17,6 +19,14 @@ class EmailVerificationWaitingController extends GetxController {
     //   }
     // });
     super.onInit();
+  }
+
+  Future<void> signOut() async {
+    isSigningOut.value = true;
+    await FirebaseAuth.instance.signOut();
+    await PreferencesHelper.instance.clearAll();
+    Get.back();
+    isSigningOut.value = false;
   }
 
   resendEmail() async {

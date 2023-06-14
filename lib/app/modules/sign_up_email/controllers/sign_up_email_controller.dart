@@ -105,8 +105,11 @@ class SignUpEmailController extends GetxController {
       if (e.code == 'weak-password') {
         fToast.showToast(child: errorToast("Password is too weak"));
       } else if (e.code == 'email-already-in-use') {
+        await FirebaseAuth.instance.signOut();
+        Get.toNamed(Routes.CREW_SIGN_IN_EMAIL);
         fToast.showToast(
-            child: errorToast("The account already exists for that email."));
+            child: errorToast(
+                "An account already exists for that email. Please Login"));
       }
     } catch (e) {
       fToast.showToast(child: errorToast("Unable to process your request."));

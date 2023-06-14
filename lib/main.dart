@@ -44,9 +44,11 @@ void main() async {
             initialRoute: AppPages.INITIAL,
             getPages: AppPages.routes,
             theme: ThemeData(
-                textTheme: GoogleFonts.poppinsTextTheme(
-              Theme.of(context).textTheme,
-            )),
+                    textTheme: GoogleFonts.poppinsTextTheme(
+                        Theme.of(context).textTheme))
+                .copyWith(
+                    colorScheme: Get.theme.colorScheme.copyWith(
+                        background: const Color.fromRGBO(251, 246, 255, 1))),
           ));
         }),
   );

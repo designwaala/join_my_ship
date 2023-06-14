@@ -53,7 +53,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                       Text("Sign In",
                           style: Get.theme.textTheme.headlineSmall
                               ?.copyWith(fontWeight: FontWeight.bold)),
-                      Text("Please sign in to your registered\n account"),
+                      Text("Please sign in to your registered\naccount"),
                       20.verticalSpace,
                       TextFormField(
                         controller: controller.emailController,

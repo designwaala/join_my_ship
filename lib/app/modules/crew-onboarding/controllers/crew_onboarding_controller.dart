@@ -243,9 +243,9 @@ class CrewOnboardingController extends GetxController with PickImage {
           previousEmployerReferences;
     } else if (crewUser?.screenCheck == 3) {
       if (crewUser?.isVerified == 1) {
-        Get.toNamed(Routes.HOME);
+        Get.offAllNamed(Routes.HOME);
       } else {
-        Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+        Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
       }
     }
     step.value = (crewUser?.screenCheck ?? 0) + 1;

@@ -127,23 +127,31 @@ _buildBody() {
             bottom: 0,
             left: 28,
             right: 28,
-            child: TextFormField(
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  hintText: "Search job here...",
-                  prefixIcon: Icon(Icons.search, color: Get.theme.primaryColor),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(64))),
+            child: PhysicalModel(
+              borderRadius: BorderRadius.circular(64),
+              color: Colors.white,
+              elevation: 5.0,
+              shadowColor: const Color.fromRGBO(46, 4, 142, 0.08),
+              child: TextFormField(
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    hintText: "Search job here...",
+                    prefixIcon:
+                        Icon(Icons.search, color: Get.theme.primaryColor),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(64))),
+              ),
             ),
           ),
         ],
       ),
       Expanded(
           child: ListView(
+        padding: EdgeInsets.zero,
         children: [
-          // 16.verticalSpace,
+          16.verticalSpace,
           Stack(
             children: [
               Container(
@@ -194,7 +202,7 @@ _buildBody() {
               )
             ],
           ),
-          16.verticalSpace,
+          8.verticalSpace,
           Row(
             children: [
               28.horizontalSpace,
@@ -208,9 +216,9 @@ _buildBody() {
               28.horizontalSpace
             ],
           ),
-          16.verticalSpace,
+          12.verticalSpace,
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.r),
@@ -247,7 +255,7 @@ _buildBody() {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.r),
@@ -284,7 +292,7 @@ _buildBody() {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.r),
@@ -321,7 +329,7 @@ _buildBody() {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.r),
