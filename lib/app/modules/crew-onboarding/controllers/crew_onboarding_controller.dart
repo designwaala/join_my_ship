@@ -362,7 +362,7 @@ class CrewOnboardingController extends GetxController with PickImage {
         crewUser: CrewUser(
             firstName: FirebaseAuth.instance.currentUser?.displayName,
             lastName: "_",
-            password: password,
+            password: "Demo@123",
             email: FirebaseAuth.instance.currentUser?.email,
             addressLine1: addressLine1.text,
             pincode: zipCode.text,
