@@ -529,7 +529,7 @@ class CrewOnboardingController extends GetxController with PickImage {
                 rankId: recordRank.value?.rankPriority,
                 flag: recordFlagName.text,
                 gRT: recordGrt.text,
-                vesselType: 1 ?? recordVesselType.value,
+                vesselType: recordVesselType.value,
                 signonDate: recordSignOnDate.text,
                 signoffDate: recordSignOffDate.text,
                 contractDuration: int.tryParse(recordContarctDuration.text)));

@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/error.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
@@ -50,6 +55,36 @@ class CrewUserProvider extends WrapperConnect {
       // print(await streamedResponse.stream.bytesToString());
     } else {
       // print(streamedResponse.reasonPhrase);
+      APIErrorList errors = APIErrorList.fromJson(jsonDecode(response.body));
+      Get.showSnackbar(GetSnackBar(
+        title: "Some error occurred",
+        messageText: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: errors.apiErrorList
+                    ?.map((error) => [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(error.field ?? "",
+                                  style: Get.theme.textTheme.bodyMedium
+                                      ?.copyWith(color: Colors.white)),
+                              4.horizontalSpace,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ...?error.errors?.map((e) => Text(e,
+                                      style: Get.theme.textTheme.bodyMedium
+                                          ?.copyWith(color: Colors.white))),
+                                ],
+                              )
+                            ],
+                          ),
+                          4.verticalSpace
+                        ])
+                    .expand((element) => element)
+                    .toList() ??
+                []),
+      ));
     }
     return streamedResponse.statusCode;
   }
