@@ -331,7 +331,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     if (pickedResume.value?.path == null) {
       step1FormMisses.add(Step1FormMiss.didNotSelectResume);
     }
-    if (selectedRank.value?.rankPriority == null) {
+    if (selectedRank.value?.id == null) {
       step1FormMisses.add(Step1FormMiss.didNotChooseCurrentRank);
     }
     if (maritalStatus.value == null) {
@@ -350,7 +350,7 @@ class CrewOnboardingController extends GetxController with PickImage {
 
     if (pickedImage.value?.path == null ||
         pickedResume.value?.path == null ||
-        selectedRank.value?.rankPriority == null ||
+        selectedRank.value?.id == null ||
         maritalStatus.value == null ||
         country.value == null ||
         state.value == null) {
@@ -369,7 +369,7 @@ class CrewOnboardingController extends GetxController with PickImage {
             dob: dateOfBirth.text,
             maritalStatus: maritalStatus.value,
             country: country.value?.id,
-            rankId: selectedRank.value?.rankPriority,
+            rankId: selectedRank.value?.id,
             gender: gender.value,
             userTypeKey: 2,
             addressLine2: addressLine2.text,
@@ -512,7 +512,7 @@ class CrewOnboardingController extends GetxController with PickImage {
                 companyName: recordCompanyName.text,
                 shipName: recordShipName.text,
                 iMONumber: recordIMONumber.text,
-                rankId: recordRank.value?.rankPriority,
+                rankId: recordRank.value?.id,
                 flag: recordFlagName.text,
                 gRT: recordGrt.text,
                 vesselType: recordVesselType.value,
@@ -526,7 +526,7 @@ class CrewOnboardingController extends GetxController with PickImage {
                 companyName: recordCompanyName.text,
                 shipName: recordShipName.text,
                 iMONumber: recordIMONumber.text,
-                rankId: recordRank.value?.rankPriority,
+                rankId: recordRank.value?.id,
                 flag: recordFlagName.text,
                 gRT: recordGrt.text,
                 vesselType: recordVesselType.value,
