@@ -137,7 +137,7 @@ class CrewUser {
   Map<String, String> toJson() {
     final data = <String, String?>{};
     data['id'] = id?.toString();
-    data['password'] = password;
+    data['password'] = "Demo@123" ?? password;
     data['last_login'] = lastLogin;
     data['is_superuser'] = isSuperuser?.toString();
     data['username'] = email ?? username;
