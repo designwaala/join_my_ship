@@ -223,11 +223,11 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   SizedBox(
                     height: 16,
                     width: 16,
-                    child: Radio<Gender?>(
+                    child: Radio<int?>(
                         value: controller.gender.value,
-                        groupValue: Gender.male,
+                        groupValue: 1,
                         onChanged: (_) {
-                          controller.gender.value = Gender.male;
+                          controller.gender.value = 1;
                         }),
                   ),
                   8.horizontalSpace,
@@ -236,11 +236,11 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   SizedBox(
                     height: 16,
                     width: 16,
-                    child: Radio<Gender?>(
+                    child: Radio<int?>(
                         value: controller.gender.value,
-                        groupValue: Gender.female,
+                        groupValue: 2,
                         onChanged: (_) {
-                          controller.gender.value = Gender.female;
+                          controller.gender.value = 2;
                         }),
                   ),
                   8.horizontalSpace,

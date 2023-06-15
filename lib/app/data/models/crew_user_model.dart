@@ -39,6 +39,7 @@ class CrewUser {
   List<int>? groups;
   String? authKey;
   int? screenCheck;
+  int? gender;
 
   CrewUser(
       {this.id,
@@ -80,7 +81,8 @@ class CrewUser {
       this.state,
       this.groups,
       this.authKey,
-      this.screenCheck});
+      this.screenCheck,
+      this.gender});
 
   CrewUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -123,6 +125,7 @@ class CrewUser {
     groups = json['groups']?.cast<int>();
     authKey = json['auth_key'];
     screenCheck = json['screen_check'];
+    gender = json['gender'];
     // if (json['user_permissions'] != null) {
     //   userPermissions = <Null>[];
     //   json['user_permissions'].forEach((v) {
@@ -172,6 +175,7 @@ class CrewUser {
     data['state'] = state?.toString();
     data['auth_key'] = authKey;
     data['screen_check'] = screenCheck?.toString();
+    data['gender'] = gender?.toString();
     data.removeWhere((key, value) => value == null);
     print(data);
     return data.map((key, value) => MapEntry(key, value!));

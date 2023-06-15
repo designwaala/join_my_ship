@@ -39,10 +39,10 @@ class CrewOnboardingView extends GetView<CrewOnboardingController> {
             leading: Navigator.of(context).canPop()
                 ? InkWell(
                     onTap: () {
-                      if (controller.step.value > 1) {
+                      /* if (controller.step.value > 1) {
                         controller.step.value = controller.step.value - 1;
                         return;
-                      }
+                      } */
                       Get.back();
                     },
                     child: Container(

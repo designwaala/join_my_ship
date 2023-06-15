@@ -19,7 +19,11 @@ class ProfileController extends GetxController with PickImage {
   Rxn<File> pickedResume = Rxn();
 
   String get rank =>
-      UserStates.instance.ranks?[crewUser.value?.rankId ?? -1].name ?? "";
+      UserStates.instance.ranks
+          ?.firstWhereOrNull(
+              (rank) => rank.id == (crewUser.value?.rankId ?? -1))
+          ?.name ??
+      "";
 
   @override
   void onInit() {
@@ -45,6 +49,9 @@ class ProfileController extends GetxController with PickImage {
       return;
     }
     await pickSource();
+    if (pickedImage.value == null) {
+      return;
+    }
     bool? confirm = await confirmUpdate();
     if (confirm != true) {
       pickedImage.value = null;

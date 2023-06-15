@@ -42,6 +42,9 @@ Map<String, int> reverseMaritalStatuses = {
   "Divorced": 3
 };
 
+Map<int, String> genderMap = {1: "Male", 2: "Female", 3: "Others"};
+Map<String, int> reversedGenderMap = {"Male": 1, "Female": 2, "Others": 3};
+
 enum Step1FormMiss {
   didNotSelectProfilePic,
   didNotChooseCurrentRank,
@@ -77,7 +80,7 @@ class CrewOnboardingController extends GetxController with PickImage {
 
   Rxn<Rank> selectedRank = Rxn();
   Rxn<String> promotionRank = Rxn();
-  Rx<Gender> gender = Gender.male.obs;
+  RxnInt gender = RxnInt(1);
   Rxn<StateModel> state = Rxn();
   Rxn<Country> country = Rxn();
   RxBool isLookingForPromotion = false.obs;
@@ -286,6 +289,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     maritalStatus.value = crewUser?.maritalStatus;
     uploadedImagePath.value = "$baseURL/${crewUser?.profilePic}";
     uploadedResumePath.value = "$baseURL/${crewUser?.resume}";
+    gender.value = crewUser?.gender;
     country.value =
         countries.firstWhereOrNull((e) => e.id == crewUser?.country);
     await getStates();
@@ -366,6 +370,7 @@ class CrewOnboardingController extends GetxController with PickImage {
             maritalStatus: maritalStatus.value,
             country: country.value?.id,
             rankId: selectedRank.value?.rankPriority,
+            gender: gender.value,
             userTypeKey: 2,
             addressLine2: addressLine2.text,
             addressCity: city.text,
@@ -524,7 +529,7 @@ class CrewOnboardingController extends GetxController with PickImage {
                 rankId: recordRank.value?.rankPriority,
                 flag: recordFlagName.text,
                 gRT: recordGrt.text,
-                vesselType: recordVesselType.value,
+                vesselType: 1 ?? recordVesselType.value,
                 signonDate: recordSignOnDate.text,
                 signoffDate: recordSignOffDate.text,
                 contractDuration: int.tryParse(recordContarctDuration.text)));
@@ -640,7 +645,7 @@ class CrewOnboardingArguments {
   const CrewOnboardingArguments({required this.email, required this.password});
 }
 
-enum Gender { male, female }
+// enum Gender { male, female }
 
 mixin PickImage {
   final Rxn<XFile> pickedImage = Rxn();
