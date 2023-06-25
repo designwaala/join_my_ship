@@ -19,10 +19,11 @@ class CrewOnboardingView extends GetView<CrewOnboardingController> {
     return Obx(() {
       return WillPopScope(
         onWillPop: () async {
-          /* if (controller.step.value > 1) {
+          if (controller.step.value > 1) {
             controller.step.value = controller.step.value - 1;
+            controller.getAndSetCurrentScreen();
             return false;
-          } */
+          }
           return true;
         },
         child: Scaffold(
@@ -36,39 +37,49 @@ class CrewOnboardingView extends GetView<CrewOnboardingController> {
                     fontSize: 20,
                     fontWeight: FontWeight.w600)),
             backgroundColor: Colors.white,
-            leading: Navigator.of(context).canPop()
-                ? InkWell(
-                    onTap: () {
-                      /* if (controller.step.value > 1) {
-                        controller.step.value = controller.step.value - 1;
-                        return;
-                      } */
-                      Get.back();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                          color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-                      child: const Icon(
-                        Icons.keyboard_backspace_rounded,
-                        color: Colors.black,
-                      ),
-                    ),
-                  )
-                : null,
+            leading: InkWell(
+              onTap: () {
+                if (controller.step.value > 1) {
+                  controller.step.value = controller.step.value - 1;
+                  controller.getAndSetCurrentScreen();
+                  return;
+                }
+                Get.back();
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                    color: Color(0xFFF3F3F3), shape: BoxShape.circle),
+                child: const Icon(
+                  Icons.keyboard_backspace_rounded,
+                  color: Colors.black,
+                ),
+              ),
+            ),
             centerTitle: false,
+            actions: [
+              if ((controller.step.value == 1 &&
+                      controller.crewUser?.id != null) ||
+                  (controller.step.value == 2 &&
+                      controller.userDetails?.id != null))
+                TextButton(
+                    onPressed: () {
+                      controller.step.value = controller.step.value + 1;
+                    },
+                    child: const Text("Skip"))
+            ],
           ),
           body: controller.isLoading.value
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : () {
                   switch (controller.step.value) {
                     case 1:
-                      return CrewonboardingStep1();
+                      return const CrewonboardingStep1();
                     case 2:
-                      return CrewOnboardingStep2();
+                      return const CrewOnboardingStep2();
                     case 3:
-                      return CrewOnboardingStep3();
+                      return const CrewOnboardingStep3();
                   }
                 }(),
         ),

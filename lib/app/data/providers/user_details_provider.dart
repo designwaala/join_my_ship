@@ -27,6 +27,13 @@ class UserDetailsProvider extends WrapperConnect {
     return response.body;
   }
 
+  Future<UserDetails?> patchUserDetails(UserDetails userDetails) async {
+    final response = await multipartPatch(
+        'crew/crew_details_update/${userDetails.userId}', userDetails.toJson());
+    print(response);
+    return UserDetails.fromJson(response);
+  }
+
   Future<UserDetails?> getUserDetails(int userId) async {
     final response =
         await get("crew/crew_details_list/$userId", decoder: (map) {

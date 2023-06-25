@@ -20,14 +20,14 @@ class PreviousEmployerReference {
     contactNumber = json['contact_number'];
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['id'] = id;
+  Map<String, String> toJson() {
+    final data = <String, String?>{};
+    data['id'] = id.toString();
     // data['user_id'] = userId;
     data['company_name'] = companyName;
     data['reference_name'] = referenceName;
     data['contact_number'] = contactNumber;
     data.removeWhere((key, value) => value == null);
-    return data;
+    return data.map((key, value) => MapEntry(key, value!));
   }
 }

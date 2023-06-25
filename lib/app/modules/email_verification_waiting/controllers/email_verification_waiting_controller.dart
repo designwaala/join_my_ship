@@ -8,6 +8,7 @@ import 'package:join_mp_ship/utils/shared_preferences.dart';
 class EmailVerificationWaitingController extends GetxController {
   RxBool isResendingEmail = false.obs;
   RxBool isSigningOut = false.obs;
+  RxBool isRefreshing = false.obs;
   // Timer? _timer;
 
   @override
@@ -33,6 +34,12 @@ class EmailVerificationWaitingController extends GetxController {
     isResendingEmail.value = true;
     await FirebaseAuth.instance.currentUser?.sendEmailVerification();
     isResendingEmail.value = false;
+  }
+
+  Future<void> refresh() async {
+    isRefreshing.value = true;
+    await FirebaseAuth.instance.currentUser?.reload();
+    isRefreshing.value = false;
   }
 
   @override

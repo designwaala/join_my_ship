@@ -5,6 +5,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/country_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
@@ -15,6 +16,9 @@ import 'package:join_mp_ship/widgets/astrix_text.dart';
 import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:flutter/services.dart';
+import 'package:join_mp_ship/widgets/top_modal_sheet.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
   const CrewonboardingStep1({Key? key}) : super(key: key);
@@ -250,44 +254,61 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               20.verticalSpace,
               const AsterixText("Communication address"),
               16.verticalSpace,
-              CustomTextFormField(
-                  controller: controller.addressLine1,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your address";
-                    }
-                    return null;
-                  },
-                  hintText: "Address Line 1"),
-              16.verticalSpace,
-              CustomTextFormField(
-                  controller: controller.addressLine2,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your address";
-                    }
-                    return null;
-                  },
-                  hintText: "Address Line 2"),
-              16.verticalSpace,
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: CustomTextFormField(
-                        controller: controller.city,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please enter your city";
-                          }
-                        },
-                        hintText: "City"),
-                  ),
-                  20.horizontalSpace,
                   Expanded(
                     child: Column(
                       children: [
-                        DropdownButtonHideUnderline(
+                        Builder(builder: (context) {
+                          TextEditingController countryController =
+                              TextEditingController();
+                          countryController.text =
+                              controller.country.value?.countryName ?? "";
+                          return TypeAheadFormField<Country>(
+                            textFieldConfiguration: TextFieldConfiguration(
+                              controller: countryController,
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                hintText: "Country",
+                                hintStyle: Get.textTheme.bodySmall,
+                                isDense: true,
+                                suffixIconConstraints: const BoxConstraints(
+                                    maxHeight: 32, maxWidth: 32),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Get.theme.primaryColor),
+                                    borderRadius: BorderRadius.circular(64)),
+                              ),
+                            ),
+                            itemBuilder:
+                                (BuildContext context, Country itemData) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(itemData.countryName ?? ""),
+                              );
+                            },
+                            onSuggestionSelected: (Country suggestion) {
+                              controller.country.value = suggestion;
+                              controller
+                                ..states.clear()
+                                ..getStates();
+                              countryController.text =
+                                  suggestion.countryName ?? "";
+                            },
+                            suggestionsCallback: (String pattern) {
+                              return Future.value(controller.countries.where(
+                                  (rank) =>
+                                      rank.countryName
+                                          ?.toLowerCase()
+                                          .startsWith(pattern.toLowerCase()) ==
+                                      true));
+                            },
+                          );
+                        }),
+                        /* DropdownButtonHideUnderline(
                           child: DropdownButton2<Country>(
                             value: controller.country.value,
                             isExpanded: true,
@@ -312,7 +333,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                     const EdgeInsets.symmetric(horizontal: 8),
                                 decoration: DropdownDecoration()),
                           ),
-                        ),
+                        ), */
                         if (controller.step1FormMisses
                             .contains(Step1FormMiss.didNotSelectCountry)) ...[
                           4.verticalSpace,
@@ -323,69 +344,114 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                       ],
                     ),
                   ),
+                  20.horizontalSpace,
+                  Expanded(
+                    child: controller.isLoadingStates.value
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              SizedBox(
+                                  height: 16,
+                                  width: 16,
+                                  child: CircularProgressIndicator())
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton2<int?>(
+                                  value: controller.state.value?.id,
+                                  isExpanded: true,
+                                  items: controller.states
+                                      .map((e) => DropdownMenuItem(
+                                          value: e.id,
+                                          child: Text(
+                                            e.stateName ?? "",
+                                            style: Get.textTheme.titleMedium,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          )))
+                                      .toList(),
+                                  style: Get.textTheme.bodySmall,
+                                  onChanged: (value) {
+                                    controller.state.value = controller.states
+                                        .firstWhereOrNull(
+                                            (state) => state.id == value);
+                                  },
+                                  hint: const Text("State"),
+                                  buttonStyleData: ButtonStyleData(
+                                      height: 40,
+                                      width: 160,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      decoration: DropdownDecoration()),
+                                ),
+                              ),
+                              if (controller.step1FormMisses.contains(
+                                  Step1FormMiss.didNotSelectState)) ...[
+                                4.verticalSpace,
+                                Text("Please select your State",
+                                    style: Get.textTheme.bodySmall
+                                        ?.copyWith(color: Colors.red)),
+                              ]
+                            ],
+                          ),
+                  ),
                 ],
               ),
               16.verticalSpace,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton2<int?>(
-                            value: controller.state.value?.id,
-                            isExpanded: true,
-                            items: controller.states
-                                .map((e) => DropdownMenuItem(
-                                    value: e.id,
-                                    child: Text(
-                                      e.stateName ?? "",
-                                      style: Get.textTheme.titleMedium,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    )))
-                                .toList(),
-                            style: Get.textTheme.bodySmall,
-                            onChanged: (value) {
-                              controller.state.value = controller.states
-                                  .firstWhereOrNull(
-                                      (state) => state.id == value);
-                            },
-                            hint: const Text("State"),
-                            buttonStyleData: ButtonStyleData(
-                                height: 40,
-                                width: 160,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                decoration: DropdownDecoration()),
-                          ),
-                        ),
-                        if (controller.step1FormMisses
-                            .contains(Step1FormMiss.didNotSelectState)) ...[
-                          4.verticalSpace,
-                          Text("Please select your State",
-                              style: Get.textTheme.bodySmall
-                                  ?.copyWith(color: Colors.red)),
-                        ]
-                      ],
-                    ),
-                  ),
-                  16.horizontalSpace,
-                  Expanded(
-                    child: CustomTextFormField(
-                        controller: controller.zipCode,
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please enter your zip code";
-                          }
-                          return null;
-                        },
-                        hintText: "Zip Code"),
-                  ),
-                ],
-              ),
+              CustomTextFormField(
+                  controller: controller.city,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your city";
+                    }
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z]+'))
+                  ],
+                  hintText: "City"),
+              16.verticalSpace,
+              CustomTextFormField(
+                  controller: controller.addressLine1,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your address";
+                    }
+                    return null;
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r"^[a-zA-Z0-9&,.-/' ]+"))
+                  ],
+                  hintText: "Address Line 1"),
+              16.verticalSpace,
+              CustomTextFormField(
+                  controller: controller.addressLine2,
+                  validator: (value) {
+                    return null;
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your address";
+                    }
+                    return null;
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r"^[a-zA-Z0-9&,.-/' ]+"))
+                  ],
+                  hintText: "Address Line 2"),
+              16.verticalSpace,
+              CustomTextFormField(
+                  controller: controller.zipCode,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your zip code";
+                    }
+                    return null;
+                  },
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  hintText: "Zip Code"),
               16.verticalSpace,
               Row(
                 children: [
@@ -405,7 +471,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
                                 initialDate: DateTime.parse("1990-01-01"),
-                                firstDate: DateTime.parse("1990-01-01"),
+                                firstDate: DateTime.parse("1950-01-01"),
                                 lastDate: DateTime.now());
                             controller.dateOfBirth.text =
                                 selectedDateTime?.getServerDate() ?? "";
@@ -477,24 +543,60 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                 style: BorderStyle.solid),
                             borderRadius: BorderRadius.circular(64))),
                     onPressed: () async {
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles();
-                      if (result == null) {
-                        return;
-                      }
-                      if (!["doc", "docx", "pdf"]
-                          .contains(result.files.single.extension ?? "")) {
-                        controller.fToast.showToast(
-                            child: errorToast(
-                                "Please pick your resume in supported file format"));
-                        return;
-                      }
-
-                      if (result?.files.single.path != null) {
-                        controller.pickedResume.value =
-                            File(result!.files.single.path!);
-                      } else {
-                        // User canceled the picker
+                      try {
+                        await controller.pickResume();
+                      } on PlatformException catch (e) {
+                        print(e);
+                        if (e.message != null) {
+                          showTopModalSheet(
+                              context,
+                              Column(
+                                children: [
+                                  16.verticalSpace,
+                                  Icon(
+                                    Icons.info_outline,
+                                    color: Colors.red,
+                                    size: 48,
+                                  ),
+                                  16.verticalSpace,
+                                  Text(e.message ?? "",
+                                      style: Get.textTheme.titleMedium),
+                                  if (e.code ==
+                                      "read_external_storage_denied") ...[
+                                    16.verticalSpace,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        OutlinedButton(
+                                            onPressed: Get.back,
+                                            child: const Text("Cancel")),
+                                        32.horizontalSpace,
+                                        OutlinedButton(
+                                            onPressed: () async {
+                                              await openAppSettings();
+                                              Get.back();
+                                              /* PermissionStatus status =
+                                                  await Permission
+                                                      .storage.status;
+                                              if (status ==
+                                                  PermissionStatus.granted) {
+                                                controller.fToast.showToast(
+                                                    child: successToast(
+                                                        "Got Storage Permission, picking resume"));
+                                                await Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 500));
+                                                controller.pickResume();
+                                              } */
+                                            },
+                                            child: Text("Open Settings")),
+                                      ],
+                                    )
+                                  ]
+                                ],
+                              ));
+                        }
                       }
                     },
                     child: controller.uploadedResumePath.value != null
@@ -544,31 +646,22 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  controller.crewUser?.id == null
-                      ? controller.isUpdating.value
-                          ? const CircularProgressIndicator()
-                          : ElevatedButton(
-                              onPressed: () async {
-                                bool shouldContinue =
-                                    await controller.postStep1();
-                                if (shouldContinue == true) {
-                                  controller.step.value = 2;
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(64))),
-                              child: const Text("SAVE & CONTINUE"),
-                            )
+                  controller.isUpdating.value
+                      ? const CircularProgressIndicator()
                       : ElevatedButton(
                           onPressed: () async {
-                            controller.step.value = 2;
+                            bool shouldContinue = await controller.postStep1();
+                            if (shouldContinue == true) {
+                              controller.step.value = 2;
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(64))),
-                          child: const Text("NEXT"),
-                        ),
+                          child: controller.crewUser?.id == null
+                              ? const Text("SAVE & CONTINUE")
+                              : const Text("UPDATE & CONTINUE"),
+                        )
                 ],
               ),
               24.verticalSpace

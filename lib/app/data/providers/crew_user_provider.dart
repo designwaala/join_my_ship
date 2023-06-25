@@ -7,6 +7,7 @@ import 'package:join_mp_ship/app/data/models/error.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
+import 'package:join_mp_ship/widgets/top_modal_sheet.dart';
 
 import '../../../main.dart';
 import '../models/crew_user_model.dart';
@@ -56,40 +57,153 @@ class CrewUserProvider extends WrapperConnect {
     } else {
       // print(streamedResponse.reasonPhrase);
       APIErrorList errors = APIErrorList.fromJson(jsonDecode(response.body));
-      Get.showSnackbar(GetSnackBar(
-        title: "Some error occurred",
-        messageText: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: errors.apiErrorList
-                    ?.map((error) => [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(error.field ?? "",
-                                  style: Get.theme.textTheme.bodyMedium
-                                      ?.copyWith(color: Colors.white)),
-                              4.horizontalSpace,
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ...?error.errors?.map((e) => Text(e,
-                                      style: Get.theme.textTheme.bodyMedium
-                                          ?.copyWith(color: Colors.white))),
-                                ],
-                              )
-                            ],
-                          ),
-                          4.verticalSpace
-                        ])
-                    .expand((element) => element)
-                    .toList() ??
-                []),
-      ));
+      showTopModalSheet(
+          Get.context!,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Some error occurred", style: Get.textTheme.titleMedium),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: errors.apiErrorList
+                            ?.map((error) => [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("${error.field ?? ""}:",
+                                          style:
+                                              Get.theme.textTheme.bodyMedium),
+                                      4.horizontalSpace,
+                                      Flexible(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ...?error.errors?.map((e) => Text(e,
+                                                maxLines: 3,
+                                                style: Get
+                                                    .theme.textTheme.bodyMedium
+                                                    ?.copyWith())),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  4.verticalSpace
+                                ])
+                            .expand((element) => element)
+                            .toList() ??
+                        []),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: OutlinedButton(onPressed: Get.back, child: Text("OK")),
+                )
+              ],
+            ),
+          ));
     }
     return streamedResponse.statusCode;
   }
 
-  Future<int> updateCrewUser(
+  Future<int?> updateCrewUser(
+      {required int crewId,
+      CrewUser? crewUser,
+      String? profilePicPath,
+      String? resumePath}) async {
+    print(PreferencesHelper.instance.accessToken);
+    if (PreferencesHelper.instance.accessToken.isEmpty) {
+      print("Access Token not found, getting them");
+      await getAccessTokens();
+    }
+    var response = await _updateCrewUserCore(
+        crewId: crewId,
+        crewUser: crewUser,
+        profilePicPath: profilePicPath,
+        resumePath: resumePath);
+    if (response.statusCode == 401) {
+      print("Refreshing Access Token");
+      await refreshAccessToken();
+      response = await _updateCrewUserCore(
+          crewId: crewId,
+          crewUser: crewUser,
+          profilePicPath: profilePicPath,
+          resumePath: resumePath);
+      if (response.statusCode == 401) {
+        print("Refreshing Access Token didnt work, getting new Tokens");
+        await getAccessTokens();
+        response = await _updateCrewUserCore(
+            crewId: crewId,
+            crewUser: crewUser,
+            profilePicPath: profilePicPath,
+            resumePath: resumePath);
+        if (response.statusCode == 401) {
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {
+          APIErrorList errors =
+              APIErrorList.fromJson(jsonDecode(response.body));
+          showTopModalSheet(
+              Get.context!,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Some error occurred",
+                        style: Get.textTheme.titleMedium),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: errors.apiErrorList
+                                ?.map((error) => [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${error.field ?? ""}:",
+                                              style: Get
+                                                  .theme.textTheme.bodyMedium),
+                                          4.horizontalSpace,
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...?error.errors?.map((e) =>
+                                                    Text(e,
+                                                        maxLines: 3,
+                                                        style: Get
+                                                            .theme
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith())),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      4.verticalSpace
+                                    ])
+                                .expand((element) => element)
+                                .toList() ??
+                            []),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton(
+                          onPressed: Get.back, child: Text("OK")),
+                    )
+                  ],
+                ),
+              ));
+        }
+
+        return response.statusCode;
+      }
+    }
+  }
+
+  Future<http.Response> _updateCrewUserCore(
       {required int crewId,
       CrewUser? crewUser,
       String? profilePicPath,
@@ -119,8 +233,55 @@ class CrewUserProvider extends WrapperConnect {
     if (streamedResponse.statusCode < 300) {
       // print(await streamedResponse.stream.bytesToString());
     } else {
-      print(streamedResponse.reasonPhrase);
+      APIErrorList errors = APIErrorList.fromJson(jsonDecode(response.body));
+      showTopModalSheet(
+          Get.context!,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Some error occurred", style: Get.textTheme.titleMedium),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: errors.apiErrorList
+                            ?.map((error) => [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("${error.field ?? ""}:",
+                                          style:
+                                              Get.theme.textTheme.bodyMedium),
+                                      4.horizontalSpace,
+                                      Flexible(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ...?error.errors?.map((e) => Text(e,
+                                                maxLines: 3,
+                                                style: Get
+                                                    .theme.textTheme.bodyMedium
+                                                    ?.copyWith())),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  4.verticalSpace
+                                ])
+                            .expand((element) => element)
+                            .toList() ??
+                        []),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: OutlinedButton(onPressed: Get.back, child: Text("OK")),
+                )
+              ],
+            ),
+          ));
     }
-    return streamedResponse.statusCode;
+    return response;
   }
 }

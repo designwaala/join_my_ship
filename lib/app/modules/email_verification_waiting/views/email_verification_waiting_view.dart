@@ -22,7 +22,7 @@ class EmailVerificationWaitingView
           return true;
         },
         child: Scaffold(
-            backgroundColor: Color(0xFFFbF6FF),
+            backgroundColor: const Color(0xFFFbF6FF),
             appBar: AppBar(
               toolbarHeight: 70,
               title: Text('CREW',
@@ -32,7 +32,7 @@ class EmailVerificationWaitingView
                       fontWeight: FontWeight.w600)),
               backgroundColor: Colors.white,
               leading: controller.isSigningOut.value
-                  ? Center(
+                  ? const Center(
                       child: SizedBox(
                         height: 16,
                         width: 16,
@@ -45,10 +45,10 @@ class EmailVerificationWaitingView
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             margin: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 color: Color(0xFFF3F3F3),
                                 shape: BoxShape.circle),
-                            child: Icon(
+                            child: const Icon(
                               Icons.keyboard_backspace_rounded,
                               color: Colors.black,
                             ),
@@ -61,7 +61,7 @@ class EmailVerificationWaitingView
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Spacer(),
+                  const Spacer(),
                   SizedBox(
                     width: Get.width,
                     height: 200,
@@ -81,35 +81,38 @@ class EmailVerificationWaitingView
       inbox and follow the instructions.
               """,
                       textAlign: TextAlign.center,
-                      style: Get.textTheme.bodyMedium
-                          ?.copyWith(color: Color.fromRGBO(88, 88, 88, 1))),
+                      style: Get.textTheme.bodyMedium?.copyWith(
+                          color: const Color.fromRGBO(88, 88, 88, 1))),
                   32.verticalSpace,
-                  TextButton(
-                      onPressed: () async {
-                        await FirebaseAuth.instance.currentUser?.reload();
-                        if (FirebaseAuth.instance.currentUser?.emailVerified ==
-                            true) {
-                          Get.offNamed(Routes.CREW_ONBOARDING);
-                        }
-                      },
-                      child: Text("Refresh")),
+                  controller.isRefreshing.value
+                      ? const CircularProgressIndicator()
+                      : TextButton(
+                          onPressed: () async {
+                            await controller.refresh();
+                            if (FirebaseAuth
+                                    .instance.currentUser?.emailVerified ==
+                                true) {
+                              Get.offNamed(Routes.CREW_ONBOARDING);
+                            }
+                          },
+                          child: const Text("Refresh")),
                   32.verticalSpace,
                   controller.isResendingEmail.value
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(64))),
                           onPressed: controller.resendEmail,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text("Resend email"),
                           )),
                   32.verticalSpace,
                   RichText(
                       text:
                           TextSpan(style: Get.textTheme.bodyMedium, children: [
-                    TextSpan(text: "Already have an account? "),
+                    const TextSpan(text: "Already have an account? "),
                     TextSpan(
                         text: "Login",
                         recognizer: TapGestureRecognizer()
@@ -120,7 +123,7 @@ class EmailVerificationWaitingView
                         style: Get.textTheme.bodyMedium
                             ?.copyWith(color: Get.theme.primaryColor))
                   ])),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ),
             )),

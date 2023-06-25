@@ -48,95 +48,137 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             Text("Please complete your profile",
                 style: Get.textTheme.bodyMedium?.copyWith(color: Colors.grey)),
             16.verticalSpace,
-            const AsterixText("Sea Service Record"),
-            16.verticalSpace,
-            const Text("Please enter last two vessel records"),
-            8.verticalSpace,
-            ...controller.serviceRecords.map((serviceRecord) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                        onTap: () async {
-                          controller.prepareRecordBottomSheet();
-                          controller.setRecordBottomSheet(serviceRecord);
-                          await showModalBottomSheet(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(16))),
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => DraggableScrollableSheet(
-                                  initialChildSize: 0.9,
-                                  minChildSize: 0.25,
-                                  maxChildSize: 0.9,
-                                  expand: false,
-                                  builder: (context, controller) {
-                                    return AddARecord(
-                                        scrollController: controller);
-                                  }));
-                          controller.resetRecordBottomSheet();
-                        },
-                        child: Text(serviceRecord.companyName ?? "")),
-                    controller.serviceRecordDeletingId.value == serviceRecord.id
-                        ? const CircularProgressIndicator()
-                        : TextButton(
-                            onPressed: () {
-                              if (serviceRecord.id == null) {
-                                return;
-                              }
-                              controller.deleteServiceRecord(serviceRecord.id!);
-                            },
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                                4.horizontalSpace,
-                                Text("DELETE",
-                                    style: Get.textTheme.bodyMedium
-                                        ?.copyWith(color: Colors.red))
-                              ],
-                            ))
-                  ],
-                )),
-            if (controller.step3FormMisses
-                .contains(Step3FormMiss.lessThan2SeaServiceRecords)) ...[
-              Text("Please provide at least 2 Sea Service Records",
-                  style: Get.textTheme.bodyMedium?.copyWith(color: Colors.red)),
-              4.verticalSpace
+            if (controller.selectedRank.value?.needSeaServiceRecord ==
+                true) ...[
+              const AsterixText("Sea Service Record"),
+              16.verticalSpace,
+              const Text("Please enter last two vessel records"),
+              8.verticalSpace,
+              ...controller.serviceRecords.map((serviceRecord) => Row(
+                    children: [
+                      InkWell(
+                          onTap: () async {
+                            controller.prepareRecordBottomSheet();
+                            controller.setRecordBottomSheet(serviceRecord);
+                            await showModalBottomSheet(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(16))),
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => DraggableScrollableSheet(
+                                    initialChildSize: 0.9,
+                                    minChildSize: 0.25,
+                                    maxChildSize: 0.9,
+                                    expand: false,
+                                    builder: (context, controller) {
+                                      return AddARecord(
+                                          scrollController: controller);
+                                    }));
+                            controller.resetRecordBottomSheet();
+                          },
+                          child: Text(serviceRecord.companyName ?? "")),
+                      const Spacer(),
+                      controller.serviceRecordDeletingId.value ==
+                              serviceRecord.id
+                          ? const CircularProgressIndicator()
+                          : TextButton(
+                              onPressed: () {
+                                if (serviceRecord.id == null) {
+                                  return;
+                                }
+                                controller
+                                    .deleteServiceRecord(serviceRecord.id!);
+                              },
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  4.horizontalSpace,
+                                  Text("DELETE",
+                                      style: Get.textTheme.bodyMedium
+                                          ?.copyWith(color: Colors.red))
+                                ],
+                              )),
+                      TextButton(
+                          onPressed: () async {
+                            controller.prepareRecordBottomSheet();
+                            controller.setRecordBottomSheet(serviceRecord);
+                            await showModalBottomSheet(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(16))),
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => DraggableScrollableSheet(
+                                    initialChildSize: 0.9,
+                                    minChildSize: 0.25,
+                                    maxChildSize: 0.9,
+                                    expand: false,
+                                    builder: (context, controller) {
+                                      return AddARecord(
+                                          scrollController: controller);
+                                    }));
+                            controller.resetRecordBottomSheet();
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.edit,
+                              ),
+                              4.horizontalSpace,
+                              Text("EDIT", style: Get.textTheme.bodyMedium)
+                            ],
+                          ))
+                    ],
+                  )),
+              Center(
+                child: Text(
+                    "Recommended to add at least Last 2 Vessel Sea Service to get your profile highlighted.",
+                    style: Get.textTheme.bodyMedium
+                        ?.copyWith(fontSize: 8.sp, color: Colors.grey)),
+              ),
+              if (controller.step3FormMisses
+                  .contains(Step3FormMiss.lessThan2SeaServiceRecords)) ...[
+                Text("Please provide at least 2 Sea Service Records",
+                    style:
+                        Get.textTheme.bodyMedium?.copyWith(color: Colors.red)),
+                4.verticalSpace
+              ],
+              OutlinedButton(
+                  onPressed: () async {
+                    controller.prepareRecordBottomSheet();
+                    controller.resetRecordBottomSheet();
+                    await showModalBottomSheet(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(16))),
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => DraggableScrollableSheet(
+                            initialChildSize: 0.9,
+                            minChildSize: 0.25,
+                            maxChildSize: 0.9,
+                            expand: false,
+                            builder: (context, controller) {
+                              return AddARecord(scrollController: controller);
+                            }));
+                    controller.resetRecordBottomSheet();
+                  },
+                  child: const Text("Add a record")),
+              16.verticalSpace,
             ],
-            OutlinedButton(
-                onPressed: () async {
-                  controller.prepareRecordBottomSheet();
-                  controller.resetRecordBottomSheet();
-                  await showModalBottomSheet(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(16))),
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (context) => DraggableScrollableSheet(
-                          initialChildSize: 0.9,
-                          minChildSize: 0.25,
-                          maxChildSize: 0.9,
-                          expand: false,
-                          builder: (context, controller) {
-                            return AddARecord(scrollController: controller);
-                          }));
-                  controller.resetRecordBottomSheet();
-                },
-                child: const Text("Add a record")),
-            16.verticalSpace,
             const AsterixText("Reference from Your Previous Employer"),
             16.verticalSpace,
             const Text("Please enter your reference details"),
             8.verticalSpace,
             ...controller.previousEmployerReferences
                 .map((previousEmployerRef) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(previousEmployerRef.companyName ?? ""),
+                        const Spacer(),
                         controller.previousEmployerReferenceDeletingId.value ==
                                 previousEmployerRef.id
                             ? const CircularProgressIndicator()
@@ -160,9 +202,46 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                                         style: Get.textTheme.bodyMedium
                                             ?.copyWith(color: Colors.red))
                                   ],
-                                ))
+                                )),
+                        TextButton(
+                            onPressed: () async {
+                              controller
+                                  .setReferenceBottomSheet(previousEmployerRef);
+                              await showModalBottomSheet(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(16))),
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) =>
+                                      DraggableScrollableSheet(
+                                          initialChildSize: 0.6,
+                                          minChildSize: 0.25,
+                                          maxChildSize: 0.9,
+                                          expand: false,
+                                          builder: (context, controller) {
+                                            return AddAReference(
+                                                scrollController: controller);
+                                          }));
+                              controller.resetReferenceBottomSheet();
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.edit,
+                                ),
+                                4.horizontalSpace,
+                                Text("EDIT", style: Get.textTheme.bodyMedium)
+                              ],
+                            )),
                       ],
                     )),
+            Center(
+              child: Text(
+                  "Recommended to at least add your last employer reference to gain trust from the recruiter.",
+                  style: Get.textTheme.bodyMedium
+                      ?.copyWith(fontSize: 8.sp, color: Colors.grey)),
+            ),
             if (controller.step3FormMisses.contains(
                 Step3FormMiss.referenceFromPreviousEmployerNotProvided)) ...[
               Text("Please provide at least 1 Reference from past employer",

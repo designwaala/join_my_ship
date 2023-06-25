@@ -54,18 +54,22 @@ class UserDetails {
             : List<IssuingAuthority>.from(
                 jsonDecode(json['STCW_Issuing_Authority'])
                     ?.map((e) => IssuingAuthority.fromJson(e))));
-    validCOCIssuingAuthority = json['valid_COC_Issuing_Authority'] == null ||
-            jsonDecode(json['valid_COC_Issuing_Authority']) is! Map
+    validCOCIssuingAuthority = json['valid_COC_Issuing_Authority'] == null
         ? null
-        : List<IssuingAuthority>.from(
-            jsonDecode(json['valid_COC_Issuing_Authority'])
-                ?.map((e) => IssuingAuthority.fromJson(e)));
-    validCOPIssuingAuthority = json['valid_COP_Issuing_Authority'] == null ||
-            jsonDecode(json['valid_COP_Issuing_Authority']) is! Map
+        : (jsonDecode(json['valid_COC_Issuing_Authority']))
+                is Map<String, dynamic>
+            ? [IssuingAuthority.fromJson(json['valid_COC_Issuing_Authority'])]
+            : List<IssuingAuthority>.from(
+                jsonDecode(json['valid_COC_Issuing_Authority'])
+                    ?.map((e) => IssuingAuthority.fromJson(e)));
+    validCOPIssuingAuthority = json['valid_COP_Issuing_Authority'] == null
         ? null
-        : List<IssuingAuthority>.from(
-            jsonDecode(json['valid_COP_Issuing_Authority'])
-                ?.map((e) => IssuingAuthority.fromJson(e)));
+        : (jsonDecode(json['valid_COP_Issuing_Authority']))
+                is Map<String, dynamic>
+            ? [IssuingAuthority.fromJson(json['valid_COP_Issuing_Authority'])]
+            : List<IssuingAuthority>.from(
+                jsonDecode(json['valid_COP_Issuing_Authority'])
+                    ?.map((e) => IssuingAuthority.fromJson(e)));
     validWatchKeepingIssuingAuthority =
         json['valid_Watch_keeping_Issuing_Authority'] == null ||
                 jsonDecode(json['valid_Watch_keeping_Issuing_Authority'])
@@ -78,51 +82,57 @@ class UserDetails {
     validUSVisaValidTill = json['valid_US_Visa_valid_till'];
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['id'] = id;
-    data['user_id'] = userId;
-    data['INDOS_number'] = iNDOSNumber;
-    data['CDC_number'] = cDCNumber;
-    data['CDC_number_valid_till'] = cDCNumberValidTill;
-    data['CDC_seaman_book'] = cDCSeamanBookNumber;
-    data['CDC_seaman_book_valid_till'] = cDCSeamanBookNumberValidTill;
-    data['Passport_number'] = passportNumber;
-    data['Passport_number_valid_till'] = passportNumberValidTill;
+  Map<String, String> toJson() {
+    final data = <String, String?>{};
+    data['id'] = id?.toString();
+    data['user_id'] = userId?.toString();
+    data['INDOS_number'] = iNDOSNumber?.toString();
+    data['CDC_number'] = cDCNumber?.toString();
+    data['CDC_number_valid_till'] = cDCNumberValidTill?.toString();
+    data['CDC_seaman_book'] = cDCSeamanBookNumber?.toString();
+    data['CDC_seaman_book_valid_till'] =
+        cDCSeamanBookNumberValidTill?.toString();
+    data['Passport_number'] = passportNumber?.toString();
+    data['Passport_number_valid_till'] = passportNumberValidTill.toString();
     data['STCW_Issuing_Authority'] = sTCWIssuingAuthority == null
-        ? null
+        ? jsonEncode([])
         : jsonEncode(sTCWIssuingAuthority?.map((e) => e.toJson()).toList());
     data['valid_COC_Issuing_Authority'] = validCOCIssuingAuthority == null
-        ? null
+        ? jsonEncode([])
         : jsonEncode(validCOCIssuingAuthority?.map((e) => e.toJson()).toList());
     data['valid_COP_Issuing_Authority'] = validCOPIssuingAuthority == null
-        ? null
+        ? jsonEncode([])
         : jsonEncode(validCOPIssuingAuthority?.map((e) => e.toJson()).toList());
     data['valid_Watch_keeping_Issuing_Authority'] =
         validWatchKeepingIssuingAuthority == null
-            ? null
+            ? jsonEncode([])
             : jsonEncode(validWatchKeepingIssuingAuthority
                 ?.map((e) => e.toJson())
                 .toList());
-    data['valid_US_Visa'] = validUSVisa;
+    data['valid_US_Visa'] = validUSVisa?.toString();
     data['valid_US_Visa_valid_till'] = validUSVisaValidTill;
     data.removeWhere((key, value) => value == null);
-    return data;
+    return data.map((key, value) => MapEntry(key, value!));
   }
 }
 
 class IssuingAuthority {
   String? issuingAuthority;
   String? validTill;
+  String? customName;
 
-  IssuingAuthority({this.issuingAuthority, this.validTill});
+  IssuingAuthority({this.customName, this.issuingAuthority, this.validTill});
 
   factory IssuingAuthority.fromJson(Map<String, dynamic> json) {
     return IssuingAuthority(
         issuingAuthority: json['issuing_authority'],
+        customName: json['custom_name'],
         validTill: json['valid_till']);
   }
 
-  Map<String, dynamic> toJson() =>
-      {"issuing_authority": issuingAuthority, "valid_till": validTill};
+  Map<String, dynamic> toJson() => {
+        "issuing_authority": issuingAuthority,
+        "custom_name": customName,
+        "valid_till": validTill
+      };
 }

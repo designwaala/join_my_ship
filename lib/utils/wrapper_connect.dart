@@ -2,15 +2,19 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/error.dart';
 import 'package:join_mp_ship/app/data/models/login_model.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:join_mp_ship/widgets/top_modal_sheet.dart';
 
 class WrapperConnect extends GetConnect {
-  _signOut() async {
+  signOut() async {
     await FirebaseAuth.instance.signOut();
     await PreferencesHelper.instance.clearAll();
     Get.offAllNamed(Routes.INFO);
@@ -82,7 +86,62 @@ class WrapperConnect extends GetConnect {
           decoder: decoder,
         );
         if (response.statusCode == 401) {
-          _signOut();
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {
+          APIErrorList errors =
+              APIErrorList.fromJson(jsonDecode(response.bodyString ?? ""));
+          showTopModalSheet(
+              Get.context!,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Some error occurred",
+                        style: Get.textTheme.titleMedium),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: errors.apiErrorList
+                                ?.map((error) => [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${error.field ?? ""}:",
+                                              style: Get
+                                                  .theme.textTheme.bodyMedium),
+                                          4.horizontalSpace,
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...?error.errors?.map((e) =>
+                                                    Text(e,
+                                                        maxLines: 3,
+                                                        style: Get
+                                                            .theme
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith())),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      4.verticalSpace
+                                    ])
+                                .expand((element) => element)
+                                .toList() ??
+                            []),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton(
+                          onPressed: Get.back, child: Text("OK")),
+                    )
+                  ],
+                ),
+              ));
         }
       }
     }
@@ -178,9 +237,166 @@ class WrapperConnect extends GetConnect {
           uploadProgress: uploadProgress,
         );
         if (response.statusCode == 401) {
-          _signOut();
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {
+          APIErrorList errors =
+              APIErrorList.fromJson(jsonDecode(response.bodyString ?? ""));
+          showTopModalSheet(
+              Get.context!,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Some error occurred",
+                        style: Get.textTheme.titleMedium),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: errors.apiErrorList
+                                ?.map((error) => [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${error.field ?? ""}:",
+                                              style: Get
+                                                  .theme.textTheme.bodyMedium),
+                                          4.horizontalSpace,
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...?error.errors?.map((e) =>
+                                                    Text(e,
+                                                        maxLines: 3,
+                                                        style: Get
+                                                            .theme
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith())),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      4.verticalSpace
+                                    ])
+                                .expand((element) => element)
+                                .toList() ??
+                            []),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton(
+                          onPressed: Get.back, child: Text("OK")),
+                    )
+                  ],
+                ),
+              ));
         }
       }
+    }
+    return response;
+  }
+
+  Future<Map<String, dynamic>> multipartPatch(String url, dynamic body,
+      {Map<String, dynamic>? headers}) async {
+    print(PreferencesHelper.instance.accessToken);
+    if (PreferencesHelper.instance.accessToken.isEmpty) {
+      print("Access Token not found, getting them");
+      await getAccessTokens();
+    }
+    var response = await _multipartPatchCore(url, body);
+    if (response.statusCode == 401) {
+      print("Refreshing Access Token");
+      await refreshAccessToken();
+      response = await _multipartPatchCore(url, body);
+      if (response.statusCode == 401) {
+        print("Refreshing Access Token didnt work, getting new Tokens");
+        await getAccessTokens();
+        response = await _multipartPatchCore(url, body);
+        if (response.statusCode == 401) {
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {
+          APIErrorList errors =
+              APIErrorList.fromJson(jsonDecode(response.body));
+          showTopModalSheet(
+              Get.context!,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Some error occurred",
+                        style: Get.textTheme.titleMedium),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: errors.apiErrorList
+                                ?.map((error) => [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${error.field ?? ""}:",
+                                              style: Get
+                                                  .theme.textTheme.bodyMedium),
+                                          4.horizontalSpace,
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...?error.errors?.map((e) =>
+                                                    Text(e,
+                                                        maxLines: 3,
+                                                        style: Get
+                                                            .theme
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith())),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      4.verticalSpace
+                                    ])
+                                .expand((element) => element)
+                                .toList() ??
+                            []),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton(
+                          onPressed: Get.back, child: Text("OK")),
+                    )
+                  ],
+                ),
+              ));
+        }
+      }
+    }
+    return jsonDecode(response.body);
+  }
+
+  Future<http.Response> _multipartPatchCore(String url, dynamic body,
+      {Map<String, String>? headers}) async {
+    var request = http.MultipartRequest('PATCH', Uri.parse("$baseURL/$url"));
+    request.fields.addAll(body is Map ? body : body.toJson());
+
+    headers ??= {
+      "Content-Type": "multipart/form-data",
+      "Authorization": "Bearer ${PreferencesHelper.instance.accessToken}"
+    };
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+    if (streamedResponse.statusCode == 200) {
+      // print(await streamedResponse.stream.bytesToString());
+    } else {
+      print(streamedResponse.reasonPhrase);
     }
     return response;
   }
@@ -202,9 +418,10 @@ class WrapperConnect extends GetConnect {
     }
 
     var response = await http.patch(Uri.parse("$baseURL/$url"),
-        body: jsonEncode(body),
+        body: body is Map ? jsonEncode(body) : body,
         headers: headers ??
             {
+              "Content-Type": "multipart/form-data",
               "Authorization":
                   "Bearer ${PreferencesHelper.instance.accessToken}"
             });
@@ -215,6 +432,7 @@ class WrapperConnect extends GetConnect {
           body: jsonEncode(body),
           headers: headers ??
               {
+                "Content-Type": "multipart/form-data",
                 "Authorization":
                     "Bearer ${PreferencesHelper.instance.accessToken}"
               });
@@ -226,12 +444,68 @@ class WrapperConnect extends GetConnect {
             body: jsonEncode(body),
             headers: headers ??
                 {
+                  "Content-Type": "multipart/form-data",
                   "Authorization":
                       "Bearer ${PreferencesHelper.instance.accessToken}"
                 });
 
         if (response.statusCode == 401) {
-          _signOut();
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {
+          APIErrorList errors =
+              APIErrorList.fromJson(jsonDecode(response.body));
+          showTopModalSheet(
+              Get.context!,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Some error occurred",
+                        style: Get.textTheme.titleMedium),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: errors.apiErrorList
+                                ?.map((error) => [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${error.field ?? ""}:",
+                                              style: Get
+                                                  .theme.textTheme.bodyMedium),
+                                          4.horizontalSpace,
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...?error.errors?.map((e) =>
+                                                    Text(e,
+                                                        maxLines: 3,
+                                                        style: Get
+                                                            .theme
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith())),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      4.verticalSpace
+                                    ])
+                                .expand((element) => element)
+                                .toList() ??
+                            []),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton(
+                          onPressed: Get.back, child: Text("OK")),
+                    )
+                  ],
+                ),
+              ));
         }
       }
     }
@@ -289,7 +563,62 @@ class WrapperConnect extends GetConnect {
           decoder: decoder,
         );
         if (response.statusCode == 401) {
-          _signOut();
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {
+          APIErrorList errors =
+              APIErrorList.fromJson(jsonDecode(response.bodyString ?? ""));
+          showTopModalSheet(
+              Get.context!,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Some error occurred",
+                        style: Get.textTheme.titleMedium),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: errors.apiErrorList
+                                ?.map((error) => [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${error.field ?? ""}:",
+                                              style: Get
+                                                  .theme.textTheme.bodyMedium),
+                                          4.horizontalSpace,
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...?error.errors?.map((e) =>
+                                                    Text(e,
+                                                        maxLines: 3,
+                                                        style: Get
+                                                            .theme
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith())),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      4.verticalSpace
+                                    ])
+                                .expand((element) => element)
+                                .toList() ??
+                            []),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton(
+                          onPressed: Get.back, child: Text("OK")),
+                    )
+                  ],
+                ),
+              ));
         }
       }
     }

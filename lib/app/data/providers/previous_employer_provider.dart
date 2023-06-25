@@ -28,6 +28,15 @@ class PreviousEmployerProvider extends WrapperConnect {
       (await post('crew/previous_employer_create',
               FormData(previousemployer.toJson())))
           .body;
+
+  Future<PreviousEmployerReference?> patchPreviousEmployer(
+      PreviousEmployerReference previousEmployer) async {
+    final response = await multipartPatch(
+        "crew/previous_employer_update/${previousEmployer.id}",
+        previousEmployer.toJson());
+    return PreviousEmployerReference.fromJson(response);
+  }
+
   Future<Response> deletePreviousEmployer(int id) async =>
       await delete('crew/previous_employer_destroy/$id/');
 }

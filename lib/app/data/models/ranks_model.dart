@@ -8,6 +8,7 @@ class Rank {
   bool? watchKeeping;
   bool? isPromotable;
   int? promotedTo;
+  bool? needSeaServiceRecord;
 
   Rank(
       {this.id,
@@ -15,7 +16,8 @@ class Rank {
       this.rankPriority,
       this.forOtheroption,
       this.isPromotable,
-      this.promotedTo});
+      this.promotedTo,
+      this.needSeaServiceRecord});
 
   Rank.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -27,6 +29,7 @@ class Rank {
     watchKeeping = json['watch_keeping'];
     isPromotable = json['is_promotable'];
     promotedTo = json['promoted_to'];
+    needSeaServiceRecord = json['need_sea_service_record'];
   }
 
   Map<String, dynamic> toJson() {

@@ -25,7 +25,7 @@ class SeaServiceProvider extends WrapperConnect {
 
   Future<SeaServiceRecord?> updateSeaService(
       SeaServiceRecord seaService) async {
-    final response = await httpPatch(
+    final response = await multipartPatch(
         "crew/sea_services_update/${seaService.id}", seaService.toJson());
     return SeaServiceRecord.fromJson(response);
   }

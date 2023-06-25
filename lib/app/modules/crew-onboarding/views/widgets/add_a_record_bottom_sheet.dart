@@ -191,11 +191,11 @@ class AddARecord extends GetView<CrewOnboardingController> {
                               DateTime? selectedDateTime = await showDatePicker(
                                   context: Get.context!,
                                   initialDate: DateTime.parse("1990-01-01"),
-                                  firstDate: DateTime.parse("1990-01-01"),
+                                  firstDate: DateTime.parse("1950-01-01"),
                                   lastDate: DateTime.now());
-
                               controller.recordSignOnDate.text =
                                   selectedDateTime?.getServerDate() ?? "";
+                              controller.calculateDuration();
                             },
                             icon: Icon(
                               Icons.calendar_month,
@@ -218,10 +218,11 @@ class AddARecord extends GetView<CrewOnboardingController> {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
                                 initialDate: DateTime.parse("1990-01-01"),
-                                firstDate: DateTime.parse("1990-01-01"),
+                                firstDate: DateTime.parse("1950-01-01"),
                                 lastDate: DateTime.now());
                             controller.recordSignOffDate.text =
                                 selectedDateTime?.getServerDate() ?? "";
+                            controller.calculateDuration();
                           },
                           readOnly: true,
                           hintText: "yyyy/mm/dd",
@@ -240,6 +241,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                       SizedBox(
                         width: 146.w,
                         child: CustomTextFormField(
+                            readOnly: true,
                             controller: controller.recordContarctDuration,
                             keyboardType: TextInputType.number,
                             hintText: "In Years"),

@@ -41,21 +41,21 @@ class SeaServiceRecord {
     contractDuration = json['contract_duration'];
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['id'] = id;
-    data['user_id'] = userId;
+  Map<String, String> toJson() {
+    final data = <String, String?>{};
+    data['id'] = id?.toString();
+    data['user_id'] = userId?.toString();
     data['company_name'] = companyName;
     data['ship_name'] = shipName;
     data['IMO_number'] = iMONumber;
-    data['Rank_id'] = rankId;
+    data['Rank_id'] = rankId?.toString();
     data['Flag'] = flag;
     data['GRT'] = gRT;
-    data['VesselType'] = vesselType;
+    data['VesselType'] = vesselType?.toString();
     data['signon_date'] = signonDate;
     data['signoff_date'] = signoffDate;
-    data['contract_duration'] = contractDuration;
+    data['contract_duration'] = contractDuration?.toString();
     data.removeWhere((key, value) => value == null);
-    return data;
+    return data.map((key, value) => MapEntry(key, value!));
   }
 }

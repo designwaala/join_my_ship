@@ -1,4 +1,6 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
@@ -43,6 +45,9 @@ class AddAReference extends GetView<CrewOnboardingController> {
             16.verticalSpace,
             CustomTextFormField(
                 controller: controller.referenceCompanyName,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z ]+'))
+                ],
                 hintText: "Company Name"),
             16.verticalSpace,
             Row(
@@ -56,6 +61,9 @@ class AddAReference extends GetView<CrewOnboardingController> {
             16.verticalSpace,
             CustomTextFormField(
                 controller: controller.referenceReferenceName,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z ]+'))
+                ],
                 hintText: "Reference Name"),
             16.verticalSpace,
             Row(
@@ -66,10 +74,36 @@ class AddAReference extends GetView<CrewOnboardingController> {
               ],
             ),
             16.verticalSpace,
-            CustomTextFormField(
-                controller: controller.referenceContactNumber,
-                keyboardType: TextInputType.phone,
-                hintText: "Contact Number"),
+            Row(
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: CustomTextFormField(
+                      controller: controller.referenceDialCode,
+                      onTap: () {
+                        showCountryPicker(
+                            context: context,
+                            exclude: <String>[
+                              'KN',
+                              'MF'
+                            ], //It takes a list of country code(iso2).
+                            onSelect: (Country country) {
+                              controller.referenceDialCode.text =
+                                  "+${country.phoneCode}";
+                            });
+                      },
+                      keyboardType: TextInputType.phone,
+                      hintText: "Dial Code"),
+                ),
+                16.horizontalSpace,
+                Expanded(
+                  child: CustomTextFormField(
+                      controller: controller.referenceContactNumber,
+                      keyboardType: TextInputType.phone,
+                      hintText: "Contact Number"),
+                ),
+              ],
+            ),
             36.verticalSpace,
             Divider(thickness: 2),
             18.verticalSpace,

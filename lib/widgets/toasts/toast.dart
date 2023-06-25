@@ -12,8 +12,13 @@ Widget successToast(String text) => Container(
           children: [
             Icon(Icons.check, color: Colors.white),
             16.horizontalSpace,
-            Text(text,
-                style: Get.textTheme.bodyMedium?.copyWith(color: Colors.white)),
+            Flexible(
+              child: Text(
+                text,
+                style: Get.textTheme.bodyMedium?.copyWith(color: Colors.white),
+                maxLines: 3,
+              ),
+            ),
             8.horizontalSpace
           ],
         ),

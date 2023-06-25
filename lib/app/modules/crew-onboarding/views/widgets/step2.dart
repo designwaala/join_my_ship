@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
@@ -64,6 +65,10 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                     Expanded(
                       child: CustomTextFormField(
                           controller: controller.indosNumber,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[a-zA-Z0-9]+'))
+                          ],
                           /* validator: (value) {
                             if (value == null || value.isEmpty == true) {
                               return "Please enter this field";
@@ -106,7 +111,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                           DateTime? selectedDateTime = await showDatePicker(
                               context: Get.context!,
                               initialDate: DateTime.parse("1990-01-01"),
-                              firstDate: DateTime.parse("1990-01-01"),
+                              firstDate: DateTime.parse("1950-01-01"),
                               lastDate: DateTime.now());
                           controller.cdcNumberValidTill.text =
                               selectedDateTime?.getServerDate() ?? "";
@@ -118,7 +123,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                   ],
                 ), */
                 16.verticalSpace,
-                AsterixText("CDC / Seaman Book Details"),
+                const AsterixText("CDC / Seaman Book Details"),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,6 +137,10 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[a-zA-Z0-9]+'))
+                          ],
                           hintText: "CDC Number"),
                     ),
                     20.horizontalSpace,
@@ -149,20 +158,20 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
                                 initialDate: DateTime.parse("1990-01-01"),
-                                firstDate: DateTime.parse("1990-01-01"),
+                                firstDate: DateTime.parse("1950-01-01"),
                                 lastDate: DateTime.now());
                             controller.cdcSeamanNumberValidTill.text =
                                 selectedDateTime?.getServerDate() ?? "";
                           },
                           hintText: "Valid Till",
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.calendar_month,
                           )),
                     ),
                   ],
                 ),
                 16.verticalSpace,
-                AsterixText("Passport Details"),
+                const AsterixText("Passport Details"),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,6 +185,10 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[a-zA-Z0-9,-/]+'))
+                          ],
                           hintText: "Passport Number"),
                     ),
                     20.horizontalSpace,
@@ -193,14 +206,14 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
                                 initialDate: DateTime.parse("1990-01-01"),
-                                firstDate: DateTime.parse("1990-01-01"),
+                                firstDate: DateTime.parse("1950-01-01"),
                                 lastDate: DateTime.now());
 
                             controller.passportValidTill.text =
                                 selectedDateTime?.getServerDate() ?? "";
                           },
                           hintText: "Valid Till",
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.calendar_month,
                           )),
                     ),
@@ -237,7 +250,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                     16.verticalSpace
                   ]
                 ],
-                AsterixText("Are you holding valid US Visa?"),
+                const AsterixText("Are you holding valid US Visa?"),
                 16.verticalSpace,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,14 +293,14 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                               DateTime? selectedDateTime = await showDatePicker(
                                   context: Get.context!,
                                   initialDate: DateTime.parse("1990-01-01"),
-                                  firstDate: DateTime.parse("1990-01-01"),
+                                  firstDate: DateTime.parse("1950-01-01"),
                                   lastDate: DateTime.now());
                               controller.usVisaValidTill.text =
                                   selectedDateTime?.getServerDate() ?? "";
                             },
                             readOnly: true,
                             hintText: "Valid Till",
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.calendar_month,
                             )),
                       ),
@@ -297,30 +310,21 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    controller.userDetails?.id == null
-                        ? controller.isUpdating.value
-                            ? const CircularProgressIndicator()
-                            : ElevatedButton(
-                                onPressed: () async {
-                                  // controller.step.value = 3;
-                                  if (await controller.postStep2()) {
-                                    controller.step.value = 3;
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(64))),
-                                child: const Text("SAVE & CONTINUE"),
-                              )
+                    controller.isUpdating.value
+                        ? const CircularProgressIndicator()
                         : ElevatedButton(
                             onPressed: () async {
-                              controller.step.value = 3;
+                              // controller.step.value = 3;
+                              if (await controller.postStep2()) {
+                                controller.step.value = 3;
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(64))),
-                            child: const Text("NEXT"),
+                            child: controller.userDetails?.id == null
+                                ? const Text("SAVE & CONTINUE")
+                                : const Text("UPDATE & CONTINUE"),
                           ),
                   ],
                 ),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide State;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,6 +35,7 @@ import 'package:join_mp_ship/utils/secure_storage.dart';
 import 'package:join_mp_ship/app/data/models/state_model.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:time_machine/time_machine.dart';
 
 Map<int, String> maritalStatuses = {1: "Single", 2: "Married", 3: "Divorced"};
 Map<String, int> reverseMaritalStatuses = {
@@ -120,6 +122,7 @@ class CrewOnboardingController extends GetxController with PickImage {
   TextEditingController passportValidTill = TextEditingController();
   //
   TextEditingController usVisaValidTill = TextEditingController();
+  TextEditingController stcwOther = TextEditingController();
   //__________________________
 
   //Add a record bottom sheet
@@ -134,10 +137,13 @@ class CrewOnboardingController extends GetxController with PickImage {
   TextEditingController recordSignOffDate = TextEditingController();
   TextEditingController recordContarctDuration = TextEditingController();
   SeaServiceRecord? selectedSeaServiceRecord;
+  PreviousEmployerReference? selectedPreviousReference;
+
   //Add a reference bottom sheet
   TextEditingController referenceCompanyName = TextEditingController();
   TextEditingController referenceReferenceName = TextEditingController();
   TextEditingController referenceContactNumber = TextEditingController();
+  TextEditingController referenceDialCode = TextEditingController();
 
   Rxn<File> pickedResume = Rxn();
 
@@ -166,6 +172,7 @@ class CrewOnboardingController extends GetxController with PickImage {
   // List<VesselType> vesselTypes = [];
   VesselList? vesselList;
   RxBool isPreparingRecordBottomSheet = false.obs;
+  RxBool isLoadingStates = false.obs;
 
 /*   List<String> ranks = [
     "Master/Captain",
@@ -217,11 +224,47 @@ class CrewOnboardingController extends GetxController with PickImage {
     super.onInit();
   }
 
+  Future<void> getAndSetCurrentScreen() async {
+    isLoading.value = true;
+    if (step.value == 1 && crewUser == null) {
+      crewUser = await getIt<CrewUserProvider>().getCrewUser(softRefresh: true);
+      UserStates.instance.crewUser = crewUser;
+      if (crewUser?.id != null) {
+        await setStep1Fields();
+      }
+    } else if (step.value == 2 && userDetails == null) {
+      userDetails =
+          await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
+      UserStates.instance.userDetails = userDetails;
+      await setStep2Fields();
+    } else if (step.value == 3 &&
+        (serviceRecords.isEmpty || previousEmployerReferences.isEmpty)) {
+      serviceRecords.value =
+          (await getIt<SeaServiceProvider>().getSeaServices(crewUser!.id!)) ??
+              [];
+      UserStates.instance.serviceRecords = serviceRecords;
+      previousEmployerReferences.value =
+          (await getIt<PreviousEmployerProvider>()
+                  .getPreviousEmployer(crewUser!.id!)) ??
+              [];
+      UserStates.instance.previousEmployerReferences =
+          previousEmployerReferences;
+    }
+    isLoading.value = false;
+  }
+
   instantiate() async {
     isLoading.value = true;
     ranks = await getIt<RanksProvider>().getRankList();
+    ranks?.sort((a, b) => (a.rankPriority ?? 0) - (b.rankPriority ?? 0));
     UserStates.instance.ranks = ranks;
     countries = (await getIt<CountryProvider>().getCountry()) ?? [];
+    Country? india =
+        countries.firstWhereOrNull((country) => country.countryCode == "IN");
+    countries.removeWhere((country) => country.id == india?.id);
+    if (india != null) {
+      countries.insert(0, india);
+    }
     UserStates.instance.countries = countries;
     crewUser = await getIt<CrewUserProvider>().getCrewUser(softRefresh: true);
     UserStates.instance.crewUser = crewUser;
@@ -297,6 +340,7 @@ class CrewOnboardingController extends GetxController with PickImage {
   }
 
   getStates() async {
+    isLoadingStates.value = true;
     if (country.value?.id == null) {
       return;
     }
@@ -306,6 +350,7 @@ class CrewOnboardingController extends GetxController with PickImage {
         [];
     states.add(
         StateModel(id: 58, country: 00, stateCode: "00", stateName: "Others"));
+    isLoadingStates.value = false;
   }
 
   prepareRecordBottomSheet() async {
@@ -325,10 +370,10 @@ class CrewOnboardingController extends GetxController with PickImage {
 
   Future<bool> postStep1() async {
     step1FormMisses.clear();
-    if (pickedImage.value?.path == null) {
+    if (pickedImage.value?.path == null && crewUser?.profilePic == null) {
       step1FormMisses.add(Step1FormMiss.didNotSelectProfilePic);
     }
-    if (pickedResume.value?.path == null) {
+    if (pickedResume.value?.path == null && crewUser?.resume == null) {
       step1FormMisses.add(Step1FormMiss.didNotSelectResume);
     }
     if (selectedRank.value?.id == null) {
@@ -348,8 +393,8 @@ class CrewOnboardingController extends GetxController with PickImage {
       return false;
     }
 
-    if (pickedImage.value?.path == null ||
-        pickedResume.value?.path == null ||
+    if ((pickedImage.value?.path == null && crewUser?.profilePic == null) ||
+        (pickedResume.value?.path == null && crewUser?.resume == null) ||
         selectedRank.value?.id == null ||
         maritalStatus.value == null ||
         country.value == null ||
@@ -358,36 +403,69 @@ class CrewOnboardingController extends GetxController with PickImage {
     }
     isUpdating.value = true;
     String password = await SecureStorage.instance.password;
-    int statusCode = await getIt<CrewUserProvider>().createCrewUser(
-        crewUser: CrewUser(
-            firstName: FirebaseAuth.instance.currentUser?.displayName,
-            lastName: "_",
-            password: "Demo@123",
-            email: FirebaseAuth.instance.currentUser?.email,
-            addressLine1: addressLine1.text,
-            pincode: zipCode.text,
-            dob: dateOfBirth.text,
-            maritalStatus: maritalStatus.value,
-            country: country.value?.id,
-            rankId: selectedRank.value?.id,
-            gender: gender.value,
-            userTypeKey: 2,
-            addressLine2: addressLine2.text,
-            addressCity: city.text,
-            state: state.value?.id,
-            promotionApplied: isLookingForPromotion.value,
-            screenCheck: 1,
-            authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
-        profilePicPath: pickedImage.value?.path,
-        resumePath: pickedResume.value?.path);
-    isUpdating.value = false;
-    if (statusCode == 201) {
-      fToast.showToast(
-          child: successToast("Your account was successfully created."));
+    int? statusCode;
+    if (crewUser?.id == null) {
+      statusCode = await getIt<CrewUserProvider>().createCrewUser(
+          crewUser: CrewUser(
+              firstName: FirebaseAuth.instance.currentUser?.displayName,
+              lastName: "_",
+              password: "Demo@123",
+              email: FirebaseAuth.instance.currentUser?.email,
+              addressLine1: addressLine1.text,
+              pincode: zipCode.text,
+              dob: dateOfBirth.text,
+              maritalStatus: maritalStatus.value,
+              country: country.value?.id,
+              rankId: selectedRank.value?.id,
+              gender: gender.value,
+              userTypeKey: 2,
+              addressLine2: addressLine2.text,
+              addressCity: city.text,
+              state: state.value?.id,
+              promotionApplied: isLookingForPromotion.value,
+              screenCheck: 1,
+              authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
+          profilePicPath: pickedImage.value?.path,
+          resumePath: pickedResume.value?.path);
+      if (statusCode < 300) {
+        fToast.showToast(
+            child: successToast("Your account was successfully created."));
+      } else {
+        fToast.showToast(child: errorToast("Error creating your account"));
+      }
     } else {
-      fToast.showToast(child: errorToast("Error creating your account"));
+      statusCode = await getIt<CrewUserProvider>().updateCrewUser(
+          crewId: crewUser!.id!,
+          crewUser: CrewUser(
+              firstName: FirebaseAuth.instance.currentUser?.displayName,
+              lastName: "_",
+              email: FirebaseAuth.instance.currentUser?.email,
+              addressLine1: addressLine1.text,
+              pincode: zipCode.text,
+              dob: dateOfBirth.text,
+              maritalStatus: maritalStatus.value,
+              country: country.value?.id,
+              rankId: selectedRank.value?.id,
+              gender: gender.value,
+              userTypeKey: 2,
+              addressLine2: addressLine2.text,
+              addressCity: city.text,
+              state: state.value?.id,
+              promotionApplied: isLookingForPromotion.value,
+              screenCheck: 1,
+              authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
+          profilePicPath: pickedImage.value?.path,
+          resumePath: pickedResume.value?.path);
+      if ((statusCode ?? 0) < 300) {
+        fToast.showToast(
+            child: successToast("Your account was successfully updated."));
+      } else {
+        fToast.showToast(child: errorToast("Error updating your account"));
+      }
     }
-    return statusCode == 201;
+    isUpdating.value = false;
+
+    return (statusCode ?? 0) < 300;
   }
 
   Future<bool> postStep2() async {
@@ -443,26 +521,44 @@ class CrewOnboardingController extends GetxController with PickImage {
     isUpdating.value = true;
     UserDetails? userDetails;
     try {
-      userDetails = await getIt<UserDetailsProvider>().postUserDetails(
-          UserDetails(
-              userId: userId,
-              iNDOSNumber: indosNumber.text.nullIfEmpty(),
-/*               cDCNumber: cdcNumber.text.nullIfEmpty(),
-              cDCNumberValidTill: cdcNumberValidTill.text.nullIfEmpty(), */
-              cDCSeamanBookNumber: cdcSeamanNumber.text.nullIfEmpty(),
-              cDCSeamanBookNumberValidTill:
-                  cdcSeamanNumberValidTill.text.nullIfEmpty(),
-              passportNumber: passportNumber.text.nullIfEmpty(),
-              passportNumberValidTill: passportValidTill.text.nullIfEmpty(),
-              validUSVisa: usVisaValidTill.text.isNotEmpty,
-              sTCWIssuingAuthority: stcwIssuingAuthorities.nullIfEmpty(),
-              validCOCIssuingAuthority: cocIssuingAuthorities.nullIfEmpty(),
-              validCOPIssuingAuthority: copIssuingAuthorities.nullIfEmpty(),
-              validWatchKeepingIssuingAuthority:
-                  watchKeepingIssuingAuthorities.nullIfEmpty(),
-              validUSVisaValidTill: usVisaValidTill.text.nullIfEmpty()));
-      await getIt<CrewUserProvider>().updateCrewUser(
-          crewId: crewUser?.id ?? -1, crewUser: CrewUser(screenCheck: 2));
+      if (this.userDetails?.id == null) {
+        userDetails = await getIt<UserDetailsProvider>().postUserDetails(
+            UserDetails(
+                userId: userId,
+                iNDOSNumber: indosNumber.text.nullIfEmpty(),
+                cDCSeamanBookNumber: cdcSeamanNumber.text.nullIfEmpty(),
+                cDCSeamanBookNumberValidTill:
+                    cdcSeamanNumberValidTill.text.nullIfEmpty(),
+                passportNumber: passportNumber.text.nullIfEmpty(),
+                passportNumberValidTill: passportValidTill.text.nullIfEmpty(),
+                validUSVisa: usVisaValidTill.text.isNotEmpty,
+                sTCWIssuingAuthority: stcwIssuingAuthorities.nullIfEmpty(),
+                validCOCIssuingAuthority: cocIssuingAuthorities.nullIfEmpty(),
+                validCOPIssuingAuthority: copIssuingAuthorities.nullIfEmpty(),
+                validWatchKeepingIssuingAuthority:
+                    watchKeepingIssuingAuthorities.nullIfEmpty(),
+                validUSVisaValidTill: usVisaValidTill.text.nullIfEmpty()));
+        await getIt<CrewUserProvider>().updateCrewUser(
+            crewId: crewUser?.id ?? -1, crewUser: CrewUser(screenCheck: 2));
+      } else {
+        userDetails = await getIt<UserDetailsProvider>().patchUserDetails(
+            UserDetails(
+                id: this.userDetails?.id,
+                userId: userId,
+                iNDOSNumber: indosNumber.text.nullIfEmpty(),
+                cDCSeamanBookNumber: cdcSeamanNumber.text.nullIfEmpty(),
+                cDCSeamanBookNumberValidTill:
+                    cdcSeamanNumberValidTill.text.nullIfEmpty(),
+                passportNumber: passportNumber.text.nullIfEmpty(),
+                passportNumberValidTill: passportValidTill.text.nullIfEmpty(),
+                validUSVisa: usVisaValidTill.text.isNotEmpty,
+                sTCWIssuingAuthority: stcwIssuingAuthorities.nullIfEmpty(),
+                validCOCIssuingAuthority: cocIssuingAuthorities.nullIfEmpty(),
+                validCOPIssuingAuthority: copIssuingAuthorities.nullIfEmpty(),
+                validWatchKeepingIssuingAuthority:
+                    watchKeepingIssuingAuthorities.nullIfEmpty(),
+                validUSVisaValidTill: usVisaValidTill.text.nullIfEmpty()));
+      }
     } catch (e) {
       print("$e");
     }
@@ -480,13 +576,13 @@ class CrewOnboardingController extends GetxController with PickImage {
 
   step3SubmitOnPress() async {
     step3FormMisses.clear();
-    if (serviceRecords.length < 2) {
+    /* if (serviceRecords.length < 2) {
       step3FormMisses.add(Step3FormMiss.lessThan2SeaServiceRecords);
     }
     if (previousEmployerReferences.isEmpty) {
       step3FormMisses
           .add(Step3FormMiss.referenceFromPreviousEmployerNotProvided);
-    }
+    } */
     if (!declaration1.value || !declaration2.value) {
       step3FormMisses.add(Step3FormMiss.didNotAgreeToTermsAndCondition);
     }
@@ -499,6 +595,23 @@ class CrewOnboardingController extends GetxController with PickImage {
         crewId: crewUser?.id ?? -1, crewUser: CrewUser(screenCheck: 3));
     isUpdating.value = false;
     Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+  }
+
+  calculateDuration() {
+    if (recordSignOffDate.text.isEmpty || recordSignOnDate.text.isEmpty) {
+      return;
+    }
+    LocalDate a = LocalDate.dateTime(DateTime.parse(recordSignOnDate.text));
+    LocalDate b = LocalDate.dateTime(DateTime.parse(recordSignOffDate.text));
+    Period diff = b.periodSince(a);
+    if (diff.years == 0) {
+      recordContarctDuration.text = "${diff.months} Months";
+    } else if (diff.months != 0) {
+      recordContarctDuration.text =
+          "${diff.years} Years, ${diff.months} Months";
+    } else {
+      recordContarctDuration.text = "${diff.years} Years";
+    }
   }
 
   Future<bool> addServiceRecord() async {
@@ -543,9 +656,11 @@ class CrewOnboardingController extends GetxController with PickImage {
       serviceRecords.add(newRecord);
       return true;
     } else if (updatedRecord != null && updatedRecord.id != null) {
+      int? index =
+          serviceRecords.indexWhere((record) => record.id == updatedRecord?.id);
       serviceRecords
-        ..removeWhere((record) => record.id == updatedRecord?.id)
-        ..add(updatedRecord);
+        ..removeAt(index)
+        ..insert(index, updatedRecord);
       return true;
     } else {
       return false;
@@ -568,20 +683,43 @@ class CrewOnboardingController extends GetxController with PickImage {
   Future<bool> addReferenceFromPreviousEmployer() async {
     isAddingBottomSheet.value = true;
     PreviousEmployerReference? newPreviousEmployerReference;
+    PreviousEmployerReference? updatedPreviousEmployerReference;
     try {
-      newPreviousEmployerReference = await getIt<PreviousEmployerProvider>()
-          .postPreviousEmployer(PreviousEmployerReference(
-        userId: userId,
-        companyName: referenceCompanyName.text,
-        referenceName: referenceReferenceName.text,
-        contactNumber: referenceContactNumber.text,
-      ));
+      if (selectedPreviousReference?.id == null) {
+        newPreviousEmployerReference = await getIt<PreviousEmployerProvider>()
+            .postPreviousEmployer(PreviousEmployerReference(
+          userId: userId,
+          companyName: referenceCompanyName.text,
+          referenceName: referenceReferenceName.text,
+          contactNumber:
+              "${referenceDialCode.text}-${referenceContactNumber.text}",
+        ));
+      } else {
+        updatedPreviousEmployerReference =
+            await getIt<PreviousEmployerProvider>()
+                .patchPreviousEmployer(PreviousEmployerReference(
+          id: selectedPreviousReference?.id,
+          userId: userId,
+          companyName: referenceCompanyName.text,
+          referenceName: referenceReferenceName.text,
+          contactNumber:
+              "${referenceDialCode.text}-${referenceContactNumber.text}",
+        ));
+      }
     } catch (e) {
       print("$e");
     }
     isAddingBottomSheet.value = false;
     if (newPreviousEmployerReference != null) {
       previousEmployerReferences.add(newPreviousEmployerReference);
+      return true;
+    } else if (updatedPreviousEmployerReference != null) {
+      int? index = previousEmployerReferences
+          .indexWhere((ref) => ref.id == selectedPreviousReference?.id);
+
+      previousEmployerReferences
+        ..removeAt(index)
+        ..insert(index, updatedPreviousEmployerReference);
       return true;
     } else {
       return false;
@@ -621,6 +759,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     referenceCompanyName.clear();
     referenceReferenceName.clear();
     referenceContactNumber.clear();
+    selectedPreviousReference = null;
   }
 
   setRecordBottomSheet(SeaServiceRecord record) {
@@ -634,7 +773,40 @@ class CrewOnboardingController extends GetxController with PickImage {
     recordVesselType.value = record.vesselType;
     recordSignOnDate.text = record.signonDate ?? "";
     recordSignOffDate.text = record.signoffDate ?? "";
-    recordContarctDuration.text = record.contractDuration?.toString() ?? "";
+    calculateDuration();
+    // recordContarctDuration.text = record.contractDuration?.toString() ?? "";
+  }
+
+  setReferenceBottomSheet(PreviousEmployerReference reference) {
+    selectedPreviousReference = reference;
+    referenceCompanyName.text = reference.companyName ?? "";
+    try {
+      referenceContactNumber.text =
+          reference.contactNumber?.split("-")[1] ?? "";
+      referenceDialCode.text = reference.contactNumber?.split("-")[0] ?? "";
+    } catch (e) {
+      print(e);
+    }
+    referenceReferenceName.text = reference.referenceName ?? "";
+  }
+
+  Future<void> pickResume() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result == null) {
+      return;
+    }
+    if (!["doc", "docx", "pdf"].contains(result.files.single.extension ?? "")) {
+      fToast.showToast(
+          child:
+              errorToast("Please pick your resume in supported file format"));
+      return;
+    }
+
+    if (result.files.single.path != null) {
+      pickedResume.value = File(result.files.single.path!);
+    } else {
+      // User canceled the picker
+    }
   }
 }
 
