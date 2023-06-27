@@ -8,6 +8,7 @@ import 'package:join_mp_ship/widgets/astrix_text.dart';
 import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/date_time.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 class STCWDetails extends GetView<CrewOnboardingController> {
   const STCWDetails({Key? key}) : super(key: key);
@@ -44,7 +45,7 @@ class STCWDetails extends GetView<CrewOnboardingController> {
                               controller.stcwIssuingAuthorities
                                   .add(IssuingAuthority(issuingAuthority: e));
                             } else {
-                              controller.fToast.showToast(
+                              controller.fToast.safeShowToast(
                                   child: errorToast(
                                       "You can select only 2 issuing authorities."));
                             }
@@ -72,7 +73,7 @@ class STCWDetails extends GetView<CrewOnboardingController> {
                                             IssuingAuthority(
                                                 issuingAuthority: e));
                                       } else {
-                                        controller.fToast.showToast(
+                                        controller.fToast.safeShowToast(
                                             child: errorToast(
                                                 "You can select only 2 issuing authorities."));
                                       }

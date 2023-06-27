@@ -12,6 +12,7 @@ import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -161,7 +162,7 @@ class ProfileView extends GetView<ProfileController> {
                           }
                           if (!["doc", "docx", "pdf"]
                               .contains(result.files.single.extension ?? "")) {
-                            controller.fToast.showToast(
+                            controller.fToast.safeShowToast(
                                 child: errorToast(
                                     "Please pick your resume in supported file format"));
                             return;

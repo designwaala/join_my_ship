@@ -36,6 +36,7 @@ import 'package:join_mp_ship/app/data/models/state_model.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:time_machine/time_machine.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 Map<int, String> maritalStatuses = {1: "Single", 2: "Married", 3: "Divorced"};
 Map<String, int> reverseMaritalStatuses = {
@@ -135,15 +136,16 @@ class CrewOnboardingController extends GetxController with PickImage {
   RxnInt recordVesselType = RxnInt();
   TextEditingController recordSignOnDate = TextEditingController();
   TextEditingController recordSignOffDate = TextEditingController();
-  TextEditingController recordContarctDuration = TextEditingController();
+  // TextEditingController recordContarctDuration = TextEditingController();
   SeaServiceRecord? selectedSeaServiceRecord;
   PreviousEmployerReference? selectedPreviousReference;
+  RxnString recordContractDuration = RxnString();
 
   //Add a reference bottom sheet
   TextEditingController referenceCompanyName = TextEditingController();
   TextEditingController referenceReferenceName = TextEditingController();
   TextEditingController referenceContactNumber = TextEditingController();
-  TextEditingController referenceDialCode = TextEditingController();
+  TextEditingController referenceDialCode = TextEditingController(text: "+91");
 
   Rxn<File> pickedResume = Rxn();
 
@@ -300,8 +302,6 @@ class CrewOnboardingController extends GetxController with PickImage {
 
   Future<void> setStep2Fields() async {
     indosNumber.text = userDetails?.iNDOSNumber ?? "";
-/*     cdcNumber.text = userDetails?.cDCNumber ?? "";
-    cdcNumberValidTill.text = userDetails?.cDCNumberValidTill ?? ""; */
     cdcSeamanNumber.text = userDetails?.cDCSeamanBookNumber ?? "";
     cdcSeamanNumberValidTill.text =
         userDetails?.cDCSeamanBookNumberValidTill ?? "";
@@ -428,10 +428,10 @@ class CrewOnboardingController extends GetxController with PickImage {
           profilePicPath: pickedImage.value?.path,
           resumePath: pickedResume.value?.path);
       if (statusCode < 300) {
-        fToast.showToast(
+        fToast.safeShowToast(
             child: successToast("Your account was successfully created."));
       } else {
-        fToast.showToast(child: errorToast("Error creating your account"));
+        fToast.safeShowToast(child: errorToast("Error creating your account"));
       }
     } else {
       statusCode = await getIt<CrewUserProvider>().updateCrewUser(
@@ -457,10 +457,10 @@ class CrewOnboardingController extends GetxController with PickImage {
           profilePicPath: pickedImage.value?.path,
           resumePath: pickedResume.value?.path);
       if ((statusCode ?? 0) < 300) {
-        fToast.showToast(
+        fToast.safeShowToast(
             child: successToast("Your account was successfully updated."));
       } else {
-        fToast.showToast(child: errorToast("Error updating your account"));
+        fToast.safeShowToast(child: errorToast("Error updating your account"));
       }
     }
     isUpdating.value = false;
@@ -564,9 +564,9 @@ class CrewOnboardingController extends GetxController with PickImage {
     }
 
     if (userDetails?.userId != null) {
-      fToast.showToast(child: successToast("Details uploaded"));
+      fToast.safeShowToast(child: successToast("Details uploaded"));
     } else {
-      fToast.showToast(
+      fToast.safeShowToast(
           child:
               errorToast("Some error occurred while uploading your details"));
     }
@@ -599,19 +599,45 @@ class CrewOnboardingController extends GetxController with PickImage {
 
   calculateDuration() {
     if (recordSignOffDate.text.isEmpty || recordSignOnDate.text.isEmpty) {
+      recordContractDuration.value = null;
       return;
     }
     LocalDate a = LocalDate.dateTime(DateTime.parse(recordSignOnDate.text));
     LocalDate b = LocalDate.dateTime(DateTime.parse(recordSignOffDate.text));
     Period diff = b.periodSince(a);
-    if (diff.years == 0) {
-      recordContarctDuration.text = "${diff.months} Months";
+    String sentence = "";
+    if (diff.years != 0) {
+      if (diff.years == 1) {
+        sentence = "${diff.years} Year-";
+      } else {
+        sentence = "${diff.years} Years-";
+      }
+    }
+    if (diff.months != 0) {
+      if (diff.months == 1) {
+        sentence = "$sentence ${diff.months} Month-";
+      } else {
+        sentence = "$sentence ${diff.months} Months-";
+      }
+    }
+    if (diff.days != 0) {
+      if (diff.days == 1) {
+        sentence = "$sentence ${diff.days} Day-";
+      } else {
+        sentence = "$sentence ${diff.days} Days-";
+      }
+    }
+    sentence = sentence.split("-").join(", ");
+    sentence = sentence.substring(0, sentence.length - 2);
+    recordContractDuration.value = sentence;
+    /* if (diff.years == 0) {
+      recordContractDuration.value = "${diff.months} Months";
     } else if (diff.months != 0) {
-      recordContarctDuration.text =
+      recordContractDuration.value =
           "${diff.years} Years, ${diff.months} Months";
     } else {
-      recordContarctDuration.text = "${diff.years} Years";
-    }
+      recordContractDuration.value = "${diff.years} Years";
+    } */
   }
 
   Future<bool> addServiceRecord() async {
@@ -630,8 +656,7 @@ class CrewOnboardingController extends GetxController with PickImage {
                 gRT: recordGrt.text,
                 vesselType: recordVesselType.value,
                 signonDate: recordSignOnDate.text,
-                signoffDate: recordSignOffDate.text,
-                contractDuration: int.tryParse(recordContarctDuration.text)));
+                signoffDate: recordSignOffDate.text));
       } else {
         updatedRecord = await getIt<SeaServiceProvider>().updateSeaService(
             SeaServiceRecord(
@@ -644,8 +669,7 @@ class CrewOnboardingController extends GetxController with PickImage {
                 gRT: recordGrt.text,
                 vesselType: recordVesselType.value,
                 signonDate: recordSignOnDate.text,
-                signoffDate: recordSignOffDate.text,
-                contractDuration: int.tryParse(recordContarctDuration.text)));
+                signoffDate: recordSignOffDate.text));
       }
     } catch (e) {
       print("$e");
@@ -673,7 +697,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     if (resp.statusCode == 204) {
       serviceRecords.removeWhere((serviceRecord) => serviceRecord.id == id);
     } else {
-      fToast.showToast(
+      fToast.safeShowToast(
           child: errorToast(
               "There was an issue deleting your Sea Service Record"));
     }
@@ -734,7 +758,7 @@ class CrewOnboardingController extends GetxController with PickImage {
       previousEmployerReferences.removeWhere(
           (previousEmployerReference) => previousEmployerReference.id == id);
     } else {
-      fToast.showToast(
+      fToast.safeShowToast(
           child: errorToast(
               "There was an issue deleting your Employer Reference"));
     }
@@ -749,7 +773,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     recordGrt.clear();
     recordSignOnDate.clear();
     recordSignOffDate.clear();
-    recordContarctDuration.clear();
+    recordContractDuration.value = null;
     recordRank.value = null;
     recordVesselType.value = null;
     selectedSeaServiceRecord = null;
@@ -796,7 +820,7 @@ class CrewOnboardingController extends GetxController with PickImage {
       return;
     }
     if (!["doc", "docx", "pdf"].contains(result.files.single.extension ?? "")) {
-      fToast.showToast(
+      fToast.safeShowToast(
           child:
               errorToast("Please pick your resume in supported file format"));
       return;

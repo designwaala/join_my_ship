@@ -19,7 +19,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(),
+                const CircularProgressIndicator(),
               ],
             )
           : SingleChildScrollView(
@@ -56,6 +56,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                       hintText: "Ship Name"),
                   20.verticalSpace,
                   Table(
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                     children: [
                       TableRow(children: [
                         Text("IMO Number", style: headingStyle),
@@ -169,7 +170,54 @@ class AddARecord extends GetView<CrewOnboardingController> {
                                 )),
                           ),
                         ),
-                      ])
+                      ]),
+                      TableRow(
+                        children: [
+                          Text("Sign-On Date", style: headingStyle),
+                          CustomTextFormField(
+                              controller: controller.recordSignOnDate,
+                              onTap: () async {
+                                DateTime? selectedDateTime =
+                                    await showDatePicker(
+                                        context: Get.context!,
+                                        initialDate:
+                                            DateTime.parse("1990-01-01"),
+                                        firstDate: DateTime.parse("1950-01-01"),
+                                        lastDate: DateTime.now());
+                                controller.recordSignOnDate.text =
+                                    selectedDateTime?.getServerDate() ?? "";
+                                controller.calculateDuration();
+                              },
+                              icon: const Icon(
+                                Icons.calendar_month,
+                              ),
+                              readOnly: true,
+                              hintText: "yyyy/mm/dd"),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          Text("Sign-Off Date", style: headingStyle),
+                          CustomTextFormField(
+                            controller: controller.recordSignOffDate,
+                            onTap: () async {
+                              DateTime? selectedDateTime = await showDatePicker(
+                                  context: Get.context!,
+                                  initialDate: DateTime.parse("1990-01-01"),
+                                  firstDate: DateTime.parse("1950-01-01"),
+                                  lastDate: DateTime.now());
+                              controller.recordSignOffDate.text =
+                                  selectedDateTime?.getServerDate() ?? "";
+                              controller.calculateDuration();
+                            },
+                            readOnly: true,
+                            hintText: "yyyy/mm/dd",
+                            icon: const Icon(
+                              Icons.calendar_month,
+                            ),
+                          ),
+                        ],
+                      ),
                     ]
                         .map((e) => [
                               e,
@@ -179,77 +227,17 @@ class AddARecord extends GetView<CrewOnboardingController> {
                         .expand((element) => element)
                         .toList(),
                   ),
-                  Row(
-                    children: [
-                      Text("Sign-On Date", style: headingStyle),
-                      Spacer(),
-                      SizedBox(
-                        width: 146.w,
-                        child: CustomTextFormField(
-                            controller: controller.recordSignOnDate,
-                            onTap: () async {
-                              DateTime? selectedDateTime = await showDatePicker(
-                                  context: Get.context!,
-                                  initialDate: DateTime.parse("1990-01-01"),
-                                  firstDate: DateTime.parse("1950-01-01"),
-                                  lastDate: DateTime.now());
-                              controller.recordSignOnDate.text =
-                                  selectedDateTime?.getServerDate() ?? "";
-                              controller.calculateDuration();
-                            },
-                            icon: Icon(
-                              Icons.calendar_month,
-                            ),
-                            readOnly: true,
-                            hintText: "yyyy/mm/dd"),
-                      ),
-                    ],
-                  ),
-                  16.verticalSpace,
-                  Row(
-                    children: [
-                      Text("Sign-Off Date", style: headingStyle),
-                      Spacer(),
-                      SizedBox(
-                        width: 146.w,
-                        child: CustomTextFormField(
-                          controller: controller.recordSignOffDate,
-                          onTap: () async {
-                            DateTime? selectedDateTime = await showDatePicker(
-                                context: Get.context!,
-                                initialDate: DateTime.parse("1990-01-01"),
-                                firstDate: DateTime.parse("1950-01-01"),
-                                lastDate: DateTime.now());
-                            controller.recordSignOffDate.text =
-                                selectedDateTime?.getServerDate() ?? "";
-                            controller.calculateDuration();
-                          },
-                          readOnly: true,
-                          hintText: "yyyy/mm/dd",
-                          icon: const Icon(
-                            Icons.calendar_month,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  16.verticalSpace,
-                  Row(
-                    children: [
-                      Text("Contract Duration", style: headingStyle),
-                      Spacer(),
-                      SizedBox(
-                        width: 146.w,
-                        child: CustomTextFormField(
-                            readOnly: true,
-                            controller: controller.recordContarctDuration,
-                            keyboardType: TextInputType.number,
-                            hintText: "In Years"),
-                      ),
-                    ],
-                  ),
-                  24.verticalSpace,
-                  Divider(thickness: 2),
+                  if (controller.recordContractDuration.value != null) ...[
+                    Row(
+                      children: [
+                        Text("Contract Duration", style: headingStyle),
+                        const Spacer(),
+                        Text(controller.recordContractDuration.value ?? "")
+                      ],
+                    ),
+                    24.verticalSpace,
+                  ],
+                  const Divider(thickness: 2),
                   16.verticalSpace,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -266,7 +254,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                       ),
                       20.horizontalSpace,
                       controller.isAddingBottomSheet.value
-                          ? CircularProgressIndicator()
+                          ? const CircularProgressIndicator()
                           : ElevatedButton(
                               onPressed: () async {
                                 if (await controller.addServiceRecord()) {

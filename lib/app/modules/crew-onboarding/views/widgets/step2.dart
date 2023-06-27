@@ -222,25 +222,9 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                 16.verticalSpace,
                 const STCWDetails(),
                 16.verticalSpace,
-                // if (![
-                //   "Deck Cadet",
-                //   "Trainee Electrical Cadet",
-                //   "Engine Cadet",
-                //   "Trainee Ordinary Seaman",
-                //   "Trainee Wiper"
-                // ].contains(controller.selectedRank.value?.name))
                 if (controller.selectedRank.value?.coc == true)
                   const COCDetails(),
-                if (controller.isHoldingValidCOC.value != true
-                // &&
-                //     ![
-                //       "Mess boy / GS / Steward",
-                //       "Second Cook / 2nd Cook",
-                //       "Chief Cook",
-                //       "Trainee Electrical Cadet",
-                //       "ETO / Electrician",
-                //     ].contains(controller.selectedRank.value?.name)
-                ) ...[
+                if (controller.isHoldingValidCOC.value != true) ...[
                   if (controller.selectedRank.value?.cop == true) ...[
                     const COPDetails(),
                     16.verticalSpace,

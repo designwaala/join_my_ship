@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+
 
 class SignUpEmailController extends GetxController {
   SignUpEmailArguments? args;
@@ -103,16 +105,17 @@ class SignUpEmailController extends GetxController {
           }); */
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        fToast.showToast(child: errorToast("Password is too weak"));
+        fToast.safeShowToast(child: errorToast("Password is too weak"));
       } else if (e.code == 'email-already-in-use') {
         await FirebaseAuth.instance.signOut();
         Get.toNamed(Routes.CREW_SIGN_IN_EMAIL);
-        fToast.showToast(
+        fToast.safeShowToast(
             child: errorToast(
                 "An account already exists for that email. Please Login"));
       }
     } catch (e) {
-      fToast.showToast(child: errorToast("Unable to process your request."));
+      fToast.safeShowToast(
+          child: errorToast("Unable to process your request."));
     }
     isAdding.value = false;
   }

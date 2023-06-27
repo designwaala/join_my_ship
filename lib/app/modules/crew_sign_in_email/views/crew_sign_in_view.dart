@@ -147,6 +147,8 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                       4.verticalSpace,
                       Center(child: Text('Mobile Number')),
                       Spacer(),
+                      Divider(),
+                      16.verticalSpace,
                       SizedBox(
                         width: double.maxFinite,
                         height: 64.h,

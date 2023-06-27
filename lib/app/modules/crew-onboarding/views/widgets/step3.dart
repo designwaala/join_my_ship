@@ -50,8 +50,17 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
             16.verticalSpace,
             if (controller.selectedRank.value?.needSeaServiceRecord ==
                 true) ...[
-              const AsterixText("Sea Service Record"),
-              16.verticalSpace,
+              Text("Sea Service Record",
+                  style: Get.textTheme.titleSmall
+                      ?.copyWith(color: Get.theme.primaryColor)),
+              4.verticalSpace,
+              Center(
+                child: Text(
+                    "Recommended to add at least Last 2 Vessel Sea Service to get your profile highlighted.",
+                    style: Get.textTheme.bodyMedium
+                        ?.copyWith(fontSize: 11.sp, color: Colors.grey)),
+              ),
+              8.verticalSpace,
               const Text("Please enter last two vessel records"),
               8.verticalSpace,
               ...controller.serviceRecords.map((serviceRecord) => Row(
@@ -134,12 +143,6 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                           ))
                     ],
                   )),
-              Center(
-                child: Text(
-                    "Recommended to add at least Last 2 Vessel Sea Service to get your profile highlighted.",
-                    style: Get.textTheme.bodyMedium
-                        ?.copyWith(fontSize: 8.sp, color: Colors.grey)),
-              ),
               if (controller.step3FormMisses
                   .contains(Step3FormMiss.lessThan2SeaServiceRecords)) ...[
                 Text("Please provide at least 2 Sea Service Records",
@@ -170,8 +173,17 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                   child: const Text("Add a record")),
               16.verticalSpace,
             ],
-            const AsterixText("Reference from Your Previous Employer"),
-            16.verticalSpace,
+            Text("Reference from Your Previous Employer",
+                style: Get.textTheme.titleSmall
+                    ?.copyWith(color: Get.theme.primaryColor)),
+            4.verticalSpace,
+            Center(
+              child: Text(
+                  "Recommended to at least add your last employer reference to gain trust from the recruiter.",
+                  style: Get.textTheme.bodyMedium
+                      ?.copyWith(fontSize: 11.sp, color: Colors.grey)),
+            ),
+            8.verticalSpace,
             const Text("Please enter your reference details"),
             8.verticalSpace,
             ...controller.previousEmployerReferences
@@ -236,12 +248,6 @@ class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
                             )),
                       ],
                     )),
-            Center(
-              child: Text(
-                  "Recommended to at least add your last employer reference to gain trust from the recruiter.",
-                  style: Get.textTheme.bodyMedium
-                      ?.copyWith(fontSize: 8.sp, color: Colors.grey)),
-            ),
             if (controller.step3FormMisses.contains(
                 Step3FormMiss.referenceFromPreviousEmployerNotProvided)) ...[
               Text("Please provide at least 1 Reference from past employer",

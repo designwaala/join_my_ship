@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 class CrewSignInMobileController extends GetxController {
   TextEditingController phoneController = TextEditingController();
@@ -23,6 +24,7 @@ class CrewSignInMobileController extends GetxController {
 
   RxInt timePassed = 0.obs;
   Timer? timer;
+  RxBool isSelectingCountryCode = false.obs;
 
   Function? redirection;
 
@@ -52,17 +54,19 @@ class CrewSignInMobileController extends GetxController {
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: "${selectedCountryCode.value}${phoneController.text}",
         verificationCompleted: (phoneAuthCredential) {},
-        verificationFailed: (error) {},
+        verificationFailed: (error) {
+          isVerifying.value = false;
+        },
         codeSent: (verificationId, forceResendingToken) {
           this.verificationId = verificationId;
           this.forceResendingToken = forceResendingToken;
-          fToast.showToast(child: successToast("OTP Sent"));
+          fToast.safeShowToast(child: successToast("OTP Sent"));
           isOTPSent.value = true;
+          isVerifying.value = false;
           startTimer();
         },
         forceResendingToken: forceResendingToken,
         codeAutoRetrievalTimeout: (verificationId) {});
-    isVerifying.value = false;
   }
 
   startTimer() {
@@ -87,22 +91,22 @@ class CrewSignInMobileController extends GetxController {
           : await FirebaseAuth.instance.currentUser
               ?.linkWithCredential(credential);
     } catch (e) {
-      fToast.showToast(child: errorToast("$e"));
+      fToast.safeShowToast(child: errorToast("$e"));
       isVerifying.value = false;
       return;
     }
     if (FirebaseAuth.instance.currentUser?.emailVerified != true) {
       await FirebaseAuth.instance.signOut();
-      fToast.showToast(child: errorToast("Email not Verified"));
+      fToast.safeShowToast(child: errorToast("Email not Verified"));
     } else if (FirebaseAuth.instance.currentUser != null) {
       if (redirection != null) {
         redirection!();
       } else {
         Get.offAllNamed(Routes.CREW_ONBOARDING);
       }
-      fToast.showToast(child: successToast("Authentication Successful"));
+      fToast.safeShowToast(child: successToast("Authentication Successful"));
     } else {
-      fToast.showToast(child: errorToast("Authentication Failed"));
+      fToast.safeShowToast(child: errorToast("Authentication Failed"));
     }
     isVerifying.value = false;
   }

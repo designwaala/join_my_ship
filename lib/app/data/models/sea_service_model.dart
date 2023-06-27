@@ -38,7 +38,7 @@ class SeaServiceRecord {
     vesselType = json['VesselType'];
     signonDate = json['signon_date'];
     signoffDate = json['signoff_date'];
-    contractDuration = json['contract_duration'];
+    // contractDuration = json['contract_duration'];
   }
 
   Map<String, String> toJson() {
@@ -54,7 +54,7 @@ class SeaServiceRecord {
     data['VesselType'] = vesselType?.toString();
     data['signon_date'] = signonDate;
     data['signoff_date'] = signoffDate;
-    data['contract_duration'] = contractDuration?.toString();
+    // data['contract_duration'] = contractDuration?.toString();
     data.removeWhere((key, value) => value == null);
     return data.map((key, value) => MapEntry(key, value!));
   }

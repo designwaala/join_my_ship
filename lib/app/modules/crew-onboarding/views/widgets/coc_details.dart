@@ -9,6 +9,7 @@ import 'package:join_mp_ship/widgets/astrix_text.dart';
 import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 class COCDetails extends GetView<CrewOnboardingController> {
   const COCDetails({Key? key}) : super(key: key);
@@ -79,7 +80,7 @@ class COCDetails extends GetView<CrewOnboardingController> {
                                 controller.cocIssuingAuthorities
                                     .add(IssuingAuthority(issuingAuthority: e));
                               } else {
-                                controller.fToast.showToast(
+                                controller.fToast.safeShowToast(
                                     child: errorToast(
                                         "You can select only 2 issuing authorities."));
                               }
@@ -108,7 +109,7 @@ class COCDetails extends GetView<CrewOnboardingController> {
                                               IssuingAuthority(
                                                   issuingAuthority: e));
                                         } else {
-                                          controller.fToast.showToast(
+                                          controller.fToast.safeShowToast(
                                               child: errorToast(
                                                   "You can select only 2 issuing authorities."));
                                         }

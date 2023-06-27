@@ -138,26 +138,27 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                         SizedBox(
                           width: double.maxFinite,
                           height: 64.h,
-                          child: 
-                          controller.isAdding.value
-                                  ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      CircularProgressIndicator(),
-                                    ],
-                                  )
-                                  :
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(64))),
-                              onPressed: controller.addEmail,
-                              child:  Text("SIGN UP")),
+                          child: controller.isAdding.value
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(),
+                                  ],
+                                )
+                              : ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(64))),
+                                  onPressed: controller.addEmail,
+                                  child: Text("SIGN UP")),
                         ),
                         Spacer(),
                         32.verticalSpace,
                         Center(child: Text("Already have an account?")),
-                        32.verticalSpace,
+                        16.verticalSpace,
+                        Divider(),
+                        16.verticalSpace,
                         SizedBox(
                           width: double.maxFinite,
                           height: 64.h,

@@ -66,6 +66,7 @@ class CrewOnboardingView extends GetView<CrewOnboardingController> {
                 TextButton(
                     onPressed: () {
                       controller.step.value = controller.step.value + 1;
+                      controller.getAndSetCurrentScreen();
                     },
                     child: const Text("Skip"))
             ],

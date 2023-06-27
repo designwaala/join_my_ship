@@ -77,7 +77,7 @@ class AddAReference extends GetView<CrewOnboardingController> {
             Row(
               children: [
                 SizedBox(
-                  width: 100,
+                  width: 70,
                   child: CustomTextFormField(
                       controller: controller.referenceDialCode,
                       onTap: () {

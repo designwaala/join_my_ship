@@ -10,6 +10,7 @@ import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/secure_storage.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 class CrewSignInController extends GetxController {
   TextEditingController emailController = TextEditingController();
@@ -51,7 +52,7 @@ class CrewSignInController extends GetxController {
     isVerifying.value = false;
     bool? emailVerified = FirebaseAuth.instance.currentUser?.emailVerified;
     if (emailVerified == true) {
-      fToast.showToast(child: successToast("Authentication Successful"));
+      fToast.safeShowToast(child: successToast("Authentication Successful"));
       Get.offAllNamed(Routes.CREW_ONBOARDING,
           arguments: CrewOnboardingArguments(
               email: emailController.text, password: passwordController.text));
@@ -67,9 +68,9 @@ class CrewSignInController extends GetxController {
     } else if (emailVerified == false) {
       // await FirebaseAuth.instance.signOut();
       Get.toNamed(Routes.EMAIL_VERIFICATION_WAITING);
-      fToast.showToast(child: errorToast("Email Not Verified"));
+      fToast.safeShowToast(child: errorToast("Email Not Verified"));
     } else {
-      fToast.showToast(child: errorToast("Authentication Failed"));
+      fToast.safeShowToast(child: errorToast("Authentication Failed"));
     }
   }
 }

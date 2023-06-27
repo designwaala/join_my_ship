@@ -422,7 +422,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   },
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
-                        RegExp(r"^[a-zA-Z0-9&,.-/' ]+"))
+                        RegExp(r"^[a-zA-Z0-9&,.-/-' ]+"))
                   ],
                   hintText: "Address Line 1"),
               16.verticalSpace,
@@ -437,7 +437,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   },
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
-                        RegExp(r"^[a-zA-Z0-9&,.-/' ]+"))
+                        RegExp(r"^[a-zA-Z0-9&,.-/-' ]+"))
                   ],
                   hintText: "Address Line 2"),
               16.verticalSpace,
@@ -528,106 +528,122 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               24.verticalSpace,
-              const AsterixText("Upload Resume"),
-              16.verticalSpace,
-              Center(
-                child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                            color: Get.theme.primaryColor,
-                            style: BorderStyle.solid),
-                        foregroundColor: Get.theme.primaryColor,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: Get.theme.primaryColor,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(64))),
-                    onPressed: () async {
-                      try {
-                        await controller.pickResume();
-                      } on PlatformException catch (e) {
-                        print(e);
-                        if (e.message != null) {
-                          showTopModalSheet(
-                              context,
-                              Column(
-                                children: [
-                                  16.verticalSpace,
-                                  Icon(
-                                    Icons.info_outline,
-                                    color: Colors.red,
-                                    size: 48,
-                                  ),
-                                  16.verticalSpace,
-                                  Text(e.message ?? "",
-                                      style: Get.textTheme.titleMedium),
-                                  if (e.code ==
-                                      "read_external_storage_denied") ...[
-                                    16.verticalSpace,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: const AsterixText("Upload Resume")),
+                  20.horizontalSpace,
+                  Expanded(
+                    child: SizedBox(
+                      height: 40,
+                      child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              side: BorderSide(
+                                  color: Get.theme.primaryColor,
+                                  style: BorderStyle.solid),
+                              foregroundColor: Get.theme.primaryColor,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: Get.theme.primaryColor,
+                                      style: BorderStyle.solid),
+                                  borderRadius: BorderRadius.circular(64))),
+                          onPressed: () async {
+                            try {
+                              await controller.pickResume();
+                            } on PlatformException catch (e) {
+                              print(e);
+                              if (e.message != null) {
+                                showTopModalSheet(
+                                    context,
+                                    Column(
                                       children: [
-                                        OutlinedButton(
-                                            onPressed: Get.back,
-                                            child: const Text("Cancel")),
-                                        32.horizontalSpace,
-                                        OutlinedButton(
-                                            onPressed: () async {
-                                              await openAppSettings();
-                                              Get.back();
-                                              /* PermissionStatus status =
-                                                  await Permission
-                                                      .storage.status;
-                                              if (status ==
-                                                  PermissionStatus.granted) {
-                                                controller.fToast.showToast(
-                                                    child: successToast(
-                                                        "Got Storage Permission, picking resume"));
-                                                await Future.delayed(
-                                                    const Duration(
-                                                        milliseconds: 500));
-                                                controller.pickResume();
-                                              } */
-                                            },
-                                            child: Text("Open Settings")),
+                                        16.verticalSpace,
+                                        Icon(
+                                          Icons.info_outline,
+                                          color: Colors.red,
+                                          size: 48,
+                                        ),
+                                        16.verticalSpace,
+                                        Text(e.message ?? "",
+                                            style: Get.textTheme.titleMedium),
+                                        if (e.code ==
+                                            "read_external_storage_denied") ...[
+                                          16.verticalSpace,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              OutlinedButton(
+                                                  onPressed: Get.back,
+                                                  child: const Text("Cancel")),
+                                              32.horizontalSpace,
+                                              OutlinedButton(
+                                                  onPressed: () async {
+                                                    await openAppSettings();
+                                                    Get.back();
+                                                    /* PermissionStatus status =
+                                                    await Permission
+                                                        .storage.status;
+                                                if (status ==
+                                                    PermissionStatus.granted) {
+                                                  controller.fToast.safeShowToast(
+                                                      child: successToast(
+                                                          "Got Storage Permission, picking resume"));
+                                                  await Future.delayed(
+                                                      const Duration(
+                                                          milliseconds: 500));
+                                                  controller.pickResume();
+                                                } */
+                                                  },
+                                                  child: Text("Open Settings")),
+                                            ],
+                                          )
+                                        ]
+                                      ],
+                                    ));
+                              }
+                            }
+                          },
+                          child: controller.uploadedResumePath.value != null
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.check),
+                                    4.horizontalSpace,
+                                    const Text("Resume Uploaded")
+                                  ],
+                                )
+                              : controller.pickedResume.value != null
+                                  ? Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(Icons.check),
+                                        4.horizontalSpace,
+                                        Flexible(
+                                            child: const Text(
+                                          "Resume picked",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ))
                                       ],
                                     )
-                                  ]
-                                ],
-                              ));
-                        }
-                      }
-                    },
-                    child: controller.uploadedResumePath.value != null
-                        ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.check),
-                              4.horizontalSpace,
-                              const Text("Resume Uploaded")
-                            ],
-                          )
-                        : controller.pickedResume.value != null
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(Icons.check),
-                                  4.horizontalSpace,
-                                  const Text("Resume picked")
-                                ],
-                              )
-                            : Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(Icons.upload),
-                                  4.horizontalSpace,
-                                  Text("UPLOAD",
-                                      style: Get.textTheme.bodyMedium?.copyWith(
-                                          color: Get.theme.primaryColor)),
-                                ],
-                              )),
+                                  : Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(Icons.upload),
+                                        4.horizontalSpace,
+                                        Text("UPLOAD",
+                                            style: Get.textTheme.bodyMedium
+                                                ?.copyWith(
+                                                    color: Get
+                                                        .theme.primaryColor)),
+                                      ],
+                                    )),
+                    ),
+                  ),
+                ],
               ),
+              16.verticalSpace,
               if (controller.step1FormMisses
                   .contains(Step1FormMiss.didNotSelectResume))
                 Center(
@@ -640,7 +656,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 child: Text(
                     "Supported file formats Doc, Docx, pdf | Maximum file size 2 MB",
                     style: Get.textTheme.bodyMedium
-                        ?.copyWith(fontSize: 8.sp, color: Colors.grey)),
+                        ?.copyWith(fontSize: 11.sp, color: Colors.grey)),
               ),
               16.verticalSpace,
               Row(

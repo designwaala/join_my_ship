@@ -8,6 +8,7 @@ import 'package:join_mp_ship/widgets/astrix_text.dart';
 import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/date_time.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 class COPDetails extends GetView<CrewOnboardingController> {
   const COPDetails({Key? key}) : super(key: key);
@@ -70,7 +71,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                 controller.copIssuingAuthorities
                                     .add(IssuingAuthority(issuingAuthority: e));
                               } else {
-                                controller.fToast.showToast(
+                                controller.fToast.safeShowToast(
                                     child: errorToast(
                                         "You can select only 2 issuing authorities."));
                               }
@@ -99,7 +100,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                               IssuingAuthority(
                                                   issuingAuthority: e));
                                         } else {
-                                          controller.fToast.showToast(
+                                          controller.fToast.safeShowToast(
                                               child: errorToast(
                                                   "You can select only 2 issuing authorities."));
                                         }
@@ -153,71 +154,78 @@ class COPDetails extends GetView<CrewOnboardingController> {
                             4.verticalSpace,
                             Row(
                               children: [
-                                Builder(builder: (context) {
-                                  TextEditingController textEditingController =
-                                      TextEditingController();
-                                  textEditingController.text =
-                                      issuingAuthority.validTill ?? "";
-                                  return CustomTextFormField(
-                                      controller: textEditingController,
-                                      validator: (value) {
-                                        if (value == null ||
-                                            value.isEmpty == true) {
-                                          return "Please enter this field";
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        controller.copIssuingAuthorities
-                                            .firstWhereOrNull((authority) =>
-                                                authority.issuingAuthority ==
-                                                "Others")
-                                            ?.customName = value;
-                                      },
-                                      hintText: "Issuing Authority");
-                                }),
+                                Expanded(
+                                  child: Builder(builder: (context) {
+                                    TextEditingController
+                                        textEditingController =
+                                        TextEditingController();
+                                    textEditingController.text =
+                                        issuingAuthority.customName ?? "";
+                                    return CustomTextFormField(
+                                        controller: textEditingController,
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.isEmpty == true) {
+                                            return "Please enter this field";
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          controller.copIssuingAuthorities
+                                              .firstWhereOrNull((authority) =>
+                                                  authority.issuingAuthority ==
+                                                  "Others")
+                                              ?.customName = value;
+                                        },
+                                        hintText: "Issuing Authority");
+                                  }),
+                                ),
                                 16.horizontalSpace,
-                                Builder(builder: (context) {
-                                  TextEditingController textEditingController =
-                                      TextEditingController();
-                                  textEditingController.text =
-                                      issuingAuthority.validTill ?? "";
-                                  return CustomTextFormField(
-                                      controller: textEditingController,
-                                      validator: (value) {
-                                        if (value == null ||
-                                            value.isEmpty == true) {
-                                          return "Please enter this field";
-                                        }
-                                        return null;
-                                      },
-                                      onTap: () async {
-                                        DateTime? selectedDateTime =
-                                            await showDatePicker(
-                                                context: Get.context!,
-                                                initialDate: DateTime.parse(
-                                                    "1990-01-01"),
-                                                firstDate: DateTime.parse(
-                                                    "1950-01-01"),
-                                                lastDate: DateTime.now());
-                                        controller.copIssuingAuthorities
-                                                .firstWhere((e) =>
-                                                    e.issuingAuthority ==
-                                                    issuingAuthority
-                                                        .issuingAuthority)
-                                                .validTill =
-                                            selectedDateTime?.getServerDate() ??
-                                                "";
-                                        textEditingController.text =
-                                            selectedDateTime?.getServerDate() ??
-                                                "";
-                                      },
-                                      readOnly: true,
-                                      hintText: "Valid Till",
-                                      icon: const Icon(
-                                        Icons.calendar_month,
-                                      ));
-                                }),
+                                Expanded(
+                                  child: Builder(builder: (context) {
+                                    TextEditingController
+                                        textEditingController =
+                                        TextEditingController();
+                                    textEditingController.text =
+                                        issuingAuthority.validTill ?? "";
+                                    return CustomTextFormField(
+                                        controller: textEditingController,
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.isEmpty == true) {
+                                            return "Please enter this field";
+                                          }
+                                          return null;
+                                        },
+                                        onTap: () async {
+                                          DateTime? selectedDateTime =
+                                              await showDatePicker(
+                                                  context: Get.context!,
+                                                  initialDate: DateTime.parse(
+                                                      "1990-01-01"),
+                                                  firstDate: DateTime.parse(
+                                                      "1950-01-01"),
+                                                  lastDate: DateTime.now());
+                                          controller.copIssuingAuthorities
+                                              .firstWhere((e) =>
+                                                  e.issuingAuthority ==
+                                                  issuingAuthority
+                                                      .issuingAuthority)
+                                              .validTill = selectedDateTime
+                                                  ?.getServerDate() ??
+                                              "";
+                                          textEditingController.text =
+                                              selectedDateTime
+                                                      ?.getServerDate() ??
+                                                  "";
+                                        },
+                                        readOnly: true,
+                                        hintText: "Valid Till",
+                                        icon: const Icon(
+                                          Icons.calendar_month,
+                                        ));
+                                  }),
+                                ),
                               ],
                             )
                           ],

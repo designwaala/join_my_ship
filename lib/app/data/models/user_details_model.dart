@@ -71,13 +71,17 @@ class UserDetails {
                 jsonDecode(json['valid_COP_Issuing_Authority'])
                     ?.map((e) => IssuingAuthority.fromJson(e)));
     validWatchKeepingIssuingAuthority =
-        json['valid_Watch_keeping_Issuing_Authority'] == null ||
-                jsonDecode(json['valid_Watch_keeping_Issuing_Authority'])
-                    is! Map
+        json['valid_Watch_keeping_Issuing_Authority'] == null
             ? null
-            : List<IssuingAuthority>.from(
-                jsonDecode(json['valid_Watch_keeping_Issuing_Authority'])
-                    ?.map((e) => IssuingAuthority.fromJson(e)));
+            : jsonDecode(json['valid_Watch_keeping_Issuing_Authority'])
+                    is Map<String, dynamic>
+                ? [
+                    IssuingAuthority.fromJson(
+                        json['valid_Watch_keeping_Issuing_Authority'])
+                  ]
+                : List<IssuingAuthority>.from(
+                    jsonDecode(json['valid_Watch_keeping_Issuing_Authority'])
+                        ?.map((e) => IssuingAuthority.fromJson(e)));
     validUSVisa = json['valid_US_Visa'];
     validUSVisaValidTill = json['valid_US_Visa_valid_till'];
   }

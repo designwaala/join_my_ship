@@ -57,40 +57,74 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                       const Text(
                           "Please sign in to your registered mobile number"),
                       20.verticalSpace,
-                      TextFormField(
-                        controller: controller.phoneController,
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            hintText: "Mobile Number",
-                            prefixIcon: InkWell(
-                              onTap: () {
-                                showCountryPicker(
-                                  context: context,
-                                  showPhoneCode:
-                                      true, // optional. Shows phone code before the country name.
-                                  onSelect: (Country country) {
-                                    print(
-                                        'Select country: ${country.displayName}');
-                                    controller.selectedCountryCode.value =
-                                        "+${country.phoneCode}";
+                      SizedBox(
+                        height: 64,
+                        child: TextFormField(
+                          controller: controller.phoneController,
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              hintText: "Mobile Number",
+                              contentPadding: EdgeInsets.zero,
+                              prefixIcon: Container(
+                                width: 72,
+                                margin: EdgeInsets.only(right: 8),
+                                decoration: BoxDecoration(
+                                    color: Colors.blue[50],
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(64),
+                                        bottomLeft: Radius.circular(64))),
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.isSelectingCountryCode.value =
+                                        true;
+                                    showCountryPicker(
+                                      context: context,
+                                      onClosed: () {
+                                        controller.isSelectingCountryCode
+                                            .value = false;
+                                      },
+                                      showPhoneCode: true,
+                                      onSelect: (Country country) {
+                                        print(
+                                            'Select country: ${country.displayName}');
+                                        controller.selectedCountryCode.value =
+                                            "+${country.phoneCode}";
+                                        controller.isSelectingCountryCode
+                                            .value = false;
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(controller.selectedCountryCode.value,
-                                      style: Get.theme.textTheme.bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold)),
-                                ],
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                              controller
+                                                  .selectedCountryCode.value,
+                                              style: Get
+                                                  .theme.textTheme.bodyMedium
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                          Icon(controller
+                                                  .isSelectingCountryCode.value
+                                              ? Icons.keyboard_arrow_up
+                                              : Icons.keyboard_arrow_down)
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(64))),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(64))),
+                        ),
                       ),
                       24.verticalSpace,
                       AnimatedCrossFade(
@@ -173,6 +207,8 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                       4.verticalSpace,
                       const Center(child: Text('Email Id')),
                       const Spacer(),
+                      Divider(),
+                      16.verticalSpace,
                       SizedBox(
                         width: double.maxFinite,
                         height: 64.h,
