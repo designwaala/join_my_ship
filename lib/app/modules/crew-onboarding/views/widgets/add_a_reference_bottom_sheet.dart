@@ -98,6 +98,10 @@ class AddAReference extends GetView<CrewOnboardingController> {
                 16.horizontalSpace,
                 Expanded(
                   child: CustomTextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^[0-9]{0,15}'))
+                      ],
                       controller: controller.referenceContactNumber,
                       keyboardType: TextInputType.phone,
                       hintText: "Contact Number"),

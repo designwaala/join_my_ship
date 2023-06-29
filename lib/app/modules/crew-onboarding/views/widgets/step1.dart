@@ -527,11 +527,11 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   )
                 ],
               ),
-              24.verticalSpace,
+              16.verticalSpace,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(child: const AsterixText("Upload Resume")),
+                  const Expanded(child: AsterixText("Upload Resume")),
                   20.horizontalSpace,
                   Expanded(
                     child: SizedBox(
@@ -558,7 +558,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                     Column(
                                       children: [
                                         16.verticalSpace,
-                                        Icon(
+                                        const Icon(
                                           Icons.info_outline,
                                           color: Colors.red,
                                           size: 48,
@@ -595,7 +595,8 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                                   controller.pickResume();
                                                 } */
                                                   },
-                                                  child: Text("Open Settings")),
+                                                  child: const Text(
+                                                      "Open Settings")),
                                             ],
                                           )
                                         ]
@@ -610,7 +611,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                   children: [
                                     const Icon(Icons.check),
                                     4.horizontalSpace,
-                                    const Text("Resume Uploaded")
+                                    const Flexible(child: Text("Uploaded"))
                                   ],
                                 )
                               : controller.pickedResume.value != null
@@ -619,9 +620,9 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                       children: [
                                         const Icon(Icons.check),
                                         4.horizontalSpace,
-                                        Flexible(
-                                            child: const Text(
-                                          "Resume picked",
+                                        const Flexible(
+                                            child: Text(
+                                          "Picked",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ))

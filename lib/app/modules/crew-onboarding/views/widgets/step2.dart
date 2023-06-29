@@ -112,7 +112,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                               context: Get.context!,
                               initialDate: DateTime.parse("1990-01-01"),
                               firstDate: DateTime.parse("1950-01-01"),
-                              lastDate: DateTime.now());
+                              firstDate: DateTime.parse("2050-01-01"));
                           controller.cdcNumberValidTill.text =
                               selectedDateTime?.getServerDate() ?? "";
                         },
@@ -159,7 +159,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                                 context: Get.context!,
                                 initialDate: DateTime.parse("1990-01-01"),
                                 firstDate: DateTime.parse("1950-01-01"),
-                                lastDate: DateTime.now());
+                                lastDate: DateTime.parse("2050-01-01"));
                             controller.cdcSeamanNumberValidTill.text =
                                 selectedDateTime?.getServerDate() ?? "";
                           },
@@ -207,7 +207,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                                 context: Get.context!,
                                 initialDate: DateTime.parse("1990-01-01"),
                                 firstDate: DateTime.parse("1950-01-01"),
-                                lastDate: DateTime.now());
+                                lastDate: DateTime.parse("2050-01-01"));
 
                             controller.passportValidTill.text =
                                 selectedDateTime?.getServerDate() ?? "";
@@ -278,7 +278,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                                   context: Get.context!,
                                   initialDate: DateTime.parse("1990-01-01"),
                                   firstDate: DateTime.parse("1950-01-01"),
-                                  lastDate: DateTime.now());
+                                  lastDate: DateTime.parse("2050-01-01"));
                               controller.usVisaValidTill.text =
                                   selectedDateTime?.getServerDate() ?? "";
                             },

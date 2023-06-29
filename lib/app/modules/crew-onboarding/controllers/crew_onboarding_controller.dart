@@ -419,7 +419,7 @@ class CrewOnboardingController extends GetxController with PickImage {
               rankId: selectedRank.value?.id,
               gender: gender.value,
               userTypeKey: 2,
-              addressLine2: addressLine2.text,
+              addressLine2: addressLine2.text.nullIfEmpty(),
               addressCity: city.text,
               state: state.value?.id,
               promotionApplied: isLookingForPromotion.value,
@@ -606,18 +606,18 @@ class CrewOnboardingController extends GetxController with PickImage {
     LocalDate b = LocalDate.dateTime(DateTime.parse(recordSignOffDate.text));
     Period diff = b.periodSince(a);
     String sentence = "";
-    if (diff.years != 0) {
+    /* if (diff.years != 0) {
       if (diff.years == 1) {
         sentence = "${diff.years} Year-";
       } else {
         sentence = "${diff.years} Years-";
       }
-    }
-    if (diff.months != 0) {
-      if (diff.months == 1) {
-        sentence = "$sentence ${diff.months} Month-";
+    } */
+    if ((diff.months + diff.years * 12) != 0) {
+      if ((diff.months + diff.years * 12) == 1) {
+        sentence = "$sentence ${(diff.months + diff.years * 12)} Month-";
       } else {
-        sentence = "$sentence ${diff.months} Months-";
+        sentence = "$sentence ${(diff.months + diff.years * 12)} Months-";
       }
     }
     if (diff.days != 0) {

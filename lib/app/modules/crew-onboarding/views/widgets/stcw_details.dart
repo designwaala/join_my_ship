@@ -169,7 +169,8 @@ class STCWDetails extends GetView<CrewOnboardingController> {
                                                   DateTime.parse("1990-01-01"),
                                               firstDate:
                                                   DateTime.parse("1950-01-01"),
-                                              lastDate: DateTime.now());
+                                              lastDate:
+                                                  DateTime.parse("2050-01-01"));
                                       controller.stcwIssuingAuthorities
                                           .firstWhere((e) =>
                                               e.issuingAuthority ==
@@ -219,7 +220,8 @@ class STCWDetails extends GetView<CrewOnboardingController> {
                                                 DateTime.parse("1990-01-01"),
                                             firstDate:
                                                 DateTime.parse("1950-01-01"),
-                                            lastDate: DateTime.now());
+                                            lastDate:
+                                                DateTime.parse("2050-01-01"));
                                     controller.stcwIssuingAuthorities
                                             .firstWhere(
                                                 (e) =>
@@ -241,7 +243,7 @@ class STCWDetails extends GetView<CrewOnboardingController> {
                         ],
                       ),
               )),
-          8.verticalSpace
+          // 8.verticalSpace
         ],
       );
     });

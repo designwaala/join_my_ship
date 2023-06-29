@@ -205,7 +205,8 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                                       "1990-01-01"),
                                                   firstDate: DateTime.parse(
                                                       "1950-01-01"),
-                                                  lastDate: DateTime.now());
+                                                  lastDate: DateTime.parse(
+                                                      "2050-01-01"));
                                           controller.copIssuingAuthorities
                                               .firstWhere((e) =>
                                                   e.issuingAuthority ==
@@ -258,7 +259,8 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                                   DateTime.parse("1990-01-01"),
                                               firstDate:
                                                   DateTime.parse("1950-01-01"),
-                                              lastDate: DateTime.now());
+                                              lastDate:
+                                                  DateTime.parse("2050-01-01"));
                                       controller.copIssuingAuthorities
                                           .firstWhere((e) =>
                                               e.issuingAuthority ==

@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
@@ -47,6 +48,10 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   16.verticalSpace,
                   CustomTextFormField(
                       controller: controller.recordCompanyName,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^[a-zA-Z ]+'))
+                      ],
                       hintText: "Company Name"),
                   16.verticalSpace,
                   Text("Ship Name", style: headingStyle),
@@ -183,7 +188,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                                         initialDate:
                                             DateTime.parse("1990-01-01"),
                                         firstDate: DateTime.parse("1950-01-01"),
-                                        lastDate: DateTime.now());
+                                        lastDate: DateTime.parse("2050-01-01"));
                                 controller.recordSignOnDate.text =
                                     selectedDateTime?.getServerDate() ?? "";
                                 controller.calculateDuration();
@@ -205,7 +210,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                                   context: Get.context!,
                                   initialDate: DateTime.parse("1990-01-01"),
                                   firstDate: DateTime.parse("1950-01-01"),
-                                  lastDate: DateTime.now());
+                                  lastDate: DateTime.parse("2050-01-01"));
                               controller.recordSignOffDate.text =
                                   selectedDateTime?.getServerDate() ?? "";
                               controller.calculateDuration();
@@ -230,9 +235,13 @@ class AddARecord extends GetView<CrewOnboardingController> {
                   if (controller.recordContractDuration.value != null) ...[
                     Row(
                       children: [
-                        Text("Contract Duration", style: headingStyle),
-                        const Spacer(),
-                        Text(controller.recordContractDuration.value ?? "")
+                        Expanded(
+                            child:
+                                Text("Contract Duration", style: headingStyle)),
+                        24.horizontalSpace,
+                        Expanded(
+                            child: Text(
+                                controller.recordContractDuration.value ?? ""))
                       ],
                     ),
                     24.verticalSpace,
