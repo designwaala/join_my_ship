@@ -7,7 +7,6 @@ import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
-
 class SignUpEmailController extends GetxController {
   SignUpEmailArguments? args;
   SignUpType? signUpType = SignUpType.crew;
@@ -43,9 +42,14 @@ class SignUpEmailController extends GetxController {
   }
 
   addEmail() async {
-    if (formKey.currentState?.validate() != true) {
-      return;
-    }
+    // Get.toNamed(Routes.EMAIL_VERIFICATION_WAITING);
+
+    print(
+        '__value ${emailController.text.split("@")[1]}  ${websiteController.text}');
+
+    // if (formKey.currentState?.validate() != true) {
+    //   return;
+    // }
     isAdding.value = true;
     try {
       if (FirebaseAuth.instance.currentUser == null) {

@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,7 +11,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: controller.parentKey,
-        backgroundColor: Color(0xFFFbF6FF),
+        backgroundColor: const Color(0xFFFbF6FF),
         appBar: AppBar(
           toolbarHeight: 70,
           title: Text(
@@ -28,9 +27,9 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-                    child: Icon(
+                    child: const Icon(
                       Icons.keyboard_backspace_rounded,
                       color: Colors.black,
                     ),
@@ -90,6 +89,8 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                         TextFormField(
                           controller: controller.emailController,
                           validator: (value) {
+                            print(
+                                '__value ${controller.emailController.text.split("@")[1]}  ${controller.websiteController.text}');
                             if ([
                                   "gmail",
                                   "yahoo",
@@ -98,6 +99,8 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                                   "protonme"
                                 ].contains(
                                     value?.split("@")[1].split(".")[0]) &&
+                                value?.split("@")[1] ==
+                                    controller.websiteController.text &&
                                 [
                                   SignUpType.employerITF,
                                   SignUpType.employerManagementCompany
@@ -109,7 +112,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
-                              hintText: "Your Email",
+                              hintText: "email@yourdomain",
                               border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(64))),
@@ -151,13 +154,32 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                                           borderRadius:
                                               BorderRadius.circular(64))),
                                   onPressed: controller.addEmail,
-                                  child: Text("SIGN UP")),
+                                  child: const Text("SIGN UP")),
                         ),
-                        Spacer(),
                         32.verticalSpace,
-                        Center(child: Text("Already have an account?")),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.info_outline,
+                                color: Color(0xFF407BFF)),
+                            InkWell(
+                              onTap: () {
+                                Get.toNamed(Routes.HELP);
+                              },
+                              child: Text(
+                                'Help',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.sp,
+                                    color: const Color(0xFF407BFF)),
+                              ),
+                            )
+                          ],
+                        ),
+                        32.verticalSpace,
+                        const Center(child: Text("Already have an account?")),
                         16.verticalSpace,
-                        Divider(),
+                        const Divider(),
                         16.verticalSpace,
                         SizedBox(
                           width: double.maxFinite,
@@ -167,6 +189,8 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(64))),
                               onPressed: () {
+                                // print(
+                                //     '__value ${controller.emailController.text.split("@")[1]}  ${controller.websiteController.text}');
                                 Get.toNamed(Routes.CREW_SIGN_IN_EMAIL);
                               },
                               child: Text("LOGIN")),
