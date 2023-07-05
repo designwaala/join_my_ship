@@ -47,9 +47,9 @@ class SignUpEmailController extends GetxController {
     print(
         '__value ${emailController.text.split("@")[1]}  ${websiteController.text}');
 
-    // if (formKey.currentState?.validate() != true) {
-    //   return;
-    // }
+    if (formKey.currentState?.validate() != true) {
+      return;
+    }
     isAdding.value = true;
     try {
       if (FirebaseAuth.instance.currentUser == null) {

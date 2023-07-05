@@ -88,7 +88,7 @@ class EmailVerificationWaitingView
                       ? const CircularProgressIndicator()
                       : TextButton(
                           onPressed: () async {
-                            // Get.offNamed(Routes.CREW_ONBOARDING);
+                            // Get.offNamed(Routes.EMPLOYER_CREATE_USER);
                             await controller.refresh();
                             if (FirebaseAuth
                                     .instance.currentUser?.emailVerified ==

@@ -17,6 +17,7 @@ abstract class Routes {
   static const ACCOUNT_UNDER_VERIFICATION = _Paths.ACCOUNT_UNDER_VERIFICATION;
   static const PROFILE = _Paths.PROFILE;
   static const HELP = _Paths.HELP;
+  static const EMPLOYER_CREATE_USER = _Paths.EMPLOYER_CREATE_USER;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const ACCOUNT_UNDER_VERIFICATION = '/account-under-verification';
   static const PROFILE = '/profile';
   static const HELP = '/help';
+  static const EMPLOYER_CREATE_USER = '/employer-create-user';
 }
