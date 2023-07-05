@@ -16,7 +16,9 @@ class PreferencesHelper {
 
   String _ACCESS_TOKEN = 'access-token',
       _REFRESH_TOKEN = "refresh-token",
-      _USER_CREATED = "user-created";
+      _USER_CREATED = "user-created",
+      _COMPANY_NAME = "company_name",
+      _WEBSITE = "webiste";
 
   Future<void> setAccessToken(String? value) =>
       value == null || _sharedPreferences == null
@@ -34,4 +36,12 @@ class PreferencesHelper {
   bool? get userCreated => _sharedPreferences?.getBool(_USER_CREATED);
   Future<bool>? setUserCreated(value) =>
       _sharedPreferences?.setBool(_USER_CREATED, value);
+
+  String? get companyName => _sharedPreferences?.getString(_COMPANY_NAME);
+  Future<void>? setCompanyName(value) =>
+      _sharedPreferences?.setString(_COMPANY_NAME, value);
+
+  String? get website => _sharedPreferences?.getString(_WEBSITE);
+  Future<void>? setWebsite(value) =>
+      _sharedPreferences?.setString(_WEBSITE, value);
 }

@@ -1,5 +1,5 @@
 name: join_mp_ship
-version: 1.0.14+14
+version: 1.0.16+16
 publish_to: none
 description: A new Flutter project.
 environment: 
@@ -34,6 +34,8 @@ dependencies:
   flutter_typeahead: ^4.6.2
   permission_handler: ^10.3.0
   time_machine: ^0.9.17
+  device_info_plus: 
+
 
 dev_dependencies: 
   flutter_lints: ^2.0.0

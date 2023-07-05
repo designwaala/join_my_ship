@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'dart:math';
 
 class SignUpEmailView extends GetView<SignUpEmailController> {
   const SignUpEmailView({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: controller.parentKey,
-        backgroundColor: Color(0xFFFbF6FF),
+        backgroundColor: const Color(0xFFFbF6FF),
         appBar: AppBar(
           toolbarHeight: 70,
           title: Text(
@@ -28,9 +29,9 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-                    child: Icon(
+                    child: const Icon(
                       Icons.keyboard_backspace_rounded,
                       color: Colors.black,
                     ),
@@ -90,18 +91,25 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                         TextFormField(
                           controller: controller.emailController,
                           validator: (value) {
-                            if ([
-                                  "gmail",
-                                  "yahoo",
-                                  "hotmail",
-                                  "mail",
-                                  "protonme"
-                                ].contains(
-                                    value?.split("@")[1].split(".")[0]) &&
-                                [
-                                  SignUpType.employerITF,
-                                  SignUpType.employerManagementCompany
-                                ].contains(controller.signUpType)) {
+                            if (([
+                                      "gmail",
+                                      "yahoo",
+                                      "hotmail",
+                                      "mail",
+                                      "protonme"
+                                    ].contains(
+                                        value?.split("@")[1].split(".")[0]) &&
+                                    [
+                                      SignUpType.employerITF,
+                                      SignUpType.employerManagementCompany
+                                    ].contains(controller.signUpType)) &&
+                                value?.split("@")[1].split(".")[0] ==
+                                    controller.websiteController.text
+                                        .replaceAll("https", "")
+                                        .replaceAll("http", "")
+                                        .split(".")
+                                        .reduce((a, b) =>
+                                            a.length > b.length ? a : b)) {
                               return "Please use your company domain email address";
                             }
                             return null;
@@ -109,7 +117,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
-                              hintText: "Your Email",
+                              hintText: "email@yourdomain",
                               border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(64))),
@@ -121,7 +129,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
-                              hintText: "Your Password",
+                              hintText: "Password",
                               suffixIcon: InkWell(
                                 onTap: () {
                                   controller.shouldObscure.value =
@@ -142,7 +150,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                               ? Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    CircularProgressIndicator(),
+                                    const CircularProgressIndicator(),
                                   ],
                                 )
                               : ElevatedButton(
@@ -151,13 +159,13 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                                           borderRadius:
                                               BorderRadius.circular(64))),
                                   onPressed: controller.addEmail,
-                                  child: Text("SIGN UP")),
+                                  child: const Text("SIGN UP")),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         32.verticalSpace,
-                        Center(child: Text("Already have an account?")),
+                        const Center(child: Text("Already have an account?")),
                         16.verticalSpace,
-                        Divider(),
+                        const Divider(),
                         16.verticalSpace,
                         SizedBox(
                           width: double.maxFinite,
@@ -169,7 +177,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                               onPressed: () {
                                 Get.toNamed(Routes.CREW_SIGN_IN_EMAIL);
                               },
-                              child: Text("LOGIN")),
+                              child: const Text("LOGIN")),
                         )
                       ],
                     ),
