@@ -220,32 +220,57 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                       }),
                     ),
                     20.horizontalSpace,
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2<int?>(
-                        value: controller.state.value?.id,
-                        isExpanded: true,
-                        items: controller.states
-                            .map((e) => DropdownMenuItem(
-                                value: e.id,
-                                child: Text(
-                                  e.stateName ?? "",
-                                  style: Get.textTheme.titleMedium,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                )))
-                            .toList(),
-                        style: Get.textTheme.bodySmall,
-                        onChanged: (value) {
-                          controller.state.value = controller.states
-                              .firstWhereOrNull((state) => state.id == value);
-                        },
-                        hint: const Text("State"),
-                        buttonStyleData: ButtonStyleData(
-                            height: 40,
-                            width: 160,
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: DropdownDecoration()),
-                      ),
+                    Expanded(
+                      child: controller.isLoadingStates.value
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                SizedBox(
+                                    height: 16,
+                                    width: 16,
+                                    child: CircularProgressIndicator())
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                DropdownButtonHideUnderline(
+                                  child: DropdownButton2<int?>(
+                                    value: controller.state.value?.id,
+                                    isExpanded: true,
+                                    items: controller.states
+                                        .map((e) => DropdownMenuItem(
+                                            value: e.id,
+                                            child: Text(
+                                              e.stateName ?? "",
+                                              style: Get.textTheme.titleMedium,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            )))
+                                        .toList(),
+                                    style: Get.textTheme.bodySmall,
+                                    onChanged: (value) {
+                                      controller.state.value = controller.states
+                                          .firstWhereOrNull(
+                                              (state) => state.id == value);
+                                    },
+                                    hint: const Text("State"),
+                                    buttonStyleData: ButtonStyleData(
+                                        height: 40,
+                                        width: 160,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8),
+                                        decoration: DropdownDecoration()),
+                                  ),
+                                ),
+                                if (controller.step1FormMisses.contains(
+                                    Step1FormMiss.didNotSelectState)) ...[
+                                  4.verticalSpace,
+                                  Text("Please select your State",
+                                      style: Get.textTheme.bodySmall
+                                          ?.copyWith(color: Colors.red)),
+                                ]
+                              ],
+                            ),
                     ),
                   ],
                 ),
@@ -256,16 +281,31 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                 ),
                 15.verticalSpace,
                 CustomTextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your Address Line 1";
+                    }
+                  },
                   controller: controller.addressLine1Controller,
                   hintText: 'Address Line 1',
                 ),
                 15.verticalSpace,
                 CustomTextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your Address Line 2";
+                    }
+                  },
                   controller: controller.addressLine2Controller,
                   hintText: 'Address Line 2',
                 ),
                 15.verticalSpace,
                 CustomTextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your Zip Code";
+                    }
+                  },
                   controller: controller.zipCodeController,
                   hintText: 'Zip Code',
                 ),
@@ -328,7 +368,13 @@ class CustomRow extends StatelessWidget {
             // height: 40.h,
             width: 170.w,
             child: CustomTextFormField(
-                controller: textEditingController, hintText: hintText))
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your $hintText";
+                  }
+                },
+                controller: textEditingController,
+                hintText: hintText))
       ],
     );
   }
