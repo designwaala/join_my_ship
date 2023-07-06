@@ -52,7 +52,7 @@ class CrewOnboardingView extends GetView<CrewOnboardingController> {
                 ),
               ),
             ),
-            centerTitle: false,
+            centerTitle: true,
             actions: [
               if ((controller.step.value == 1 &&
                       controller.crewUser?.id != null) ||

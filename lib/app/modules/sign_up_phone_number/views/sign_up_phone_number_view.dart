@@ -53,7 +53,7 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                       Text("Sign In",
                           style: Get.theme.textTheme.headlineSmall
                               ?.copyWith(fontWeight: FontWeight.bold)),
-                      Text("Please sign in to your registered mobile\n number"),
+                      Text("Please sign in to your registered mobile\nnumber"),
                       20.verticalSpace,
                       SizedBox(
                         height: 64,

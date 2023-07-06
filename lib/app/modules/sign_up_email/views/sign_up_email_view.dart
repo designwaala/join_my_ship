@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'dart:math';
 
 class SignUpEmailView extends GetView<SignUpEmailController> {
   const SignUpEmailView({Key? key}) : super(key: key);
@@ -91,20 +92,25 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                           validator: (value) {
                             print(
                                 '__value ${controller.emailController.text.split("@")[1]}  ${controller.websiteController.text}');
-                            if ([
-                                  "gmail",
-                                  "yahoo",
-                                  "hotmail",
-                                  "mail",
-                                  "protonme"
-                                ].contains(
-                                    value?.split("@")[1].split(".")[0]) &&
-                                value?.split("@")[1] ==
-                                    controller.websiteController.text &&
-                                [
-                                  SignUpType.employerITF,
-                                  SignUpType.employerManagementCompany
-                                ].contains(controller.signUpType)) {
+                            if (([
+                                      "gmail",
+                                      "yahoo",
+                                      "hotmail",
+                                      "mail",
+                                      "protonme"
+                                    ].contains(
+                                        value?.split("@")[1].split(".")[0]) &&
+                                    [
+                                      SignUpType.employerITF,
+                                      SignUpType.employerManagementCompany
+                                    ].contains(controller.signUpType)) &&
+                                value?.split("@")[1].split(".")[0] ==
+                                    controller.websiteController.text
+                                        .replaceAll("https", "")
+                                        .replaceAll("http", "")
+                                        .split(".")
+                                        .reduce((a, b) =>
+                                            a.length > b.length ? a : b)) {
                               return "Please use your company domain email address";
                             }
                             return null;
@@ -124,7 +130,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
-                              hintText: "Your Password",
+                              hintText: "Password",
                               suffixIcon: InkWell(
                                 onTap: () {
                                   controller.shouldObscure.value =
@@ -145,7 +151,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                               ? Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    CircularProgressIndicator(),
+                                    const CircularProgressIndicator(),
                                   ],
                                 )
                               : ElevatedButton(
@@ -193,7 +199,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                                 //     '__value ${controller.emailController.text.split("@")[1]}  ${controller.websiteController.text}');
                                 Get.toNamed(Routes.CREW_SIGN_IN_EMAIL);
                               },
-                              child: Text("LOGIN")),
+                              child: const Text("LOGIN")),
                         )
                       ],
                     ),

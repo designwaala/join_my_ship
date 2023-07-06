@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide State;
+import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -35,6 +37,7 @@ import 'package:join_mp_ship/utils/secure_storage.dart';
 import 'package:join_mp_ship/app/data/models/state_model.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:time_machine/time_machine.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
@@ -293,7 +296,7 @@ class CrewOnboardingController extends GetxController with PickImage {
       if (crewUser?.isVerified == 1) {
         Get.offAllNamed(Routes.HOME);
       } else {
-        Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+        // Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
       }
     }
     step.value = (crewUser?.screenCheck ?? 0) + 1;
@@ -815,7 +818,18 @@ class CrewOnboardingController extends GetxController with PickImage {
   }
 
   Future<void> pickResume() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    // final x = await Permission.storage.request();
+    // await checkStoragePermission();
+    final path = await FlutterDocumentPicker.openDocument(
+        params: FlutterDocumentPickerParams(
+      allowedFileExtensions: ['pdf', 'doc', 'docx'],
+    ));
+    if (path == null) {
+      return;
+    }
+    pickedResume.value = File(path);
+
+/*     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result == null) {
       return;
     }
@@ -830,6 +844,37 @@ class CrewOnboardingController extends GetxController with PickImage {
       pickedResume.value = File(result.files.single.path!);
     } else {
       // User canceled the picker
+    } */
+  }
+
+  Future<bool> checkStoragePermission() async {
+    PermissionStatus status;
+    status = await Permission.storage.request();
+    if (Platform.isAndroid) {
+      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      final AndroidDeviceInfo info = await deviceInfoPlugin.androidInfo;
+      if ((info.version.sdkInt ?? 0) >= 33) {
+        status = await Permission.manageExternalStorage.request();
+      } else {
+        status = await Permission.storage.request();
+      }
+    } else {
+      status = await Permission.storage.request();
+    }
+
+    switch (status) {
+      case PermissionStatus.denied:
+        return false;
+      case PermissionStatus.granted:
+        return true;
+      case PermissionStatus.restricted:
+        return false;
+      case PermissionStatus.limited:
+        return true;
+      case PermissionStatus.permanentlyDenied:
+        return false;
+      case PermissionStatus.provisional:
+        return true;
     }
   }
 }
