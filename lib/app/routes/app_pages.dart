@@ -15,6 +15,10 @@ import '../modules/crew_sign_in_mobile/bindings/crew_sign_in_mobile_binding.dart
 import '../modules/crew_sign_in_mobile/views/crew_sign_in_mobile_view.dart';
 import '../modules/email_verification_waiting/bindings/email_verification_waiting_binding.dart';
 import '../modules/email_verification_waiting/views/email_verification_waiting_view.dart';
+import '../modules/employer_create_user/bindings/employer_create_user_binding.dart';
+import '../modules/employer_create_user/views/employer_create_user_view.dart';
+import '../modules/help/bindings/help_binding.dart';
+import '../modules/help/views/help_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/info/bindings/info_binding.dart';
@@ -100,6 +104,16 @@ class AppPages {
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.HELP,
+      page: () => const HelpView(),
+      binding: HelpBinding(),
+    ),
+    GetPage(
+      name: _Paths.EMPLOYER_CREATE_USER,
+      page: () => const EmployerCreateUserView(),
+      binding: EmployerCreateUserBinding(),
     ),
   ];
 }

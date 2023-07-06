@@ -29,6 +29,9 @@ class SignUpPhoneNumberController extends GetxController {
 
   String? verificationId;
   sendOTP() async {
+    // isOTPSent.value = true;
+    // isVerifying.value = false;
+    // update();
     isVerifying.value = true;
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: "${selectedCountryCode.value}${phoneController.text}",
@@ -46,6 +49,11 @@ class SignUpPhoneNumberController extends GetxController {
   }
 
   verify() async {
+    // Get.offAllNamed(Routes.SIGN_UP_EMAIL,
+    //     arguments: SignUpEmailArguments(
+    //         signUpType: Get.arguments["company_type"],
+    //         smsCode: otpController.text,
+    //         verificationId: verificationId));
     isVerifying.value = true;
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId!, smsCode: otpController.text);
