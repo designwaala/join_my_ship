@@ -35,6 +35,7 @@ dependencies:
   permission_handler: ^10.3.0
   time_machine: ^0.9.17
   device_info_plus: 
+  flutter_document_picker: ^5.2.3
 
 
 dev_dependencies: 

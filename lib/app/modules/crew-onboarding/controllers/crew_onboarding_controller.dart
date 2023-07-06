@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide State;
+import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -817,9 +818,18 @@ class CrewOnboardingController extends GetxController with PickImage {
   }
 
   Future<void> pickResume() async {
-    final x = await Permission.storage.request();
+    // final x = await Permission.storage.request();
     // await checkStoragePermission();
-    FilePickerResult? result = await FilePicker.      platform.pickFiles();
+    final path = await FlutterDocumentPicker.openDocument(
+        params: FlutterDocumentPickerParams(
+      allowedFileExtensions: ['pdf', 'doc', 'docx'],
+    ));
+    if (path == null) {
+      return;
+    }
+    pickedResume.value = File(path);
+
+/*     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result == null) {
       return;
     }
@@ -834,7 +844,7 @@ class CrewOnboardingController extends GetxController with PickImage {
       pickedResume.value = File(result.files.single.path!);
     } else {
       // User canceled the picker
-    }
+    } */
   }
 
   Future<bool> checkStoragePermission() async {
