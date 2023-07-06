@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../widgets/custom_text_form_field.dart';
 import '../controllers/employer_create_user_controller.dart';
 
 class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
@@ -40,6 +44,9 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 20.h,
+                ),
                 Text(
                   'Create User Profile',
                   style: GoogleFonts.poppins(
@@ -58,24 +65,66 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                   ),
                 ),
                 25.verticalSpace,
-                Center(
-                  child: Stack(
-                    children: [
-                      Icon(Icons.account_circle,
-                          size: 85, color: Colors.grey.shade400),
-                      Positioned(
-                          bottom: 4,
-                          right: 4,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: Icon(Icons.add_circle,
-                                color: Get.theme.primaryColor, size: 32),
-                          ))
-                    ],
-                  ),
+                InkWell(
+                  onTap: controller.pickSource,
+                  child: controller.pickedImage.value != null ||
+                          controller.uploadedImagePath.value != null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            controller.uploadedImagePath.value != null
+                                ? CachedNetworkImage(
+                                    height: 100,
+                                    width: 100,
+                                    imageUrl:
+                                        controller.uploadedImagePath.value ??
+                                            "",
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: NetworkImage(controller
+                                                          .uploadedImagePath
+                                                          .value ??
+                                                      ""))),
+                                          height: 100,
+                                          width: 100,
+                                        ))
+                                : Container(
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: Image.file(File(controller
+                                                    .pickedImage.value!.path))
+                                                .image,
+                                            fit: BoxFit.cover)),
+                                  )
+                          ],
+                        )
+                      : Center(
+                          child: Stack(
+                            children: [
+                              Icon(Icons.account_circle,
+                                  size: 85, color: Colors.grey.shade400),
+                              Positioned(
+                                  bottom: 4,
+                                  right: 4,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                    child: Icon(Icons.add_circle,
+                                        color: Get.theme.primaryColor,
+                                        size: 32),
+                                  ))
+                            ],
+                          ),
+                        ),
                 ),
                 12.verticalSpace,
                 Center(
@@ -91,16 +140,19 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                 ),
                 30.verticalSpace,
                 CustomRow(
+                  textEditingController: controller.firstNameController,
                   FieldName: 'First Name',
                   hintText: 'First Name',
                 ),
                 15.verticalSpace,
                 CustomRow(
+                  textEditingController: controller.lastNameController,
                   FieldName: 'Last Name',
                   hintText: 'Last Name',
                 ),
                 15.verticalSpace,
                 CustomRow(
+                  textEditingController: controller.designationController,
                   FieldName: 'Designation',
                   hintText: 'Designation',
                 ),
@@ -198,19 +250,23 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                   ],
                 ),
                 20.verticalSpace,
-                CustomTextField(
+                CustomTextFormField(
+                  controller: controller.cityController,
                   hintText: 'City',
                 ),
                 15.verticalSpace,
-                CustomTextField(
+                CustomTextFormField(
+                  controller: controller.addressLine1Controller,
                   hintText: 'Address Line 1',
                 ),
                 15.verticalSpace,
-                CustomTextField(
+                CustomTextFormField(
+                  controller: controller.addressLine2Controller,
                   hintText: 'Address Line 2',
                 ),
                 15.verticalSpace,
-                CustomTextField(
+                CustomTextFormField(
+                  controller: controller.zipCodeController,
                   hintText: 'Zip Code',
                 ),
                 20.verticalSpace,
@@ -225,7 +281,7 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                         ),
                       ),
                       onPressed: () {
-                        Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+                        // Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
                       },
                       child: Text(
                         'SAVE & CONTINUE',
@@ -245,57 +301,12 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
   }
 }
 
-class CustomTextField extends StatelessWidget {
-  CustomTextField({required this.hintText});
-  String hintText;
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        // height: 40.h,
-        width: Get.width,
-        child: TextField(
-          decoration: InputDecoration(
-            isDense: false,
-            hintText: hintText,
-            hintStyle: GoogleFonts.inter(
-              color: const Color(0xFF667084),
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-            contentPadding:
-                const EdgeInsets.only(top: 10, bottom: 10, left: 14),
-            disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100),
-                borderSide:
-                    const BorderSide(width: 1, color: Color(0xFF407BFF))),
-            errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100),
-                borderSide:
-                    const BorderSide(width: 1, color: Color(0xFF407BFF))),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100),
-                borderSide:
-                    const BorderSide(width: 1, color: Color(0xFF407BFF))),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100),
-                borderSide:
-                    const BorderSide(width: 1, color: Color(0xFF407BFF))),
-            focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100),
-                borderSide:
-                    const BorderSide(width: 1, color: Color(0xFF407BFF))),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100),
-                borderSide:
-                    const BorderSide(width: 1, color: Color(0xFF407BFF))),
-          ),
-        ));
-  }
-}
-
 class CustomRow extends StatelessWidget {
-  CustomRow({required this.FieldName, required this.hintText});
-
+  CustomRow(
+      {required this.FieldName,
+      required this.hintText,
+      required this.textEditingController});
+  TextEditingController textEditingController;
   String FieldName;
   String hintText;
   @override
@@ -316,43 +327,8 @@ class CustomRow extends StatelessWidget {
         SizedBox(
             // height: 40.h,
             width: 170.w,
-            child: TextField(
-              decoration: InputDecoration(
-                isDense: false,
-                hintText: hintText,
-                hintStyle: GoogleFonts.inter(
-                  color: const Color(0xFF667084),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-                contentPadding:
-                    const EdgeInsets.only(top: 10, bottom: 10, left: 14),
-                disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide:
-                        const BorderSide(width: 1, color: Color(0xFF407BFF))),
-                errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide:
-                        const BorderSide(width: 1, color: Color(0xFF407BFF))),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide:
-                        const BorderSide(width: 1, color: Color(0xFF407BFF))),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide:
-                        const BorderSide(width: 1, color: Color(0xFF407BFF))),
-                focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide:
-                        const BorderSide(width: 1, color: Color(0xFF407BFF))),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide:
-                        const BorderSide(width: 1, color: Color(0xFF407BFF))),
-              ),
-            ))
+            child: CustomTextFormField(
+                controller: textEditingController, hintText: hintText))
       ],
     );
   }
