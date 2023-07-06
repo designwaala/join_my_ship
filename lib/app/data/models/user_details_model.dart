@@ -44,7 +44,8 @@ class UserDetails {
     cDCSeamanBookNumberValidTill = json['CDC_seaman_book_valid_till'];
     passportNumber = json['Passport_number'];
     passportNumberValidTill = json['Passport_number_valid_till'];
-    sTCWIssuingAuthority = json['STCW_Issuing_Authority'] == null
+    sTCWIssuingAuthority = json['STCW_Issuing_Authority'] == null ||
+            json['STCW_Issuing_Authority'] == ""
         ? null
         : (jsonDecode(json['STCW_Issuing_Authority']) is Map<String, dynamic>
             ? [
@@ -54,7 +55,8 @@ class UserDetails {
             : List<IssuingAuthority>.from(
                 jsonDecode(json['STCW_Issuing_Authority'])
                     ?.map((e) => IssuingAuthority.fromJson(e))));
-    validCOCIssuingAuthority = json['valid_COC_Issuing_Authority'] == null
+    validCOCIssuingAuthority = json['valid_COC_Issuing_Authority'] == null ||
+            json['valid_COC_Issuing_Authority'] == ""
         ? null
         : (jsonDecode(json['valid_COC_Issuing_Authority']))
                 is Map<String, dynamic>
@@ -62,7 +64,8 @@ class UserDetails {
             : List<IssuingAuthority>.from(
                 jsonDecode(json['valid_COC_Issuing_Authority'])
                     ?.map((e) => IssuingAuthority.fromJson(e)));
-    validCOPIssuingAuthority = json['valid_COP_Issuing_Authority'] == null
+    validCOPIssuingAuthority = json['valid_COP_Issuing_Authority'] == null ||
+            json['valid_COP_Issuing_Authority'] == ""
         ? null
         : (jsonDecode(json['valid_COP_Issuing_Authority']))
                 is Map<String, dynamic>
@@ -71,7 +74,8 @@ class UserDetails {
                 jsonDecode(json['valid_COP_Issuing_Authority'])
                     ?.map((e) => IssuingAuthority.fromJson(e)));
     validWatchKeepingIssuingAuthority =
-        json['valid_Watch_keeping_Issuing_Authority'] == null
+        json['valid_Watch_keeping_Issuing_Authority'] == null ||
+                json['valid_Watch_keeping_Issuing_Authority'] == ""
             ? null
             : jsonDecode(json['valid_Watch_keeping_Issuing_Authority'])
                     is Map<String, dynamic>

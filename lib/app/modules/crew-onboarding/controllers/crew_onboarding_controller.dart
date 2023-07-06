@@ -77,6 +77,7 @@ TextStyle? get headingStyle =>
     Get.textTheme.titleSmall?.copyWith(color: Get.theme.primaryColor);
 
 class CrewOnboardingController extends GetxController with PickImage {
+  bool editMode = false;
   CrewUser? crewUser;
   UserDetails? userDetails;
   RxBool isLoading = false.obs;
@@ -225,6 +226,7 @@ class CrewOnboardingController extends GetxController with PickImage {
         (Get.arguments is CrewOnboardingArguments?) ? Get.arguments : null;
     email = args?.email;
     password = args?.password;
+    editMode = args?.editMode ?? false;
     instantiate();
     super.onInit();
   }
@@ -276,30 +278,33 @@ class CrewOnboardingController extends GetxController with PickImage {
     if (crewUser?.id != null) {
       await setStep1Fields();
     }
-    if (crewUser?.screenCheck == 1) {
-      userDetails =
-          await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
-      UserStates.instance.userDetails = userDetails;
-      await setStep2Fields();
-    } else if (crewUser?.screenCheck == 2) {
-      serviceRecords.value =
-          (await getIt<SeaServiceProvider>().getSeaServices(crewUser!.id!)) ??
-              [];
-      UserStates.instance.serviceRecords = serviceRecords;
-      previousEmployerReferences.value =
-          (await getIt<PreviousEmployerProvider>()
-                  .getPreviousEmployer(crewUser!.id!)) ??
-              [];
-      UserStates.instance.previousEmployerReferences =
-          previousEmployerReferences;
-    } else if (crewUser?.screenCheck == 3) {
-      if (crewUser?.isVerified == 1) {
-        Get.offAllNamed(Routes.HOME);
-      } else {
-        // Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+    if (!editMode) {
+      if (crewUser?.screenCheck == 1) {
+        userDetails =
+            await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
+        UserStates.instance.userDetails = userDetails;
+        await setStep2Fields();
+      } else if (crewUser?.screenCheck == 2) {
+        serviceRecords.value =
+            (await getIt<SeaServiceProvider>().getSeaServices(crewUser!.id!)) ??
+                [];
+        UserStates.instance.serviceRecords = serviceRecords;
+        previousEmployerReferences.value =
+            (await getIt<PreviousEmployerProvider>()
+                    .getPreviousEmployer(crewUser!.id!)) ??
+                [];
+        UserStates.instance.previousEmployerReferences =
+            previousEmployerReferences;
+      } else if (crewUser?.screenCheck == 3) {
+        if (crewUser?.isVerified == 1) {
+          Get.offAllNamed(Routes.HOME);
+        } else {
+          Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+        }
       }
+      step.value = (crewUser?.screenCheck ?? 0) + 1;
     }
-    step.value = (crewUser?.screenCheck ?? 0) + 1;
+
     isLoading.value = false;
   }
 
@@ -459,7 +464,7 @@ class CrewOnboardingController extends GetxController with PickImage {
               authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
           profilePicPath: pickedImage.value?.path,
           resumePath: pickedResume.value?.path);
-      if ((statusCode ?? 0) < 300) {
+      if ((statusCode ?? 999) < 300) {
         fToast.safeShowToast(
             child: successToast("Your account was successfully updated."));
       } else {
@@ -880,10 +885,11 @@ class CrewOnboardingController extends GetxController with PickImage {
 }
 
 class CrewOnboardingArguments {
-  final String email;
-  final String password;
+  final String? email;
+  final String? password;
+  final bool? editMode;
 
-  const CrewOnboardingArguments({required this.email, required this.password});
+  const CrewOnboardingArguments({this.email, this.password, this.editMode});
 }
 
 // enum Gender { male, female }

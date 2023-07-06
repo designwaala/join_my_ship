@@ -30,7 +30,12 @@ class CrewSignInMobileController extends GetxController {
 
   @override
   void onInit() {
-    redirection = Get.arguments;
+    if (Get.arguments is CrewSignInMobileArguments) {
+      CrewSignInMobileArguments args = Get.arguments;
+      redirection = args.redirection;
+      phoneController.text = args.phoneNumber ?? "";
+      selectedCountryCode.value = args.countryCode ?? "";
+    }
     super.onInit();
   }
 
@@ -86,10 +91,13 @@ class CrewSignInMobileController extends GetxController {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId!, smsCode: otpController.text);
     try {
-      UserCredential? userCred = FirebaseAuth.instance.currentUser == null
+      FirebaseAuth.instance.currentUser == null
           ? await FirebaseAuth.instance.signInWithCredential(credential)
-          : await FirebaseAuth.instance.currentUser
-              ?.linkWithCredential(credential);
+          : FirebaseAuth.instance.currentUser?.phoneNumber == null
+              ? await FirebaseAuth.instance.currentUser
+                  ?.linkWithCredential(credential)
+              : await FirebaseAuth.instance.currentUser
+                  ?.updatePhoneNumber(credential);
     } catch (e) {
       fToast.safeShowToast(child: errorToast("$e"));
       isVerifying.value = false;
@@ -110,4 +118,13 @@ class CrewSignInMobileController extends GetxController {
     }
     isVerifying.value = false;
   }
+}
+
+class CrewSignInMobileArguments {
+  final Function? redirection;
+  final String? phoneNumber;
+  final String? countryCode;
+
+  const CrewSignInMobileArguments(
+      {this.redirection, this.countryCode, this.phoneNumber});
 }
