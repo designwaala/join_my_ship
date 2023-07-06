@@ -52,7 +52,7 @@ class InfoView extends GetView<InfoController> {
                         height: 245.h,
                       ),
                       Spacer(),
-                      Text('It’s easy to find\n your employees\n here with us',
+                      Text("It's easy to find\nready - to - join\nSeafarer's with us",
                           textAlign: TextAlign.center,
                           style: Get.theme.textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.bold,
@@ -60,7 +60,7 @@ class InfoView extends GetView<InfoController> {
                               color: Colors.black)),
                       20.verticalSpace,
                       Text(
-                        "Let’s Recruit",
+                        "Find Your Next Voyage with us.",
                         textAlign: TextAlign.center,
                       ),
                       36.verticalSpace,

@@ -419,7 +419,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   },
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
-                        RegExp(r"^[a-zA-Z0-9&,.-/-' ]+"))
+                        RegExp(r"^[a-zA-Z0-9,.-/- ]+"))
                   ],
                   hintText: "Address Line 1"),
               16.verticalSpace,
@@ -434,7 +434,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   },
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
-                        RegExp(r"^[a-zA-Z0-9&,.-/-' ]+"))
+                        RegExp(r"^[a-zA-Z0-9,.-/- ]+"))
                   ],
                   hintText: "Address Line 2"),
               16.verticalSpace,
@@ -463,7 +463,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
-                          readOnly: true,
+                          isDate: true,
                           onTap: () async {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
@@ -473,7 +473,7 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                             controller.dateOfBirth.text =
                                 selectedDateTime?.getServerDate() ?? "";
                           },
-                          hintText: "yyyy/mm/dd",
+                          hintText: "dd-mm-yyyy",
                           icon: Icon(
                             Icons.calendar_month,
                             color: Get.theme.primaryColor,

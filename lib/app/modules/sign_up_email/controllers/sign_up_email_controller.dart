@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
@@ -41,6 +42,15 @@ class SignUpEmailController extends GetxController {
     fToast.init(parentKey.currentContext!);
   }
 
+  Future<void>? storeData() async {
+    await Future.wait<void>([
+      PreferencesHelper.instance.setCompanyName(fullNameController.text) ??
+          Future.value(),
+      PreferencesHelper.instance.setWebsite(websiteController.text) ??
+          Future.value()
+    ]);
+  }
+
   addEmail() async {
     // Get.toNamed(Routes.EMAIL_VERIFICATION_WAITING);
 
@@ -51,6 +61,7 @@ class SignUpEmailController extends GetxController {
       return;
     }
     isAdding.value = true;
+    await storeData();
     try {
       if (FirebaseAuth.instance.currentUser == null) {
         final credential =
@@ -60,6 +71,7 @@ class SignUpEmailController extends GetxController {
         );
         await FirebaseAuth.instance.currentUser
             ?.updateDisplayName(fullNameController.text);
+        FirebaseAuth.instance.currentUser;
       } else {
         await FirebaseAuth.instance.currentUser?.linkWithCredential(
             EmailAuthProvider.credential(

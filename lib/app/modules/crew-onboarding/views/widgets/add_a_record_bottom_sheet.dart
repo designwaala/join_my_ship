@@ -197,7 +197,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                                 Icons.calendar_month,
                               ),
                               readOnly: true,
-                              hintText: "yyyy/mm/dd"),
+                              hintText: "dd-mm-yyyy"),
                         ],
                       ),
                       TableRow(
@@ -216,7 +216,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                               controller.calculateDuration();
                             },
                             readOnly: true,
-                            hintText: "yyyy/mm/dd",
+                            hintText: "dd-mm-yyyy",
                             icon: const Icon(
                               Icons.calendar_month,
                             ),
