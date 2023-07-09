@@ -196,7 +196,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                               icon: const Icon(
                                 Icons.calendar_month,
                               ),
-                              readOnly: true,
+                              isDate: true,
                               hintText: "dd-mm-yyyy"),
                         ],
                       ),
@@ -215,7 +215,7 @@ class AddARecord extends GetView<CrewOnboardingController> {
                                   selectedDateTime?.getServerDate() ?? "";
                               controller.calculateDuration();
                             },
-                            readOnly: true,
+                            isDate: true,
                             hintText: "dd-mm-yyyy",
                             icon: const Icon(
                               Icons.calendar_month,
@@ -277,7 +277,8 @@ class AddARecord extends GetView<CrewOnboardingController> {
                             ),
                     ],
                   ),
-                  28.verticalSpace
+                  28.verticalSpace,
+                  Get.mediaQuery.viewInsets.bottom.verticalSpace
                 ],
               ),
             );

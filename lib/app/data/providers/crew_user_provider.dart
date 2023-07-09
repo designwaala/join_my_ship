@@ -197,10 +197,9 @@ class CrewUserProvider extends WrapperConnect {
                 ),
               ));
         }
-
-        return response.statusCode;
       }
     }
+    return response.statusCode;
   }
 
   Future<http.Response> _updateCrewUserCore(
@@ -233,7 +232,7 @@ class CrewUserProvider extends WrapperConnect {
     if (streamedResponse.statusCode < 300) {
       // print(await streamedResponse.stream.bytesToString());
     } else {
-      APIErrorList errors = APIErrorList.fromJson(jsonDecode(response.body));
+      /* APIErrorList errors = APIErrorList.fromJson(jsonDecode(response.body));
       showTopModalSheet(
           Get.context!,
           Padding(
@@ -280,7 +279,7 @@ class CrewUserProvider extends WrapperConnect {
                 )
               ],
             ),
-          ));
+          )); */
     }
     return response;
   }

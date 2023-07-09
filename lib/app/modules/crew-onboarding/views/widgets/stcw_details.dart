@@ -161,6 +161,13 @@ class STCWDetails extends GetView<CrewOnboardingController> {
                                       }
                                       return null;
                                     },
+                                    onChanged: (value) {
+                                      controller.stcwIssuingAuthorities
+                                          .firstWhere((e) =>
+                                              e.issuingAuthority ==
+                                              issuingAuthority.issuingAuthority)
+                                          .validTill = value;
+                                    },
                                     onTap: () async {
                                       DateTime? selectedDateTime =
                                           await showDatePicker(
@@ -182,7 +189,7 @@ class STCWDetails extends GetView<CrewOnboardingController> {
                                           selectedDateTime?.getServerDate() ??
                                               "";
                                     },
-                                    readOnly: true,
+                                    isDate: true,
                                     hintText: "Valid Till",
                                     icon: const Icon(
                                       Icons.calendar_month,
@@ -212,6 +219,13 @@ class STCWDetails extends GetView<CrewOnboardingController> {
                                     }
                                     return null;
                                   },
+                                  onChanged: (value) {
+                                    controller.stcwIssuingAuthorities
+                                        .firstWhere((e) =>
+                                            e.issuingAuthority ==
+                                            issuingAuthority.issuingAuthority)
+                                        .validTill = value;
+                                  },
                                   onTap: () async {
                                     DateTime? selectedDateTime =
                                         await showDatePicker(
@@ -233,7 +247,7 @@ class STCWDetails extends GetView<CrewOnboardingController> {
                                     textEditingController.text =
                                         selectedDateTime?.getServerDate() ?? "";
                                   },
-                                  readOnly: true,
+                                  isDate: true,
                                   hintText: "Valid Till",
                                   icon: const Icon(
                                     Icons.calendar_month,

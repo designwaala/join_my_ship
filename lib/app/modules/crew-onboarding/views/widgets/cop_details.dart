@@ -197,6 +197,13 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                           }
                                           return null;
                                         },
+                                        onChanged: (value) {
+                                          controller.copIssuingAuthorities
+                                              .firstWhereOrNull((authority) =>
+                                                  authority.issuingAuthority ==
+                                                  "Others")
+                                              ?.validTill = value;
+                                        },
                                         onTap: () async {
                                           DateTime? selectedDateTime =
                                               await showDatePicker(
@@ -220,7 +227,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                                       ?.getServerDate() ??
                                                   "";
                                         },
-                                        readOnly: true,
+                                        isDate: true,
                                         hintText: "Valid Till",
                                         icon: const Icon(
                                           Icons.calendar_month,
@@ -251,6 +258,13 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                       }
                                       return null;
                                     },
+                                    onChanged: (value) {
+                                      controller.copIssuingAuthorities
+                                          .firstWhereOrNull((authority) =>
+                                              authority.issuingAuthority ==
+                                              issuingAuthority.issuingAuthority)
+                                          ?.validTill = value;
+                                    },
                                     onTap: () async {
                                       DateTime? selectedDateTime =
                                           await showDatePicker(
@@ -272,7 +286,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                           selectedDateTime?.getServerDate() ??
                                               "";
                                     },
-                                    readOnly: true,
+                                    isDate: true,
                                     hintText: "Valid Till",
                                     icon: const Icon(
                                       Icons.calendar_month,

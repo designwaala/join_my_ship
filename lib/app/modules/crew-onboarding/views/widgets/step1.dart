@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/country_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/contact_details.dart';
 import 'package:join_mp_ship/utils/extensions/date_time.dart';
 import 'package:join_mp_ship/widgets/astrix_text.dart';
 import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
@@ -58,79 +59,83 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                   style:
                       Get.textTheme.bodyMedium?.copyWith(color: Colors.grey)),
               24.verticalSpace,
-              InkWell(
-                onTap: controller.pickSource,
-                child: controller.pickedImage.value != null ||
-                        controller.uploadedImagePath.value != null
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+              if (!controller.editMode) ...[
+                InkWell(
+                  onTap: controller.pickSource,
+                  child: controller.pickedImage.value != null ||
                           controller.uploadedImagePath.value != null
-                              ? CachedNetworkImage(
-                                  height: 100,
-                                  width: 100,
-                                  imageUrl:
-                                      controller.uploadedImagePath.value ?? "",
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage(controller
-                                                        .uploadedImagePath
-                                                        .value ??
-                                                    ""))),
-                                        height: 100,
-                                        width: 100,
-                                      ))
-                              : Container(
-                                  height: 100,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: Image.file(File(controller
-                                                  .pickedImage.value!.path))
-                                              .image,
-                                          fit: BoxFit.cover)),
-                                )
-                        ],
-                      )
-                    : Center(
-                        child: Stack(
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.account_circle,
-                                size: 85.sp, color: Colors.grey.shade400),
-                            Positioned(
-                                bottom: 4,
-                                right: 4,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                  ),
-                                  child: Icon(Icons.add_circle,
-                                      color: Get.theme.primaryColor, size: 32),
-                                ))
+                            controller.uploadedImagePath.value != null
+                                ? CachedNetworkImage(
+                                    height: 100,
+                                    width: 100,
+                                    imageUrl:
+                                        controller.uploadedImagePath.value ??
+                                            "",
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: NetworkImage(controller
+                                                          .uploadedImagePath
+                                                          .value ??
+                                                      ""))),
+                                          height: 100,
+                                          width: 100,
+                                        ))
+                                : Container(
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: Image.file(File(controller
+                                                    .pickedImage.value!.path))
+                                                .image,
+                                            fit: BoxFit.cover)),
+                                  )
                           ],
+                        )
+                      : Center(
+                          child: Stack(
+                            children: [
+                              Icon(Icons.account_circle,
+                                  size: 85.sp, color: Colors.grey.shade400),
+                              Positioned(
+                                  bottom: 4,
+                                  right: 4,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                    child: Icon(Icons.add_circle,
+                                        color: Get.theme.primaryColor,
+                                        size: 32),
+                                  ))
+                            ],
+                          ),
                         ),
-                      ),
-              ),
-              12.verticalSpace,
-              Center(
-                child: Text("Upload Profile Pic",
-                    style: Get.textTheme.bodyMedium
-                        ?.copyWith(color: Get.theme.primaryColor)),
-              ),
-              if (controller.step1FormMisses
-                  .contains(Step1FormMiss.didNotSelectProfilePic))
-                Center(
-                  child: Text("Please select an image",
-                      style:
-                          Get.textTheme.bodySmall?.copyWith(color: Colors.red)),
                 ),
-              33.verticalSpace,
+                12.verticalSpace,
+                Center(
+                  child: Text("Upload Profile Pic",
+                      style: Get.textTheme.bodyMedium
+                          ?.copyWith(color: Get.theme.primaryColor)),
+                ),
+                if (controller.step1FormMisses
+                    .contains(Step1FormMiss.didNotSelectProfilePic))
+                  Center(
+                    child: Text("Please select an image",
+                        style: Get.textTheme.bodySmall
+                            ?.copyWith(color: Colors.red)),
+                  ),
+                33.verticalSpace,
+              ],
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -249,6 +254,10 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                 ],
               ),
               20.verticalSpace,
+              if (controller.editMode) ...[
+                ContactDetails(),
+                16.verticalSpace,
+              ],
               const AsterixText("Communication address"),
               16.verticalSpace,
               Row(

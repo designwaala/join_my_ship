@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
@@ -223,7 +224,11 @@ class ProfileView extends GetView<ProfileController> {
                         CardObject(
                             iconPath: "assets/images/profile/edit_profile.png",
                             text: "Edit Profile",
-                            onTap: () {}),
+                            onTap: () {
+                              Get.toNamed(Routes.CREW_ONBOARDING,
+                                  arguments: const CrewOnboardingArguments(
+                                      editMode: true));
+                            }),
                         CardObject(
                             iconPath: "assets/images/profile/wallet.png",
                             text: "Wallet",
@@ -242,29 +247,34 @@ class ProfileView extends GetView<ProfileController> {
                             iconPath: "assets/images/profile/help.png",
                             text: "Help & Feedback",
                             onTap: () {}),
-                      ].map((e) => Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16.h, horizontal: 14.h),
-                            margin: EdgeInsets.symmetric(vertical: 8.h),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16.r)),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  e.iconPath,
-                                  height: 24.h,
-                                  width: 24.h,
-                                ),
-                                18.horizontalSpace,
-                                Text(e.text,
-                                    style: Get.textTheme.bodyMedium?.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14.sp,
-                                    )),
-                                const Spacer(),
-                                const Icon(Icons.keyboard_arrow_right)
-                              ],
+                      ].map((e) => InkWell(
+                            onTap: () {
+                              e.onTap();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 16.h, horizontal: 14.h),
+                              margin: EdgeInsets.symmetric(vertical: 8.h),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16.r)),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    e.iconPath,
+                                    height: 24.h,
+                                    width: 24.h,
+                                  ),
+                                  18.horizontalSpace,
+                                  Text(e.text,
+                                      style: Get.textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14.sp,
+                                      )),
+                                  const Spacer(),
+                                  const Icon(Icons.keyboard_arrow_right)
+                                ],
+                              ),
                             ),
                           )),
                       InkWell(
