@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -93,6 +94,7 @@ class CrewOnboardingController extends GetxController with PickImage {
   RxBool isLookingForPromotion = false.obs;
   RxnString uploadedImagePath = RxnString();
   RxnString uploadedResumePath = RxnString();
+  RxString selectedCountryCode = "+91".obs;
   //______________STEP 2__________________
   // RxList<String> stcwIssuingAuthority = RxList.empty();
   RxnBool isHoldingValidCOC = RxnBool(false);
@@ -111,6 +113,7 @@ class CrewOnboardingController extends GetxController with PickImage {
   TextEditingController addressLine2 = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController dateOfBirth = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
   //__________________________
 
   //__________Step 2_________________
@@ -328,6 +331,8 @@ class CrewOnboardingController extends GetxController with PickImage {
   }
 
   Future<void> setStep1Fields() async {
+    phoneNumber.text = crewUser?.number?.split("-")[1] ?? "";
+    selectedCountryCode.value = crewUser?.number?.split("-").firstOrNull ?? "";
     selectedRank.value =
         ranks?.firstWhereOrNull((e) => e.id == crewUser?.rankId);
     addressLine1.text = crewUser?.addressLine1 ?? "";

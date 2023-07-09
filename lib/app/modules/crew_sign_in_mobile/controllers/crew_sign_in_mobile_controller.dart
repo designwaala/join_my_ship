@@ -26,7 +26,7 @@ class CrewSignInMobileController extends GetxController {
   Timer? timer;
   RxBool isSelectingCountryCode = false.obs;
 
-  Function? redirection;
+  Function(String phoneNumber, String dialCode)? redirection;
 
   @override
   void onInit() {
@@ -108,7 +108,7 @@ class CrewSignInMobileController extends GetxController {
       fToast.safeShowToast(child: errorToast("Email not Verified"));
     } else if (FirebaseAuth.instance.currentUser != null) {
       if (redirection != null) {
-        redirection!();
+        redirection!(phoneController.text, selectedCountryCode.value);
       } else {
         Get.offAllNamed(Routes.CREW_ONBOARDING);
       }
@@ -121,7 +121,7 @@ class CrewSignInMobileController extends GetxController {
 }
 
 class CrewSignInMobileArguments {
-  final Function? redirection;
+  final Function(String phoneNumber, String dialCode)? redirection;
   final String? phoneNumber;
   final String? countryCode;
 

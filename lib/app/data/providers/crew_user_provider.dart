@@ -197,10 +197,9 @@ class CrewUserProvider extends WrapperConnect {
                 ),
               ));
         }
-
-        return response.statusCode;
       }
     }
+    return response.statusCode;
   }
 
   Future<http.Response> _updateCrewUserCore(

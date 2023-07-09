@@ -112,22 +112,7 @@ class CustomTextFormField extends TextFormField {
           minLines: minLines,
           expands: expands,
           maxLength: maxLength,
-          onChanged: isDate
-              ? (value) {
-                  // print(value);
-                  // print(controller?.text);
-                  // if (controller?.text == null) {
-                  //   return;
-                  // }
-                  // if ((value.length == 2 || value.length == 5) &&
-                  //     (controller?.text.split("").lastOrNull ?? "") != "/") {
-                  //   controller!.text = "${controller.text}/";
-                  //   controller.selection = TextSelection.fromPosition(
-                  //     TextPosition(offset: controller.text.length),
-                  //   );
-                  // }
-                }
-              : onChanged,
+          onChanged: onChanged,
           onTap: isDate ? null : onTap,
           onEditingComplete: onEditingComplete,
           onFieldSubmitted: onFieldSubmitted,

@@ -14,17 +14,10 @@ import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 
 class ContactDetails extends GetView<CrewOnboardingController> {
   ContactDetails({Key? key}) : super(key: key);
-  TextEditingController phoneNumber = TextEditingController();
-  String selectedCountryCode = "+91";
+
   @override
   Widget build(BuildContext context) {
-    try {
-      phoneNumber.text = controller.crewUser?.number?.split("-")[1] ?? "";
-      selectedCountryCode =
-          controller.crewUser?.number?.split("-").firstOrNull ?? "";
-    } catch (e) {}
-
-    return StatefulBuilder(builder: (context, setState) {
+    return Obx(() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -39,7 +32,8 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   CustomTextFormField(
-                    controller: phoneNumber,
+                    controller: controller.phoneNumber,
+                    keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
@@ -61,10 +55,8 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                                 onSelect: (Country country) {
                                   print(
                                       'Select country: ${country.displayName}');
-                                  setState(() {
-                                    selectedCountryCode =
-                                        "+${country.phoneCode}";
-                                  });
+                                  controller.selectedCountryCode.value =
+                                      "+${country.phoneCode}";
                                 },
                               );
                             },
@@ -74,7 +66,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(selectedCountryCode,
+                                    Text(controller.selectedCountryCode.value,
                                         style: Get.theme.textTheme.bodyMedium
                                             ?.copyWith(
                                                 fontWeight: FontWeight.bold)),
@@ -107,23 +99,32 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                   4.verticalSpace,
                   InkWell(
                     onTap: () async {
-                      await Get.toNamed(Routes.CREW_SIGN_IN_MOBILE,
+                      Map<String, dynamic> result = await Get.toNamed(
+                          Routes.CREW_SIGN_IN_MOBILE,
                           arguments: CrewSignInMobileArguments(
-                              phoneNumber: phoneNumber.text,
-                              countryCode: selectedCountryCode,
-                              redirection: Get.back));
+                              phoneNumber: controller.phoneNumber.text,
+                              countryCode: controller.selectedCountryCode.value,
+                              redirection: (phoneNumber, dialCode) {
+                                Get.back(result: {
+                                  "phone_number": phoneNumber,
+                                  "dial_code": dialCode
+                                });
+                              }));
+                      controller.phoneNumber.text =
+                          result['phone_number'] ?? "";
+                      controller.selectedCountryCode.value =
+                          result['dial_code'] ?? "";
                       await FirebaseAuth.instance.currentUser?.reload();
                       if (FirebaseAuth.instance.currentUser?.phoneNumber !=
-                          controller.crewUser?.number) {
+                          controller.crewUser?.number?.replaceAll("-", "")) {
                         controller.isUpdating.value = true;
                         await getIt<CrewUserProvider>().updateCrewUser(
                             crewId: controller.crewUser!.id!,
                             crewUser: CrewUser(
                                 number:
-                                    "$selectedCountryCode-${phoneNumber.text}"));
+                                    "${controller.selectedCountryCode}-${controller.phoneNumber.text}"));
                         controller.isUpdating.value = false;
                       }
-                      setState(() {});
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,

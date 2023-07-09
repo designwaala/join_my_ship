@@ -153,7 +153,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
-                          readOnly: true,
+                          isDate: true,
                           onTap: () async {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
@@ -201,7 +201,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                             }
                             return null;
                           },
-                          readOnly: true,
+                          isDate: true,
                           onTap: () async {
                             DateTime? selectedDateTime = await showDatePicker(
                                 context: Get.context!,
@@ -282,7 +282,7 @@ class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
                               controller.usVisaValidTill.text =
                                   selectedDateTime?.getServerDate() ?? "";
                             },
-                            readOnly: true,
+                            isDate: true,
                             hintText: "Valid Till",
                             icon: const Icon(
                               Icons.calendar_month,

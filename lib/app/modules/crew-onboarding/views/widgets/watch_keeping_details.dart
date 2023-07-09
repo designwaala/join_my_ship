@@ -197,6 +197,13 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                                       }
                                       return null;
                                     },
+                                    onChanged: (value) {
+                                      controller.watchKeepingIssuingAuthorities
+                                          .firstWhereOrNull((authority) =>
+                                              authority.issuingAuthority ==
+                                              "Others")
+                                          ?.validTill = value;
+                                    },
                                     onTap: () async {
                                       DateTime? selectedDateTime =
                                           await showDatePicker(
@@ -218,7 +225,7 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                                           selectedDateTime?.getServerDate() ??
                                               "";
                                     },
-                                    readOnly: true,
+                                    isDate: true,
                                     hintText: "Valid Till",
                                     icon: const Icon(
                                       Icons.calendar_month,
@@ -241,7 +248,7 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                                     TextEditingController();
                                 textEditingController.text =
                                     issuingAuthority.validTill ?? "";
-                                return TextFormField(
+                                return CustomTextFormField(
                                     controller: textEditingController,
                                     validator: (value) {
                                       if (value == null ||
@@ -249,6 +256,13 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                                         return "Please enter this field";
                                       }
                                       return null;
+                                    },
+                                    onChanged: (value) {
+                                      controller.watchKeepingIssuingAuthorities
+                                          .firstWhereOrNull((authority) =>
+                                              authority.issuingAuthority ==
+                                              issuingAuthority.issuingAuthority)
+                                          ?.validTill = value;
                                     },
                                     onTap: () async {
                                       DateTime? selectedDateTime =
@@ -271,28 +285,11 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                                           selectedDateTime?.getServerDate() ??
                                               "";
                                     },
-                                    decoration: InputDecoration(
-                                        fillColor: Colors.white,
-                                        filled: true,
-                                        hintText: "Valid Till",
-                                        isDense: true,
-                                        suffixIcon: const Padding(
-                                          padding: EdgeInsets.only(right: 16),
-                                          child: Icon(
-                                            Icons.calendar_month,
-                                          ),
-                                        ),
-                                        suffixIconConstraints:
-                                            const BoxConstraints(
-                                                maxHeight: 32, maxWidth: 32),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 8),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Get.theme.primaryColor),
-                                            borderRadius:
-                                                BorderRadius.circular(64))));
+                                    isDate: true,
+                                    hintText: "Valid Till",
+                                    icon: const Icon(
+                                      Icons.calendar_month,
+                                    ));
                               }),
                             ),
                           ],

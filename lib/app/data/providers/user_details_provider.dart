@@ -40,7 +40,9 @@ class UserDetailsProvider extends WrapperConnect {
       if (map.isEmpty) {
         return null;
       }
-      return UserDetails.fromJson(map.first);
+      if (map is List) {
+        return UserDetails.fromJson(map.first);
+      }
     }, contentType: "");
     UserStates.instance.userDetails = response.body;
     return response.body;

@@ -197,6 +197,13 @@ class COCDetails extends GetView<CrewOnboardingController> {
                                         }
                                         return null;
                                       },
+                                      onChanged: (value) {
+                                        controller.cocIssuingAuthorities
+                                            .firstWhereOrNull((authority) =>
+                                                authority.issuingAuthority ==
+                                                "Others")
+                                            ?.validTill = value;
+                                      },
                                       onTap: () async {
                                         DateTime? selectedDateTime =
                                             await showDatePicker(
@@ -219,7 +226,7 @@ class COCDetails extends GetView<CrewOnboardingController> {
                                             selectedDateTime?.getServerDate() ??
                                                 "";
                                       },
-                                      readOnly: true,
+                                      isDate: true,
                                       hintText: "Valid Till",
                                       icon: const Icon(
                                         Icons.calendar_month,
@@ -250,6 +257,13 @@ class COCDetails extends GetView<CrewOnboardingController> {
                                     }
                                     return null;
                                   },
+                                  onChanged: (value) {
+                                    controller.cocIssuingAuthorities
+                                        .firstWhereOrNull((authority) =>
+                                            authority.issuingAuthority ==
+                                            issuingAuthority.issuingAuthority)
+                                        ?.validTill = value;
+                                  },
                                   onTap: () async {
                                     DateTime? selectedDateTime =
                                         await showDatePicker(
@@ -271,7 +285,7 @@ class COCDetails extends GetView<CrewOnboardingController> {
                                     textEditingController.text =
                                         selectedDateTime?.getServerDate() ?? "";
                                   },
-                                  readOnly: true,
+                                  isDate: true,
                                   hintText: "Valid Till",
                                   icon: const Icon(
                                     Icons.calendar_month,
