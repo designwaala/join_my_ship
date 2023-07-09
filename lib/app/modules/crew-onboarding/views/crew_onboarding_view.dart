@@ -1,14 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:dropdown_button2/src/dropdown_button2.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/step1.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/step2.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/step3.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 import '../controllers/crew_onboarding_controller.dart';
 
