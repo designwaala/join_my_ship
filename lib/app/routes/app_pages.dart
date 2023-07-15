@@ -17,6 +17,10 @@ import '../modules/email_verification_waiting/bindings/email_verification_waitin
 import '../modules/email_verification_waiting/views/email_verification_waiting_view.dart';
 import '../modules/employer_create_user/bindings/employer_create_user_binding.dart';
 import '../modules/employer_create_user/views/employer_create_user_view.dart';
+import '../modules/employer_invite_new_members/bindings/employer_invite_new_members_binding.dart';
+import '../modules/employer_invite_new_members/views/employer_invite_new_members_view.dart';
+import '../modules/employer_manage_users/bindings/employer_manage_users_binding.dart';
+import '../modules/employer_manage_users/views/employer_manage_users_view.dart';
 import '../modules/help/bindings/help_binding.dart';
 import '../modules/help/views/help_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -114,6 +118,16 @@ class AppPages {
       name: _Paths.EMPLOYER_CREATE_USER,
       page: () => const EmployerCreateUserView(),
       binding: EmployerCreateUserBinding(),
+    ),
+    GetPage(
+      name: _Paths.EMPLOYER_INVITE_NEW_MEMBERS,
+      page: () => const EmployerInviteNewMembersView(),
+      binding: EmployerInviteNewMembersBinding(),
+    ),
+    GetPage(
+      name: _Paths.EMPLOYER_MANAGE_USERS,
+      page: () => const EmployerManageUsersView(),
+      binding: EmployerManageUsersBinding(),
     ),
   ];
 }

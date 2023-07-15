@@ -1,15 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/providers/country_provider.dart';
+import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/state_provider.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 import '../../../data/models/country_model.dart';
 import '../../../data/models/state_model.dart';
 
 enum Step1FormMiss {
   didNotSelectProfilePic,
-  didNotChooseCurrentRank,
-  didNotSelectMaritalStatus,
-  didNotSelectResume,
   didNotSelectCountry,
   didNotSelectState
 }
@@ -28,116 +37,149 @@ class EmployerCreateUserController extends GetxController {
   TextEditingController addressLine1Controller = TextEditingController();
   TextEditingController addressLine2Controller = TextEditingController();
   TextEditingController zipCodeController = TextEditingController();
+  TextEditingController companyNameController = TextEditingController();
+  TextEditingController websiteController = TextEditingController();
   final Rxn<XFile> pickedImage = Rxn();
   final ImagePicker imagePicker = ImagePicker();
   RxnString uploadedImagePath = RxnString();
   RxnString uploadedResumePath = RxnString();
   RxList<StateModel> states = RxList.empty();
 
-  final count = 0.obs;
+  final parentKey = GlobalKey();
+  FToast fToast = FToast();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  RxBool isLoading = false.obs;
+  RxBool isUpdating = false.obs;
+
+  CrewUser? crewUser;
+
   @override
   void onInit() {
+    instantiate();
     super.onInit();
   }
-  // Future<bool> postEmployerUser() async {
-  //   step1FormMisses.clear();
-  //   if (pickedImage.value?.path == null && ?.profilePic == null) {
-  //     step1FormMisses.add(Step1FormMiss.didNotSelectProfilePic);
-  //   }
-  //   if (pickedResume.value?.path == null && crewUser?.resume == null) {
-  //     step1FormMisses.add(Step1FormMiss.didNotSelectResume);
-  //   }
-  //   if (selectedRank.value?.id == null) {
-  //     step1FormMisses.add(Step1FormMiss.didNotChooseCurrentRank);
-  //   }
-  //   if (maritalStatus.value == null) {
-  //     step1FormMisses.add(Step1FormMiss.didNotSelectMaritalStatus);
-  //   }
-  //   if (country.value == null) {
-  //     step1FormMisses.add(Step1FormMiss.didNotSelectCountry);
-  //   }
-  //   if (state.value == null) {
-  //     step1FormMisses.add(Step1FormMiss.didNotSelectState);
-  //   }
 
-  //   if (formKeyStep1.currentState?.validate() != true) {
-  //     return false;
-  //   }
+  @override
+  onReady() {
+    super.onReady();
+    websiteController.text = PreferencesHelper.instance.website ?? "";
+    companyNameController.text = PreferencesHelper.instance.companyName ?? "";
+    fToast.init(parentKey.currentContext!);
+  }
 
-  //   if ((pickedImage.value?.path == null && crewUser?.profilePic == null) ||
-  //       (pickedResume.value?.path == null && crewUser?.resume == null) ||
-  //       selectedRank.value?.id == null ||
-  //       maritalStatus.value == null ||
-  //       country.value == null ||
-  //       state.value == null) {
-  //     return false;
-  //   }
-  //   isUpdating.value = true;
-  //   String password = await SecureStorage.instance.password;
-  //   int? statusCode;
-  //   if (crewUser?.id == null) {
-  //     statusCode = await getIt<CrewUserProvider>().createCrewUser(
-  //         crewUser: CrewUser(
-  //             firstName: FirebaseAuth.instance.currentUser?.displayName,
-  //             lastName: "_",
-  //             password: "Demo@123",
-  //             email: FirebaseAuth.instance.currentUser?.email,
-  //             addressLine1: addressLine1.text,
-  //             pincode: zipCode.text,
-  //             dob: dateOfBirth.text,
-  //             maritalStatus: maritalStatus.value,
-  //             country: country.value?.id,
-  //             rankId: selectedRank.value?.id,
-  //             gender: gender.value,
-  //             userTypeKey: 2,
-  //             addressLine2: addressLine2.text.nullIfEmpty(),
-  //             addressCity: city.text,
-  //             state: state.value?.id,
-  //             promotionApplied: isLookingForPromotion.value,
-  //             screenCheck: 1,
-  //             authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
-  //         profilePicPath: pickedImage.value?.path,
-  //         resumePath: pickedResume.value?.path);
-  //     if (statusCode < 300) {
-  //       fToast.safeShowToast(
-  //           child: successToast("Your account was successfully created."));
-  //     } else {
-  //       fToast.safeShowToast(child: errorToast("Error creating your account"));
-  //     }
-  //   } else {
-  //     statusCode = await getIt<CrewUserProvider>().updateCrewUser(
-  //         crewId: crewUser!.id!,
-  //         crewUser: CrewUser(
-  //             firstName: FirebaseAuth.instance.currentUser?.displayName,
-  //             lastName: "_",
-  //             email: FirebaseAuth.instance.currentUser?.email,
-  //             addressLine1: addressLine1.text,
-  //             pincode: zipCode.text,
-  //             dob: dateOfBirth.text,
-  //             maritalStatus: maritalStatus.value,
-  //             country: country.value?.id,
-  //             rankId: selectedRank.value?.id,
-  //             gender: gender.value,
-  //             userTypeKey: 2,
-  //             addressLine2: addressLine2.text,
-  //             addressCity: city.text,
-  //             state: state.value?.id,
-  //             promotionApplied: isLookingForPromotion.value,
-  //             screenCheck: 1,
-  //             authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
-  //         profilePicPath: pickedImage.value?.path,
-  //         resumePath: pickedResume.value?.path);
-  //     if ((statusCode ?? 0) < 300) {
-  //       fToast.safeShowToast(
-  //           child: successToast("Your account was successfully updated."));
-  //     } else {
-  //       fToast.safeShowToast(child: errorToast("Error updating your account"));
-  //     }
-  //   }
-  //   isUpdating.value = false;
+  getStates() async {
+    isLoadingStates.value = true;
+    if (country.value?.id == null) {
+      return;
+    }
+    state.value = null;
+    states.value = (await getIt<StateProvider>()
+            .getStates(countryId: country.value!.id!)) ??
+        [];
+    states.add(
+        StateModel(id: 58, country: 00, stateCode: "00", stateName: "Others"));
+    isLoadingStates.value = false;
+  }
 
-  //   return (statusCode ?? 0) < 300;
-  // }
+  instantiate() async {
+    isLoading.value = true;
+    countries = (await getIt<CountryProvider>().getCountry()) ?? [];
+    Country? india =
+        countries.firstWhereOrNull((country) => country.countryCode == "IN");
+    countries.removeWhere((country) => country.id == india?.id);
+    if (india != null) {
+      countries.insert(0, india);
+    }
+    isLoading.value = false;
+  }
+
+  Future<bool> postEmployerUser() async {
+    step1FormMisses.clear();
+    if (pickedImage.value?.path == null) {
+      step1FormMisses.add(Step1FormMiss.didNotSelectProfilePic);
+    }
+    if (country.value == null) {
+      step1FormMisses.add(Step1FormMiss.didNotSelectCountry);
+    }
+    if (state.value == null) {
+      step1FormMisses.add(Step1FormMiss.didNotSelectState);
+    }
+
+    if (formKey.currentState?.validate() != true) {
+      return false;
+    }
+
+    if (pickedImage.value?.path == null ||
+        country.value == null ||
+        state.value == null) {
+      return false;
+    }
+    if (formKey.currentState?.validate() != true) {
+      return false;
+    }
+    isUpdating.value = true;
+    int? statusCode;
+    if (crewUser?.id == null) {
+      statusCode = await getIt<CrewUserProvider>().createCrewUser(
+          crewUser: CrewUser(
+              firstName: firstNameController.text,
+              lastName: lastNameController.text,
+              designation: designationController.text,
+              website: websiteController.text.nullIfEmpty(),
+              country: country.value?.id,
+              state: state.value?.id,
+              addressCity: cityController.text,
+              addressLine1: addressLine1Controller.text.nullIfEmpty(),
+              addressLine2: addressLine2Controller.text.nullIfEmpty(),
+              pincode: zipCodeController.text.nullIfEmpty(),
+              password: "Demo@123",
+              email: FirebaseAuth.instance.currentUser?.email,
+              userTypeKey: 3,
+              screenCheck: 1,
+              gender: 3,
+              username: companyNameController.text.nullIfEmpty(),
+              authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
+          profilePicPath: pickedImage.value?.path);
+      if (statusCode < 300) {
+        fToast.safeShowToast(
+            child: successToast("Your account was successfully created."));
+        Get.toNamed(Routes.HOME);
+      } else {
+        fToast.safeShowToast(child: errorToast("Error creating your account"));
+      }
+    } else {
+      statusCode = await getIt<CrewUserProvider>().updateCrewUser(
+          crewId: crewUser!.id!,
+          crewUser: CrewUser(
+              firstName: FirebaseAuth.instance.currentUser?.displayName,
+              lastName: "_",
+              password: "Demo@123",
+              email: FirebaseAuth.instance.currentUser?.email,
+              website: websiteController.text.nullIfEmpty(),
+              addressLine1: addressLine1Controller.text,
+              pincode: zipCodeController.text,
+              country: country.value?.id,
+              userTypeKey: 3,
+              addressLine2: addressLine2Controller.text.nullIfEmpty(),
+              addressCity: cityController.text,
+              state: state.value?.id,
+              screenCheck: 1,
+              gender: 3,
+              username: companyNameController.text.nullIfEmpty(),
+              authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
+          profilePicPath: pickedImage.value?.path);
+      if ((statusCode ?? 0) < 300) {
+        fToast.safeShowToast(
+            child: successToast("Your account was successfully updated."));
+      } else {
+        fToast.safeShowToast(child: errorToast("Error updating your account"));
+      }
+    }
+    isUpdating.value = false;
+
+    return (statusCode ?? 0) < 300;
+  }
 
   Future<void> pickSource() async {
     return showDialog(
@@ -174,14 +216,7 @@ class EmployerCreateUserController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

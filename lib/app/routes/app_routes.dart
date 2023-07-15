@@ -18,6 +18,8 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const HELP = _Paths.HELP;
   static const EMPLOYER_CREATE_USER = _Paths.EMPLOYER_CREATE_USER;
+  static const EMPLOYER_INVITE_NEW_MEMBERS = _Paths.EMPLOYER_INVITE_NEW_MEMBERS;
+  static const EMPLOYER_MANAGE_USERS = _Paths.EMPLOYER_MANAGE_USERS;
 }
 
 abstract class _Paths {
@@ -37,4 +39,6 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const HELP = '/help';
   static const EMPLOYER_CREATE_USER = '/employer-create-user';
+  static const EMPLOYER_INVITE_NEW_MEMBERS = '/employer-invite-new-members';
+  static const EMPLOYER_MANAGE_USERS = '/employer-manage-users';
 }

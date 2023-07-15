@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 
 import '../controllers/choose_user_controller.dart';
 
@@ -62,9 +63,12 @@ class ChooseUserView extends GetView<ChooseUserController> {
             ].mapIndexed((index, e) => InkWell(
                   onTap: () {
                     if (index == 0) {
+                      PreferencesHelper.instance.setIsCrew(true);
                       Get.toNamed(Routes.SIGN_UP_EMAIL,
-                          arguments: const SignUpEmailArguments(signUpType: SignUpType.crew));
+                          arguments: const SignUpEmailArguments(
+                              signUpType: SignUpType.crew));
                     } else {
+                      PreferencesHelper.instance.setIsCrew(false);
                       Get.toNamed(Routes.CHOOSE_EMPLOYER);
                     }
                   },

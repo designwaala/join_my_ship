@@ -13,6 +13,7 @@ import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart'
 import 'package:join_mp_ship/app/data/providers/previous_employer_reference_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
+import 'package:join_mp_ship/app/data/providers/secondary_users_provider.dart';
 import 'package:join_mp_ship/app/data/providers/service_record_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
@@ -31,9 +32,14 @@ GetIt getIt = GetIt.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  print(await FirebaseAuth.instance.currentUser?.getIdToken());
-  baseURL = "https://designwaala.me/";
   PreferencesHelper.instance.init();
+  try {
+    print(await FirebaseAuth.instance.currentUser?.getIdToken());
+  } catch (e) {
+    await FirebaseAuth.instance.signOut();
+    PreferencesHelper.instance.clearAll();
+  }
+  baseURL = "https://designwaala.me/";
   runApp(
     ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -44,6 +50,8 @@ void main() async {
             initialRoute: AppPages.INITIAL,
             getPages: AppPages.routes,
             theme: ThemeData(
+                    scaffoldBackgroundColor:
+                        const Color.fromRGBO(251, 246, 255, 1),
                     textTheme: GoogleFonts.poppinsTextTheme(
                         Theme.of(context).textTheme))
                 .copyWith(
@@ -65,5 +73,6 @@ void main() async {
     ..registerSingleton(VesselTypeProvider())
     ..registerSingleton(SeaServiceProvider())
     ..registerSingleton(PreviousEmployerProvider())
-    ..registerSingleton(VesselListProvider());
+    ..registerSingleton(VesselListProvider())
+    ..registerSingleton(SecondaryUsersProvider());
 }

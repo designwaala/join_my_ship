@@ -9,10 +9,15 @@ class EmailVerificationWaitingController extends GetxController {
   RxBool isResendingEmail = false.obs;
   RxBool isSigningOut = false.obs;
   RxBool isRefreshing = false.obs;
+  bool isCrew = true;
   // Timer? _timer;
 
   @override
   void onInit() {
+    if (Get.arguments is EmailVerificationArguments) {
+      final args = Get.arguments as EmailVerificationArguments;
+      isCrew = args.isCrew;
+    }
     // _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
     //   await FirebaseAuth.instance.currentUser?.reload();
     //   if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
@@ -52,4 +57,9 @@ class EmailVerificationWaitingController extends GetxController {
     super.onClose();
     // _timer?.cancel();
   }
+}
+
+class EmailVerificationArguments {
+  final bool isCrew;
+  const EmailVerificationArguments({required this.isCrew});
 }

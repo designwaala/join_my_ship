@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 
 class SplashController extends GetxController with GetTickerProviderStateMixin {
   late AnimationController animationController;
@@ -25,27 +26,14 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
   }
 
   redirection() async {
-    await Future.wait([
-      // getIt<LoginProvider>().login(),
-      Future.delayed(const Duration(seconds: 3))
-    ]);
-
-    // CrewUser? crewUser = await getIt<CrewUserProvider>().getCrewUser();
-
-    // if (FirebaseAuth.instance.currentUser == null) {
-    //   Get.toNamed(Routes.INFO);
-    // } else {
-    //   if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
-    //     Get.toNamed(Routes.CREW_ONBOARDING);
-    //   } else {
-    //     Get.toNamed(Routes.EMAIL_VERIFICATION_WAITING);
-    //   }
-    // }
+    await Future.wait([Future.delayed(const Duration(seconds: 3))]);
 
     Get.offAllNamed(FirebaseAuth.instance.currentUser == null
         ? Routes.INFO
         : FirebaseAuth.instance.currentUser?.emailVerified == true
-            ? Routes.CREW_ONBOARDING
+            ? PreferencesHelper.instance.isCrew == true
+                ? Routes.CREW_ONBOARDING
+                : Routes.EMPLOYER_CREATE_USER
             : Routes.EMAIL_VERIFICATION_WAITING);
   }
 
