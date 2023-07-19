@@ -242,7 +242,9 @@ class ProfileView extends GetView<ProfileController> {
                             iconPath:
                                 "assets/images/profile/change_password.png",
                             text: "Change Password",
-                            onTap: () {}),
+                            onTap: () {
+                              Get.toNamed(Routes.CHANGE_PASSWORD);
+                            }),
                         CardObject(
                             iconPath: "assets/images/profile/help.png",
                             text: "Help & Feedback",

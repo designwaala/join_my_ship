@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
+import '../modules/change_password/bindings/change_password_binding.dart';
+import '../modules/change_password/views/change_password_view.dart';
 import '../modules/choose_employer/bindings/choose_employer_binding.dart';
 import '../modules/choose_employer/views/choose_employer_view.dart';
 import '../modules/choose_user/bindings/choose_user_binding.dart';
@@ -128,6 +129,11 @@ class AppPages {
       name: _Paths.EMPLOYER_MANAGE_USERS,
       page: () => const EmployerManageUsersView(),
       binding: EmployerManageUsersBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
     ),
   ];
 }

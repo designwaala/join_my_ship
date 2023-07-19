@@ -20,6 +20,7 @@ abstract class Routes {
   static const EMPLOYER_CREATE_USER = _Paths.EMPLOYER_CREATE_USER;
   static const EMPLOYER_INVITE_NEW_MEMBERS = _Paths.EMPLOYER_INVITE_NEW_MEMBERS;
   static const EMPLOYER_MANAGE_USERS = _Paths.EMPLOYER_MANAGE_USERS;
+  static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
 }
 
 abstract class _Paths {
@@ -41,4 +42,5 @@ abstract class _Paths {
   static const EMPLOYER_CREATE_USER = '/employer-create-user';
   static const EMPLOYER_INVITE_NEW_MEMBERS = '/employer-invite-new-members';
   static const EMPLOYER_MANAGE_USERS = '/employer-manage-users';
+  static const CHANGE_PASSWORD = '/change-password';
 }
