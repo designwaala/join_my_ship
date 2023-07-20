@@ -30,6 +30,8 @@ import '../modules/info/bindings/info_binding.dart';
 import '../modules/info/views/info_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/reset_password/bindings/reset_password_binding.dart';
+import '../modules/reset_password/views/reset_password_view.dart';
 import '../modules/sign_up_email/bindings/sign_up_email_binding.dart';
 import '../modules/sign_up_email/views/sign_up_email_view.dart';
 import '../modules/sign_up_phone_number/bindings/sign_up_phone_number_binding.dart';
@@ -134,6 +136,11 @@ class AppPages {
       name: _Paths.CHANGE_PASSWORD,
       page: () => const ChangePasswordView(),
       binding: ChangePasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.RESET_PASSWORD,
+      page: () => const ResetPasswordView(),
+      binding: ResetPasswordBinding(),
     ),
   ];
 }
