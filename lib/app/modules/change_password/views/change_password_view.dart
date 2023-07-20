@@ -15,17 +15,32 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: const Color(0xFF000000),
-        title: Text(
-          'Change Password',
-          style: GoogleFonts.poppins(
-              color: const Color(0xFF000000),
-              fontWeight: FontWeight.w600,
-              fontSize: 22.sp),
-        ),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-      ),
+          foregroundColor: const Color(0xFF000000),
+          toolbarHeight: 70,
+          title: Text(
+            'Change Password',
+            style: GoogleFonts.poppins(
+                color: const Color(0xFF000000),
+                fontWeight: FontWeight.w500,
+                fontSize: 20.sp),
+          ),
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          leading: InkWell(
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(
+                  color: Color(0xFFF3F3F3), shape: BoxShape.circle),
+              child: const Icon(
+                Icons.keyboard_backspace_rounded,
+                color: Colors.black,
+              ),
+            ),
+          )),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: Obx(
@@ -106,7 +121,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                                   color: Colors.blue, width: 2),
                               borderRadius: BorderRadius.circular(64))),
                     ),
-                    50.verticalSpace,
+                    40.verticalSpace,
                     MaterialButton(
                         minWidth: double.infinity,
                         height: 60,
