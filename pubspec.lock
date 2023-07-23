@@ -1125,6 +1125,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  text_form_field_validator:
+    dependency: "direct main"
+    description:
+      name: text_form_field_validator
+      sha256: d9c0e3c28878a332f81c127c38ca893395b5f684a1050eef53a3e79e95b4f8ec
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   time_machine:
     dependency: "direct main"
     description:

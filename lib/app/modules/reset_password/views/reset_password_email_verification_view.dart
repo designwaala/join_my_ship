@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/app/modules/reset_password/controllers/reset_password_controller.dart';
 
-class CheckEmailView extends GetView {
-  const CheckEmailView({Key? key}) : super(key: key);
+class ResetPasswordEmailVerificationView
+    extends GetView<ResetPasswordController> {
+  const ResetPasswordEmailVerificationView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70,
+        backgroundColor: Colors.white,
+        centerTitle: true,
         title: Text('Reset Password',
             style: Get.theme.textTheme.headlineSmall?.copyWith(
                 color: Colors.black,
                 fontSize: 20,
                 fontWeight: FontWeight.w600)),
-        backgroundColor: Colors.white,
         leading: InkWell(
           onTap: Get.back,
           child: Container(
@@ -30,7 +32,6 @@ class CheckEmailView extends GetView {
             ),
           ),
         ),
-        centerTitle: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(40),
@@ -67,7 +68,7 @@ class CheckEmailView extends GetView {
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(30),
                 ),
-                onPressed: () => Get.offAndToNamed(Routes.CREW_SIGN_IN_EMAIL),
+                onPressed: Get.back,
                 child: const Text(
                   "OK",
                   style: TextStyle(fontSize: 16),

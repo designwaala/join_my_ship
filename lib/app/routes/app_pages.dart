@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/modules/reset_password/views/reset_password_email_verification_view.dart';
 
 import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
@@ -140,6 +141,11 @@ class AppPages {
     GetPage(
       name: _Paths.RESET_PASSWORD,
       page: () => const ResetPasswordView(),
+      binding: ResetPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.RESET_PASSWORD_EMAIL_VERIFICATION,
+      page: () => const ResetPasswordEmailVerificationView(),
       binding: ResetPasswordBinding(),
     ),
   ];

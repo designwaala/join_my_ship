@@ -22,6 +22,8 @@ abstract class Routes {
   static const EMPLOYER_MANAGE_USERS = _Paths.EMPLOYER_MANAGE_USERS;
   static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
   static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
+  static const RESET_PASSWORD_EMAIL_VERIFICATION =
+      _Paths.RESET_PASSWORD_EMAIL_VERIFICATION;
 }
 
 abstract class _Paths {
@@ -45,4 +47,6 @@ abstract class _Paths {
   static const EMPLOYER_MANAGE_USERS = '/employer-manage-users';
   static const CHANGE_PASSWORD = '/change-password';
   static const RESET_PASSWORD = '/reset-password';
+  static const RESET_PASSWORD_EMAIL_VERIFICATION =
+      '/reset-password-email-verification';
 }
