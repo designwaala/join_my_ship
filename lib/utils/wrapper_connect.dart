@@ -154,7 +154,7 @@ class WrapperConnect extends GetConnect {
     if (idToken == null) {
       await FirebaseAuth.instance.signOut();
       PreferencesHelper.instance.clearAll();
-      Get.offAllNamed(Routes.CREW_SIGN_IN_MOBILE);
+      Get.offAllNamed(Routes.INFO);
       return false;
     }
     final response = await super.post(
