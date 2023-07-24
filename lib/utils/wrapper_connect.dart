@@ -151,6 +151,12 @@ class WrapperConnect extends GetConnect {
 
   Future<bool> getAccessTokens() async {
     String? idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (idToken == null) {
+      await FirebaseAuth.instance.signOut();
+      PreferencesHelper.instance.clearAll();
+      Get.offAllNamed(Routes.CREW_SIGN_IN_MOBILE);
+      return false;
+    }
     final response = await super.post(
       "myadmin_api/log_in/",
       {},
