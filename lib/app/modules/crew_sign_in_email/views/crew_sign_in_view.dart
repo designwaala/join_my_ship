@@ -115,7 +115,9 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                             TextSpan(
                                 text: "Reset here",
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () {},
+                                  ..onTap = () {
+                                    Get.toNamed(Routes.RESET_PASSWORD);
+                                  },
                                 style: Get.textTheme.bodyMedium?.copyWith(
                                     color: Get.theme.primaryColor,
                                     decoration: TextDecoration.underline))

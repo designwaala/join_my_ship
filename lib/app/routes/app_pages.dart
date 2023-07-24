@@ -1,8 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/modules/reset_password/views/reset_password_email_verification_view.dart';
 
 import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
+import '../modules/change_password/bindings/change_password_binding.dart';
+import '../modules/change_password/views/change_password_view.dart';
 import '../modules/choose_employer/bindings/choose_employer_binding.dart';
 import '../modules/choose_employer/views/choose_employer_view.dart';
 import '../modules/choose_user/bindings/choose_user_binding.dart';
@@ -33,6 +35,8 @@ import '../modules/job_posted_successfully/bindings/job_posted_successfully_bind
 import '../modules/job_posted_successfully/views/job_posted_successfully_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/reset_password/bindings/reset_password_binding.dart';
+import '../modules/reset_password/views/reset_password_view.dart';
 import '../modules/sign_up_email/bindings/sign_up_email_binding.dart';
 import '../modules/sign_up_email/views/sign_up_email_view.dart';
 import '../modules/sign_up_phone_number/bindings/sign_up_phone_number_binding.dart';
@@ -134,6 +138,21 @@ class AppPages {
       name: _Paths.EMPLOYER_MANAGE_USERS,
       page: () => const EmployerManageUsersView(),
       binding: EmployerManageUsersBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.RESET_PASSWORD,
+      page: () => const ResetPasswordView(),
+      binding: ResetPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.RESET_PASSWORD_EMAIL_VERIFICATION,
+      page: () => const ResetPasswordEmailVerificationView(),
+      binding: ResetPasswordBinding(),
     ),
     GetPage(
       name: _Paths.JOB_POST,
