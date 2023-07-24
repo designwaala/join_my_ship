@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
+import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/login_provider.dart';
@@ -19,6 +21,7 @@ import 'package:join_mp_ship/app/data/providers/state_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
+import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/firebase_options.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/toasts/unfocus_gesture.dart';
@@ -74,5 +77,8 @@ void main() async {
     ..registerSingleton(SeaServiceProvider())
     ..registerSingleton(PreviousEmployerProvider())
     ..registerSingleton(VesselListProvider())
-    ..registerSingleton(SecondaryUsersProvider());
+    ..registerSingleton(SecondaryUsersProvider())
+    ..registerSingleton(CocProvider())
+    ..registerSingleton(CopProvider())
+    ..registerSingleton(WatchKeepingProvider());
 }

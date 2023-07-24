@@ -178,7 +178,7 @@ class ProfileView extends GetView<ProfileController> {
                           }
                         },
                         child: Container(
-                          height: 55.h,
+                          height: 62.h,
                           margin: EdgeInsets.symmetric(horizontal: 22.w),
                           padding: EdgeInsets.symmetric(
                               horizontal: 18.w, vertical: 6.h),
