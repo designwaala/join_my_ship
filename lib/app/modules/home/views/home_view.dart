@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/profile/views/profile_view.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -13,61 +15,91 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Scaffold(
-        body: () {
-          switch (controller.currentIndex.value) {
-            case 1:
-              return _buildBody();
-            case 2:
-              return SizedBox();
-            case 3:
-              return SizedBox();
-            case 4:
-              return SizedBox();
-            case 5:
-              return ProfileView();
-            default:
-              return SizedBox();
-          }
-        }(),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CurvedNavigationBar(
-          height: 64,
-          backgroundColor: Colors.transparent,
-          buttonBackgroundColor: Colors.white,
-          items: bottomIcons
-              .mapIndexed(
-                  (index, e) => index == controller.currentIndex.value - 1
-                      ? e.icon
-                      : ColorFiltered(
-                          colorFilter: const ColorFilter.matrix([
-                            0.2126,
-                            0.7152,
-                            0.0722,
-                            0,
-                            0,
-                            0.2126,
-                            0.7152,
-                            0.0722,
-                            0,
-                            0,
-                            0.2126,
-                            0.7152,
-                            0.0722,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            1,
-                            0,
-                          ]),
-                          child: e.icon))
-              .toList(),
-          onTap: (index) {
-            controller.currentIndex.value = index + 1;
-          },
-        ),
+      return Stack(
+        children: [
+          Scaffold(
+            body: () {
+              switch (controller.currentIndex.value) {
+                case 1:
+                  return _buildBody();
+                case 2:
+                  return SizedBox();
+                case 3:
+                  return SizedBox();
+                case 4:
+                  return SizedBox();
+                case 5:
+                  return ProfileView();
+                default:
+                  return SizedBox();
+              }
+            }(),
+            // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            bottomNavigationBar: CurvedNavigationBar(
+              height: 64,
+              backgroundColor: Colors.transparent,
+              buttonBackgroundColor: Colors.white,
+              items: bottomIcons
+                  .mapIndexed(
+                      (index, e) => index == controller.currentIndex.value - 1
+                          ? e.icon
+                          : ColorFiltered(
+                              colorFilter: const ColorFilter.matrix([
+                                0.2126,
+                                0.7152,
+                                0.0722,
+                                0,
+                                0,
+                                0.2126,
+                                0.7152,
+                                0.0722,
+                                0,
+                                0,
+                                0.2126,
+                                0.7152,
+                                0.0722,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                1,
+                                0,
+                              ]),
+                              child: e.icon))
+                  .toList(),
+              onTap: (index) {
+                if (index != 2) {
+                  controller.showJobButtons.value = false;
+                  controller.currentIndex.value = index + 1;
+                } else {
+                  controller.showJobButtons.value = true;
+                }
+              },
+            ),
+          ),
+          if (controller.showJobButtons.value)
+            Positioned(
+                bottom: 72,
+                left: 0,
+                right: 0,
+                child: IntrinsicWidth(
+                  child: Column(
+                    children: [
+                      CustomElevatedButon(
+                          onPressed: () {
+                            Get.toNamed(Routes.JOB_POST);
+                          },
+                          child: Text("Post a new job")),
+                      CustomElevatedButon(
+                          onPressed: () {
+                            Get.toNamed(Routes.JOB_POST);
+                          },
+                          child: Text("View posted jobs")),
+                    ],
+                  ),
+                ))
+        ],
       );
     });
   }

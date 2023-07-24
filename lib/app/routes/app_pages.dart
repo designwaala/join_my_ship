@@ -27,6 +27,10 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/info/bindings/info_binding.dart';
 import '../modules/info/views/info_view.dart';
+import '../modules/job_post/bindings/job_post_binding.dart';
+import '../modules/job_post/views/job_post_view.dart';
+import '../modules/job_posted_successfully/bindings/job_posted_successfully_binding.dart';
+import '../modules/job_posted_successfully/views/job_posted_successfully_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/sign_up_email/bindings/sign_up_email_binding.dart';
@@ -35,6 +39,8 @@ import '../modules/sign_up_phone_number/bindings/sign_up_phone_number_binding.da
 import '../modules/sign_up_phone_number/views/sign_up_phone_number_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+import '../modules/view_jobs_posted/bindings/view_jobs_posted_binding.dart';
+import '../modules/view_jobs_posted/views/view_jobs_posted_view.dart';
 
 part 'app_routes.dart';
 
@@ -128,6 +134,21 @@ class AppPages {
       name: _Paths.EMPLOYER_MANAGE_USERS,
       page: () => const EmployerManageUsersView(),
       binding: EmployerManageUsersBinding(),
+    ),
+    GetPage(
+      name: _Paths.JOB_POST,
+      page: () => const JobPostView(),
+      binding: JobPostBinding(),
+    ),
+    GetPage(
+      name: _Paths.JOB_POSTED_SUCCESSFULLY,
+      page: () => const JobPostedSuccessfullyView(),
+      binding: JobPostedSuccessfullyBinding(),
+    ),
+    GetPage(
+      name: _Paths.VIEW_JOBS_POSTED,
+      page: () => const ViewJobsPostedView(),
+      binding: ViewJobsPostedBinding(),
     ),
   ];
 }

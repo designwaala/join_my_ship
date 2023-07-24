@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
@@ -9,6 +11,7 @@ import 'package:join_mp_ship/utils/shared_preferences.dart';
 
 class SplashController extends GetxController with GetTickerProviderStateMixin {
   late AnimationController animationController;
+  CrewUser? user;
 
   @override
   void onInit() {
@@ -26,12 +29,15 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
   }
 
   redirection() async {
-    await Future.wait([Future.delayed(const Duration(seconds: 3))]);
-
+    await Future.wait([
+      getIt<CrewUserProvider>().getCrewUser().then((value) => user = value),
+      Future.delayed(const Duration(seconds: 3))
+    ]);
     Get.offAllNamed(FirebaseAuth.instance.currentUser == null
         ? Routes.INFO
         : FirebaseAuth.instance.currentUser?.emailVerified == true
-            ? PreferencesHelper.instance.isCrew == true
+            ? (PreferencesHelper.instance.isCrew == true ||
+                    user?.userTypeKey == 2)
                 ? Routes.CREW_ONBOARDING
                 : Routes.EMPLOYER_CREATE_USER
             : Routes.EMAIL_VERIFICATION_WAITING);
