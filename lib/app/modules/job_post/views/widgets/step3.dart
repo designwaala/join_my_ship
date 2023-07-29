@@ -88,7 +88,11 @@ class JobPostStep3 extends GetView<JobPostController> {
                       ],
                     ),
                     4.verticalSpace,
-                    ...controller.rankWithWages.map((rankWithWage) => Row(
+                    ...[
+                      ...controller.deckRankWithWages,
+                      ...controller.engineRankWithWages,
+                      ...controller.galleyRankWithWages
+                    ].map((rankWithWage) => Row(
                           children: [
                             Icon(Icons.radio_button_checked,
                                 color: Color(0xFF6750A4), size: 16),

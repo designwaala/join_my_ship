@@ -10,6 +10,7 @@ import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/job_provider.dart';
 import 'package:join_mp_ship/app/data/providers/login_provider.dart';
 import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_mp_ship/app/data/providers/previous_employer_reference_provider.dart';
@@ -80,5 +81,6 @@ void main() async {
     ..registerSingleton(SecondaryUsersProvider())
     ..registerSingleton(CocProvider())
     ..registerSingleton(CopProvider())
-    ..registerSingleton(WatchKeepingProvider());
+    ..registerSingleton(WatchKeepingProvider())
+    ..registerSingleton(JobProvider());
 }

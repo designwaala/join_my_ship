@@ -9,9 +9,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_mp_ship/app/modules/employer_create_user/controllers/employer_create_user_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
@@ -45,28 +47,32 @@ class ProfileView extends GetView<ProfileController> {
                               child: controller.pickedImage.value == null
                                   ? CachedNetworkImage(
                                       imageUrl: controller
-                                                  .crewUser.value?.profilePic ==
-                                              null
-                                          ? ""
-                                          : "$baseURL/${controller.crewUser.value?.profilePic}",
+                                              .crewUser.value?.profilePic ??
+                                          "",
                                       height: 100.h,
                                       width: 100.h,
                                       imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Get.theme.primaryColor),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Container(
+                                          Obx(() {
+                                        return Container(
+                                          padding: const EdgeInsets.all(4),
                                           decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover)),
-                                        ),
-                                      ),
+                                            border: Border.all(
+                                                color: Get.theme.primaryColor),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                      controller.crewUser.value
+                                                              ?.profilePic ??
+                                                          "",
+                                                    ),
+                                                    fit: BoxFit.cover)),
+                                          ),
+                                        );
+                                      }),
                                     )
                                   : Container(
                                       height: 100,
@@ -104,14 +110,16 @@ class ProfileView extends GetView<ProfileController> {
                                 fontWeight: FontWeight.w700, fontSize: 18)),
                       ),
                       4.verticalSpace,
-                      Center(
-                        child: Text(controller.rank,
-                            style: Get.textTheme.bodyMedium?.copyWith(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey)),
-                      ),
-                      24.verticalSpace,
+                      if (controller.crewUser.value?.userTypeKey == 2) ...[
+                        Center(
+                          child: Text(controller.rank,
+                              style: Get.textTheme.bodyMedium?.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey)),
+                        ),
+                        24.verticalSpace,
+                      ],
                       if (FirebaseAuth.instance.currentUser?.phoneNumber ==
                               null ||
                           FirebaseAuth
@@ -154,69 +162,75 @@ class ProfileView extends GetView<ProfileController> {
                         ),
                         24.verticalSpace,
                       ],
-                      InkWell(
-                        onTap: () async {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles();
-                          if (result == null) {
-                            return;
-                          }
-                          if (!["doc", "docx", "pdf"]
-                              .contains(result.files.single.extension ?? "")) {
-                            controller.fToast.safeShowToast(
-                                child: errorToast(
-                                    "Please pick your resume in supported file format"));
-                            return;
-                          }
+                      if (controller.crewUser.value?.userTypeKey == 2) ...[
+                        InkWell(
+                          onTap: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles();
+                            if (result == null) {
+                              return;
+                            }
+                            if (![
+                              "doc",
+                              "docx",
+                              "pdf"
+                            ].contains(result.files.single.extension ?? "")) {
+                              controller.fToast.safeShowToast(
+                                  child: errorToast(
+                                      "Please pick your resume in supported file format"));
+                              return;
+                            }
 
-                          if (result.files.single.path != null) {
-                            controller.pickedResume.value =
-                                File(result.files.single.path!);
-                            controller.updateResume();
-                          } else {
-                            controller.pickedResume.value = null;
-                          }
-                        },
-                        child: Container(
-                          height: 62.h,
-                          margin: EdgeInsets.symmetric(horizontal: 22.w),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 18.w, vertical: 6.h),
-                          decoration: BoxDecoration(
-                            color: Get.theme.primaryColor,
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("My Resume",
-                                        style: Get.textTheme.bodyMedium
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 14,
-                                                color: Colors.white)),
-                                    Text(
-                                        controller.crewUser.value?.resume
-                                                ?.split("/")
-                                                .lastOrNull ??
-                                            "",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Get.textTheme.bodyMedium
-                                            ?.copyWith(color: Colors.white))
-                                  ],
+                            if (result.files.single.path != null) {
+                              controller.pickedResume.value =
+                                  File(result.files.single.path!);
+                              controller.updateResume();
+                            } else {
+                              controller.pickedResume.value = null;
+                            }
+                          },
+                          child: Container(
+                            height: 62.h,
+                            margin: EdgeInsets.symmetric(horizontal: 22.w),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 18.w, vertical: 6.h),
+                            decoration: BoxDecoration(
+                              color: Get.theme.primaryColor,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("My Resume",
+                                          style: Get.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14,
+                                                  color: Colors.white)),
+                                      Text(
+                                          controller.crewUser.value?.resume
+                                                  ?.split("/")
+                                                  .lastOrNull ??
+                                              "",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Get.textTheme.bodyMedium
+                                              ?.copyWith(color: Colors.white))
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              4.horizontalSpace,
-                              const Icon(Icons.file_open, color: Colors.white)
-                            ],
+                                4.horizontalSpace,
+                                const Icon(Icons.file_open, color: Colors.white)
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      28.verticalSpace,
+                        28.verticalSpace,
+                      ],
                       Text("Options",
                           style: Get.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold, fontSize: 18.sp)),
@@ -224,15 +238,30 @@ class ProfileView extends GetView<ProfileController> {
                         CardObject(
                             iconPath: "assets/images/profile/edit_profile.png",
                             text: "Edit Profile",
-                            onTap: () {
-                              Get.toNamed(Routes.CREW_ONBOARDING,
-                                  arguments: const CrewOnboardingArguments(
-                                      editMode: true));
+                            onTap: () async {
+                              if (controller.crewUser.value?.userTypeKey == 2) {
+                                await Get.toNamed(Routes.CREW_ONBOARDING,
+                                    arguments: const CrewOnboardingArguments(
+                                        editMode: true));
+                              } else {
+                                await Get.toNamed(Routes.EMPLOYER_CREATE_USER,
+                                    arguments:
+                                        const EmployerCreateUserArguments(
+                                            editMode: true));
+                              }
+                              controller.crewUser.value =
+                                  UserStates.instance.crewUser;
                             }),
                         CardObject(
                             iconPath: "assets/images/profile/wallet.png",
                             text: "Wallet",
                             onTap: () {}),
+                        CardObject(
+                            iconPath: "assets/images/profile/manage_users.png",
+                            text: "Manage User",
+                            onTap: () {
+                              Get.toNamed(Routes.EMPLOYER_MANAGE_USERS);
+                            }),
                         CardObject(
                             iconPath:
                                 "assets/images/profile/my_subscription.png",

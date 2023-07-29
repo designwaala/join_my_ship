@@ -19,7 +19,9 @@ enum Step1Miss {
   tentativeJoining,
   vesselType,
   grt,
-  rank;
+  deckRank,
+  engineRank,
+  galleyRank;
 
   String get errorMessage {
     switch (this) {
@@ -29,8 +31,12 @@ enum Step1Miss {
         return "Please select a Vessel type";
       case Step1Miss.grt:
         return "Please enter GRT";
-      case Step1Miss.rank:
-        return "Please select atleast one rank";
+      case Step1Miss.deckRank:
+        return "Please select atleast one rank.";
+      case Step1Miss.engineRank:
+        return "Please select atleast one rank.";
+      case Step1Miss.galleyRank:
+        return "Please select atleast one rank.";
     }
   }
 }
@@ -49,7 +55,7 @@ enum Step2Miss {
 enum CrewRequirements {
   deckNavigation,
   engine,
-  gallery;
+  galley;
 
   String get name {
     switch (this) {
@@ -57,8 +63,8 @@ enum CrewRequirements {
         return "Deck / Navigation";
       case CrewRequirements.engine:
         return "Engine";
-      case CrewRequirements.gallery:
-        return "Gallery";
+      case CrewRequirements.galley:
+        return "Galley";
     }
   }
 }
@@ -70,7 +76,9 @@ class JobPostController extends GetxController {
   TextEditingController tentativeJoining = TextEditingController();
   TextEditingController grt = TextEditingController();
   RxList<CrewRequirements> crewRequirements = RxList.empty();
-  RxList<MapEntry<Rank?, double>> rankWithWages = RxList.empty();
+  RxList<MapEntry<Rank?, double>> deckRankWithWages = RxList.empty();
+  RxList<MapEntry<Rank?, double>> engineRankWithWages = RxList.empty();
+  RxList<MapEntry<Rank?, double>> galleyRankWithWages = RxList.empty();
   RxnInt recordVesselType = RxnInt();
   VesselList? vesselList;
   RxList<Rank> ranks = RxList.empty();
@@ -117,15 +125,12 @@ class JobPostController extends GetxController {
     isLoading.value = false;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
   validateStep1() {
     step1Misses.clear();
-    rankWithWages.removeWhere((e) => e.key == null);
-    if (tentativeJoining.text.isEmail) {
+    deckRankWithWages.removeWhere((e) => e.key == null);
+    engineRankWithWages.removeWhere((e) => e.key == null);
+    galleyRankWithWages.removeWhere((e) => e.key == null);
+    if (tentativeJoining.text.isEmpty) {
       step1Misses.add(Step1Miss.tentativeJoining);
     }
     if (recordVesselType.value == null) {
@@ -134,8 +139,17 @@ class JobPostController extends GetxController {
     if (grt.text.isEmpty) {
       step1Misses.add(Step1Miss.grt);
     }
-    if (rankWithWages.isEmpty) {
-      step1Misses.add(Step1Miss.rank);
+    if (crewRequirements.contains(CrewRequirements.deckNavigation) &&
+        deckRankWithWages.isEmpty) {
+      step1Misses.add(Step1Miss.deckRank);
+    }
+    if (crewRequirements.contains(CrewRequirements.engine) &&
+        engineRankWithWages.isEmpty) {
+      step1Misses.add(Step1Miss.engineRank);
+    }
+    if (crewRequirements.contains(CrewRequirements.galley) &&
+        galleyRankWithWages.isEmpty) {
+      step1Misses.add(Step1Miss.galleyRank);
     }
     if (step1Misses.isEmpty) {
       currentStep.value = 2;

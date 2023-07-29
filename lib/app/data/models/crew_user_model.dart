@@ -1,3 +1,5 @@
+import 'package:join_mp_ship/main.dart';
+
 class CrewUser {
   int? id;
   String? password;
@@ -95,7 +97,9 @@ class CrewUser {
     isStaff = json['is_staff'];
     isActive = json['is_active'];
     dateJoined = json['date_joined'];
-    profilePic = json['profilePic'];
+    profilePic = json['profilePic']?.contains(baseURL) == true
+        ? json['profilePic']
+        : "${baseURL.substring(0, baseURL.length - 1)}${json['profilePic']}";
     resume = json['resume'];
     email = json['email'];
     extraaPass = json['extraa_pass'];

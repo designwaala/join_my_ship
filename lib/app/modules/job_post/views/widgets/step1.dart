@@ -59,10 +59,12 @@ class JobPostStep1 extends GetView<JobPostController> {
                     ],
                   ),
                   if (controller.step1Misses
-                      .contains(Step1Miss.tentativeJoining))
+                      .contains(Step1Miss.tentativeJoining)) ...[
+                    8.verticalSpace,
                     Text(Step1Miss.tentativeJoining.errorMessage,
                         style: Get.textTheme.bodyMedium
                             ?.copyWith(color: Colors.red)),
+                  ],
                   12.verticalSpace,
                   Row(
                     children: [
@@ -133,10 +135,13 @@ class JobPostStep1 extends GetView<JobPostController> {
                       )
                     ],
                   ),
-                  if (controller.step1Misses.contains(Step1Miss.vesselType))
+                  if (controller.step1Misses
+                      .contains(Step1Miss.vesselType)) ...[
+                    8.verticalSpace,
                     Text(Step1Miss.vesselType.errorMessage,
                         style: Get.textTheme.bodyMedium
                             ?.copyWith(color: Colors.red)),
+                  ],
                   12.verticalSpace,
                   Row(
                     children: [
@@ -155,66 +160,90 @@ class JobPostStep1 extends GetView<JobPostController> {
                           ))
                     ],
                   ),
-                  if (controller.step1Misses.contains(Step1Miss.grt))
+                  if (controller.step1Misses.contains(Step1Miss.grt)) ...[
+                    8.verticalSpace,
                     Text(Step1Miss.grt.errorMessage,
                         style: Get.textTheme.bodyMedium
                             ?.copyWith(color: Colors.red)),
+                  ],
                   18.verticalSpace,
                   Text("Crew Requirements",
                       style: Get.textTheme.titleSmall
                           ?.copyWith(color: Get.theme.primaryColor)),
                   18.verticalSpace,
-                  ...CrewRequirements.values.map((e) => Row(
-                        children: [
-                          Checkbox(
-                              value: controller.crewRequirements.contains(e),
-                              onChanged: (_) {
-                                if (controller.crewRequirements.contains(e)) {
-                                  controller.crewRequirements.remove(e);
-                                } else {
-                                  controller.crewRequirements.add(e);
-                                }
-                              }),
-                          Text(e.name, style: Get.textTheme.bodyMedium)
-                        ],
-                      )),
-                  18.verticalSpace,
-                  ...controller.rankWithWages.map((MapEntry<Rank?, double>
-                          rankWithWage) =>
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Row(
+                  ...CrewRequirements.values.map((e) => Obx(() {
+                        RxList<MapEntry<Rank?, double>> rankWithWages;
+                        switch (e) {
+                          case CrewRequirements.deckNavigation:
+                            rankWithWages = controller.deckRankWithWages;
+                            break;
+                          case CrewRequirements.engine:
+                            rankWithWages = controller.engineRankWithWages;
+                            break;
+                          case CrewRequirements.galley:
+                            rankWithWages = controller.galleyRankWithWages;
+                            break;
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton2<Rank>(
-                                  value: rankWithWage.key,
-                                  isExpanded: true,
-                                  style: Get.textTheme.bodySmall,
-                                  items: controller.ranks
-                                      .where((p0) => controller.rankWithWages
-                                          .none((e) =>
-                                              e.key?.id == p0.id &&
-                                              e.key?.id !=
-                                                  rankWithWage.key?.id))
-                                      .map((e) => DropdownMenuItem<Rank>(
-                                          value: e,
-                                          child: Text(e.name ?? "",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style:
-                                                  Get.textTheme.titleMedium)))
-                                      .toList(),
-                                  onChanged: (Rank? newRank) {
-                                    int index = controller.rankWithWages
-                                        .indexWhere((e) =>
-                                            e.key?.id == rankWithWage.key?.id);
-                                    MapEntry<Rank?, double> e = controller
-                                        .rankWithWages
-                                        .removeAt(index);
-                                    controller.rankWithWages.insert(
-                                        index, MapEntry(newRank, e.value));
-                                    /* double wage = 0.0;
+                            Row(
+                              children: [
+                                Checkbox(
+                                    value:
+                                        controller.crewRequirements.contains(e),
+                                    onChanged: (_) {
+                                      if (controller.crewRequirements
+                                          .contains(e)) {
+                                        controller.crewRequirements.remove(e);
+                                      } else {
+                                        controller.crewRequirements.add(e);
+                                      }
+                                    }),
+                                Text(e.name, style: Get.textTheme.bodyMedium)
+                              ],
+                            ),
+                            ...rankWithWages.map((MapEntry<Rank?, double>
+                                    rankWithWage) =>
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton2<Rank>(
+                                            value: rankWithWage.key,
+                                            isExpanded: true,
+                                            style: Get.textTheme.bodySmall,
+                                            items: controller.ranks
+                                                .where((p0) =>
+                                                    rankWithWages.none((e) =>
+                                                        e.key?.id == p0.id &&
+                                                        e.key?.id !=
+                                                            rankWithWage
+                                                                .key?.id))
+                                                .map((e) =>
+                                                    DropdownMenuItem<Rank>(
+                                                        value: e,
+                                                        child: Text(
+                                                            e.name ?? "",
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
+                                                            style: Get.textTheme
+                                                                .titleMedium)))
+                                                .toList(),
+                                            onChanged: (Rank? newRank) {
+                                              int index = rankWithWages
+                                                  .indexWhere((e) =>
+                                                      e.key?.id ==
+                                                      rankWithWage.key?.id);
+                                              MapEntry<Rank?, double> e =
+                                                  rankWithWages.removeAt(index);
+                                              rankWithWages.insert(index,
+                                                  MapEntry(newRank, e.value));
+                                              /* double wage = 0.0;
                                     controller.rankWithWages
                                       ..removeWhere((key, value) {
                                         if (key?.id == rank?.id) {
@@ -224,64 +253,91 @@ class JobPostStep1 extends GetView<JobPostController> {
                                         return false;
                                       })
                                       ..addAll({newRank: wage}); */
-                                  },
-                                  hint: const Text("Select Rank"),
-                                  buttonStyleData: ButtonStyleData(
-                                      height: 40,
-                                      width: 200,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                      decoration: DropdownDecoration()),
-                                ),
-                              ),
-                            ),
-                            16.horizontalSpace,
-                            Expanded(child: Builder(builder: (context) {
-                              TextEditingController wage =
-                                  TextEditingController();
-                              wage.text = controller.rankWithWages
-                                      .firstWhereOrNull((e) =>
-                                          e.key?.id == rankWithWage.key?.id)
-                                      ?.value
-                                      .toString() ??
-                                  "";
-                              return CustomTextFormField(
-                                controller: wage,
-                                onChanged: (value) {
-                                  int index = controller.rankWithWages
-                                      .indexWhere((e) =>
-                                          e.key?.id == rankWithWage.key?.id);
+                                            },
+                                            hint: const Text("Select Rank"),
+                                            buttonStyleData: ButtonStyleData(
+                                                height: 40,
+                                                width: 200,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8),
+                                                decoration:
+                                                    DropdownDecoration()),
+                                          ),
+                                        ),
+                                      ),
+                                      16.horizontalSpace,
+                                      Expanded(
+                                          child: Builder(builder: (context) {
+                                        TextEditingController wage =
+                                            TextEditingController();
+                                        wage.text = rankWithWages
+                                                .firstWhereOrNull((e) =>
+                                                    e.key?.id ==
+                                                    rankWithWage.key?.id)
+                                                ?.value
+                                                .toString() ??
+                                            "";
+                                        return CustomTextFormField(
+                                          controller: wage,
+                                          onChanged: (value) {
+                                            int index =
+                                                rankWithWages.indexWhere((e) =>
+                                                    e.key?.id ==
+                                                    rankWithWage.key?.id);
 
-                                  controller.rankWithWages
-                                    ..removeAt(index)
-                                    ..insert(
-                                        index,
-                                        MapEntry(rankWithWage.key,
-                                            double.parse(value)));
-                                },
-                              );
-                            })),
-                            IconButton(
-                                onPressed: () {
-                                  controller.rankWithWages.removeWhere(
-                                      (MapEntry<Rank?, double> e) =>
-                                          e.key?.id == rankWithWage.key?.id);
-                                },
-                                padding: EdgeInsets.zero,
-                                icon: const Icon(Icons.remove))
+                                            rankWithWages
+                                              ..removeAt(index)
+                                              ..insert(
+                                                  index,
+                                                  MapEntry(rankWithWage.key,
+                                                      double.parse(value)));
+                                          },
+                                        );
+                                      })),
+                                      IconButton(
+                                          onPressed: () {
+                                            rankWithWages.removeWhere(
+                                                (MapEntry<Rank?, double> e) =>
+                                                    e.key?.id ==
+                                                    rankWithWage.key?.id);
+                                          },
+                                          padding: EdgeInsets.zero,
+                                          icon: const Icon(Icons.remove))
+                                    ],
+                                  ),
+                                )),
+                            // 12.verticalSpace,
+                            if (controller.crewRequirements.contains(e))
+                              TextButton(
+                                  onPressed: () {
+                                    rankWithWages
+                                        .add(const MapEntry(null, 0.0));
+                                  },
+                                  child: const Text("Add new rank +")),
+                            if ((e == CrewRequirements.deckNavigation &&
+                                    controller.step1Misses
+                                        .contains(Step1Miss.deckRank)) ||
+                                (e == CrewRequirements.engine &&
+                                    controller.step1Misses
+                                        .contains(Step1Miss.engineRank)) ||
+                                (e == CrewRequirements.galley &&
+                                    controller.step1Misses
+                                        .contains(Step1Miss.galleyRank)))
+                              Text(
+                                  controller.step1Misses
+                                          .firstWhereOrNull((e) => [
+                                                Step1Miss.deckRank,
+                                                Step1Miss.engineRank,
+                                                Step1Miss.galleyRank
+                                              ].contains(e))
+                                          ?.errorMessage ??
+                                      "",
+                                  style: Get.textTheme.bodyMedium
+                                      ?.copyWith(color: Colors.red)),
                           ],
-                        ),
-                      )),
-                  // 12.verticalSpace,
-                  TextButton(
-                      onPressed: () {
-                        controller.rankWithWages.add(const MapEntry(null, 0.0));
-                      },
-                      child: const Text("Add new rank +")),
-                  if (controller.step1Misses.contains(Step1Miss.rank))
-                    Text(Step1Miss.rank.errorMessage,
-                        style: Get.textTheme.bodyMedium
-                            ?.copyWith(color: Colors.red)),
+                        );
+                      })),
                   32.verticalSpace,
                   Center(
                     child: SizedBox(
@@ -289,7 +345,6 @@ class JobPostStep1 extends GetView<JobPostController> {
                       child: CustomElevatedButon(
                           onPressed: () {
                             controller.validateStep1();
-                            
                           },
                           child: const Text("SAVE & CONTINUE")),
                     ),
