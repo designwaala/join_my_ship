@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/reset_password/views/reset_password_email_verification_view.dart';
+import 'package:join_mp_ship/app/modules/employer_jobs/views/employer_job_posts_view.dart';
 
 import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
@@ -21,6 +21,8 @@ import '../modules/employer_create_user/bindings/employer_create_user_binding.da
 import '../modules/employer_create_user/views/employer_create_user_view.dart';
 import '../modules/employer_invite_new_members/bindings/employer_invite_new_members_binding.dart';
 import '../modules/employer_invite_new_members/views/employer_invite_new_members_view.dart';
+import '../modules/employer_jobs/bindings/employer_jobs_binding.dart';
+import '../modules/employer_jobs/views/employer_job_applications_view.dart';
 import '../modules/employer_manage_users/bindings/employer_manage_users_binding.dart';
 import '../modules/employer_manage_users/views/employer_manage_users_view.dart';
 import '../modules/help/bindings/help_binding.dart';
@@ -36,6 +38,7 @@ import '../modules/job_posted_successfully/views/job_posted_successfully_view.da
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/reset_password/bindings/reset_password_binding.dart';
+import '../modules/reset_password/views/reset_password_email_verification_view.dart';
 import '../modules/reset_password/views/reset_password_view.dart';
 import '../modules/sign_up_email/bindings/sign_up_email_binding.dart';
 import '../modules/sign_up_email/views/sign_up_email_view.dart';
@@ -168,6 +171,16 @@ class AppPages {
       name: _Paths.VIEW_JOBS_POSTED,
       page: () => const ViewJobsPostedView(),
       binding: ViewJobsPostedBinding(),
+    ),
+    GetPage(
+      name: _Paths.EMPLOYER_JOB_APPLICATIONS,
+      page: () => const EmployerJobApplicationsView(),
+      binding: EmployerJobsBinding(),
+    ),
+    GetPage(
+      name: _Paths.EMPLOYER_JOB_POSTS,
+      page: () => const EmployerJobPostsView(),
+      binding: EmployerJobsBinding(),
     ),
   ];
 }

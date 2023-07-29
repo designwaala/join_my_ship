@@ -1,0 +1,13 @@
+[
+    {
+        "id": 653283,
+        "tentative_joining_date": "03/07/23",
+        "vessel_type": 10,
+        "grt": 14456,
+        "rank_list": [3,4,5,6,7,8,9,10],
+        "coc_list": [8,9,10,11],
+        "cop_list": [4,5,6,7],
+        "watch_keeping_list": [4,5,6,7],
+        "likes": 99
+    }
+]

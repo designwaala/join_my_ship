@@ -23,15 +23,15 @@ class HomeView extends GetView<HomeController> {
                 case 1:
                   return _buildBody();
                 case 2:
-                  return SizedBox();
+                  return const SizedBox();
                 case 3:
-                  return SizedBox();
+                  return const SizedBox();
                 case 4:
-                  return SizedBox();
+                  return const SizedBox();
                 case 5:
-                  return ProfileView();
+                  return const ProfileView();
                 default:
-                  return SizedBox();
+                  return const SizedBox();
               }
             }(),
             // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -90,12 +90,12 @@ class HomeView extends GetView<HomeController> {
                           onPressed: () {
                             Get.toNamed(Routes.JOB_POST);
                           },
-                          child: Text("Post a new job")),
+                          child: const Text("Post a new job")),
                       CustomElevatedButon(
                           onPressed: () {
-                            Get.toNamed(Routes.JOB_POST);
+                            Get.toNamed(Routes.EMPLOYER_JOB_POSTS);
                           },
-                          child: Text("View posted jobs")),
+                          child: const Text("View posted jobs")),
                     ],
                   ),
                 ))
@@ -131,9 +131,9 @@ _buildBody() {
                       16.horizontalSpace,
                       const Icon(Icons.menu_sharp, color: Colors.white),
                       16.horizontalSpace,
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text("Welcome",
                               style: TextStyle(
                                   fontSize: 20,

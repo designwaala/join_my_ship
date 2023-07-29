@@ -31,6 +31,9 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+**/*.cc
+**/*.cmake
+**/*.swift
 pubspec.lock
 
 # Symbolication related
