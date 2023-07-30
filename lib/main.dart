@@ -10,6 +10,8 @@ import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
+import 'package:join_mp_ship/app/data/providers/job_post_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_coc_post.dart';
 import 'package:join_mp_ship/app/data/providers/job_cop_post.dart';
 import 'package:join_mp_ship/app/data/providers/job_provider.dart';
@@ -17,11 +19,9 @@ import 'package:join_mp_ship/app/data/providers/job_rank_with_wages_provider.dar
 import 'package:join_mp_ship/app/data/providers/job_watch_keeping_post.dart';
 import 'package:join_mp_ship/app/data/providers/login_provider.dart';
 import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart';
-import 'package:join_mp_ship/app/data/providers/previous_employer_reference_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
 import 'package:join_mp_ship/app/data/providers/secondary_users_provider.dart';
-import 'package:join_mp_ship/app/data/providers/service_record_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
@@ -86,6 +86,8 @@ void main() async {
     ..registerSingleton(CocProvider())
     ..registerSingleton(CopProvider())
     ..registerSingleton(WatchKeepingProvider())
+    // ..registerSingleton(JobPostProvider())
+    ..registerSingleton(JobApplicationProvider())
     ..registerSingleton(JobProvider())
     ..registerSingleton(JobCOCPostProvider())
     ..registerSingleton(JobCOPPostProvider())

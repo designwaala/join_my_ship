@@ -189,7 +189,9 @@ class JobPostController extends GetxController {
         tentativeJoining: tentativeJoining.text,
         vesselId: recordVesselType.value,
         gRT: grt.text,
-        expiryInDay: jobExpiry.value.toString()));
+        expiryInDay: jobExpiry.value.toString(),
+        mailInfo: showEmail.value,
+        numberInfo: showMobileNumber.value));
 
     //Step 2: Post All Rank with wages
 /*     for (MapEntry<Rank?, double> e in [

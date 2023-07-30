@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
@@ -14,7 +13,8 @@ class WatchKeepingProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
-  Future<List<WatchKeeping>?> getWatchKeepingList({required int userType}) async {
+  Future<List<WatchKeeping>?> getWatchKeepingList(
+      {required int userType}) async {
     final response = await get('employer/watch_keeping_list/$userType');
     return response.body;
   }

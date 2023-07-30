@@ -1,7 +1,13 @@
+import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/job_rank_with_wages_model.dart';
+
 class Job {
   int? id;
   List<JobCoc>? jobCoc;
   List<JobCop>? jobCop;
+  List<JobWatchKeeping>? jobWatchKeeping;
+  CrewUser? employerDetails;
+  List<JobRankWithWages>? jobRankWithWages;
   String? tentativeJoining;
   String? gRT;
   bool? mailInfo;
@@ -19,6 +25,9 @@ class Job {
       {this.id,
       this.jobCoc,
       this.jobCop,
+      this.jobWatchKeeping,
+      this.employerDetails,
+      this.jobRankWithWages,
       this.tentativeJoining,
       this.gRT,
       this.mailInfo,
@@ -46,6 +55,16 @@ class Job {
         jobCop?.add(JobCop.fromJson(v));
       });
     }
+    jobWatchKeeping = json['job_Watch_Keeping'] == null
+        ? null
+        : List<JobWatchKeeping>.from(
+            json['job_Watch_Keeping'].map((e) => JobWatchKeeping.fromJson(e)));
+    jobRankWithWages = json['Job_Rank_wages'] == null
+        ? null
+        : List<JobRankWithWages>.from(
+            json['Job_Rank_wages'].map((e) => JobRankWithWages.fromJson(e)));
+    employerDetails =
+        json['posted_by'] == null ? null : CrewUser.fromJson(json['posted_by']);
     tentativeJoining = json['tentative_joining'];
     gRT = json['GRT'];
     mailInfo = json['mail_info'];

@@ -1,20 +1,22 @@
 import 'package:get/get.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
 import '../models/vessel_type_model.dart';
 
-class VesselTypeProvider extends GetConnect {
+class VesselTypeProvider extends WrapperConnect {
   VesselTypeProvider() {
     httpClient.defaultDecoder = (map) {
       if (map is Map<String, dynamic>) return VesselType.fromJson(map);
-      if (map is List)
+      if (map is List) {
         return map.map((item) => VesselType.fromJson(item)).toList();
+      }
     };
     httpClient.baseUrl = baseURL;
   }
 
   Future<List<VesselType>?> getVesselTypes() async {
-    final response = await get('employer/vesselstype_list');
+    final response = await get('employer/vessels_list');
     return response.body;
   }
 

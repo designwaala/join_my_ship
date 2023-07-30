@@ -27,15 +27,15 @@ class HomeView extends GetView<HomeController> {
                   case 1:
                     return _buildBody();
                   case 2:
-                    return SizedBox();
+                    return const SizedBox();
                   case 3:
-                    return SizedBox();
+                    return const SizedBox();
                   case 4:
-                    return SizedBox();
+                    return const SizedBox();
                   case 5:
-                    return ProfileView();
+                    return const ProfileView();
                   default:
-                    return SizedBox();
+                    return const SizedBox();
                 }
               }(),
               // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -96,12 +96,12 @@ class HomeView extends GetView<HomeController> {
                                   onPressed: () {
                                     Get.toNamed(Routes.JOB_POST);
                                   },
-                                  child: Text("Post a new job")),
+                                  child: const Text("Post a new job")),
                               CustomElevatedButon(
                                   onPressed: () {
-                                    Get.toNamed(Routes.JOB_POST);
+                                    Get.toNamed(Routes.EMPLOYER_JOB_POSTS);
                                   },
-                                  child: Text("View posted jobs")),
+                                  child: const Text("View posted jobs")),
                             ],
                           ),
                         )
@@ -142,13 +142,13 @@ _buildBody() {
                       16.horizontalSpace,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text("Welcome",
+                        children: [
+                          const Text("Welcome",
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white)),
-                          Text("Ashutosh Mehta",
+                          const Text("Ashutosh Mehta",
                               style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w600,

@@ -1,3 +1,5 @@
+import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
+
 class Rank {
   int? id;
   String? name;
@@ -8,6 +10,7 @@ class Rank {
   bool? watchKeeping;
   bool? isPromotable;
   int? promotedTo;
+  CrewRequirements? jobType;
   bool? needSeaServiceRecord;
 
   Rank(
@@ -17,6 +20,7 @@ class Rank {
       this.forOtheroption,
       this.isPromotable,
       this.promotedTo,
+      this.jobType,
       this.needSeaServiceRecord});
 
   Rank.fromJson(Map<String, dynamic> json) {
@@ -29,6 +33,16 @@ class Rank {
     watchKeeping = json['watch_keeping'];
     isPromotable = json['is_promotable'];
     promotedTo = json['promoted_to'];
+    jobType = () {
+      switch (json['job_type']) {
+        case 1:
+          return CrewRequirements.deckNavigation;
+        case 2:
+          return CrewRequirements.engine;
+        case 3:
+          return CrewRequirements.galley;
+      }
+    }();
     needSeaServiceRecord = json['need_sea_service_record'];
   }
 

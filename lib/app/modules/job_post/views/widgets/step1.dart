@@ -217,6 +217,7 @@ class JobPostStep1 extends GetView<JobPostController> {
                                             isExpanded: true,
                                             style: Get.textTheme.bodySmall,
                                             items: controller.ranks
+                                                .where((p0) => p0.jobType == e)
                                                 .where((p0) =>
                                                     rankWithWages.none((e) =>
                                                         e.key?.id == p0.id &&

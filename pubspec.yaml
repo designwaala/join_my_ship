@@ -3,7 +3,7 @@ version: 1.0.17+17
 publish_to: none
 description: A new Flutter project.
 environment:
-  sdk: ">=2.17.0 <=3.0.6"
+  sdk: ">=2.17.0"
 
 dependencies:
   get_cli: ^1.8.1
@@ -56,3 +56,4 @@ flutter:
     - assets/images/dashboard/
     - assets/images/profile/
     - assets/images/employer_invite/
+    - assets/icons/

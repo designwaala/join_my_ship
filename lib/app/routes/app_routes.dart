@@ -22,10 +22,13 @@ abstract class Routes {
   static const EMPLOYER_MANAGE_USERS = _Paths.EMPLOYER_MANAGE_USERS;
   static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
   static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
-  static const RESET_PASSWORD_EMAIL_VERIFICATION = _Paths.RESET_PASSWORD_EMAIL_VERIFICATION;
+  static const RESET_PASSWORD_EMAIL_VERIFICATION =
+      _Paths.RESET_PASSWORD_EMAIL_VERIFICATION;
   static const JOB_POST = _Paths.JOB_POST;
   static const JOB_POSTED_SUCCESSFULLY = _Paths.JOB_POSTED_SUCCESSFULLY;
   static const VIEW_JOBS_POSTED = _Paths.VIEW_JOBS_POSTED;
+  static const EMPLOYER_JOB_APPLICATIONS = _Paths.EMPLOYER_JOB_APPLICATIONS;
+  static const EMPLOYER_JOB_POSTS = _Paths.EMPLOYER_JOB_POSTS;
 }
 
 abstract class _Paths {
@@ -49,8 +52,11 @@ abstract class _Paths {
   static const EMPLOYER_MANAGE_USERS = '/employer-manage-users';
   static const CHANGE_PASSWORD = '/change-password';
   static const RESET_PASSWORD = '/reset-password';
-  static const RESET_PASSWORD_EMAIL_VERIFICATION = '/reset-password-email-verification';
+  static const RESET_PASSWORD_EMAIL_VERIFICATION =
+      '/reset-password-email-verification';
   static const JOB_POST = '/job-post';
   static const JOB_POSTED_SUCCESSFULLY = '/job-posted-successfully';
   static const VIEW_JOBS_POSTED = '/view-jobs-posted';
+  static const EMPLOYER_JOB_APPLICATIONS = '/employer-job-applications';
+  static const EMPLOYER_JOB_POSTS = '/employer-job-posts';
 }
