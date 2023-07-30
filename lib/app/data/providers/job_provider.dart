@@ -13,11 +13,11 @@ class JobProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
-  Future<Job?> getJob(int id) async {
-    final response = await get('job/$id');
+  Future<Job?> getJobList() async {
+    final response = await get('employer/get_job_list');
     return response.body;
   }
 
-  Future<Response<Job>> postJob(Job job) async => await post('job', job);
-  Future<Response> deleteJob(int id) async => await delete('job/$id');
+  Future<Job> postJob(Job job) async =>
+      (await post('employer/post_job', job.toJson())).body;
 }

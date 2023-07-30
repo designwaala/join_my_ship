@@ -412,6 +412,7 @@ class JobPostStep2 extends GetView<JobPostController> {
                   Text("Job post expiry",
                       style: Get.textTheme.formFieldHeading),
                   Spacer(),
+                  16.horizontalSpace,
                   DropdownButtonHideUnderline(
                     child: DropdownButton2<int>(
                       value: controller.jobExpiry.value,
@@ -430,7 +431,7 @@ class JobPostStep2 extends GetView<JobPostController> {
                       hint: const Text("Select"),
                       buttonStyleData: ButtonStyleData(
                           height: 40,
-                          width: 200,
+                          width: 160,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           decoration: DropdownDecoration()),
                     ),

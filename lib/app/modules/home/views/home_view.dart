@@ -82,27 +82,31 @@ class HomeView extends GetView<HomeController> {
                 },
               ),
             ),
-            if (controller.showJobButtons.value)
-              Positioned(
-                  bottom: 72,
-                  left: 0,
-                  right: 0,
-                  child: IntrinsicWidth(
-                    child: Column(
-                      children: [
-                        CustomElevatedButon(
-                            onPressed: () {
-                              Get.toNamed(Routes.JOB_POST);
-                            },
-                            child: Text("Post a new job")),
-                        CustomElevatedButon(
-                            onPressed: () {
-                              Get.toNamed(Routes.JOB_POST);
-                            },
-                            child: Text("View posted jobs")),
-                      ],
-                    ),
-                  ))
+            Positioned(
+                bottom: 72,
+                left: 0,
+                right: 0,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: controller.showJobButtons.value
+                      ? IntrinsicWidth(
+                          child: Column(
+                            children: [
+                              CustomElevatedButon(
+                                  onPressed: () {
+                                    Get.toNamed(Routes.JOB_POST);
+                                  },
+                                  child: Text("Post a new job")),
+                              CustomElevatedButon(
+                                  onPressed: () {
+                                    Get.toNamed(Routes.JOB_POST);
+                                  },
+                                  child: Text("View posted jobs")),
+                            ],
+                          ),
+                        )
+                      : const SizedBox(),
+                ))
           ],
         ),
       );

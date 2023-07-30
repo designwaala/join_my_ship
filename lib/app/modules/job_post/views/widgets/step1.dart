@@ -269,23 +269,38 @@ class JobPostStep1 extends GetView<JobPostController> {
                                       16.horizontalSpace,
                                       Expanded(
                                           child: Builder(builder: (context) {
-                                        TextEditingController wage =
-                                            TextEditingController();
-                                        wage.text = rankWithWages
+                                        /* TextEditingController wage =
+                                            TextEditingController(); */
+                                        /* wage.text = rankWithWages
                                                 .firstWhereOrNull((e) =>
                                                     e.key?.id ==
                                                     rankWithWage.key?.id)
                                                 ?.value
                                                 .toString() ??
-                                            "";
+                                            ""; */
+                                        // print(wage.text);
+                                        /* wage.selection =
+                                            TextSelection.fromPosition(
+                                                TextPosition(
+                                                    offset: wage.text.length)); */
+
                                         return CustomTextFormField(
-                                          controller: wage,
+                                          // controller: wage,
+                                          initialValue: rankWithWages
+                                              .firstWhereOrNull((e) =>
+                                                  e.key?.id ==
+                                                  rankWithWage.key?.id)
+                                              ?.value
+                                              .toString(),
+
                                           onChanged: (value) {
+                                            if (value.isEmpty) {
+                                              return;
+                                            }
                                             int index =
                                                 rankWithWages.indexWhere((e) =>
                                                     e.key?.id ==
                                                     rankWithWage.key?.id);
-
                                             rankWithWages
                                               ..removeAt(index)
                                               ..insert(
@@ -311,8 +326,7 @@ class JobPostStep1 extends GetView<JobPostController> {
                             if (controller.crewRequirements.contains(e))
                               TextButton(
                                   onPressed: () {
-                                    rankWithWages
-                                        .add(const MapEntry(null, 0.0));
+                                    rankWithWages.add(const MapEntry(null, 0));
                                   },
                                   child: const Text("Add new rank +")),
                             if ((e == CrewRequirements.deckNavigation &&

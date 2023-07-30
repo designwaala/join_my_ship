@@ -276,7 +276,8 @@ class CrewOnboardingController extends GetxController with PickImage {
       countries.insert(0, india);
     }
     UserStates.instance.countries = countries;
-    crewUser = await getIt<CrewUserProvider>().getCrewUser(softRefresh: true);
+    crewUser = UserStates.instance.crewUser ??
+        await getIt<CrewUserProvider>().getCrewUser(softRefresh: true);
     UserStates.instance.crewUser = crewUser;
     if (crewUser?.id != null) {
       await setStep1Fields();

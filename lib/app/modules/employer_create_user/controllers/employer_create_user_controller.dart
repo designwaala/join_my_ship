@@ -14,6 +14,7 @@ import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 import '../../../data/models/country_model.dart';
@@ -103,8 +104,9 @@ class EmployerCreateUserController extends GetxController {
       countries.insert(0, india);
     }
     if (editMode) {
-      crewUser = await getIt<CrewUserProvider>().getCrewUser();
-
+      crewUser = UserStates.instance.crewUser ??
+          await getIt<CrewUserProvider>().getCrewUser();
+      UserStates.instance.crewUser = crewUser;
       // if (crewUser?.id != null) {
       //   if (crewUser?.isVerified == 1) {
       //     Get.offAllNamed(Routes.HOME);

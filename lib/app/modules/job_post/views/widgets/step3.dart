@@ -42,7 +42,7 @@ class JobPostStep3 extends GetView<JobPostController> {
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                      "$baseURL/${controller.user?.profilePic}"))),
+                                      "${controller.user?.profilePic}"))),
                         ),
                         12.horizontalSpace,
                         Column(
@@ -260,16 +260,22 @@ class JobPostStep3 extends GetView<JobPostController> {
               ],
             ),
             const Spacer(flex: 12),
-            SizedBox(
-                width: 231,
-                height: 46,
-                child: CustomElevatedButon(
-                    onPressed: controller.hasAgreed.value
-                        ? () {
-                            Get.toNamed(Routes.JOB_POSTED_SUCCESSFULLY);
-                          }
-                        : null,
-                    child: Text("PUBLISH"))),
+            controller.isPostingJob.value
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [CircularProgressIndicator()],
+                  )
+                : SizedBox(
+                    width: 231,
+                    height: 46,
+                    child: CustomElevatedButon(
+                        onPressed: controller.hasAgreed.value
+                            ? () async {
+                                await controller.postJob();
+                                Get.offNamed(Routes.JOB_POSTED_SUCCESSFULLY);
+                              }
+                            : null,
+                        child: Text("PUBLISH"))),
             const Spacer(flex: 21),
           ],
         ),

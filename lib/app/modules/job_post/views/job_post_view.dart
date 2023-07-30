@@ -12,6 +12,7 @@ class JobPostView extends GetView<JobPostController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.parentKey,
       appBar: AppBar(
         toolbarHeight: 70,
         title: Text('JOB POST',

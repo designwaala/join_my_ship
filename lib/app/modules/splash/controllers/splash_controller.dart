@@ -31,11 +31,20 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
   redirection() async {
     try {
       await Future.wait([
-        getIt<CrewUserProvider>().getCrewUser().then((value) => user = value),
+        FirebaseAuth.instance.currentUser == null ||
+                PreferencesHelper.instance.accessToken.isEmpty
+            ? Future.value(null)
+            : getIt<CrewUserProvider>()
+                .getCrewUser()
+                .then((value) => user = value),
         Future.delayed(const Duration(seconds: 3))
       ]);
     } catch (e) {
       print("$e");
+    }
+    if (FirebaseAuth.instance.currentUser == null) {
+      await FirebaseAuth.instance.signOut();
+      await PreferencesHelper.instance.clearAll();
     }
     Get.offAllNamed(FirebaseAuth.instance.currentUser == null
         ? Routes.INFO

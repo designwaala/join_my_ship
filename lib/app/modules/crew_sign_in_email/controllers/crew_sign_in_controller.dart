@@ -2,13 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/models/login_model.dart';
+import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/login_provider.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/secure_storage.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
@@ -21,6 +24,8 @@ class CrewSignInController extends GetxController {
 
   FToast fToast = FToast();
   final parentKey = GlobalKey();
+
+  CrewUser? crewUser;
 
   @override
   onReady() {
@@ -53,20 +58,30 @@ class CrewSignInController extends GetxController {
     bool? emailVerified = FirebaseAuth.instance.currentUser?.emailVerified;
     if (emailVerified == true) {
       fToast.safeShowToast(child: successToast("Authentication Successful"));
-      Get.offAllNamed(Routes.CREW_ONBOARDING,
-          arguments: CrewOnboardingArguments(
-              email: emailController.text, password: passwordController.text));
-      // if (login?.data?.access == null || login?.data?.refresh == null) {
-      //   Get.offAllNamed(Routes.CREW_ONBOARDING,
-      //       arguments: CrewOnboardingArguments(
-      //           email: emailController.text,
-      //           password: passwordController.text));
-      // } else {
-      //   Get.offAllNamed(Routes.HOME);
-      // }
+      crewUser = await getIt<CrewUserProvider>().getCrewUser();
+      UserStates.instance.crewUser = crewUser;
+      if (crewUser?.userTypeKey == 3) {
+        Get.offAllNamed(crewUser?.screenCheck == 1
+            ? (crewUser?.isVerified == 1
+                ? Routes.HOME
+                : Routes.ACCOUNT_UNDER_VERIFICATION)
+            : Routes.EMPLOYER_CREATE_USER);
+      } else {
+        if (crewUser?.screenCheck == 3) {
+          if (crewUser?.isVerified == 1) {
+            Get.offAllNamed(Routes.HOME);
+          } else {
+            Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+          }
+        } else {
+          Get.offAllNamed(Routes.CREW_ONBOARDING,
+              arguments: CrewOnboardingArguments(
+                  email: emailController.text,
+                  password: passwordController.text));
+        }
+      }
       SecureStorage.instance.password = passwordController.text;
     } else if (emailVerified == false) {
-      // await FirebaseAuth.instance.signOut();
       Get.toNamed(Routes.EMAIL_VERIFICATION_WAITING);
       fToast.safeShowToast(child: errorToast("Email Not Verified"));
     } else {

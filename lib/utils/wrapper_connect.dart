@@ -153,7 +153,7 @@ class WrapperConnect extends GetConnect {
     String? idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (idToken == null) {
       await FirebaseAuth.instance.signOut();
-      PreferencesHelper.instance.clearAll();
+      await PreferencesHelper.instance.clearAll();
       Get.offAllNamed(Routes.INFO);
       return false;
     }
