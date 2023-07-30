@@ -276,7 +276,8 @@ class CrewOnboardingController extends GetxController with PickImage {
       countries.insert(0, india);
     }
     UserStates.instance.countries = countries;
-    crewUser = await getIt<CrewUserProvider>().getCrewUser(softRefresh: true);
+    crewUser = UserStates.instance.crewUser ??
+        await getIt<CrewUserProvider>().getCrewUser(softRefresh: true);
     UserStates.instance.crewUser = crewUser;
     if (crewUser?.id != null) {
       await setStep1Fields();
@@ -415,7 +416,6 @@ class CrewOnboardingController extends GetxController with PickImage {
       return false;
     }
     isUpdating.value = true;
-    String password = await SecureStorage.instance.password;
     int? statusCode;
     if (crewUser?.id == null) {
       statusCode = await getIt<CrewUserProvider>().createCrewUser(
@@ -910,13 +910,13 @@ mixin PickImage {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Pick Image from"),
-                  IconButton(onPressed: Get.back, icon: Icon(Icons.close))
+                  const Text("Pick Image from"),
+                  IconButton(onPressed: Get.back, icon: const Icon(Icons.close))
                 ],
               ),
               actionsAlignment: MainAxisAlignment.center,
-              actionsPadding: EdgeInsets.symmetric(vertical: 16),
-              titlePadding: EdgeInsets.only(left: 16, right: 16, top: 16),
+              actionsPadding: const EdgeInsets.symmetric(vertical: 16),
+              titlePadding: const EdgeInsets.only(left: 16, right: 16, top: 16),
               actions: [
                 ElevatedButton(
                     onPressed: () async {
@@ -924,15 +924,15 @@ mixin PickImage {
                           source: ImageSource.gallery);
                       Get.back();
                     },
-                    child: Text("Gallery")),
+                    child: const Text("Gallery")),
                 // Spacer(),
                 ElevatedButton(
                     onPressed: () async {
-                      Get.back();
                       pickedImage.value = await imagePicker.pickImage(
                           source: ImageSource.camera);
+                      Get.back();
                     },
-                    child: Text("Image"))
+                    child: const Text("Image"))
               ],
             ));
   }
@@ -942,7 +942,7 @@ mixin PickImage {
         context: Get.context!,
         builder: (context) {
           return AlertDialog(
-            title: Text("Are you sure you want to update to this image?"),
+            title: const Text("Are you sure you want to update to this image?"),
             content: Container(
               height: 100,
               width: 100,
@@ -957,14 +957,14 @@ mixin PickImage {
                   onPressed: () async {
                     Get.back(result: true);
                   },
-                  child: Text("Yes")),
+                  child: const Text("Yes")),
               8.horizontalSpace,
               OutlinedButton(
                   onPressed: () {
                     pickedImage.value = null;
                     Get.back(result: false);
                   },
-                  child: Text("No")),
+                  child: const Text("No")),
               8.horizontalSpace,
             ],
           );

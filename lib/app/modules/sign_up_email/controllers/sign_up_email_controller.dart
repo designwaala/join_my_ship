@@ -54,9 +54,6 @@ class SignUpEmailController extends GetxController {
   addEmail() async {
     // Get.toNamed(Routes.EMAIL_VERIFICATION_WAITING);
 
-    print(
-        '__value ${emailController.text.split("@")[1]}  ${websiteController.text}');
-
     if (formKey.currentState?.validate() != true) {
       return;
     }
@@ -128,6 +125,8 @@ class SignUpEmailController extends GetxController {
         fToast.safeShowToast(
             child: errorToast(
                 "An account already exists for that email. Please Login"));
+      } else {
+        fToast.safeShowToast(child: errorToast(e.message ?? ""));
       }
     } catch (e) {
       fToast.safeShowToast(

@@ -1,3 +1,4 @@
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencesHelper {
@@ -11,6 +12,7 @@ class PreferencesHelper {
   }
 
   Future<bool>? clearAll() {
+    UserStates.instance.reset();
     return _sharedPreferences?.clear();
   }
 

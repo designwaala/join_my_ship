@@ -180,9 +180,9 @@ class EmployerJobApplicationsView
                         ),
                       ],
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [Text("Gender"), Text("data")],
+                      children: const [Text("Gender"), Text("data")],
                     ),
                   ],
                 ),

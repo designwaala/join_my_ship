@@ -29,17 +29,32 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
   }
 
   redirection() async {
-    await Future.wait([
-      getIt<CrewUserProvider>().getCrewUser().then((value) => user = value),
-      Future.delayed(const Duration(seconds: 3))
-    ]);
+    try {
+      await Future.wait([
+        FirebaseAuth.instance.currentUser == null ||
+                PreferencesHelper.instance.accessToken.isEmpty
+            ? Future.value(null)
+            : getIt<CrewUserProvider>()
+                .getCrewUser()
+                .then((value) => user = value),
+        Future.delayed(const Duration(seconds: 3))
+      ]);
+    } catch (e) {
+      print("$e");
+    }
+    if (FirebaseAuth.instance.currentUser == null) {
+      await FirebaseAuth.instance.signOut();
+      await PreferencesHelper.instance.clearAll();
+    }
     Get.offAllNamed(FirebaseAuth.instance.currentUser == null
         ? Routes.INFO
         : FirebaseAuth.instance.currentUser?.emailVerified == true
-            ? (PreferencesHelper.instance.isCrew == true ||
-                    user?.userTypeKey == 2)
-                ? Routes.CREW_ONBOARDING
-                : Routes.EMPLOYER_CREATE_USER
+            ? user?.id != null
+                ? Routes.HOME
+                : (PreferencesHelper.instance.isCrew == true ||
+                        user?.userTypeKey == 2)
+                    ? Routes.CREW_ONBOARDING
+                    : Routes.EMPLOYER_CREATE_USER
             : Routes.EMAIL_VERIFICATION_WAITING);
   }
 

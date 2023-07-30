@@ -25,7 +25,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
           16.verticalSpace,
           Row(
             children: [
-              Text("Mobile Number"),
+              const Text("Mobile Number"),
               32.horizontalSpace,
               Expanded(
                   child: Column(
@@ -41,8 +41,8 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                         isDense: true,
                         prefixIcon: Container(
                           width: 48,
-                          margin: EdgeInsets.only(right: 8, left: 4),
-                          decoration: BoxDecoration(
+                          margin: const EdgeInsets.only(right: 8, left: 4),
+                          decoration: const BoxDecoration(
                               // color: Colors.blue[50],
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(64),
@@ -70,7 +70,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                                         style: Get.theme.textTheme.bodyMedium
                                             ?.copyWith(
                                                 fontWeight: FontWeight.bold)),
-                                    Icon(Icons.keyboard_arrow_down)
+                                    const Icon(Icons.keyboard_arrow_down)
                                   ],
                                 ),
                               ],
@@ -142,7 +142,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
             ],
           ),
           16.verticalSpace,
-          Text("Email Address"),
+          const Text("Email Address"),
           8.verticalSpace,
           CustomTextFormField(
             initialValue: FirebaseAuth.instance.currentUser?.email,

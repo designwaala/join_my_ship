@@ -63,6 +63,12 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                         20.verticalSpace,
                         TextFormField(
                           controller: controller.fullNameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter your Company Name";
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
@@ -77,6 +83,15 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                         if (controller.signUpType != SignUpType.crew) ...[
                           TextFormField(
                             controller: controller.websiteController,
+                            validator: (value) {
+                              if (controller.signUpType == SignUpType.crew) {
+                                return null;
+                              }
+                              if (value == null || value.isEmpty) {
+                                return "Please enter your Company Website";
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                                 fillColor: Colors.white,
                                 filled: true,
@@ -90,8 +105,9 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                         TextFormField(
                           controller: controller.emailController,
                           validator: (value) {
-                            print(
-                                '__value ${controller.emailController.text.split("@")[1]}  ${controller.websiteController.text}');
+                            if (value == null || value.isEmpty) {
+                              return "Please enter your email";
+                            }
                             if (([
                                       "gmail",
                                       "yahoo",
@@ -103,14 +119,16 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                                     [
                                       SignUpType.employerITF,
                                       SignUpType.employerManagementCompany
-                                    ].contains(controller.signUpType)) &&
+                                    ].contains(controller.signUpType))
+                                /* &&
                                 value?.split("@")[1].split(".")[0] ==
                                     controller.websiteController.text
                                         .replaceAll("https", "")
                                         .replaceAll("http", "")
                                         .split(".")
                                         .reduce((a, b) =>
-                                            a.length > b.length ? a : b)) {
+                                            a.length > b.length ? a : b) */
+                                ) {
                               return "Please use your company domain email address";
                             }
                             return null;
@@ -127,6 +145,12 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                         TextFormField(
                           controller: controller.passwordController,
                           obscureText: controller.shouldObscure.value,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please create a password";
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,

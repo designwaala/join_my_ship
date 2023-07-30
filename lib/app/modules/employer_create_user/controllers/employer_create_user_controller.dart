@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,11 +8,13 @@ import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
+import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 import '../../../data/models/country_model.dart';
@@ -39,10 +42,11 @@ class EmployerCreateUserController extends GetxController {
   TextEditingController zipCodeController = TextEditingController();
   TextEditingController companyNameController = TextEditingController();
   TextEditingController websiteController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   final Rxn<XFile> pickedImage = Rxn();
   final ImagePicker imagePicker = ImagePicker();
   RxnString uploadedImagePath = RxnString();
-  RxnString uploadedResumePath = RxnString();
   RxList<StateModel> states = RxList.empty();
 
   final parentKey = GlobalKey();
@@ -54,8 +58,16 @@ class EmployerCreateUserController extends GetxController {
 
   CrewUser? crewUser;
 
+  bool editMode = false;
+
+  RxString selectedCountryCode = "+91".obs;
+
   @override
   void onInit() {
+    if (Get.arguments is EmployerCreateUserArguments?) {
+      EmployerCreateUserArguments? args = Get.arguments;
+      editMode = args?.editMode ?? false;
+    }
     instantiate();
     super.onInit();
   }
@@ -91,6 +103,40 @@ class EmployerCreateUserController extends GetxController {
     if (india != null) {
       countries.insert(0, india);
     }
+    if (editMode) {
+      crewUser = UserStates.instance.crewUser ??
+          await getIt<CrewUserProvider>().getCrewUser();
+      UserStates.instance.crewUser = crewUser;
+      // if (crewUser?.id != null) {
+      //   if (crewUser?.isVerified == 1) {
+      //     Get.offAllNamed(Routes.HOME);
+      //   } else {
+      //     Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+      //   }
+      // }
+
+      firstNameController.text = crewUser?.firstName ?? "";
+      lastNameController.text = crewUser?.lastName ?? "";
+      designationController.text = crewUser?.designation ?? "";
+      cityController.text = crewUser?.addressCity ?? "";
+      addressLine1Controller.text = crewUser?.addressLine1 ?? "";
+      addressLine2Controller.text = crewUser?.addressLine2 ?? "";
+      zipCodeController.text = crewUser?.pincode ?? "";
+      companyNameController.text = crewUser?.username ?? "";
+      websiteController.text = crewUser?.website ?? "";
+      emailController.text = FirebaseAuth.instance.currentUser?.email ?? "";
+
+      uploadedImagePath.value = crewUser?.profilePic;
+      country.value =
+          countries.firstWhereOrNull((e) => e.id == crewUser?.country);
+      await getStates();
+      state.value = states.firstWhereOrNull((e) => e.id == crewUser?.state);
+
+      phoneNumberController.text =
+          FirebaseAuth.instance.currentUser?.phoneNumber ?? "";
+      /* selectedCountryCode.value =
+          crewUser?.number?.split("-").firstOrNull ?? ""; */
+    }
     isLoading.value = false;
   }
 
@@ -110,7 +156,7 @@ class EmployerCreateUserController extends GetxController {
       return false;
     }
 
-    if (pickedImage.value?.path == null ||
+    if ((crewUser?.id == null && pickedImage.value?.path == null) ||
         country.value == null ||
         state.value == null) {
       return false;
@@ -120,6 +166,9 @@ class EmployerCreateUserController extends GetxController {
     }
     isUpdating.value = true;
     int? statusCode;
+    await FirebaseAuth.instance.currentUser
+        ?.updateDisplayName(firstNameController.text);
+    fToast.init(parentKey.currentContext!);
     if (crewUser?.id == null) {
       statusCode = await getIt<CrewUserProvider>().createCrewUser(
           crewUser: CrewUser(
@@ -219,4 +268,9 @@ class EmployerCreateUserController extends GetxController {
   void onClose() {
     super.onClose();
   }
+}
+
+class EmployerCreateUserArguments {
+  final bool? editMode;
+  const EmployerCreateUserArguments({this.editMode});
 }

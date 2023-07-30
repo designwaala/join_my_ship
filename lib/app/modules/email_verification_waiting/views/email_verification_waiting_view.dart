@@ -25,7 +25,10 @@ class EmailVerificationWaitingView
             backgroundColor: const Color(0xFFFbF6FF),
             appBar: AppBar(
               toolbarHeight: 70,
-              title: Text('CREW',
+              title: Text(
+                  PreferencesHelper.instance.isCrew == true
+                      ? 'CREW'
+                      : "EMPLOYER",
                   style: Get.theme.textTheme.headlineSmall?.copyWith(
                       color: Colors.black,
                       fontSize: 20,

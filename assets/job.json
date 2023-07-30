@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "job_coc": [
+            {
+                "id": 1,
+                "is_active": true,
+                "created_by": "1",
+                "modified_by": "0",
+                "created_at": "2023-07-30T06:35:14.325923Z",
+                "modified_at": "2023-07-30T06:35:14.325965Z",
+                "job_id": 1,
+                "coc_id": 4
+            }
+        ],
+        "job_cop": [
+            {
+                "id": 1,
+                "is_active": true,
+                "created_by": "1",
+                "modified_by": "0",
+                "created_at": "2023-07-30T06:37:32.387473Z",
+                "modified_at": "2023-07-30T06:37:32.387517Z",
+                "job_id": 1,
+                "cop_id": 1
+            }
+        ],
+        "tentative_joining": "2025-07-07",
+        "GRT": "5465465",
+        "mail_info": false,
+        "number_info": false,
+        "expiry_in_day": "7",
+        "is_active": true,
+        "created_by": "1",
+        "modified_by": "0",
+        "created_at": "2023-07-29T18:36:55.047624Z",
+        "modified_at": "2023-07-29T18:36:55.047666Z",
+        "vessel_id": 1,
+        "posted_by": null
+    },
+    {
+        "id": 2,
+        "job_coc": [],
+        "job_cop": [],
+        "tentative_joining": "2025-07-07",
+        "GRT": "5465465",
+        "mail_info": false,
+        "number_info": false,
+        "expiry_in_day": "7",
+        "is_active": true,
+        "created_by": "2",
+        "modified_by": "0",
+        "created_at": "2023-07-29T20:50:13.446490Z",
+        "modified_at": "2023-07-29T20:50:13.446527Z",
+        "vessel_id": 1,
+        "posted_by": null
+    },
+    {
+        "id": 3,
+        "job_coc": [],
+        "job_cop": [],
+        "tentative_joining": "2025-07-07",
+        "GRT": "5465465",
+        "mail_info": false,
+        "number_info": false,
+        "expiry_in_day": "7",
+        "is_active": true,
+        "created_by": "3",
+        "modified_by": "0",
+        "created_at": "2023-07-29T21:37:06.392896Z",
+        "modified_at": "2023-07-29T21:37:06.392925Z",
+        "vessel_id": 1,
+        "posted_by": null
+    },
+    {
+        "id": 4,
+        "job_coc": [],
+        "job_cop": [],
+        "tentative_joining": "2025-07-07",
+        "GRT": "5465465",
+        "mail_info": false,
+        "number_info": false,
+        "expiry_in_day": "7",
+        "is_active": true,
+        "created_by": "4",
+        "modified_by": "0",
+        "created_at": "2023-07-29T21:40:00.392478Z",
+        "modified_at": "2023-07-29T21:40:00.392506Z",
+        "vessel_id": 1,
+        "posted_by": null
+    }
+]

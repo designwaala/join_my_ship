@@ -1,8 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/coc_model.dart';
 import 'package:join_mp_ship/app/data/models/cop_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/job_model.dart';
+import 'package:join_mp_ship/app/data/models/job_rank_with_wages_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_type_model.dart';
@@ -10,16 +13,25 @@ import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/job_coc_post.dart';
+import 'package:join_mp_ship/app/data/providers/job_cop_post.dart';
+import 'package:join_mp_ship/app/data/providers/job_provider.dart';
+import 'package:join_mp_ship/app/data/providers/job_rank_with_wages_provider.dart';
+import 'package:join_mp_ship/app/data/providers/job_watch_keeping_post.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 enum Step1Miss {
   tentativeJoining,
   vesselType,
   grt,
-  rank;
+  deckRank,
+  engineRank,
+  galleyRank;
 
   String get errorMessage {
     switch (this) {
@@ -29,8 +41,12 @@ enum Step1Miss {
         return "Please select a Vessel type";
       case Step1Miss.grt:
         return "Please enter GRT";
-      case Step1Miss.rank:
-        return "Please select atleast one rank";
+      case Step1Miss.deckRank:
+        return "Please select atleast one rank.";
+      case Step1Miss.engineRank:
+        return "Please select atleast one rank.";
+      case Step1Miss.galleyRank:
+        return "Please select atleast one rank.";
     }
   }
 }
@@ -49,7 +65,7 @@ enum Step2Miss {
 enum CrewRequirements {
   deckNavigation,
   engine,
-  gallery;
+  galley;
 
   String get name {
     switch (this) {
@@ -57,8 +73,8 @@ enum CrewRequirements {
         return "Deck / Navigation";
       case CrewRequirements.engine:
         return "Engine";
-      case CrewRequirements.gallery:
-        return "Gallery";
+      case CrewRequirements.galley:
+        return "Galley";
     }
   }
 }
@@ -70,7 +86,9 @@ class JobPostController extends GetxController {
   TextEditingController tentativeJoining = TextEditingController();
   TextEditingController grt = TextEditingController();
   RxList<CrewRequirements> crewRequirements = RxList.empty();
-  RxList<MapEntry<Rank?, double>> rankWithWages = RxList.empty();
+  RxList<MapEntry<Rank?, double>> deckRankWithWages = RxList.empty();
+  RxList<MapEntry<Rank?, double>> engineRankWithWages = RxList.empty();
+  RxList<MapEntry<Rank?, double>> galleyRankWithWages = RxList.empty();
   RxnInt recordVesselType = RxnInt();
   VesselList? vesselList;
   RxList<Rank> ranks = RxList.empty();
@@ -94,11 +112,22 @@ class JobPostController extends GetxController {
   //
   RxBool hasAgreed = false.obs;
   CrewUser? user;
+  //
+  FToast fToast = FToast();
+  final parentKey = GlobalKey();
+  //
+  RxBool isPostingJob = false.obs;
 
   @override
   void onInit() {
     instantiate();
     super.onInit();
+  }
+
+  @override
+  onReady() {
+    super.onReady();
+    fToast.init(parentKey.currentContext!);
   }
 
   instantiate() async {
@@ -117,15 +146,12 @@ class JobPostController extends GetxController {
     isLoading.value = false;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
   validateStep1() {
     step1Misses.clear();
-    rankWithWages.removeWhere((e) => e.key == null);
-    if (tentativeJoining.text.isEmail) {
+    deckRankWithWages.removeWhere((e) => e.key == null);
+    engineRankWithWages.removeWhere((e) => e.key == null);
+    galleyRankWithWages.removeWhere((e) => e.key == null);
+    if (tentativeJoining.text.isEmpty) {
       step1Misses.add(Step1Miss.tentativeJoining);
     }
     if (recordVesselType.value == null) {
@@ -134,8 +160,17 @@ class JobPostController extends GetxController {
     if (grt.text.isEmpty) {
       step1Misses.add(Step1Miss.grt);
     }
-    if (rankWithWages.isEmpty) {
-      step1Misses.add(Step1Miss.rank);
+    if (crewRequirements.contains(CrewRequirements.deckNavigation) &&
+        deckRankWithWages.isEmpty) {
+      step1Misses.add(Step1Miss.deckRank);
+    }
+    if (crewRequirements.contains(CrewRequirements.engine) &&
+        engineRankWithWages.isEmpty) {
+      step1Misses.add(Step1Miss.engineRank);
+    }
+    if (crewRequirements.contains(CrewRequirements.galley) &&
+        galleyRankWithWages.isEmpty) {
+      step1Misses.add(Step1Miss.galleyRank);
     }
     if (step1Misses.isEmpty) {
       currentStep.value = 2;
@@ -145,5 +180,67 @@ class JobPostController extends GetxController {
   validateStep2() {
     step2Misses.clear();
     // if(jobExpiry)
+  }
+
+  Future<void> postJob() async {
+    isPostingJob.value = true;
+    //Step 1: Post The Job
+    Job? postedJob = await getIt<JobProvider>().postJob(Job(
+        tentativeJoining: tentativeJoining.text,
+        vesselId: recordVesselType.value,
+        gRT: grt.text,
+        expiryInDay: jobExpiry.value.toString(),
+        mailInfo: showEmail.value,
+        numberInfo: showMobileNumber.value));
+
+    //Step 2: Post All Rank with wages
+/*     for (MapEntry<Rank?, double> e in [
+      ...deckRankWithWages,
+      ...engineRankWithWages,
+      ...galleyRankWithWages
+    ]) {
+      await getIt<JobRankWithWagesProvider>()
+          .postJobRankWithWages(JobRankWithWages(
+        jobId: postedJob.id,
+        rankNumber: e.key?.id,
+        wages: e.value.toString(),
+      ));
+    } */
+    /* await Future.forEach<MapEntry<Rank?, double>>(
+        [...deckRankWithWages, ...engineRankWithWages, ...galleyRankWithWages],
+        (e) => getIt<JobRankWithWagesProvider>()
+                .postJobRankWithWages(JobRankWithWages(
+              jobId: postedJob.id,
+              rankNumber: e.key?.id,
+              wages: e.value.toString(),
+            ))); */
+    await Future.wait([
+      ...deckRankWithWages,
+      ...engineRankWithWages,
+      ...galleyRankWithWages
+    ].map((MapEntry<Rank?, double> e) =>
+        getIt<JobRankWithWagesProvider>().postJobRankWithWages(JobRankWithWages(
+          jobId: postedJob.id,
+          rankNumber: e.key?.id,
+          wages: e.value.toString(),
+        ))));
+
+    //Step 3: Post COC
+    await Future.wait(cocRequirementsSelected.map((e) =>
+        getIt<JobCOCPostProvider>()
+            .postJobCOC(JobCoc(jobId: postedJob.id, cocId: e.id))));
+
+    //Step 4: Post COP
+    await Future.wait(copRequirementsSelected.map((e) =>
+        getIt<JobCOPPostProvider>()
+            .postJobCOP(JobCop(jobId: postedJob.id, copId: e.id))));
+
+    //Step 5: Post Watch Keeping
+    await Future.wait(watchKeepingRequirementsSelected.map((e) =>
+        getIt<JobWatchKeepingPostProvider>().postJobWatchKeeping(
+            JobWatchKeeping(jobId: postedJob.id, watchKeepingId: e.id))));
+    isPostingJob.value = false;
+
+    fToast.safeShowToast(child: successToast("Job Posted Successfully!"));
   }
 }

@@ -14,4 +14,9 @@ class UserStates {
   UserDetails? userDetails;
   List<SeaServiceRecord>? serviceRecords;
   List<PreviousEmployerReference>? previousEmployerReferences;
+
+  reset() {
+    ranks = countries = crewUser =
+        userDetails = serviceRecords = previousEmployerReferences = null;
+  }
 }
