@@ -34,6 +34,8 @@ class EmployerJobPostsController extends GetxController {
 
   RxBool isLoading = false.obs;
 
+  RxnInt jobIdBeingDeleted = RxnInt();
+
   @override
   void onInit() {
     instantiate();
@@ -80,5 +82,14 @@ class EmployerJobPostsController extends GetxController {
     watchKeepings.value = (await getIt<WatchKeepingProvider>()
             .getWatchKeepingList(userType: 3)) ??
         [];
+  }
+
+  Future<void> deleteJobPost(int jobId) async {
+    jobIdBeingDeleted.value = jobId;
+    int? statusCode = await getIt<JobProvider>().deleteJob(jobId);
+    if (statusCode == 204) {
+      jobPosts.removeWhere((jobPost) => jobPost.id == jobId);
+    }
+    jobIdBeingDeleted.value = null;
   }
 }

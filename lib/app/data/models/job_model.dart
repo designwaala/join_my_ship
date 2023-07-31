@@ -79,6 +79,14 @@ class Job {
     postedBy = json['posted_by'];
   }
 
+  Map<String, dynamic> jsonToUpdateJob() => {
+        if (tentativeJoining != null) "tentative_joining": tentativeJoining,
+        if (gRT != null) "GRT": gRT,
+        if (mailInfo != null) "mail_info": mailInfo,
+        if (numberInfo != null) "number_info": numberInfo,
+        if (vesselId != null) "vessel_id": vesselId
+      };
+
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['id'] = id;

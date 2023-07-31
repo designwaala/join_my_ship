@@ -20,4 +20,13 @@ class JobProvider extends WrapperConnect {
 
   Future<Job> postJob(Job job) async =>
       (await post('employer/post_job', job.toJson())).body;
+
+  Future<Job> updateJob(Job job) async {
+    final response = await httpPatch(
+        "employer/post_job_update/${job.id}", job.jsonToUpdateJob());
+    return Job.fromJson(response);
+  }
+
+  Future<int?> deleteJob(int jobId) async =>
+      (await delete("employer/post_job_retrieve_destroy/$jobId")).statusCode;
 }

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -117,9 +118,15 @@ class JobPostController extends GetxController {
   final parentKey = GlobalKey();
   //
   RxBool isPostingJob = false.obs;
+  //
+  Job? jobToEdit;
 
   @override
   void onInit() {
+    if (Get.arguments is JobPostArguments?) {
+      JobPostArguments? args = Get.arguments;
+      jobToEdit = args?.jobToEdit;
+    }
     instantiate();
     super.onInit();
   }
@@ -143,6 +150,70 @@ class JobPostController extends GetxController {
     watchKeepings.value = (await getIt<WatchKeepingProvider>()
             .getWatchKeepingList(userType: 3)) ??
         [];
+
+    if (jobToEdit?.id != null) {
+      tentativeJoining.text = jobToEdit?.tentativeJoining ?? "";
+      recordVesselType.value = jobToEdit?.vesselId;
+      grt.text = jobToEdit?.gRT ?? "";
+      jobExpiry.value = int.tryParse(jobToEdit?.expiryInDay ?? "") ?? 0;
+      showEmail.value = jobToEdit?.mailInfo ?? false;
+      showMobileNumber.value = jobToEdit?.numberInfo ?? false;
+      deckRankWithWages.value = jobToEdit?.jobRankWithWages
+              ?.where((jobWithWage) => ranks
+                  .where((e) => e.jobType == CrewRequirements.deckNavigation)
+                  .any((e) => e.id == jobWithWage.rankNumber))
+              .map((e) => MapEntry(
+                  ranks.firstWhereOrNull((rank) => rank.id == e.rankNumber),
+                  double.parse(e.wages ?? "0")))
+              .toList() ??
+          [];
+      engineRankWithWages.value = jobToEdit?.jobRankWithWages
+              ?.where((jobWithWage) => ranks
+                  .where((e) => e.jobType == CrewRequirements.engine)
+                  .any((e) => e.id == jobWithWage.rankNumber))
+              .map((e) => MapEntry(
+                  ranks.firstWhereOrNull((rank) => rank.id == e.rankNumber),
+                  double.parse(e.wages ?? "0")))
+              .toList() ??
+          [];
+      galleyRankWithWages.value = jobToEdit?.jobRankWithWages
+              ?.where((jobWithWage) => ranks
+                  .where((e) => e.jobType == CrewRequirements.galley)
+                  .any((e) => e.id == jobWithWage.rankNumber))
+              .map((e) => MapEntry(
+                  ranks.firstWhereOrNull((rank) => rank.id == e.rankNumber),
+                  double.parse(e.wages ?? "0")))
+              .toList() ??
+          [];
+      crewRequirements.value = <CrewRequirements>[
+        if (deckRankWithWages.isNotEmpty) CrewRequirements.deckNavigation,
+        if (engineRankWithWages.isNotEmpty) CrewRequirements.engine,
+        if (galleyRankWithWages.isNotEmpty) CrewRequirements.galley
+      ];
+      cocRequirementsSelected.value = cocs
+          .where(
+              (coc) => jobToEdit?.jobCoc?.any((e) => e.cocId == coc.id) == true)
+          .toList();
+      if (cocRequirementsSelected.isNotEmpty) {
+        needCOCRequirements.value = true;
+      }
+      copRequirementsSelected.value = cops
+          .where(
+              (cop) => jobToEdit?.jobCop?.any((e) => e.copId == cop.id) == true)
+          .toList();
+      if (copRequirementsSelected.isNotEmpty) {
+        needCOPRequirements.value = true;
+      }
+      watchKeepingRequirementsSelected.value = watchKeepings
+          .where((watchKeeping) =>
+              jobToEdit?.jobWatchKeeping
+                  ?.any((e) => e.watchKeepingId == watchKeeping.id) ==
+              true)
+          .toList();
+      if (watchKeepingRequirementsSelected.isNotEmpty) {
+        needWatchKeepingRequirements.value = true;
+      }
+    }
     isLoading.value = false;
   }
 
@@ -184,63 +255,98 @@ class JobPostController extends GetxController {
 
   Future<void> postJob() async {
     isPostingJob.value = true;
-    //Step 1: Post The Job
-    Job? postedJob = await getIt<JobProvider>().postJob(Job(
-        tentativeJoining: tentativeJoining.text,
-        vesselId: recordVesselType.value,
-        gRT: grt.text,
-        expiryInDay: jobExpiry.value.toString(),
-        mailInfo: showEmail.value,
-        numberInfo: showMobileNumber.value));
 
-    //Step 2: Post All Rank with wages
-/*     for (MapEntry<Rank?, double> e in [
-      ...deckRankWithWages,
-      ...engineRankWithWages,
-      ...galleyRankWithWages
-    ]) {
-      await getIt<JobRankWithWagesProvider>()
-          .postJobRankWithWages(JobRankWithWages(
-        jobId: postedJob.id,
-        rankNumber: e.key?.id,
-        wages: e.value.toString(),
-      ));
-    } */
-    /* await Future.forEach<MapEntry<Rank?, double>>(
-        [...deckRankWithWages, ...engineRankWithWages, ...galleyRankWithWages],
-        (e) => getIt<JobRankWithWagesProvider>()
-                .postJobRankWithWages(JobRankWithWages(
-              jobId: postedJob.id,
-              rankNumber: e.key?.id,
-              wages: e.value.toString(),
-            ))); */
-    await Future.wait([
-      ...deckRankWithWages,
-      ...engineRankWithWages,
-      ...galleyRankWithWages
-    ].map((MapEntry<Rank?, double> e) =>
-        getIt<JobRankWithWagesProvider>().postJobRankWithWages(JobRankWithWages(
-          jobId: postedJob.id,
-          rankNumber: e.key?.id,
-          wages: e.value.toString(),
-        ))));
+    if (jobToEdit?.id == null) {
+      //Step 1: Post The Job
+      Job? postedJob = await getIt<JobProvider>().postJob(Job(
+          tentativeJoining: tentativeJoining.text,
+          vesselId: recordVesselType.value,
+          gRT: grt.text,
+          expiryInDay: jobExpiry.value.toString(),
+          mailInfo: showEmail.value,
+          numberInfo: showMobileNumber.value));
 
-    //Step 3: Post COC
-    await Future.wait(cocRequirementsSelected.map((e) =>
-        getIt<JobCOCPostProvider>()
-            .postJobCOC(JobCoc(jobId: postedJob.id, cocId: e.id))));
+      //Step 2: Post All Rank with wages
+      await Future.wait([
+        ...deckRankWithWages,
+        ...engineRankWithWages,
+        ...galleyRankWithWages
+      ].map((MapEntry<Rank?, double> e) => getIt<JobRankWithWagesProvider>()
+              .postJobRankWithWages(JobRankWithWages(
+            jobId: postedJob.id,
+            rankNumber: e.key?.id,
+            wages: e.value.toString(),
+          ))));
 
-    //Step 4: Post COP
-    await Future.wait(copRequirementsSelected.map((e) =>
-        getIt<JobCOPPostProvider>()
-            .postJobCOP(JobCop(jobId: postedJob.id, copId: e.id))));
+      //Step 3: Post COC
+      await Future.wait(cocRequirementsSelected.map((e) =>
+          getIt<JobCOCPostProvider>()
+              .postJobCOC(JobCoc(jobId: postedJob.id, cocId: e.id))));
 
-    //Step 5: Post Watch Keeping
-    await Future.wait(watchKeepingRequirementsSelected.map((e) =>
-        getIt<JobWatchKeepingPostProvider>().postJobWatchKeeping(
-            JobWatchKeeping(jobId: postedJob.id, watchKeepingId: e.id))));
+      //Step 4: Post COP
+      await Future.wait(copRequirementsSelected.map((e) =>
+          getIt<JobCOPPostProvider>()
+              .postJobCOP(JobCop(jobId: postedJob.id, copId: e.id))));
+
+      //Step 5: Post Watch Keeping
+      await Future.wait(watchKeepingRequirementsSelected.map((e) =>
+          getIt<JobWatchKeepingPostProvider>().postJobWatchKeeping(
+              JobWatchKeeping(jobId: postedJob.id, watchKeepingId: e.id))));
+
+      fToast.safeShowToast(child: successToast("Job Posted Successfully!"));
+    } else {
+      //Step1: check whether Job needs to be edited
+      if (jobToEdit?.tentativeJoining == tentativeJoining.text &&
+          jobToEdit?.vesselId == recordVesselType.value &&
+          jobToEdit?.gRT == grt.text &&
+          jobToEdit?.expiryInDay == jobExpiry.value.toString() &&
+          jobToEdit?.mailInfo == showEmail.value &&
+          jobToEdit?.numberInfo == showMobileNumber.value) {
+        //Job is not required to be updated
+      } else {
+        await getIt<JobProvider>().updateJob(Job(
+            tentativeJoining: tentativeJoining.text,
+            vesselId: recordVesselType.value,
+            gRT: grt.text,
+            expiryInDay: jobExpiry.value.toString(),
+            mailInfo: showEmail.value,
+            numberInfo: showMobileNumber.value));
+      }
+
+      //Step2: add new ranks if any
+      await Future.wait([
+        ...deckRankWithWages,
+        ...engineRankWithWages,
+        ...galleyRankWithWages
+      ]
+          .where((rankWithWage) =>
+              jobToEdit?.jobRankWithWages
+                  ?.none((p0) => p0.rankNumber == rankWithWage.key?.id) ==
+              true)
+          .map((e) => getIt<JobRankWithWagesProvider>()
+                  .postJobRankWithWages(JobRankWithWages(
+                jobId: jobToEdit?.id,
+                rankNumber: e.key?.id,
+                wages: e.value.toString(),
+              ))));
+
+      //Step3: delete old ranks if any
+      await Future.wait(jobToEdit?.jobRankWithWages
+              ?.where((rankWithWages) => [
+                    ...deckRankWithWages,
+                    ...engineRankWithWages,
+                    ...galleyRankWithWages
+                  ].none((p0) => p0.key?.id == rankWithWages.rankNumber))
+              .map((jobRankWithWages) => getIt<JobRankWithWagesProvider>()
+                  .deleteJobRankWithWages(jobRankWithWages)) ??
+          [Future.value(null)]);
+    }
+
     isPostingJob.value = false;
-
-    fToast.safeShowToast(child: successToast("Job Posted Successfully!"));
   }
+}
+
+class JobPostArguments {
+  final Job? jobToEdit;
+  const JobPostArguments({this.jobToEdit});
 }
