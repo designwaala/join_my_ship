@@ -73,6 +73,9 @@ class HomeView extends GetView<HomeController> {
                                 child: e.icon))
                     .toList(),
                 onTap: (index) {
+                  if (index == 3) {
+                    Get.toNamed(Routes.JOB_OPENINGS);
+                  }
                   if (index != 2) {
                     controller.showJobButtons.value = false;
                     controller.currentIndex.value = index + 1;

@@ -27,7 +27,7 @@ dependencies:
   get_it: ^7.6.0
   shared_preferences: ^2.1.1
   flutter_secure_storage: ^8.0.0
-  lottie:
+  lottie: ^2.5.0
   cached_network_image: ^3.2.3
   country_picker: ^2.0.20
   curved_navigation_bar: ^1.0.3
@@ -57,3 +57,4 @@ flutter:
     - assets/images/profile/
     - assets/images/employer_invite/
     - assets/icons/
+    - assets/animations/
