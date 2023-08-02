@@ -29,6 +29,8 @@ abstract class Routes {
   static const VIEW_JOBS_POSTED = _Paths.VIEW_JOBS_POSTED;
   static const EMPLOYER_JOB_APPLICATIONS = _Paths.EMPLOYER_JOB_APPLICATIONS;
   static const EMPLOYER_JOB_POSTS = _Paths.EMPLOYER_JOB_POSTS;
+  static const JOB_OPENINGS = _Paths.JOB_OPENINGS;
+  static const JOB_APPLIED_SUCCESSFULLY = _Paths.JOB_APPLIED_SUCCESSFULLY;
 }
 
 abstract class _Paths {
@@ -59,4 +61,6 @@ abstract class _Paths {
   static const VIEW_JOBS_POSTED = '/view-jobs-posted';
   static const EMPLOYER_JOB_APPLICATIONS = '/employer-job-applications';
   static const EMPLOYER_JOB_POSTS = '/employer-job-posts';
+  static const JOB_OPENINGS = '/job-openings';
+  static const JOB_APPLIED_SUCCESSFULLY = '/job-applied-successfully';
 }
