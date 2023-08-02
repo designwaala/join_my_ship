@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
+import 'package:join_mp_ship/app/modules/job_posted_successfully/controllers/job_posted_successfully_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/styles.dart';
@@ -272,7 +273,11 @@ class JobPostStep3 extends GetView<JobPostController> {
                         onPressed: controller.hasAgreed.value
                             ? () async {
                                 await controller.postJob();
-                                Get.offNamed(Routes.JOB_POSTED_SUCCESSFULLY);
+                                Get.offNamed(Routes.JOB_POSTED_SUCCESSFULLY,
+                                    arguments: JobPostedSuccessfullyArguments(
+                                        message: controller.jobToEdit == null
+                                            ? null
+                                            : "JOB EDITED\nSUCCESSFULLY"));
                               }
                             : null,
                         child: Text("PUBLISH"))),

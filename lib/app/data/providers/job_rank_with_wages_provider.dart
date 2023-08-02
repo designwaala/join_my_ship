@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
 import '../models/job_rank_with_wages_model.dart';
@@ -20,9 +21,13 @@ class JobRankWithWagesProvider extends WrapperConnect {
 
   Future<JobRankWithWages?> updateJobRankWithWages(
       JobRankWithWages jobrankwithwages) async {
-    final response = await httpPatch(
+    final response = await multipartPatch(
         'employer/rank_with_wages_update/${jobrankwithwages.id}',
-        jobrankwithwages.toJson());
+        jobrankwithwages,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "Bearer ${PreferencesHelper.instance.accessToken}"
+        });
     return JobRankWithWages.fromJson(response);
   }
 

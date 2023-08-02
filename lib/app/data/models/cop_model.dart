@@ -9,10 +9,11 @@ class Cop {
     name = json['name'];
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    return data;
+  Map<String, String> toJson() {
+    final data = <String, String?>{};
+    data['id'] = id?.toString();
+    data['name'] = name?.toString();
+    data.removeWhere((key, value) => value == null);
+    return data.map((key, value) => MapEntry(key, value!));
   }
 }

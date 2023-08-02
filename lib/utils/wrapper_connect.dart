@@ -28,19 +28,6 @@ class WrapperConnect extends GetConnect {
       Decoder<T>? decoder,
       bool softRefresh = false}) async {
     print(PreferencesHelper.instance.accessToken);
-    // if (PreferencesHelper.instance.userCreated != true) {
-    //   return await super.get<T>(
-    //     url,
-    //     headers: headers ??
-    //         {
-    //           "Authorization":
-    //               "Bearer ${PreferencesHelper.instance.accessToken}"
-    //         },
-    //     contentType: contentType,
-    //     query: query,
-    //     decoder: decoder,
-    //   );
-    // }
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
       bool didGetAccessTokens = await getAccessTokens();
@@ -387,6 +374,108 @@ class WrapperConnect extends GetConnect {
   Future<http.Response> _multipartPatchCore(String url, dynamic body,
       {Map<String, String>? headers}) async {
     var request = http.MultipartRequest('PATCH', Uri.parse("$baseURL/$url"));
+    request.fields.addAll(body is Map ? body : body.toJson());
+
+    headers ??= {
+      "Content-Type": "multipart/form-data",
+      "Authorization": "Bearer ${PreferencesHelper.instance.accessToken}"
+    };
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+    if (streamedResponse.statusCode == 200) {
+      // print(await streamedResponse.stream.bytesToString());
+    } else {
+      print(streamedResponse.reasonPhrase);
+    }
+    return response;
+  }
+
+  Future<Map<String, dynamic>> multipartPost(String url, dynamic body,
+      {Map<String, dynamic>? headers}) async {
+    print(PreferencesHelper.instance.accessToken);
+    if (PreferencesHelper.instance.accessToken.isEmpty) {
+      print("Access Token not found, getting them");
+      await getAccessTokens();
+    }
+    var response = await _multipartPostCore(url, body);
+    if (response.statusCode == 401) {
+      print("Refreshing Access Token");
+      await refreshAccessToken();
+      response = await _multipartPostCore(url, body);
+      if (response.statusCode == 401) {
+        print("Refreshing Access Token didnt work, getting new Tokens");
+        await getAccessTokens();
+        response = await _multipartPostCore(url, body);
+        if (response.statusCode == 401) {
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {
+          APIErrorList errors =
+              APIErrorList.fromJson(jsonDecode(response.body));
+          showTopModalSheet(
+              Get.context!,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Some error occurred",
+                        style: Get.textTheme.titleMedium),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: errors.apiErrorList
+                                ?.map((error) => [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${error.field ?? ""}:",
+                                              style: Get
+                                                  .theme.textTheme.bodyMedium),
+                                          4.horizontalSpace,
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...?error.errors?.map((e) =>
+                                                    Text(e,
+                                                        maxLines: 3,
+                                                        style: Get
+                                                            .theme
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith())),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      4.verticalSpace
+                                    ])
+                                .expand((element) => element)
+                                .toList() ??
+                            []),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton(
+                          onPressed: Get.back, child: Text("OK")),
+                    )
+                  ],
+                ),
+              ));
+        }
+      }
+    }
+    return jsonDecode(response.body);
+  }
+
+  Future<http.Response> _multipartPostCore(String url, dynamic body,
+      {Map<String, String>? headers}) async {
+    var request = http.MultipartRequest('POST', Uri.parse("$baseURL/$url"));
     request.fields.addAll(body is Map ? body : body.toJson());
 
     headers ??= {

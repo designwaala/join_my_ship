@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
 
 class JobPostedSuccessfullyController extends GetxController {
-  //TODO: Implement JobPostedSuccessfullyController
+  JobPostedSuccessfullyArguments? args;
 
-  final count = 0.obs;
   @override
   void onInit() {
+    if (Get.arguments is JobPostedSuccessfullyArguments?) {
+      args = Get.arguments;
+    }
     super.onInit();
   }
 
@@ -18,6 +20,9 @@ class JobPostedSuccessfullyController extends GetxController {
   void onClose() {
     super.onClose();
   }
+}
 
-  void increment() => count.value++;
+class JobPostedSuccessfullyArguments {
+  final String? message;
+  const JobPostedSuccessfullyArguments({this.message});
 }

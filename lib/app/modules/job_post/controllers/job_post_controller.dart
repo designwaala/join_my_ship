@@ -340,7 +340,73 @@ class JobPostController extends GetxController {
               .map((jobRankWithWages) => getIt<JobRankWithWagesProvider>()
                   .deleteJobRankWithWages(jobRankWithWages)) ??
           [Future.value(null)]);
+
+      //Step4: Update Rank with Wages if required
+      await Future.wait([
+        ...deckRankWithWages,
+        ...engineRankWithWages,
+        ...galleyRankWithWages
+      ]
+          .where((rankWithWage) =>
+              jobToEdit?.jobRankWithWages?.any((e) =>
+                  e.rankNumber == rankWithWage.key?.id &&
+                  double.tryParse(e.wages ?? "") != rankWithWage.value) ==
+              true)
+          .map((e) => e.updateJob(jobToEdit)));
     }
+
+    //Step 5: Delete COCs if any
+    await Future.wait(jobToEdit?.jobCoc
+            ?.where((coc) =>
+                cocRequirementsSelected.none((p0) => p0.id == coc.cocId))
+            .map((coc) => coc.id == null
+                ? Future.value(null)
+                : getIt<JobCOCPostProvider>()
+                    .deleteJobCOC(JobCoc(id: coc.id))) ??
+        [Future.value(null)]);
+
+    //Step 6: Add COCs if any
+    await Future.wait(cocRequirementsSelected
+        .where((coc) =>
+            jobToEdit?.jobCoc?.none((p0) => p0.cocId == coc.id) == true)
+        .map((e) => getIt<JobCOCPostProvider>()
+            .postJobCOC(JobCoc(cocId: e.id, jobId: jobToEdit?.id))));
+
+    //Step 7: Delete COPs if any
+    await Future.wait(jobToEdit?.jobCop
+            ?.where((cop) =>
+                copRequirementsSelected.none((p0) => p0.id == cop.copId))
+            .map((cop) => cop.id == null
+                ? Future.value(null)
+                : getIt<JobCOPPostProvider>()
+                    .deleteJobCOP(JobCop(jobId: jobToEdit?.id, id: cop.id))) ??
+        [Future.value(null)]);
+
+    //Step 8: Add COPs if any
+    await Future.wait(copRequirementsSelected
+        .where((cop) =>
+            jobToEdit?.jobCop?.none((p0) => p0.copId == cop.id) == true)
+        .map((e) => getIt<JobCOPPostProvider>()
+            .postJobCOP(JobCop(jobId: jobToEdit?.id, copId: e.id))));
+
+    //Step 9: Delete Watch Keepings if any
+    await Future.wait(jobToEdit?.jobWatchKeeping
+            ?.where((watchKeeping) => watchKeepingRequirementsSelected
+                .none((p0) => p0.id == watchKeeping.watchKeepingId))
+            .map((watchKeeping) => watchKeeping.id == null
+                ? Future.value(null)
+                : getIt<JobWatchKeepingPostProvider>().deleteJobWatchKeeping(
+                    JobWatchKeeping(id: watchKeeping.id))) ??
+        [Future.value(null)]);
+
+    //Step 10: Add Watch Keepings if any
+    await Future.wait(watchKeepingRequirementsSelected
+        .where((watchKeeping) =>
+            jobToEdit?.jobWatchKeeping
+                ?.none((p0) => p0.watchKeepingId == watchKeeping.id) ==
+            true)
+        .map((e) => getIt<JobWatchKeepingPostProvider>().postJobWatchKeeping(
+            JobWatchKeeping(jobId: jobToEdit?.id, watchKeepingId: e.id))));
 
     isPostingJob.value = false;
   }
@@ -349,4 +415,22 @@ class JobPostController extends GetxController {
 class JobPostArguments {
   final Job? jobToEdit;
   const JobPostArguments({this.jobToEdit});
+}
+
+extension JobUpdate on MapEntry<Rank?, double>? {
+  Future<void> updateJob(Job? job) {
+    print("Updating Job Post for ${this?.key?.name} ${this?.value}");
+    return this == null
+        ? Future.value(null)
+        : getIt<JobRankWithWagesProvider>().updateJobRankWithWages(
+            JobRankWithWages(
+                id: job
+                    ?.jobRankWithWages
+                    ?.firstWhereOrNull((rankWithWage) =>
+                        rankWithWage.rankNumber == this?.key?.id)
+                    ?.id,
+                jobId: job?.id,
+                rankNumber: this?.key?.id,
+                wages: this?.value.toString()));
+  }
 }

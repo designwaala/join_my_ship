@@ -13,11 +13,12 @@ class JobRankWithWages {
     wages = json['wages'];
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['job_id'] = jobId;
-    data['rank_number'] = rankNumber;
-    data['wages'] = wages;
-    return data;
+  Map<String, String> toJson() {
+    final data = <String, String?>{};
+    data['job_id'] = jobId?.toString();
+    data['rank_number'] = rankNumber?.toString();
+    data['wages'] = wages?.toString();
+    data.removeWhere((key, value) => value == null);
+    return data.map((key, value) => MapEntry(key, value!));
   }
 }

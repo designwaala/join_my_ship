@@ -24,7 +24,7 @@ class JobPostedSuccessfullyView
             color: Get.theme.primaryColor,
           ),
           26.verticalSpace,
-          Text("JOB PUBLISHED\nSUCCESSFULLY!",
+          Text(controller.args?.message ?? "JOB PUBLISHED\nSUCCESSFULLY!",
               style: Get.textTheme.s20w700
                   .copyWith(color: Get.theme.primaryColor)),
           20.verticalSpace,
