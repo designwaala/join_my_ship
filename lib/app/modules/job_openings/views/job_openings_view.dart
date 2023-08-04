@@ -100,7 +100,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                       ),
                     ],
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [Text("Gender"), Text("data")],
                   ),

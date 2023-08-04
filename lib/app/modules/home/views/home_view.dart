@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/profile/views/profile_view.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
 
 import '../controllers/home_controller.dart';
@@ -91,7 +92,8 @@ class HomeView extends GetView<HomeController> {
                 right: 0,
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  child: controller.showJobButtons.value
+                  child: UserStates.instance.crewUser?.userTypeKey == 3 &&
+                          controller.showJobButtons.value
                       ? IntrinsicWidth(
                           child: Column(
                             children: [

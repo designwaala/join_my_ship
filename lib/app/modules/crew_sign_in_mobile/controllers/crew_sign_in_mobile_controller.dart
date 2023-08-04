@@ -4,7 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
@@ -25,6 +29,8 @@ class CrewSignInMobileController extends GetxController {
   RxInt timePassed = 0.obs;
   Timer? timer;
   RxBool isSelectingCountryCode = false.obs;
+
+  CrewUser? crewUser;
 
   Function(String phoneNumber, String dialCode)? redirection;
 
@@ -110,7 +116,25 @@ class CrewSignInMobileController extends GetxController {
       if (redirection != null) {
         redirection!(phoneController.text, selectedCountryCode.value);
       } else {
-        Get.offAllNamed(Routes.CREW_ONBOARDING);
+        crewUser = await getIt<CrewUserProvider>().getCrewUser();
+        UserStates.instance.crewUser = crewUser;
+        if (crewUser?.userTypeKey == 3) {
+          Get.offAllNamed(crewUser?.screenCheck == 1
+              ? (crewUser?.isVerified == 1
+                  ? Routes.HOME
+                  : Routes.ACCOUNT_UNDER_VERIFICATION)
+              : Routes.EMPLOYER_CREATE_USER);
+        } else {
+          if (crewUser?.screenCheck == 3) {
+            if (crewUser?.isVerified == 1) {
+              Get.offAllNamed(Routes.HOME);
+            } else {
+              Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+            }
+          } else {
+            Get.offAllNamed(Routes.CREW_ONBOARDING);
+          }
+        }
       }
       fToast.safeShowToast(child: successToast("Authentication Successful"));
     } else {

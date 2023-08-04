@@ -118,7 +118,8 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                                 onSelected: (value) {
                                                   switch (value) {
                                                     case 1:
-                                                      Get.toNamed(Routes.JOB_POST,
+                                                      Get.offNamed(
+                                                          Routes.JOB_POST,
                                                           arguments: JobPostArguments(
                                                               jobToEdit: controller
                                                                       .jobPosts[

@@ -24,8 +24,11 @@ class CrewUserProvider extends WrapperConnect {
   }
 
   Future<CrewUser?> getCrewUser({bool softRefresh = false}) async {
-    final response = await get('crew/get_user', softRefresh: softRefresh);
+    final response = await get<CrewUser>('crew/get_user',
+        softRefresh: softRefresh, decoder: (map) => CrewUser.fromJson(map));
     UserStates.instance.crewUser = response.body;
+    await PreferencesHelper.instance.setUserId(response.body?.id);
+    await PreferencesHelper.instance.setIsCrew(response.body?.userTypeKey == 2);
     return response.body;
   }
 
