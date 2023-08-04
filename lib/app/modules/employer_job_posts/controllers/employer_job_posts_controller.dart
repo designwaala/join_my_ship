@@ -14,6 +14,7 @@ import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 
 class EmployerJobPostsController extends GetxController {
@@ -56,7 +57,9 @@ class EmployerJobPostsController extends GetxController {
   }
 
   Future<void> loadJobPosts() async {
-    jobPosts.value = (await getIt<JobProvider>().getJobList()) ?? [];
+    jobPosts.value = (await getIt<JobProvider>()
+            .getJobList(employerId: PreferencesHelper.instance.userId ?? -1)) ??
+        [];
   }
 
   Future<void> loadVesselTypes() async {

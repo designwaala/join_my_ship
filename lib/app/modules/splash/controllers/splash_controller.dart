@@ -53,8 +53,12 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
                 ? Routes.HOME
                 : (PreferencesHelper.instance.isCrew == true ||
                         user?.userTypeKey == 2)
-                    ? Routes.CREW_ONBOARDING
-                    : Routes.EMPLOYER_CREATE_USER
+                    ? user?.screenCheck == 3
+                        ? Routes.HOME
+                        : Routes.CREW_ONBOARDING
+                    : user?.screenCheck == 1
+                        ? Routes.HOME
+                        : Routes.EMPLOYER_CREATE_USER
             : Routes.EMAIL_VERIFICATION_WAITING);
   }
 

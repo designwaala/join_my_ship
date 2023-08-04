@@ -21,7 +21,8 @@ class PreferencesHelper {
       _USER_CREATED = "user-created",
       _COMPANY_NAME = "company_name",
       _WEBSITE = "webiste",
-      _IS_CREW = "is-crew";
+      _IS_CREW = "is-crew",
+      _USER_ID = "user-id";
 
   Future<void> setAccessToken(String? value) =>
       value == null || _sharedPreferences == null
@@ -51,4 +52,7 @@ class PreferencesHelper {
   bool? get isCrew => _sharedPreferences?.getBool(_IS_CREW);
   Future<void>? setIsCrew(value) =>
       _sharedPreferences?.setBool(_IS_CREW, value);
+
+  int? get userId => _sharedPreferences?.getInt(_USER_ID);
+  Future<void>? setUserId(value) => _sharedPreferences?.setInt(_USER_ID, value);
 }
