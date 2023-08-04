@@ -7,7 +7,7 @@ class CircularProgressIndicatorWidget extends GetWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white70,
+      color: Colors.white,
       child: const Center(child: CircularProgressIndicator()),
     );
   }

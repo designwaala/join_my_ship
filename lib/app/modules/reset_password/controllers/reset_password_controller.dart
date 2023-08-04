@@ -4,7 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
-import 'package:join_mp_ship/widgets/circular_progress_indicator.dart';
+import 'package:join_mp_ship/widgets/circular_progress_indicator_alert_dialog.dart';
+import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 class ResetPasswordController extends GetxController {
@@ -22,7 +23,7 @@ class ResetPasswordController extends GetxController {
 
   void resetPassword() async {
     if (formKey.currentState!.validate()) {
-      Get.to(const CircularProgressIndicatorWidget());
+      Get.to(const CircularProgressIndicatorAlertDialog());
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim())
           .then((value) {

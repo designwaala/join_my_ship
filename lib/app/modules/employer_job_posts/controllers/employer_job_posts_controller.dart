@@ -44,14 +44,13 @@ class EmployerJobPostsController extends GetxController {
     isLoading.value = true;
     currentEmployerUser.value = UserStates.instance.crewUser ??
         await getIt<CrewUserProvider>().getCrewUser();
-    currentEmployerUser.value!.userTypeKey = 3;
     await Future.wait([
       loadJobPosts(),
       loadVesselTypes(),
       loadRanks(),
-      loadCOC(userType: currentEmployerUser.value!.userTypeKey!),
-      loadCOP(userType: currentEmployerUser.value!.userTypeKey!),
-      loadWatchKeeping(userType: currentEmployerUser.value!.userTypeKey!),
+      loadCOC(),
+      loadCOP(),
+      loadWatchKeeping(),
     ]);
     isLoading.value = false;
   }
@@ -68,15 +67,15 @@ class EmployerJobPostsController extends GetxController {
     ranks.value = (await getIt<RanksProvider>().getRankList()) ?? [];
   }
 
-  Future<void> loadCOC({required int userType}) async {
+  Future<void> loadCOC() async {
     cocs.value = (await getIt<CocProvider>().getCOCList(userType: 3)) ?? [];
   }
 
-  Future<void> loadCOP({required int userType}) async {
+  Future<void> loadCOP() async {
     cops.value = (await getIt<CopProvider>().getCOPList(userType: 3)) ?? [];
   }
 
-  Future<void> loadWatchKeeping({required int userType}) async {
+  Future<void> loadWatchKeeping() async {
     watchKeepings.value = (await getIt<WatchKeepingProvider>()
             .getWatchKeepingList(userType: 3)) ??
         [];

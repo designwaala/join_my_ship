@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:get_cli/get_cli.dart';
 import 'package:join_mp_ship/app/modules/employer_job_posts/controllers/employer_job_posts_controller.dart';
 import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/widgets/circular_progress_indicator.dart';
+import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 
 class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
   const EmployerJobPostsView({Key? key}) : super(key: key);
@@ -168,9 +169,8 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text("Tentative Joining Date",
+                                            Text("Tentative Joining Date: ",
                                                 style: Get.textTheme.bodyLarge),
-                                            const Spacer(),
                                             Text(
                                               controller.jobPosts[index]
                                                   .tentativeJoining!,
@@ -180,10 +180,8 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("Vessel Type",
+                                            Text("Vessel Type: ",
                                                 style: Get.textTheme.bodyLarge),
                                             Text(controller.vesselList?.vessels
                                                     ?.map((e) =>
@@ -199,10 +197,8 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("GRT",
+                                            Text("GRT: ",
                                                 style: Get.textTheme.bodyLarge),
                                             Text(controller.jobPosts[index].gRT
                                                 .toString())
@@ -210,7 +206,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 8),
+                                              horizontal: 10, vertical: 5),
                                           child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -260,76 +256,52 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                             controller.jobPosts[index].jobCoc
                                                     ?.isNotEmpty ==
                                                 true)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "COC Requirements",
-                                                  style:
-                                                      Get.textTheme.bodyLarge,
-                                                ),
-                                                Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: controller
-                                                            .jobPosts[index]
-                                                            .jobCoc
-                                                            ?.map((e) => Text(controller
-                                                                    .cocs
-                                                                    .firstWhereOrNull((coc) =>
-                                                                        coc.id ==
-                                                                        e.cocId)
-                                                                    ?.name ??
-                                                                ""))
-                                                            .toList() ??
-                                                        []),
-                                              ],
-                                            ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "COC Requirements: ",
+                                                style: Get.textTheme.bodyLarge,
+                                              ),
+                                              Text(controller
+                                                      .jobPosts[index].jobCoc
+                                                      ?.map(
+                                                        (e) =>
+                                                            "${controller.cocs.firstWhereOrNull((coc) => coc.id == e.cocId)?.name ?? ""} |",
+                                                      )
+                                                      .toString()
+                                                      .removeAll("(")
+                                                      .removeAll(",")
+                                                      .removeAll(" |)") ??
+                                                  ""),
+                                            ],
                                           ),
                                         if (controller.jobPosts[index].jobCop !=
                                                 null &&
                                             controller.jobPosts[index].jobCop
                                                     ?.isNotEmpty ==
                                                 true)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "COP Requirements",
-                                                  style:
-                                                      Get.textTheme.bodyLarge,
-                                                ),
-                                                Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: controller
-                                                            .jobPosts[index]
-                                                            .jobCop
-                                                            ?.map((e) => Text(controller
-                                                                    .cops
-                                                                    .firstWhereOrNull((cop) =>
-                                                                        cop.id ==
-                                                                        e.copId)
-                                                                    ?.name ??
-                                                                ""))
-                                                            .toList() ??
-                                                        []),
-                                              ],
-                                            ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "COP Requirements: ",
+                                                style: Get.textTheme.bodyLarge,
+                                              ),
+                                              Text(controller
+                                                      .jobPosts[index].jobCop
+                                                      ?.map(
+                                                        (e) =>
+                                                            "${controller.cops.firstWhereOrNull((cop) => cop.id == e.copId)?.name ?? ""} |",
+                                                      )
+                                                      .toString()
+                                                      .removeAll("(")
+                                                      .removeAll(",")
+                                                      .removeAll(" |)") ??
+                                                  ""),
+                                            ],
                                           ),
                                         if (controller.jobPosts[index]
                                                     .jobWatchKeeping !=
@@ -339,50 +311,35 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                                     .jobWatchKeeping
                                                     ?.isNotEmpty ==
                                                 true)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "Watch-Keeping\nRequirements",
-                                                  style:
-                                                      Get.textTheme.bodyLarge,
-                                                ),
-                                                Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: controller
-                                                            .jobPosts[index]
-                                                            .jobWatchKeeping
-                                                            ?.map((e) => Text(controller
-                                                                    .watchKeepings
-                                                                    .firstWhereOrNull((watchKeeping) =>
-                                                                        watchKeeping
-                                                                            .id ==
-                                                                        e.watchKeepingId)
-                                                                    ?.name ??
-                                                                ""))
-                                                            .toList() ??
-                                                        []),
-                                              ],
-                                            ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Watch-Keeping Requirements: ",
+                                                style: Get.textTheme.bodyLarge,
+                                              ),
+                                              Text(controller.jobPosts[index]
+                                                      .jobWatchKeeping
+                                                      ?.map(
+                                                        (e) =>
+                                                            "${controller.watchKeepings.firstWhereOrNull((watchKeeping) => watchKeeping.id == e.watchKeepingId)?.name ?? ""} |",
+                                                      )
+                                                      .toString()
+                                                      .removeAll("(")
+                                                      .removeAll(",")
+                                                      .removeAll(" |)") ??
+                                                  ""),
+                                            ],
                                           ),
                                         if (controller
                                                 .jobPosts[index].mailInfo ==
                                             true)
                                           Row(
                                             children: [
-                                              const Text(
+                                              Text(
                                                 "Email: ",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12),
+                                                style: Get.textTheme.bodyLarge,
                                               ),
                                               Text(
                                                 controller
@@ -391,7 +348,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                                         ?.email ??
                                                     "",
                                                 style: const TextStyle(
-                                                    fontSize: 13),
+                                                    fontSize: 14),
                                               ),
                                             ],
                                           ),
@@ -400,11 +357,9 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                             true)
                                           Row(
                                             children: [
-                                              const Text(
+                                              Text(
                                                 "Mobile: ",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12),
+                                                style: Get.textTheme.bodyLarge,
                                               ),
                                               Text(
                                                 controller
@@ -460,16 +415,18 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             TextButton.icon(
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                  Icons.send,
-                                                  size: 18,
-                                                ),
-                                                label: const Text(
-                                                  "Highlight",
-                                                  style:
-                                                      TextStyle(fontSize: 13),
-                                                )),
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                Icons.send,
+                                                size: 18,
+                                              ),
+                                              style: TextButton.styleFrom(
+                                                  padding: EdgeInsets.zero),
+                                              label: const Text(
+                                                "Highlight",
+                                                style: TextStyle(fontSize: 13),
+                                              ),
+                                            ),
                                             ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
                                                     padding: const EdgeInsets
@@ -480,11 +437,9 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
-                                                                        14))),
-                                                onPressed: () =>
-                                                    {} ??
-                                                    () => Get.toNamed(Routes
-                                                        .EMPLOYER_JOB_APPLICATIONS),
+                                                                        20))),
+                                                onPressed: () => Get.toNamed(Routes
+                                                    .EMPLOYER_JOB_APPLICATIONS),
                                                 child: const Text(
                                                   "Applications",
                                                   style:
@@ -497,6 +452,8 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                                 size: 22,
                                                 color: Colors.yellow,
                                               ),
+                                              style: TextButton.styleFrom(
+                                                  padding: EdgeInsets.zero),
                                               label: const Text(
                                                 "Boost",
                                                 style: TextStyle(
@@ -506,7 +463,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                             ),
                                           ],
                                         ),
-                                        5.verticalSpace,
+                                        10.verticalSpace,
                                       ],
                                     ),
                                   ),

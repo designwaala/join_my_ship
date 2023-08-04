@@ -11,6 +11,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.parentKey,
       appBar: AppBar(
           foregroundColor: const Color(0xFF000000),
           toolbarHeight: 70,

@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
-import 'package:join_mp_ship/widgets/circular_progress_indicator.dart';
+import 'package:join_mp_ship/widgets/circular_progress_indicator_alert_dialog.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 class ChangePasswordController extends GetxController {
@@ -27,7 +27,7 @@ class ChangePasswordController extends GetxController {
 
   void changePassword() async {
     if (formKey.currentState!.validate()) {
-      Get.to(const CircularProgressIndicatorWidget());
+      Get.to(const CircularProgressIndicatorAlertDialog());
       await FirebaseAuth.instance.currentUser
           ?.updatePassword(passwordController.text.trim())
           .then((value) {
@@ -36,9 +36,9 @@ class ChangePasswordController extends GetxController {
         Get.back();
         Get.offAndToNamed(Routes.PROFILE);
       }).onError((error, stackTrace) {
+        Get.back();
         fToast.safeShowToast(child: errorToast(error.toString()));
       });
-      Get.back();
     }
   }
 }
