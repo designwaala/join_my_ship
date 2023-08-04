@@ -13,9 +13,13 @@ class JobProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
-  Future<List<Job>?> getJobList({int? employerId}) async {
-    final response = await get('employer/post_job_list',
-        query: {if (employerId != null) "emp_id": "$employerId"});
+  Future<List<Job>?> getJobList(
+      {int? employerId, List<int>? ranks, List<int>? vesselIds}) async {
+    final response = await get('employer/post_job_list', query: {
+      if (employerId != null) "emp_id": "$employerId",
+      for (int rankId in ranks ?? []) "rank": "$rankId",
+      for (int vesselId in vesselIds ?? []) "vessel_id": "$vesselId"
+    });
     return response.body;
   }
 

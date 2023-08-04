@@ -8,8 +8,10 @@ import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
+import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
 import 'package:lottie/lottie.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:collection/collection.dart';
 
 import '../controllers/job_openings_controller.dart';
 
@@ -17,201 +19,290 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
   const JobOpeningsView({Key? key}) : super(key: key);
 
   _showBottomSheet(BuildContext context) {
-    Map<String, dynamic> filters = {};
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
       isDismissible: false,
-      builder: (context) => Container(
-        height: 350,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(35),
-            topRight: Radius.circular(35),
+      builder: (context) => Obx(() {
+        controller.toApplyRanks.value = [...controller.selectedRanks];
+        controller.toApplyVesselTypes.value = [
+          ...controller.selectedVesselTypes
+        ];
+        return Container(
+          // height: 350,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(35),
+              topRight: Radius.circular(35),
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            20.verticalSpace,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 35),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: 4,
-                            width: 35,
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                          8.verticalSpace,
-                          Text(
-                            "Filter",
-                            style: Get.textTheme.titleLarge
-                                ?.copyWith(fontSize: 22),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  20.verticalSpace,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Rank",
-                        style: Get.textTheme.bodyLarge
-                            ?.copyWith(color: Colors.blue, fontSize: 18),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.blue),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Flexible(
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton2<Rank>(
-                              iconStyleData: const IconStyleData(
-                                  icon: Icon(Icons.keyboard_arrow_down)),
-                              hint: const Text(
-                                "Select Rank",
-                                style: TextStyle(fontSize: 14),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              20.verticalSpace,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              height: 4,
+                              width: 64,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade400,
+                                borderRadius: BorderRadius.circular(5),
                               ),
-                              buttonStyleData:
-                                  const ButtonStyleData(height: 40, width: 130),
-                              dropdownStyleData: const DropdownStyleData(
-                                  maxHeight: 200, width: 130),
-                              onChanged: (value) {
-                                filters['rank'] = value;
-                              },
-                              items: controller.ranks
-                                  .map(
-                                    (value) => DropdownMenuItem<Rank>(
-                                      value: value,
-                                      child: Flexible(
-                                        child: Text(
-                                          value.name ?? "",
-                                          maxLines: 2,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
                             ),
+                            16.verticalSpace,
+                            Text(
+                              "Filter",
+                              style: Get.textTheme.titleLarge
+                                  ?.copyWith(fontSize: 22),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    20.verticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Rank",
+                          style: Get.textTheme.bodyLarge
+                              ?.copyWith(color: Colors.blue, fontSize: 18),
+                        ),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2<Rank>(
+                            isExpanded: true,
+                            style: Get.textTheme.bodySmall,
+                            items: controller.ranks
+                                    .map((e) => DropdownMenuItem<Rank>(
+                                        value: e,
+                                        child: Row(
+                                          children: [
+                                            Obx(() {
+                                              return Checkbox(
+                                                  value: controller.toApplyRanks
+                                                      .contains(e.id),
+                                                  onChanged: (_) {
+                                                    if (e.id == null) {
+                                                      return;
+                                                    }
+                                                    if (controller.toApplyRanks
+                                                        .contains(e.id)) {
+                                                      controller.toApplyRanks
+                                                          .remove(e.id);
+                                                    } else {
+                                                      controller.toApplyRanks
+                                                          .add(e.id!);
+                                                    }
+                                                  });
+                                            }),
+                                            Flexible(
+                                              child: Text(e.name ?? "",
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: Get
+                                                      .textTheme.titleMedium),
+                                            ),
+                                          ],
+                                        )))
+                                    .toList() ??
+                                [],
+                            onChanged: (value) {
+                              if (value?.id == null) {
+                                return;
+                              }
+                              if (controller.toApplyRanks
+                                  .contains(value!.id!)) {
+                                controller.toApplyRanks.remove(value.id);
+                              } else {
+                                controller.toApplyRanks.add(value.id!);
+                              }
+                            },
+                            hint: const Text("Select Rank"),
+                            buttonStyleData: ButtonStyleData(
+                                height: 40,
+                                width: 200,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                decoration: DropdownDecoration()),
+                          ),
+                        )
+                      ],
+                    ),
+                    20.verticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Vessel Type",
+                          style: Get.textTheme.bodyLarge
+                              ?.copyWith(color: Colors.blue, fontSize: 18),
+                        ),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2<int>(
+                            isExpanded: true,
+                            style: Get.textTheme.bodySmall,
+                            items: controller.vesselList?.vessels
+                                    ?.map((e) => [
+                                          DropdownMenuItem<int>(
+                                              enabled: false,
+                                              child: Text(
+                                                e.vesselName ?? "",
+                                                maxLines: 1,
+                                                style: Get.textTheme.titleSmall
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                overflow: TextOverflow.ellipsis,
+                                              )),
+                                          ...?e.subVessels?.map(
+                                              (e) => DropdownMenuItem<int>(
+                                                  value: e.id,
+                                                  child: Row(
+                                                    children: [
+                                                      Obx(() {
+                                                        return Checkbox(
+                                                            value: controller
+                                                                .toApplyVesselTypes
+                                                                .contains(e.id),
+                                                            onChanged: (_) {
+                                                              if (e.id ==
+                                                                  null) {
+                                                                return;
+                                                              }
+                                                              if (controller
+                                                                  .toApplyVesselTypes
+                                                                  .contains(
+                                                                      e.id)) {
+                                                                controller
+                                                                    .toApplyVesselTypes
+                                                                    .remove(
+                                                                        e.id);
+                                                              } else {
+                                                                controller
+                                                                    .toApplyVesselTypes
+                                                                    .add(e.id!);
+                                                              }
+                                                            });
+                                                      }),
+                                                      Flexible(
+                                                        child: Text(
+                                                            e.name ?? "",
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: Get.textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(
+                                                                    fontSize:
+                                                                        12)),
+                                                      ),
+                                                    ],
+                                                  )))
+                                        ])
+                                    .expand((element) => element)
+                                    .toList() ??
+                                [],
+
+                            // .map((e) => DropdownMenuItem(
+                            //     value: e.name,
+                            //     child: Text(e.name ?? "",
+                            //         style: Get.textTheme.titleMedium)))
+                            // .toList(),
+                            onChanged: (value) {
+                              if (value == null) {
+                                return;
+                              }
+                              if (controller.toApplyVesselTypes
+                                  .contains(value)) {
+                                controller.toApplyVesselTypes.remove(value);
+                              } else {
+                                controller.toApplyVesselTypes.add(value);
+                              }
+                            },
+                            hint: const Text("Select Vessel"),
+                            buttonStyleData: ButtonStyleData(
+                                height: 40,
+                                width: 200,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(64),
+                                  border:
+                                      Border.all(color: Get.theme.primaryColor),
+                                )),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  20.verticalSpace,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Vessel Type",
-                        style: Get.textTheme.bodyLarge
-                            ?.copyWith(color: Colors.blue, fontSize: 18),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.blue),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Flexible(
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton2<Vessel>(
-                              iconStyleData: const IconStyleData(
-                                  icon: Icon(Icons.keyboard_arrow_down)),
-                              hint: const Text(
-                                "Select",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              buttonStyleData:
-                                  const ButtonStyleData(height: 40, width: 130),
-                              dropdownStyleData: const DropdownStyleData(
-                                  maxHeight: 140, width: 130),
-                              onChanged: (value) {
-                                filters['vessel'] = value;
-                              },
-                              items: controller.vesselList?.vessels
-                                  ?.map(
-                                    (value) => DropdownMenuItem<Vessel>(
-                                      value: value,
-                                      child: Flexible(
-                                        child: Text(
-                                          value.vesselName ?? "",
-                                          maxLines: 2,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  25.verticalSpace,
-                ],
-              ),
-            ),
-            20.verticalSpace,
-            const Divider(
-              height: 1,
-              color: Colors.black38,
-            ),
-            20.verticalSpace,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      side: const BorderSide(width: 1.5, color: Colors.blue),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 8),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
+                      ],
                     ),
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: const Text("Cancel"),
-                  ),
-                  15.horizontalSpace,
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 25, vertical: 8),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                    ),
-                    onPressed: () {
-                      controller.filterOn.value = true;
-                      controller.applyFilters(filters: filters);
-                      Get.back();
-                    },
-                    child: const Text("Save"),
-                  ),
-                ],
+                    25.verticalSpace,
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+              20.verticalSpace,
+              const Divider(
+                height: 1,
+                color: Colors.black38,
+              ),
+              20.verticalSpace,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        side: const BorderSide(width: 1.5, color: Colors.blue),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: const Text("Cancel"),
+                    ),
+                    15.horizontalSpace,
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 8),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                      onPressed: () {
+                        controller.selectedRanks.value = [
+                          ...controller.toApplyRanks
+                        ];
+                        controller.selectedVesselTypes.value = [
+                          ...controller.toApplyVesselTypes
+                        ];
+                        controller.applyFilters();
+                        Get.back();
+                      },
+                      child: const Text("Save"),
+                    ),
+                  ],
+                ),
+              ),
+              16.verticalSpace
+            ],
+          ),
+        );
+      }),
     ).then((value) {
       debugPrint("ModalBottomSheet Closed");
     });
@@ -249,6 +340,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
             : Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -279,6 +371,41 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                           ),
                         ],
                       ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Wrap(spacing: 8, runSpacing: 8, children: [
+                        ...controller.selectedRanks.map((rank) => Chip(
+                            onDeleted: () {
+                              controller.selectedRanks
+                                  .removeWhere((e) => e == rank);
+                              controller.applyFilters();
+                            },
+                            backgroundColor: Colors.blue[100],
+                            shape: StadiumBorder(
+                                side:
+                                    BorderSide(color: Get.theme.primaryColor)),
+                            label: Text(controller.ranks
+                                    .firstWhereOrNull((e) => e.id == rank)
+                                    ?.name ??
+                                ""))),
+                        ...controller.selectedVesselTypes.map((vessel) => Chip(
+                            onDeleted: () {
+                              controller.selectedVesselTypes
+                                  .removeWhere((e) => e == vessel);
+                              controller.applyFilters();
+                            },
+                            backgroundColor: Colors.blue[100],
+                            shape: StadiumBorder(
+                                side:
+                                    BorderSide(color: Get.theme.primaryColor)),
+                            label: Text(controller.vesselList?.vessels
+                                    ?.map((vessel) => vessel.subVessels ?? [])
+                                    .expand((e) => e)
+                                    .firstWhereOrNull((e) => e.id == vessel)
+                                    ?.name ??
+                                "")))
+                      ]),
                     ),
                     controller.jobOpenings.isEmpty
                         ? Column(

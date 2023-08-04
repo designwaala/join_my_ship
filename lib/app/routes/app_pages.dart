@@ -64,7 +64,7 @@ class AppPages {
     GetPage(
       name: _Paths.HOME,
       page: () => const HomeView(),
-      bindings: [HomeBinding(), ProfileBinding()],
+      bindings: [HomeBinding(), ProfileBinding(), JobOpeningsBinding()],
     ),
     GetPage(
       name: _Paths.SPLASH,

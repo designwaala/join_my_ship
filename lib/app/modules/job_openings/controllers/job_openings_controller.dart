@@ -25,6 +25,12 @@ class JobOpeningsController extends GetxController {
   RxList<Cop> cops = RxList.empty();
   RxList<WatchKeeping> watchKeepings = RxList.empty();
 
+  RxList<int> selectedRanks = RxList.empty();
+  RxList<int> selectedVesselTypes = RxList.empty();
+
+  RxList<int> toApplyRanks = RxList.empty();
+  RxList<int> toApplyVesselTypes = RxList.empty();
+
   RxBool isLoading = false.obs;
   RxBool isReferredJob = false.obs;
   RxBool filterOn = false.obs;
@@ -50,9 +56,9 @@ class JobOpeningsController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> applyFilters({required Map<String, dynamic> filters}) async {
+  Future<void> applyFilters() async {
     isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2));
+    await loadJobOpenings();
     isLoading.value = false;
   }
 
@@ -63,7 +69,9 @@ class JobOpeningsController extends GetxController {
   }
 
   Future<void> loadJobOpenings() async {
-    jobOpenings.value = (await getIt<JobProvider>().getJobList()) ?? [];
+    jobOpenings.value = (await getIt<JobProvider>().getJobList(
+            ranks: selectedRanks, vesselIds: selectedVesselTypes)) ??
+        [];
   }
 
   Future<void> loadVesselTypes() async {

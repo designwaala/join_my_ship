@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/modules/job_openings/views/job_openings_view.dart';
 import 'package:join_mp_ship/app/modules/profile/views/profile_view.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
@@ -32,7 +33,7 @@ class HomeView extends GetView<HomeController> {
                   case 3:
                     return const SizedBox();
                   case 4:
-                    return const SizedBox();
+                    return const JobOpeningsView();
                   case 5:
                     return const ProfileView();
                   default:
@@ -74,9 +75,6 @@ class HomeView extends GetView<HomeController> {
                                 child: e.icon))
                     .toList(),
                 onTap: (index) {
-                  if (index == 3) {
-                    Get.toNamed(Routes.JOB_OPENINGS);
-                  }
                   if (index != 2) {
                     controller.showJobButtons.value = false;
                     controller.currentIndex.value = index + 1;
