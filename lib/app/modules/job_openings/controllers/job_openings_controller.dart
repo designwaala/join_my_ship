@@ -24,7 +24,6 @@ class JobOpeningsController extends GetxController {
   RxList<Coc> cocs = RxList.empty();
   RxList<Cop> cops = RxList.empty();
   RxList<WatchKeeping> watchKeepings = RxList.empty();
-  RxMap<String, dynamic> filterOptions = RxMap();
 
   RxBool isLoading = false.obs;
   RxBool isReferredJob = false.obs;
@@ -51,6 +50,18 @@ class JobOpeningsController extends GetxController {
     isLoading.value = false;
   }
 
+  Future<void> applyFilters({required Map<String, dynamic> filters}) async {
+    isLoading.value = true;
+    await Future.delayed(const Duration(seconds: 2));
+    isLoading.value = false;
+  }
+
+  Future<void> removeFilters() async {
+    isLoading.value = true;
+    await Future.delayed(const Duration(seconds: 2));
+    isLoading.value = false;
+  }
+
   Future<void> loadJobOpenings() async {
     jobOpenings.value = (await getIt<JobProvider>().getJobList()) ?? [];
   }
@@ -64,16 +75,16 @@ class JobOpeningsController extends GetxController {
   }
 
   Future<void> loadCOC() async {
-    cocs.value = (await getIt<CocProvider>().getCOCList(userType: 2)) ?? [];
+    cocs.value = (await getIt<CocProvider>().getCOCList(userType: 3)) ?? [];
   }
 
   Future<void> loadCOP() async {
-    cops.value = (await getIt<CopProvider>().getCOPList(userType: 2)) ?? [];
+    cops.value = (await getIt<CopProvider>().getCOPList(userType: 3)) ?? [];
   }
 
   Future<void> loadWatchKeeping() async {
     watchKeepings.value = (await getIt<WatchKeepingProvider>()
-            .getWatchKeepingList(userType: 2)) ??
+            .getWatchKeepingList(userType: 3)) ??
         [];
   }
 }

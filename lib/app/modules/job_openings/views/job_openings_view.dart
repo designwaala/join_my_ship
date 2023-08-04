@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_cli/get_cli.dart';
+import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/widgets/circular_progress_indicator.dart';
+import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -14,12 +17,13 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
   const JobOpeningsView({Key? key}) : super(key: key);
 
   _showBottomSheet(BuildContext context) {
+    Map<String, dynamic> filters = {};
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
       isDismissible: false,
       builder: (context) => Container(
-        height: 500,
+        height: 350,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -57,7 +61,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                       ),
                     ],
                   ),
-                  15.verticalSpace,
+                  20.verticalSpace,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -66,44 +70,98 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                         style: Get.textTheme.bodyLarge
                             ?.copyWith(color: Colors.blue, fontSize: 18),
                       ),
-                      // Container(
-                      // padding: const EdgeInsets.all(0),
-                      // decoration: BoxDecoration(
-                      // border: Border.all(width: 1.5, color: Colors.blue),
-                      // borderRadius: BorderRadius.circular(20)),
-                      // // shape: RoundedRectangleBorder(),
-                      // style: TextButton.styleFrom(
-                      //   side: const BorderSide(
-                      //       width: 1.5, color: Colors.blue),
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 20, vertical: 10),
-                      //   shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(20)),
-                      // ),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton2<String?>(
-                          value: null,
-                          isDense: true,
-                          isExpanded: false,
-                          hint: const Text(
-                            "Select Rank",
-                            style: TextStyle(fontSize: 14),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.blue),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Flexible(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<Rank>(
+                              iconStyleData: const IconStyleData(
+                                  icon: Icon(Icons.keyboard_arrow_down)),
+                              hint: const Text(
+                                "Select Rank",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              buttonStyleData:
+                                  const ButtonStyleData(height: 40, width: 130),
+                              dropdownStyleData: const DropdownStyleData(
+                                  maxHeight: 200, width: 130),
+                              onChanged: (value) {
+                                filters['rank'] = value;
+                              },
+                              items: controller.ranks
+                                  .map(
+                                    (value) => DropdownMenuItem<Rank>(
+                                      value: value,
+                                      child: Flexible(
+                                        child: Text(
+                                          value.name ?? "",
+                                          maxLines: 2,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                           ),
-                          onChanged: (value) {
-                            controller.filterOptions['rank'] = value;
-                          },
-                          items: ["aa", "bb", "cc"]
-                              .map((value) =>
-                                  DropdownMenuItem<String>(child: Text(value)))
-                              .toList(),
                         ),
                       ),
                     ],
                   ),
+                  20.verticalSpace,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text("Gender"), Text("data")],
+                    children: [
+                      Text(
+                        "Vessel Type",
+                        style: Get.textTheme.bodyLarge
+                            ?.copyWith(color: Colors.blue, fontSize: 18),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.blue),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Flexible(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<Vessel>(
+                              iconStyleData: const IconStyleData(
+                                  icon: Icon(Icons.keyboard_arrow_down)),
+                              hint: const Text(
+                                "Select",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              buttonStyleData:
+                                  const ButtonStyleData(height: 40, width: 130),
+                              dropdownStyleData: const DropdownStyleData(
+                                  maxHeight: 140, width: 130),
+                              onChanged: (value) {
+                                filters['vessel'] = value;
+                              },
+                              items: controller.vesselList?.vessels
+                                  ?.map(
+                                    (value) => DropdownMenuItem<Vessel>(
+                                      value: value,
+                                      child: Flexible(
+                                        child: Text(
+                                          value.vesselName ?? "",
+                                          maxLines: 2,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  25.verticalSpace,
                 ],
               ),
             ),
@@ -127,7 +185,6 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                           borderRadius: BorderRadius.circular(30)),
                     ),
                     onPressed: () {
-                      controller.filterOn.value = false;
                       Get.back();
                     },
                     child: const Text("Cancel"),
@@ -143,8 +200,8 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                           borderRadius: BorderRadius.circular(30)),
                     ),
                     onPressed: () {
-                      // TODO: Apply Filter
                       controller.filterOn.value = true;
+                      controller.applyFilters(filters: filters);
                       Get.back();
                     },
                     child: const Text("Save"),
@@ -209,6 +266,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                 _showBottomSheet(context);
                               } else {
                                 controller.filterOn.value = false;
+                                controller.removeFilters();
                               }
                             },
                             icon: ImageIcon(
@@ -243,397 +301,354 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                               ),
                             ],
                           )
-                        : ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: controller.jobOpenings.length,
-                            itemBuilder: (context, index) => Obx(() {
-                              return controller.jobOpenings.isEmpty
-                                  ? const Center(child: Text("No jobs posted"))
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 3),
-                                      child: Card(
-                                        elevation: 5,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 15, top: 15),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            128),
-                                                    child: CachedNetworkImage(
-                                                        height: 50,
-                                                        width: 50,
-                                                        imageUrl: controller
-                                                                .jobOpenings[
-                                                                    index]
-                                                                .employerDetails
-                                                                ?.profilePic ??
-                                                            ""),
-                                                  ),
-                                                  10.horizontalSpace,
-                                                  Flexible(
-                                                    flex: 15,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "${!controller.isReferredJob.value ? "JOB BY: " : ""}${controller.jobOpenings[index].employerDetails?.firstName ?? ""} ${controller.jobOpenings[index].employerDetails?.lastName ?? ""}",
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: Get.textTheme
-                                                              .bodyMedium
-                                                              ?.copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 16),
-                                                        ),
-                                                        Text(
-                                                            controller
-                                                                    .isReferredJob
-                                                                    .value
-                                                                ? "Referred job"
-                                                                : controller
-                                                                        .jobOpenings[
-                                                                            index]
-                                                                        .employerDetails
-                                                                        ?.username ??
-                                                                    "",
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            // "Westline Ship Management Pvt. Ltd.",
-                                                            style: Get.textTheme
-                                                                .bodySmall
-                                                                ?.copyWith(
-                                                                    fontSize:
-                                                                        11,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold)),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  // const Spacer(),
-                                                  // controller.jobIdBeingDeleted.value ==
-                                                  //         controller.jobOpenings[index].id
-                                                  //     ? const SizedBox(
-                                                  //         height: 16,
-                                                  //         width: 16,
-                                                  //         child:
-                                                  //             CircularProgressIndicator())
-                                                  //     : PopupMenuButton<int>(
-                                                  //   onSelected: (value) {
-                                                  //     switch (value) {
-                                                  //       case 1:
-                                                  //         Get.toNamed(Routes.JOB_POST,
-                                                  //             arguments: JobPostArguments(
-                                                  //                 jobToEdit: controller
-                                                  //                         .jobOpenings[
-                                                  //                     index]));
-                                                  //         return;
-                                                  //       case 2:
-                                                  //         return;
-                                                  //       case 3:
-                                                  //         controller.deleteJobPost(
-                                                  //             controller
-                                                  //                     .jobOpenings[
-                                                  //                         index]
-                                                  //                     .id ??
-                                                  //                 -1);
-                                                  //         return;
-                                                  //     }
-                                                  //   },
-                                                  //   itemBuilder: (context) => [
-                                                  //     const PopupMenuItem(
-                                                  //       value: 1,
-                                                  //       child: Text("Edit"),
-                                                  //     ),
-                                                  //     const PopupMenuItem(
-                                                  //       value: 2,
-                                                  //       child: Text("Share"),
-                                                  //     ),
-                                                  //     const PopupMenuItem(
-                                                  //       value: 3,
-                                                  //       child: Text(
-                                                  //         "Delete",
-                                                  //         style: TextStyle(
-                                                  //             color: Colors.red),
-                                                  //       ),
-                                                  //     ),
-                                                  //   ],
-                                                  //   onOpened: () {},
-                                                  // )
-                                                ],
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 25,
-                                                      vertical: 10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  if (!controller
-                                                      .isReferredJob.value)
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        TextButton.icon(
-                                                          onPressed: () {},
-                                                          icon: const Icon(
-                                                            Icons.add,
-                                                            size: 20,
-                                                          ),
-                                                          label: const Text(
-                                                              "Follow"),
-                                                          style: TextButton
-                                                              .styleFrom(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 8,
-                                                                    right: 15),
-                                                            foregroundColor:
-                                                                Colors.white,
-                                                            backgroundColor:
-                                                                Colors.blue,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20),
-                                                            ),
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  !controller
-                                                          .isReferredJob.value
-                                                      ? Column(
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                    "Tentative Joining Date",
-                                                                    style: Get
-                                                                        .textTheme
-                                                                        .bodyLarge),
-                                                                Text(
-                                                                  controller
-                                                                      .jobOpenings[
-                                                                          index]
-                                                                      .tentativeJoining!,
-                                                                  style: Get
-                                                                      .textTheme
-                                                                      .bodyMedium
-                                                                      ?.copyWith(
-                                                                          fontSize:
-                                                                              14),
-                                                                )
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                    "Vessel Type",
-                                                                    style: Get
-                                                                        .textTheme
-                                                                        .bodyLarge),
-                                                                Text(controller
-                                                                        .vesselList
-                                                                        ?.vessels
-                                                                        ?.map((e) =>
-                                                                            e.subVessels ??
-                                                                            [])
-                                                                        .expand(
-                                                                            (e) =>
-                                                                                e)
-                                                                        .firstWhereOrNull((e) =>
-                                                                            e.id ==
-                                                                            controller.jobOpenings[index].vesselId)
-                                                                        ?.name ??
-                                                                    ""),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text("GRT",
-                                                                    style: Get
-                                                                        .textTheme
-                                                                        .bodyLarge),
-                                                                Text(controller
+                        : Flexible(
+                            child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: controller.jobOpenings.length,
+                              itemBuilder: (context, index) => Obx(
+                                () {
+                                  return controller.jobOpenings.isEmpty
+                                      ? const Center(
+                                          child: Text("No jobs posted"))
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 3),
+                                          child: Card(
+                                            elevation: 5,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 15, top: 15),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(128),
+                                                        child: CachedNetworkImage(
+                                                            height: 50,
+                                                            width: 50,
+                                                            imageUrl: controller
                                                                     .jobOpenings[
                                                                         index]
-                                                                    .gRT
-                                                                    .toString())
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        )
-                                                      : Column(
+                                                                    .employerDetails
+                                                                    ?.profilePic ??
+                                                                ""),
+                                                      ),
+                                                      10.horizontalSpace,
+                                                      Flexible(
+                                                        flex: 15,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text("Rank",
-                                                                    style: Get
-                                                                        .textTheme
-                                                                        .bodyLarge),
-                                                                const Text(
-                                                                    "Second Engineer"
-                                                                    // controller
-                                                                    //   .jobOpenings[index]
-                                                                    //   .rank
-                                                                    //   .toString(),
-                                                                    )
-                                                              ],
+                                                            Text(
+                                                              "${!controller.isReferredJob.value ? "JOB BY: " : ""}${controller.jobOpenings[index].employerDetails?.firstName ?? ""} ${controller.jobOpenings[index].employerDetails?.lastName ?? ""}",
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          16),
                                                             ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                    "Vessel IMO No.",
-                                                                    style: Get
-                                                                        .textTheme
-                                                                        .bodyLarge),
-                                                                const Text(
-                                                                    "988441"
-                                                                    // controller
-                                                                    // .jobOpenings[index]
-                                                                    // .vesselImoNo
-                                                                    // .toString(),
-                                                                    )
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                    "Vessel Type",
-                                                                    style: Get
-                                                                        .textTheme
-                                                                        .bodyLarge),
-                                                                Text(controller
-                                                                        .vesselList
-                                                                        ?.vessels
-                                                                        ?.map((e) =>
-                                                                            e.subVessels ??
-                                                                            [])
-                                                                        .expand(
-                                                                            (e) =>
-                                                                                e)
-                                                                        .firstWhereOrNull((e) =>
-                                                                            e.id ==
-                                                                            controller.jobOpenings[index].vesselId)
-                                                                        ?.name ??
-                                                                    ""),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text("Flag",
-                                                                    style: Get
-                                                                        .textTheme
-                                                                        .bodyLarge),
-                                                                const Text(
-                                                                    "INDIA"
-                                                                    // controller
-                                                                    // .jobOpenings[index]
-                                                                    // .flag
-                                                                    // .toString(),
-                                                                    )
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                    "Joining Port",
-                                                                    style: Get
-                                                                        .textTheme
-                                                                        .bodyLarge),
-                                                                const Text(
-                                                                  "Kochi",
-                                                                  // controller
-                                                                  // .jobOpenings[index]
-                                                                  // .joiningPort
-                                                                  // .toString(),
-                                                                )
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                    "Tentative Joining Date",
-                                                                    style: Get
-                                                                        .textTheme
-                                                                        .bodyLarge),
-                                                                Text(
-                                                                  controller
-                                                                      .jobOpenings[
-                                                                          index]
-                                                                      .tentativeJoining
-                                                                      .toString(),
-                                                                )
-                                                              ],
-                                                            ),
+                                                            Text(
+                                                                controller
+                                                                        .isReferredJob
+                                                                        .value
+                                                                    ? "Referred job"
+                                                                    : controller
+                                                                            .jobOpenings[
+                                                                                index]
+                                                                            .employerDetails
+                                                                            ?.username ??
+                                                                        "",
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                // "Westline Ship Management Pvt. Ltd.",
+                                                                style: Get
+                                                                    .textTheme
+                                                                    .bodySmall
+                                                                    ?.copyWith(
+                                                                        fontSize:
+                                                                            11,
+                                                                        fontWeight:
+                                                                            FontWeight.bold)),
                                                           ],
                                                         ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 8),
-                                                    child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: controller
-                                                                .jobOpenings[
-                                                                    index]
-                                                                .jobRankWithWages
-                                                                ?.map(
-                                                                    (rankWithWages) =>
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 25,
+                                                      vertical: 10),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      if (!controller
+                                                          .isReferredJob.value)
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            TextButton.icon(
+                                                              onPressed: () {},
+                                                              icon: const Icon(
+                                                                Icons.add,
+                                                                size: 20,
+                                                              ),
+                                                              label: const Text(
+                                                                  "Follow"),
+                                                              style: TextButton
+                                                                  .styleFrom(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left: 8,
+                                                                        right:
+                                                                            15),
+                                                                foregroundColor:
+                                                                    Colors
+                                                                        .white,
+                                                                backgroundColor:
+                                                                    Colors.blue,
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      !controller.isReferredJob
+                                                              .value
+                                                          ? Column(
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "Tentative Joining Date: ",
+                                                                        style: Get
+                                                                            .textTheme
+                                                                            .bodyLarge),
+                                                                    Text(
+                                                                      controller
+                                                                          .jobOpenings[
+                                                                              index]
+                                                                          .tentativeJoining!,
+                                                                      style: Get
+                                                                          .textTheme
+                                                                          .bodyMedium
+                                                                          ?.copyWith(
+                                                                              fontSize: 14),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                // Flexible(
+                                                                //   child:
+                                                                //       RichText(
+                                                                //     maxLines: 2,
+                                                                //     text:
+                                                                //         TextSpan(
+                                                                //       children: [
+                                                                //         TextSpan(
+                                                                //             text:
+                                                                //                 "Vessel Type: ",
+                                                                //             style:
+                                                                //                 Get.textTheme.bodyLarge),
+                                                                //         TextSpan(
+                                                                //             text:
+                                                                //                 controller.vesselList?.vessels?.map((e) => e.subVessels ?? []).expand((e) => e).firstWhereOrNull((e) => e.id == controller.jobOpenings[index].vesselId)?.name ?? ""),
+                                                                //       ],
+                                                                //     ),
+                                                                //   ),
+                                                                // ),
+                                                                Row(
+                                                                  children: [
+                                                                    Flexible(
+                                                                      child: Text(
+                                                                          "Vessel Type: ",
+                                                                          maxLines:
+                                                                              2,
+                                                                          style: Get
+                                                                              .textTheme
+                                                                              .bodyLarge),
+                                                                    ),
+                                                                    Text(controller
+                                                                            .vesselList
+                                                                            ?.vessels
+                                                                            ?.map((e) =>
+                                                                                e.subVessels ??
+                                                                                [])
+                                                                            .expand((e) =>
+                                                                                e)
+                                                                            .firstWhereOrNull((e) =>
+                                                                                e.id ==
+                                                                                controller.jobOpenings[index].vesselId)
+                                                                            ?.name ??
+                                                                        ""),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "GRT: ",
+                                                                        style: Get
+                                                                            .textTheme
+                                                                            .bodyLarge),
+                                                                    Text(controller
+                                                                        .jobOpenings[
+                                                                            index]
+                                                                        .gRT
+                                                                        .toString())
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            )
+                                                          : Column(
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "Rank: ",
+                                                                        style: Get
+                                                                            .textTheme
+                                                                            .bodyLarge),
+                                                                    const Text(
+                                                                        "Second Engineer"
+                                                                        // controller
+                                                                        //   .jobOpenings[index]
+                                                                        //   .rank
+                                                                        //   .toString(),
+                                                                        )
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "Vessel IMO No: ",
+                                                                        style: Get
+                                                                            .textTheme
+                                                                            .bodyLarge),
+                                                                    const Text(
+                                                                        "988441"
+                                                                        // controller
+                                                                        // .jobOpenings[index]
+                                                                        // .vesselImoNo
+                                                                        // .toString(),
+                                                                        )
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "Vessel Type: ",
+                                                                        style: Get
+                                                                            .textTheme
+                                                                            .bodyLarge),
+                                                                    Text(controller
+                                                                            .vesselList
+                                                                            ?.vessels
+                                                                            ?.map((e) =>
+                                                                                e.subVessels ??
+                                                                                [])
+                                                                            .expand((e) =>
+                                                                                e)
+                                                                            .firstWhereOrNull((e) =>
+                                                                                e.id ==
+                                                                                controller.jobOpenings[index].vesselId)
+                                                                            ?.name ??
+                                                                        ""),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "Flag: ",
+                                                                        style: Get
+                                                                            .textTheme
+                                                                            .bodyLarge),
+                                                                    const Text(
+                                                                        "INDIA"
+                                                                        // controller
+                                                                        // .jobOpenings[index]
+                                                                        // .flag
+                                                                        // .toString(),
+                                                                        )
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "Joining Port: ",
+                                                                        style: Get
+                                                                            .textTheme
+                                                                            .bodyLarge),
+                                                                    const Text(
+                                                                      "Kochi",
+                                                                      // controller
+                                                                      // .jobOpenings[index]
+                                                                      // .joiningPort
+                                                                      // .toString(),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        "Tentative Joining Date: ",
+                                                                        style: Get
+                                                                            .textTheme
+                                                                            .bodyLarge),
+                                                                    Text(
+                                                                      controller
+                                                                          .jobOpenings[
+                                                                              index]
+                                                                          .tentativeJoining
+                                                                          .toString(),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 10,
+                                                                vertical: 3),
+                                                        child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: controller
+                                                                    .jobOpenings[
+                                                                        index]
+                                                                    .jobRankWithWages
+                                                                    ?.map((rankWithWages) =>
                                                                         Padding(
                                                                           padding:
                                                                               const EdgeInsets.symmetric(vertical: 3),
@@ -656,413 +671,396 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                                             ],
                                                                           ),
                                                                         ))
-                                                                .toList() ??
-                                                            []),
-                                                  ),
-
-                                                  if (controller
-                                                              .jobOpenings[
-                                                                  index]
-                                                              .jobCoc !=
-                                                          null &&
-                                                      controller
-                                                              .jobOpenings[
-                                                                  index]
-                                                              .jobCoc
-                                                              ?.isNotEmpty ==
-                                                          true)
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            "COC Requirements",
-                                                            style: Get.textTheme
-                                                                .bodyLarge,
-                                                          ),
-                                                          Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children: controller
-                                                                      .jobOpenings[
-                                                                          index]
-                                                                      .jobCoc
-                                                                      ?.map((e) => Text(controller
-                                                                              .cocs
-                                                                              .firstWhereOrNull((coc) => coc.id == e.cocId)
-                                                                              ?.name ??
-                                                                          ""))
-                                                                      .toList() ??
-                                                                  []),
-                                                        ],
+                                                                    .toList() ??
+                                                                []),
                                                       ),
-                                                    ),
-                                                  if (controller
-                                                              .jobOpenings[
-                                                                  index]
-                                                              .jobCop !=
-                                                          null &&
-                                                      controller
-                                                              .jobOpenings[
-                                                                  index]
-                                                              .jobCop
-                                                              ?.isNotEmpty ==
-                                                          true)
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            "COP Requirements",
-                                                            style: Get.textTheme
-                                                                .bodyLarge,
-                                                          ),
-                                                          Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children: controller
-                                                                      .jobOpenings[
-                                                                          index]
-                                                                      .jobCop
-                                                                      ?.map((e) => Text(controller
-                                                                              .cops
-                                                                              .firstWhereOrNull((cop) => cop.id == e.copId)
-                                                                              ?.name ??
-                                                                          ""))
-                                                                      .toList() ??
-                                                                  []),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  if (controller
-                                                              .jobOpenings[
-                                                                  index]
-                                                              .jobWatchKeeping !=
-                                                          null &&
-                                                      controller
-                                                              .jobOpenings[
-                                                                  index]
-                                                              .jobWatchKeeping
-                                                              ?.isNotEmpty ==
-                                                          true)
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 8),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            "Watch-Keeping\nRequirements",
-                                                            style: Get.textTheme
-                                                                .bodyLarge,
-                                                          ),
-                                                          Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children: controller
-                                                                      .jobOpenings[
-                                                                          index]
-                                                                      .jobWatchKeeping
-                                                                      ?.map((e) => Text(controller
-                                                                              .watchKeepings
-                                                                              .firstWhereOrNull((watchKeeping) => watchKeeping.id == e.watchKeepingId)
-                                                                              ?.name ??
-                                                                          ""))
-                                                                      .toList() ??
-                                                                  []),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  if (controller
+                                                      if (controller
+                                                                  .jobOpenings[
+                                                                      index]
+                                                                  .jobCoc !=
+                                                              null &&
+                                                          controller
+                                                                  .jobOpenings[
+                                                                      index]
+                                                                  .jobCoc
+                                                                  ?.isNotEmpty ==
+                                                              true)
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              "COC Requirements: ",
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .bodyLarge,
+                                                            ),
+                                                            Text(controller
+                                                                    .jobOpenings[
+                                                                        index]
+                                                                    .jobCoc
+                                                                    ?.map(
+                                                                      (e) =>
+                                                                          "${controller.cocs.firstWhereOrNull((coc) => coc.id == e.cocId)?.name ?? ""} |",
+                                                                    )
+                                                                    .toString()
+                                                                    .removeAll(
+                                                                        "(")
+                                                                    .removeAll(
+                                                                        ",")
+                                                                    .removeAll(
+                                                                        " |)") ??
+                                                                ""),
+                                                          ],
+                                                        ),
+                                                      if (controller
+                                                                  .jobOpenings[
+                                                                      index]
+                                                                  .jobCop !=
+                                                              null &&
+                                                          controller
+                                                                  .jobOpenings[
+                                                                      index]
+                                                                  .jobCop
+                                                                  ?.isNotEmpty ==
+                                                              true)
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              "COP Requirements: ",
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .bodyLarge,
+                                                            ),
+                                                            Text(controller
+                                                                    .jobOpenings[
+                                                                        index]
+                                                                    .jobCop
+                                                                    ?.map(
+                                                                      (e) =>
+                                                                          "${controller.cops.firstWhereOrNull((cop) => cop.id == e.copId)?.name ?? ""} |",
+                                                                    )
+                                                                    .toString()
+                                                                    .removeAll(
+                                                                        "(")
+                                                                    .removeAll(
+                                                                        ",")
+                                                                    .removeAll(
+                                                                        " |)") ??
+                                                                ""),
+                                                          ],
+                                                        ),
+                                                      if (controller
+                                                                  .jobOpenings[
+                                                                      index]
+                                                                  .jobWatchKeeping !=
+                                                              null &&
+                                                          controller
+                                                                  .jobOpenings[
+                                                                      index]
+                                                                  .jobWatchKeeping
+                                                                  ?.isNotEmpty ==
+                                                              true)
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              "Watch-Keeping Requirements: ",
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .bodyLarge,
+                                                            ),
+                                                            Text(controller
+                                                                    .jobOpenings[
+                                                                        index]
+                                                                    .jobWatchKeeping
+                                                                    ?.map(
+                                                                      (e) =>
+                                                                          "${controller.watchKeepings.firstWhereOrNull((watchKeeping) => watchKeeping.id == e.watchKeepingId)?.name ?? ""} |",
+                                                                    )
+                                                                    .toString()
+                                                                    .removeAll(
+                                                                        "(")
+                                                                    .removeAll(
+                                                                        ",")
+                                                                    .removeAll(
+                                                                        " |)") ??
+                                                                ""),
+                                                          ],
+                                                        ),
+                                                      if (controller
                                                               .jobOpenings[
                                                                   index]
                                                               .mailInfo ==
-                                                          true &&
-                                                      !controller
-                                                          .isReferredJob.value)
-                                                    Row(
-                                                      children: [
-                                                        const Text(
-                                                          "Email: ",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 12),
+                                                          true)
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              "Email: ",
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .bodyLarge,
+                                                            ),
+                                                            Text(
+                                                              controller
+                                                                      .jobOpenings[
+                                                                          index]
+                                                                      .employerDetails
+                                                                      ?.email ??
+                                                                  "",
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          13),
+                                                            ),
+                                                          ],
                                                         ),
-                                                        Text(
-                                                          controller
-                                                                  .jobOpenings[
-                                                                      index]
-                                                                  .employerDetails
-                                                                  ?.email ??
-                                                              "",
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 13),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  if (controller
+                                                      if (controller
                                                               .jobOpenings[
                                                                   index]
                                                               .numberInfo ==
-                                                          true &&
-                                                      !controller
-                                                          .isReferredJob.value)
-                                                    Row(
-                                                      children: [
-                                                        const Text(
-                                                          "Mobile: ",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 12),
-                                                        ),
-                                                        Text(
-                                                          controller
-                                                                  .jobOpenings[
-                                                                      index]
-                                                                  .employerDetails
-                                                                  ?.number ??
-                                                              "",
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 13),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  4.verticalSpace,
-                                                  //TODO: Waiting for Prince
-                                                  /* Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  17.horizontalSpace,
-                                                  TextButton.icon(
-                                                      onPressed: () {},
-                                                      icon: const Icon(
-                                                        Icons.thumb_up,
-                                                        size: 18,
-                                                        color: Colors.blue,
-                                                      ),
-                                                      style: TextButton.styleFrom(
-                                                        splashFactory:
-                                                            NoSplash.splashFactory,
-                                                        padding: const EdgeInsets
-                                                                .symmetric(
-                                                            horizontal: 10),
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    15),
-                                                            side: const BorderSide(
-                                                                width: 1.8,
-                                                                color: Colors.blue)),
-                                                      ),
-                                                      label: Text(
-                                                        " Likes ${controller.jobOpenings[index].likes}",
-                                                        style: Get
-                                                            .textTheme.bodyMedium
-                                                            ?.copyWith(
-                                                                color: Colors.blue),
-                                                      )),
-                                                ],
-                                              ), */
-                                                  5.verticalSpace,
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      TextButton.icon(
-                                                          onPressed: () {
-                                                            // TODO: Like
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons
-                                                                .thumb_up_alt_outlined,
-                                                            size: 18,
-                                                          ),
-                                                          label: const Text(
-                                                            "Like",
-                                                            style: TextStyle(
-                                                                fontSize: 13),
-                                                          )),
-                                                      ElevatedButton(
-                                                        style: ElevatedButton.styleFrom(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        14),
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            18))),
-                                                        onPressed: () {
-                                                          showDialog(
-                                                            context: context,
-                                                            barrierDismissible:
-                                                                false,
-                                                            builder:
-                                                                (context) =>
-                                                                    AlertDialog(
-                                                              title: const Text(
-                                                                "Are You Sure ?",
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .blue),
-                                                              ),
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20),
-                                                              ),
-                                                              actionsPadding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      bottom:
-                                                                          25),
-                                                              content:
-                                                                  const Text(
-                                                                "Are you sure you want to use your 100 credits?",
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize:
-                                                                      14.5,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                ),
-                                                              ),
-                                                              actionsAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              actions: [
-                                                                ElevatedButton(
-                                                                  onPressed:
-                                                                      Get.back,
-                                                                  style: ElevatedButton
-                                                                      .styleFrom(
-                                                                    backgroundColor:
-                                                                        Colors
-                                                                            .white,
-                                                                    foregroundColor:
-                                                                        Colors
-                                                                            .black,
-                                                                    elevation:
-                                                                        3,
-                                                                    padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                        horizontal:
-                                                                            35),
-                                                                    shape:
-                                                                        RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              20),
-                                                                    ),
-                                                                  ),
-                                                                  child:
-                                                                      const Text(
-                                                                          "NO"),
-                                                                ),
-                                                                ElevatedButton(
-                                                                  onPressed: () =>
-                                                                      Get.offAndToNamed(
-                                                                          Routes
-                                                                              .JOB_APPLIED_SUCCESSFULLY),
-                                                                  style: ElevatedButton
-                                                                      .styleFrom(
-                                                                    elevation:
-                                                                        3,
-                                                                    padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                        horizontal:
-                                                                            35),
-                                                                    shape:
-                                                                        RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              20),
-                                                                    ),
-                                                                  ),
-                                                                  child:
-                                                                      const Text(
-                                                                          "YES"),
-                                                                ),
-                                                              ],
+                                                          true)
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              "Mobile: ",
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .bodyLarge,
                                                             ),
-                                                          );
-                                                        },
-                                                        child: const Text(
-                                                          "APPLY NOW",
-                                                          style: TextStyle(
-                                                              fontSize: 13),
+                                                            Text(
+                                                              controller
+                                                                      .jobOpenings[
+                                                                          index]
+                                                                      .employerDetails
+                                                                      ?.number ??
+                                                                  "",
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          13),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ),
-                                                      TextButton.icon(
+                                                      4.verticalSpace,
+                                                      //TODO: Waiting for Prince
+                                                      /* Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    17.horizontalSpace,
+                                                    TextButton.icon(
                                                         onPressed: () {},
                                                         icon: const Icon(
                                                           Icons.thumb_up,
-                                                          size: 20,
-                                                          color: Colors.black,
+                                                          size: 18,
+                                                          color: Colors.blue,
                                                         ),
-                                                        label: const Text(
-                                                          "Share",
-                                                          style: TextStyle(
-                                                              fontSize: 14,
+                                                        style: TextButton.styleFrom(
+                                                          splashFactory:
+                                                              NoSplash.splashFactory,
+                                                          padding: const EdgeInsets
+                                                                  .symmetric(
+                                                              horizontal: 10),
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      15),
+                                                              side: const BorderSide(
+                                                                  width: 1.8,
+                                                                  color: Colors.blue)),
+                                                        ),
+                                                        label: Text(
+                                                          " Likes ${controller.jobOpenings[index].likes}",
+                                                          style: Get
+                                                              .textTheme.bodyMedium
+                                                              ?.copyWith(
+                                                                  color: Colors.blue),
+                                                        )),
+                                                  ],
+                                                ), */
+                                                      10.verticalSpace,
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          TextButton.icon(
+                                                              onPressed: () {
+                                                                // TODO: Like
+                                                              },
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .thumb_up_alt_outlined,
+                                                                size: 18,
+                                                              ),
+                                                              label: const Text(
+                                                                "Like",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        13),
+                                                              )),
+                                                          ElevatedButton(
+                                                            style: ElevatedButton.styleFrom(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        20),
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            18))),
+                                                            onPressed: () {
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                barrierDismissible:
+                                                                    false,
+                                                                builder:
+                                                                    (context) =>
+                                                                        AlertDialog(
+                                                                  title:
+                                                                      const Text(
+                                                                    "Are You Sure ?",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .blue),
+                                                                  ),
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                  ),
+                                                                  actionsPadding:
+                                                                      const EdgeInsets
+                                                                              .only(
+                                                                          bottom:
+                                                                              25),
+                                                                  content:
+                                                                      const Text(
+                                                                    "Are you sure you want to use your 100 credits?",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          14.5,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                    ),
+                                                                  ),
+                                                                  actionsAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                  actions: [
+                                                                    ElevatedButton(
+                                                                      onPressed:
+                                                                          Get.back,
+                                                                      style: ElevatedButton
+                                                                          .styleFrom(
+                                                                        backgroundColor:
+                                                                            Colors.white,
+                                                                        foregroundColor:
+                                                                            Colors.black,
+                                                                        elevation:
+                                                                            3,
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(horizontal: 35),
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(20),
+                                                                        ),
+                                                                      ),
+                                                                      child: const Text(
+                                                                          "NO"),
+                                                                    ),
+                                                                    ElevatedButton(
+                                                                      onPressed:
+                                                                          () =>
+                                                                              Get.offAndToNamed(Routes.JOB_APPLIED_SUCCESSFULLY),
+                                                                      style: ElevatedButton
+                                                                          .styleFrom(
+                                                                        elevation:
+                                                                            3,
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(horizontal: 35),
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(20),
+                                                                        ),
+                                                                      ),
+                                                                      child: const Text(
+                                                                          "YES"),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: const Text(
+                                                              "APPLY NOW",
+                                                              style: TextStyle(
+                                                                  fontSize: 14),
+                                                            ),
+                                                          ),
+                                                          TextButton.icon(
+                                                            onPressed: () {},
+                                                            icon: const Icon(
+                                                              Icons.share_sharp,
+                                                              size: 18,
                                                               color:
-                                                                  Colors.black),
-                                                        ),
+                                                                  Colors.black,
+                                                            ),
+                                                            label: const Text(
+                                                              "Share",
+                                                              style: TextStyle(
+                                                                  fontSize: 13,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
+                                                      5.verticalSpace,
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            "Send an application for 100 credits",
+                                                            style: Get.textTheme
+                                                                .bodySmall
+                                                                ?.copyWith(
+                                                                    fontSize:
+                                                                        10),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      18.verticalSpace,
                                                     ],
                                                   ),
-                                                  5.verticalSpace,
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                            }),
+                                          ),
+                                        );
+                                },
+                              ),
+                            ),
                           ),
                   ],
                 ),

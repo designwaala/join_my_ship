@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/reset_password/controllers/reset_password_controller.dart';
 
-class ResetPasswordEmailVerificationView
-    extends GetView<ResetPasswordController> {
+class ResetPasswordEmailVerificationView extends GetView {
   const ResetPasswordEmailVerificationView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {

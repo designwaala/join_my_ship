@@ -5,11 +5,11 @@ import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/main.dart';
 
 class EmployerJobApplicationsController extends GetxController {
-  // final RxList<Custom> jobApplicationsList = RxList.empty();
   RxList<JobApplication> jobApplications = RxList();
   Map<int, String> rankTypes = <int, String>{};
-  RxBool filterOn = false.obs;
   final RxMap<String, dynamic> filterOptions = RxMap();
+  RxBool filterOn = false.obs;
+  RxBool isLoading = false.obs;
 
   @override
   void onInit() {
@@ -18,19 +18,27 @@ class EmployerJobApplicationsController extends GetxController {
   }
 
   instantiate() async {
-    jobApplications
-        .addAll((await getIt<JobApplicationProvider>().getJobApplications())!);
-    await loadRanks();
+    isLoading.value = true;
+
+    await Future.wait([
+      loadJobApplications(),
+      loadRanks(),
+    ]);
+
+    isLoading.value = false;
   }
 
-  loadRanks() async {
+  Future<void> loadJobApplications() async {
+    jobApplications.addAll(
+        (await getIt<JobApplicationProvider>().getJobApplications()) ?? []);
+  }
+
+  Future<void> loadRanks() async {
     final ranksList = await getIt<RanksProvider>().getRankList() ?? [];
     for (final rank in ranksList) {
       rankTypes[rank.id!] = rank.name!;
     }
   }
-
-  applyFilters() {}
 
 //   sortJobApplicationsList() {
 //     print("sorting");
