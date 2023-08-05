@@ -6,8 +6,8 @@ import 'package:join_mp_ship/main.dart';
 
 class EmployerJobApplicationsController extends GetxController {
   RxList<JobApplication> jobApplications = RxList();
-  Map<int, String> rankTypes = <int, String>{};
-  final RxMap<String, dynamic> filterOptions = RxMap();
+  RxList ranks = RxList.empty();
+  Map<String, dynamic> filters = {};
   RxBool filterOn = false.obs;
   RxBool isLoading = false.obs;
 
@@ -28,51 +28,30 @@ class EmployerJobApplicationsController extends GetxController {
     isLoading.value = false;
   }
 
+  Future<void> applyFilters() async {
+    isLoading.value = true;
+    if (filters.isEmpty) {
+      filterOn.value = false;
+    }
+    await Future.delayed(const Duration(seconds: 1));
+    isLoading.value = false;
+  }
+
+  Future<void> removeFilters() async {
+    isLoading.value = true;
+    filters.clear();
+    await Future.delayed(const Duration(seconds: 1));
+    isLoading.value = false;
+  }
+
   Future<void> loadJobApplications() async {
     jobApplications.addAll(
         (await getIt<JobApplicationProvider>().getJobApplications()) ?? []);
   }
 
   Future<void> loadRanks() async {
-    final ranksList = await getIt<RanksProvider>().getRankList() ?? [];
-    for (final rank in ranksList) {
-      rankTypes[rank.id!] = rank.name!;
-    }
+    ranks.value = (await getIt<RanksProvider>().getRankList()) ?? [];
   }
-
-//   sortJobApplicationsList() {
-//     print("sorting");
-//     jobApplicationsList.clear();
-//     if (!filterOn.value) {
-//       jobApplicationsList.addAll(jobApplications);
-//       return;
-//     }
-//     jobApplicationsList.addAll(jobApplications.where((jobApplication) {
-//       bool filter = true;
-//       if (filterOptions.value.shortlisted != -1) {
-//         filter &= filterOptions.value.shortlisted ==
-//             (jobApplication.shortlisted ? 1 : 0);
-//       }
-//       if (filterOptions.value.rank.isNotEmpty) {
-//         filter &= filterOptions.value.rank == jobApplication.rank;
-//       }
-//       if (filterOptions.value.gender.isNotEmpty) {
-//         // filter &= filterOptions.rank!.value == jobApplication.rank;
-//       }
-//       return filter;
-//     }));
-//     jobApplicationsList.refresh();
-//     // for (final jobApplication in jobApplications) {
-//     //   bool filter = true;
-//     //   if (filterOptions.shortlisted!.value != -1) {
-//     //     filter &= filterOptions.shortlisted!.value ==
-//     //         (jobApplication.shortlisted ? 1 : 0);
-//     //   }
-//     //   if (filterOptions.rank!.value.isNotEmpty) {
-//     //     // filter &= filter
-//     //   }
-//     // }
-//   }
 }
 
 class FilterOptions {
