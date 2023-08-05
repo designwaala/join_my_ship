@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/employer_job_applications/bindings/employer_job_applications_binding.dart';
-import 'package:join_mp_ship/app/modules/job_applied_successfully/bindings/job_applied_successfully_binding.dart';
-import 'package:join_mp_ship/app/modules/job_applied_successfully/views/job_applied_successfully_view.dart';
+
 import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
 import '../modules/change_password/bindings/change_password_binding.dart';
@@ -22,8 +20,9 @@ import '../modules/employer_create_user/bindings/employer_create_user_binding.da
 import '../modules/employer_create_user/views/employer_create_user_view.dart';
 import '../modules/employer_invite_new_members/bindings/employer_invite_new_members_binding.dart';
 import '../modules/employer_invite_new_members/views/employer_invite_new_members_view.dart';
-import '../modules/employer_job_posts/bindings/employer_job_posts_binding.dart';
+import '../modules/employer_job_applications/bindings/employer_job_applications_binding.dart';
 import '../modules/employer_job_applications/views/employer_job_applications_view.dart';
+import '../modules/employer_job_posts/bindings/employer_job_posts_binding.dart';
 import '../modules/employer_job_posts/views/employer_job_posts_view.dart';
 import '../modules/employer_manage_users/bindings/employer_manage_users_binding.dart';
 import '../modules/employer_manage_users/views/employer_manage_users_view.dart';
@@ -33,6 +32,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/info/bindings/info_binding.dart';
 import '../modules/info/views/info_view.dart';
+import '../modules/job_applied_successfully/bindings/job_applied_successfully_binding.dart';
+import '../modules/job_applied_successfully/views/job_applied_successfully_view.dart';
 import '../modules/job_openings/bindings/job_openings_binding.dart';
 import '../modules/job_openings/views/job_openings_view.dart';
 import '../modules/job_post/bindings/job_post_binding.dart';
@@ -50,6 +51,8 @@ import '../modules/sign_up_phone_number/bindings/sign_up_phone_number_binding.da
 import '../modules/sign_up_phone_number/views/sign_up_phone_number_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+import '../modules/success/bindings/success_binding.dart';
+import '../modules/success/views/success_view.dart';
 import '../modules/view_jobs_posted/bindings/view_jobs_posted_binding.dart';
 import '../modules/view_jobs_posted/views/view_jobs_posted_view.dart';
 
@@ -195,6 +198,11 @@ class AppPages {
       name: _Paths.JOB_APPLIED_SUCCESSFULLY,
       page: () => const JobAppliedSuccessfullyView(),
       binding: JobAppliedSuccessfullyBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUCCESS,
+      page: () => const SuccessView(),
+      binding: SuccessBinding(),
     ),
   ];
 }

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/data/models/coc_model.dart';
 import 'package:join_mp_ship/app/data/models/cop_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
@@ -6,6 +7,7 @@ import 'package:join_mp_ship/app/data/models/job_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
+import 'package:join_mp_ship/app/data/providers/application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
@@ -13,7 +15,10 @@ import 'package:join_mp_ship/app/data/providers/job_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
+import 'package:join_mp_ship/app/modules/success/controllers/success_controller.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 
 class JobOpeningsController extends GetxController {
@@ -35,6 +40,10 @@ class JobOpeningsController extends GetxController {
   RxBool isReferredJob = false.obs;
   RxBool filterOn = false.obs;
 
+  RxnInt applyingJob = RxnInt();
+
+  RxList<Application> applications = RxList.empty();
+
   @override
   void onInit() {
     instantiate();
@@ -52,8 +61,13 @@ class JobOpeningsController extends GetxController {
       loadCOC(),
       loadCOP(),
       loadWatchKeeping(),
+      getJobApplications()
     ]);
     isLoading.value = false;
+  }
+
+  Future<void> getJobApplications() async {
+    applications.value = await getIt<ApplicationProvider>().getAppliedJobList();
   }
 
   Future<void> applyFilters() async {
@@ -94,5 +108,23 @@ class JobOpeningsController extends GetxController {
     watchKeepings.value = (await getIt<WatchKeepingProvider>()
             .getWatchKeepingList(userType: 3)) ??
         [];
+  }
+
+  Future<void> apply(int? jobId) async {
+    if (jobId == null) {
+      return;
+    }
+    applyingJob.value = jobId;
+    Application? application = await getIt<ApplicationProvider>().apply(
+        Application(userId: PreferencesHelper.instance.userId, jobId: jobId));
+    if (application?.id == null) {
+      applyingJob.value = null;
+      return;
+    }
+    applications.add(application!);
+    Get.toNamed(Routes.SUCCESS,
+        arguments:
+            SuccessArguments(message: "YOU HAVE APPLIED\nSUCCESSFULLY!"));
+    applyingJob.value = null;
   }
 }

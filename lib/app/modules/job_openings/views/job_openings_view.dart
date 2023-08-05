@@ -1033,116 +1033,104 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                                     fontSize:
                                                                         13),
                                                               )),
-                                                          ElevatedButton(
-                                                            style: ElevatedButton.styleFrom(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        20),
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            18))),
-                                                            onPressed: () {
-                                                              showDialog(
-                                                                context:
-                                                                    context,
-                                                                barrierDismissible:
-                                                                    false,
-                                                                builder:
-                                                                    (context) =>
-                                                                        AlertDialog(
-                                                                  title:
-                                                                      const Text(
-                                                                    "Are You Sure ?",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .blue),
-                                                                  ),
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            20),
-                                                                  ),
-                                                                  actionsPadding:
-                                                                      const EdgeInsets
-                                                                              .only(
-                                                                          bottom:
-                                                                              25),
-                                                                  content:
-                                                                      const Text(
-                                                                    "Are you sure you want to use your 100 credits?",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          14.5,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                                  ),
-                                                                  actionsAlignment:
+                                                          controller.applyingJob
+                                                                      .value ==
+                                                                  controller
+                                                                      .jobOpenings[
+                                                                          index]
+                                                                      .id
+                                                              ? const Row(
+                                                                  mainAxisAlignment:
                                                                       MainAxisAlignment
-                                                                          .spaceEvenly,
-                                                                  actions: [
-                                                                    ElevatedButton(
-                                                                      onPressed:
-                                                                          Get.back,
-                                                                      style: ElevatedButton
-                                                                          .styleFrom(
-                                                                        backgroundColor:
-                                                                            Colors.white,
-                                                                        foregroundColor:
-                                                                            Colors.black,
-                                                                        elevation:
-                                                                            3,
-                                                                        padding:
-                                                                            const EdgeInsets.symmetric(horizontal: 35),
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(20),
-                                                                        ),
-                                                                      ),
-                                                                      child: const Text(
-                                                                          "NO"),
-                                                                    ),
-                                                                    ElevatedButton(
-                                                                      onPressed:
-                                                                          () =>
-                                                                              Get.offAndToNamed(Routes.JOB_APPLIED_SUCCESSFULLY),
-                                                                      style: ElevatedButton
-                                                                          .styleFrom(
-                                                                        elevation:
-                                                                            3,
-                                                                        padding:
-                                                                            const EdgeInsets.symmetric(horizontal: 35),
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(20),
-                                                                        ),
-                                                                      ),
-                                                                      child: const Text(
-                                                                          "YES"),
-                                                                    ),
+                                                                          .center,
+                                                                  children: [
+                                                                    CircularProgressIndicator()
                                                                   ],
+                                                                )
+                                                              : ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              20),
+                                                                      shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(18))),
+                                                                  onPressed: controller.applications.any((application) =>
+                                                                              application.jobId ==
+                                                                              controller.jobOpenings[index].id) ==
+                                                                          true
+                                                                      ? null
+                                                                      : () {
+                                                                          showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            barrierDismissible:
+                                                                                false,
+                                                                            builder: (context) =>
+                                                                                AlertDialog(
+                                                                              title: const Text(
+                                                                                "Are You Sure ?",
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(color: Colors.blue),
+                                                                              ),
+                                                                              shape: RoundedRectangleBorder(
+                                                                                borderRadius: BorderRadius.circular(20),
+                                                                              ),
+                                                                              actionsPadding: const EdgeInsets.only(bottom: 25),
+                                                                              content: const Text(
+                                                                                "Are you sure you want to use your 100 credits?",
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(
+                                                                                  fontSize: 14.5,
+                                                                                  fontWeight: FontWeight.w600,
+                                                                                ),
+                                                                              ),
+                                                                              actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                                                              actions: [
+                                                                                ElevatedButton(
+                                                                                  onPressed: Get.back,
+                                                                                  style: ElevatedButton.styleFrom(
+                                                                                    backgroundColor: Colors.white,
+                                                                                    foregroundColor: Colors.black,
+                                                                                    elevation: 3,
+                                                                                    padding: const EdgeInsets.symmetric(horizontal: 35),
+                                                                                    shape: RoundedRectangleBorder(
+                                                                                      borderRadius: BorderRadius.circular(20),
+                                                                                    ),
+                                                                                  ),
+                                                                                  child: const Text("NO"),
+                                                                                ),
+                                                                                ElevatedButton(
+                                                                                  onPressed: () async {
+                                                                                    Get.back();
+                                                                                    controller.apply(controller.jobOpenings[index].id);
+                                                                                  },
+                                                                                  style: ElevatedButton.styleFrom(
+                                                                                    elevation: 3,
+                                                                                    padding: const EdgeInsets.symmetric(horizontal: 35),
+                                                                                    shape: RoundedRectangleBorder(
+                                                                                      borderRadius: BorderRadius.circular(20),
+                                                                                    ),
+                                                                                  ),
+                                                                                  child: const Text("YES"),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                  child: Text(
+                                                                    controller.applications.any((application) =>
+                                                                                application.jobId ==
+                                                                                controller.jobOpenings[index].id) ==
+                                                                            true
+                                                                        ? "APPLIED"
+                                                                        : "APPLY NOW",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            14),
+                                                                  ),
                                                                 ),
-                                                              );
-                                                            },
-                                                            child: const Text(
-                                                              "APPLY NOW",
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
-                                                            ),
-                                                          ),
                                                           TextButton.icon(
                                                             onPressed: () {},
                                                             icon: const Icon(
