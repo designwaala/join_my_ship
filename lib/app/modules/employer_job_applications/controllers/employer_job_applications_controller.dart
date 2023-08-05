@@ -1,18 +1,36 @@
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/job_application_model.dart';
+import 'package:join_mp_ship/app/data/models/application_model.dart';
+import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/data/providers/application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 
 class EmployerJobApplicationsController extends GetxController {
-  RxList<JobApplication> jobApplications = RxList();
-  RxList ranks = RxList.empty();
+  RxList<Application> jobApplications = RxList();
+  RxList<Rank> ranks = RxList.empty();
   Map<String, dynamic> filters = {};
   RxBool filterOn = false.obs;
   RxBool isLoading = false.obs;
 
+  EmployerJobApplicationsArguments? args;
+
+  RxList<int> toApplyRanks = RxList.empty();
+  RxnInt toApplyGenderFilter = RxnInt();
+  RxnBool toApplyIsShortlisted = RxnBool();
+
+  RxList<int> selectedRanks = RxList.empty();
+  RxnInt genderFilter = RxnInt();
+  RxnBool isShortlisted = RxnBool();
+
+  RxnInt applicationShortListing = RxnInt();
+
   @override
   void onInit() {
+    if (Get.arguments is EmployerJobApplicationsArguments?) {
+      args = Get.arguments;
+    }
     instantiate();
     super.onInit();
   }
@@ -33,7 +51,7 @@ class EmployerJobApplicationsController extends GetxController {
     if (filters.isEmpty) {
       filterOn.value = false;
     }
-    await Future.delayed(const Duration(seconds: 1));
+    await loadJobApplications();
     isLoading.value = false;
   }
 
@@ -45,12 +63,37 @@ class EmployerJobApplicationsController extends GetxController {
   }
 
   Future<void> loadJobApplications() async {
-    jobApplications.addAll(
-        (await getIt<JobApplicationProvider>().getJobApplications()) ?? []);
+    if (args?.jobId == null) {
+      return;
+    }
+    jobApplications.value = (await getIt<ApplicationProvider>()
+            .getApplicationsForAJob(args!.jobId!,
+                ranks: selectedRanks.value.nullIfEmpty(),
+                genders:
+                    genderFilter.value == null ? null : [genderFilter.value!],
+                statuses: isShortlisted.value == null
+                    ? null
+                    : [
+                        if (isShortlisted.value == true) ...[
+                          ApplicationStatus.SHORT_LISTED,
+                          ApplicationStatus.RESUME_DOWNLOADED
+                        ] else
+                          ApplicationStatus.APPLIED
+                      ])) ??
+        [];
   }
 
   Future<void> loadRanks() async {
     ranks.value = (await getIt<RanksProvider>().getRankList()) ?? [];
+  }
+
+  Future<void> shortListApplication(int? applicationId) async {
+    if (applicationId == null) {
+      return;
+    }
+    applicationShortListing.value = applicationId;
+    await getIt<ApplicationProvider>().shortListApplication(applicationId);
+    applicationShortListing.value = null;
   }
 }
 
@@ -72,4 +115,9 @@ class Custom {
       required this.rank,
       required this.profilePic,
       required this.shortlisted});
+}
+
+class EmployerJobApplicationsArguments {
+  final int? jobId;
+  const EmployerJobApplicationsArguments({this.jobId});
 }

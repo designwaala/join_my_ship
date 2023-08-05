@@ -15,12 +15,23 @@ class JobProvider extends WrapperConnect {
 
   Future<List<Job>?> getJobList(
       {int? employerId, List<int>? ranks, List<int>? vesselIds}) async {
-    final response = await get('employer/post_job_list', query: {
-      if (employerId != null) "emp_id": "$employerId",
-      for (int rankId in ranks ?? []) "rank": "$rankId",
-      for (int vesselId in vesselIds ?? []) "vessel_id": "$vesselId"
-    });
-    return response.body;
+    List<MapEntry<String, String>> queries = [
+      ...?ranks?.map((e) => MapEntry("rank", e.toString())),
+      ...?vesselIds?.map((e) => MapEntry("vessel_id", e.toString()))
+    ];
+    final response = await httpGet(
+        uri: Uri(
+            scheme: "https",
+            host: "designwaala.me",
+            path: "employer/post_job_list",
+            queryParameters: {
+          if (ranks?.isNotEmpty == true)
+            "rank": ranks?.map((e) => e.toString()),
+          if (vesselIds?.isNotEmpty == true)
+            "vessel_id": vesselIds?.map((e) => e.toString())
+        }));
+
+    return List<Job>.from(response.map((e) => Job.fromJson(e)));
   }
 
   Future<Job> postJob(Job job) async =>

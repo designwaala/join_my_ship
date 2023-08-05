@@ -282,30 +282,32 @@ class CrewOnboardingController extends GetxController with PickImage {
     if (crewUser?.id != null) {
       await setStep1Fields();
     }
-    if (!editMode) {
-      if (crewUser?.screenCheck == 1) {
-        userDetails =
-            await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
-        UserStates.instance.userDetails = userDetails;
-        await setStep2Fields();
-      } else if (crewUser?.screenCheck == 2) {
-        serviceRecords.value =
-            (await getIt<SeaServiceProvider>().getSeaServices(crewUser!.id!)) ??
-                [];
-        UserStates.instance.serviceRecords = serviceRecords;
-        previousEmployerReferences.value =
-            (await getIt<PreviousEmployerProvider>()
-                    .getPreviousEmployer(crewUser!.id!)) ??
-                [];
-        UserStates.instance.previousEmployerReferences =
-            previousEmployerReferences;
-      } else if (crewUser?.screenCheck == 3) {
+    if (crewUser?.screenCheck == 1) {
+      userDetails =
+          await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
+      UserStates.instance.userDetails = userDetails;
+      await setStep2Fields();
+    } else if (crewUser?.screenCheck == 2) {
+      serviceRecords.value =
+          (await getIt<SeaServiceProvider>().getSeaServices(crewUser!.id!)) ??
+              [];
+      UserStates.instance.serviceRecords = serviceRecords;
+      previousEmployerReferences.value =
+          (await getIt<PreviousEmployerProvider>()
+                  .getPreviousEmployer(crewUser!.id!)) ??
+              [];
+      UserStates.instance.previousEmployerReferences =
+          previousEmployerReferences;
+    } else if (crewUser?.screenCheck == 3) {
+      if (!editMode) {
         if (crewUser?.isVerified == 1) {
           Get.offAllNamed(Routes.HOME);
         } else {
           Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
         }
       }
+    }
+    if (!editMode) {
       step.value = (crewUser?.screenCheck ?? 0) + 1;
     }
 

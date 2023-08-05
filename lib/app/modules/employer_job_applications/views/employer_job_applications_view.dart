@@ -1,10 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
 import '../controllers/employer_job_applications_controller.dart';
 
 class EmployerJobApplicationsView
@@ -12,16 +16,15 @@ class EmployerJobApplicationsView
   const EmployerJobApplicationsView({Key? key}) : super(key: key);
 
   _showBottomSheet(BuildContext context) {
-    RxInt shortlisted = RxInt(-1);
-    String rank = "";
-    String gender = "";
+    controller.toApplyRanks.value = [...controller.selectedRanks];
+    controller.toApplyGenderFilter.value = controller.genderFilter.value;
+    controller.toApplyIsShortlisted.value = controller.isShortlisted.value;
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
       isDismissible: false,
       builder: (context) => Obx(
         () => Container(
-          height: 400,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -30,6 +33,7 @@ class EmployerJobApplicationsView
             ),
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               20.verticalSpace,
               Padding(
@@ -43,9 +47,9 @@ class EmployerJobApplicationsView
                           children: [
                             Container(
                               height: 4,
-                              width: 35,
+                              width: 64,
                               decoration: BoxDecoration(
-                                color: Colors.grey,
+                                color: Colors.grey[400],
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
@@ -65,12 +69,14 @@ class EmployerJobApplicationsView
                       children: [
                         TextButton(
                           style: TextButton.styleFrom(
-                            foregroundColor: shortlisted.value == 1
-                                ? Colors.blue
-                                : Colors.black,
-                            backgroundColor: shortlisted.value == 1
-                                ? const Color.fromARGB(255, 227, 231, 249)
-                                : Colors.white,
+                            foregroundColor:
+                                controller.toApplyIsShortlisted.value == true
+                                    ? Colors.blue
+                                    : Colors.black,
+                            backgroundColor:
+                                controller.toApplyIsShortlisted.value == true
+                                    ? const Color.fromARGB(255, 227, 231, 249)
+                                    : Colors.white,
                             side: const BorderSide(
                                 width: 1.5, color: Colors.blue),
                             padding: const EdgeInsets.symmetric(
@@ -79,16 +85,22 @@ class EmployerJobApplicationsView
                                 borderRadius: BorderRadius.circular(20)),
                           ),
                           onPressed: () {
-                            shortlisted.value = shortlisted.value == 1 ? -1 : 1;
+                            if (controller.toApplyIsShortlisted.value == true) {
+                              controller.toApplyIsShortlisted.value = null;
+                            } else {
+                              controller.toApplyIsShortlisted.value = true;
+                            }
                           },
                           child: Row(
                             children: [
-                              if (shortlisted.value == 1)
+                              if (controller.toApplyIsShortlisted.value ==
+                                  true) ...[
                                 const Icon(
                                   Icons.cancel,
                                   size: 20,
                                 ),
-                              if (shortlisted.value == 1) 3.horizontalSpace,
+                                4.horizontalSpace
+                              ],
                               const Text(
                                 "Shortlisted",
                                 style: TextStyle(
@@ -101,12 +113,14 @@ class EmployerJobApplicationsView
                         1.horizontalSpace,
                         TextButton(
                           style: TextButton.styleFrom(
-                            foregroundColor: shortlisted.value == 0
-                                ? Colors.blue
-                                : Colors.black,
-                            backgroundColor: shortlisted.value == 0
-                                ? const Color.fromARGB(255, 227, 231, 249)
-                                : Colors.white,
+                            foregroundColor:
+                                controller.toApplyIsShortlisted.value == false
+                                    ? Colors.blue
+                                    : Colors.black,
+                            backgroundColor:
+                                controller.toApplyIsShortlisted.value == false
+                                    ? const Color.fromARGB(255, 227, 231, 249)
+                                    : Colors.white,
                             side: const BorderSide(
                                 width: 1.5, color: Colors.blue),
                             padding: const EdgeInsets.symmetric(
@@ -115,16 +129,23 @@ class EmployerJobApplicationsView
                                 borderRadius: BorderRadius.circular(20)),
                           ),
                           onPressed: () {
-                            shortlisted.value = shortlisted.value == 0 ? -1 : 0;
+                            if (controller.toApplyIsShortlisted.value ==
+                                false) {
+                              controller.toApplyIsShortlisted.value = null;
+                            } else {
+                              controller.toApplyIsShortlisted.value = false;
+                            }
                           },
                           child: Row(
                             children: [
-                              if (shortlisted.value == 0)
+                              if (controller.toApplyIsShortlisted.value ==
+                                  false) ...[
                                 const Icon(
                                   Icons.cancel,
                                   size: 20,
                                 ),
-                              if (shortlisted.value == 0) 3.horizontalSpace,
+                                4.horizontalSpace
+                              ],
                               const Text(
                                 "Not Shortlisted",
                                 style: TextStyle(
@@ -145,45 +166,62 @@ class EmployerJobApplicationsView
                           style: Get.textTheme.bodyLarge
                               ?.copyWith(color: Colors.blue, fontSize: 18),
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: Colors.blue),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Flexible(
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton2<Rank>(
-                                iconStyleData: const IconStyleData(
-                                    icon: Icon(Icons.keyboard_arrow_down)),
-                                hint: const Text(
-                                  "Select Rank",
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                                buttonStyleData: const ButtonStyleData(
-                                    height: 40, width: 130),
-                                dropdownStyleData: const DropdownStyleData(
-                                    maxHeight: 200, width: 130),
-                                onChanged: (value) {
-                                  controller.filters['rank'] = value;
-                                },
-                                items: controller.ranks
-                                    .map(
-                                      (value) => DropdownMenuItem<Rank>(
-                                        value: value,
-                                        child: Flexible(
-                                          child: Text(
-                                            value.name ?? "",
-                                            maxLines: 2,
-                                          ),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2<Rank>(
+                            isExpanded: true,
+                            style: Get.textTheme.bodySmall,
+                            items: controller.ranks
+                                .map((e) => DropdownMenuItem<Rank>(
+                                    value: e,
+                                    child: Row(
+                                      children: [
+                                        Obx(() {
+                                          return Checkbox(
+                                              value: controller.toApplyRanks
+                                                  .contains(e.id),
+                                              onChanged: (_) {
+                                                if (e.id == null) {
+                                                  return;
+                                                }
+                                                if (controller.toApplyRanks
+                                                    .contains(e.id)) {
+                                                  controller.toApplyRanks
+                                                      .remove(e.id);
+                                                } else {
+                                                  controller.toApplyRanks
+                                                      .add(e.id!);
+                                                }
+                                              });
+                                        }),
+                                        Flexible(
+                                          child: Text(e.name ?? "",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Get.textTheme.titleMedium),
                                         ),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
-                            ),
+                                      ],
+                                    )))
+                                .toList(),
+                            onChanged: (value) {
+                              if (value?.id == null) {
+                                return;
+                              }
+                              if (controller.toApplyRanks
+                                  .contains(value!.id!)) {
+                                controller.toApplyRanks.remove(value.id);
+                              } else {
+                                controller.toApplyRanks.add(value.id!);
+                              }
+                            },
+                            hint: const Text("Select Rank"),
+                            buttonStyleData: ButtonStyleData(
+                                height: 40,
+                                width: 200,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                decoration: DropdownDecoration()),
                           ),
-                        ),
+                        )
                       ],
                     ),
                     20.verticalSpace,
@@ -195,44 +233,55 @@ class EmployerJobApplicationsView
                           style: Get.textTheme.bodyLarge
                               ?.copyWith(color: Colors.blue, fontSize: 18),
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: Colors.blue),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Flexible(
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton2<String>(
-                                iconStyleData: const IconStyleData(
-                                    icon: Icon(Icons.keyboard_arrow_down)),
-                                hint: const Text(
-                                  "Select ",
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                                buttonStyleData: const ButtonStyleData(
-                                    height: 40, width: 130),
-                                dropdownStyleData: const DropdownStyleData(
-                                    maxHeight: 200, width: 130),
-                                onChanged: (value) {
-                                  controller.filters['gender'] = value;
-                                },
-                                items: ["Male", "Female"]
-                                    .map(
-                                      (value) => DropdownMenuItem<String>(
-                                        value: value,
-                                        onTap: () {
-                                          gender = value;
-                                        },
-                                        child: Text(
-                                          value,
-                                          maxLines: 2,
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2<int>(
+                            hint: const Text(
+                              "Select Gender",
+                              style: TextStyle(fontSize: 14),
                             ),
+                            buttonStyleData: ButtonStyleData(
+                                height: 40,
+                                width: 200,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                decoration: DropdownDecoration()),
+                            onChanged: (value) {},
+                            items: genderMap.keys
+                                .map(
+                                  (value) => DropdownMenuItem<int>(
+                                    value: value,
+                                    onTap: () {
+                                      if (controller
+                                              .toApplyGenderFilter.value ==
+                                          value) {
+                                        controller.toApplyGenderFilter.value =
+                                            null;
+                                      } else {
+                                        controller.toApplyGenderFilter.value =
+                                            value;
+                                      }
+                                    },
+                                    child: Obx(() {
+                                      return Row(
+                                        children: [
+                                          Icon(
+                                              controller.toApplyGenderFilter
+                                                          .value ==
+                                                      value
+                                                  ? Icons.radio_button_checked
+                                                  : Icons.radio_button_off,
+                                              color: Get.theme.primaryColor),
+                                          8.horizontalSpace,
+                                          Text(
+                                            genderMap[value] ?? "",
+                                            maxLines: 2,
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  ),
+                                )
+                                .toList(),
                           ),
                         ),
                       ],
@@ -247,7 +296,7 @@ class EmployerJobApplicationsView
               ),
               20.verticalSpace,
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -276,15 +325,13 @@ class EmployerJobApplicationsView
                             borderRadius: BorderRadius.circular(30)),
                       ),
                       onPressed: () {
-                        if (shortlisted.value != -1) {
-                          controller.filters['shortlisted'] = shortlisted.value;
-                        }
-                        if (rank.isNotEmpty) {
-                          controller.filters['rank'] = rank;
-                        }
-                        if (gender.isNotEmpty) {
-                          controller.filters['gender'] = gender;
-                        }
+                        controller.selectedRanks.value = [
+                          ...controller.toApplyRanks
+                        ];
+                        controller.genderFilter.value =
+                            controller.toApplyGenderFilter.value;
+                        controller.isShortlisted.value =
+                            controller.toApplyIsShortlisted.value;
                         controller.filterOn.value = true;
                         controller.applyFilters();
                         Get.back();
@@ -294,6 +341,7 @@ class EmployerJobApplicationsView
                   ],
                 ),
               ),
+              16.verticalSpace
             ],
           ),
         ),
@@ -343,7 +391,8 @@ class EmployerJobApplicationsView
                         "Job Applications",
                         style: Get.textTheme.bodyLarge?.copyWith(fontSize: 19),
                       ),
-                      subtitle: const Text("8 Applications Received"),
+                      subtitle: Text(
+                          "${controller.jobApplications.length} Applications Received"),
                       trailing: IconButton(
                         onPressed: () {
                           if (!controller.filterOn.value) {
@@ -363,56 +412,67 @@ class EmployerJobApplicationsView
                       ),
                     ),
                   ),
-                  if (controller.filterOn.value)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Wrap(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
                         alignment: WrapAlignment.start,
-                        children: List.generate(
-                          controller.filters.length,
-                          (index) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 3),
-                            child: TextButton.icon(
-                              icon: const Icon(
-                                Icons.cancel,
-                                size: 18,
-                                color: Colors.blue,
-                              ),
-                              style: TextButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 6),
-                                backgroundColor:
-                                    const Color.fromARGB(255, 227, 231, 249),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  side: const BorderSide(
-                                      width: 1.5, color: Colors.blue),
-                                ),
-                              ),
-                              onPressed: () {
-                                controller.filters.removeWhere((key, value) =>
-                                    controller.filters.keys.elementAt(index) ==
-                                    key);
+                        children: [
+                          if (controller.isShortlisted.value == true)
+                            Chip(
+                              label: Text("Shortlisted"),
+                              backgroundColor: Colors.blue[100],
+                              shape: StadiumBorder(
+                                  side: BorderSide(
+                                      color: Get.theme.primaryColor)),
+                              onDeleted: () {
+                                controller.isShortlisted.value = null;
                                 controller.applyFilters();
                               },
-                              label: Text(
-                                controller.filters.keys.elementAt(index) ==
-                                        "shortlisted"
-                                    ? controller.filters.values
-                                                .elementAt(index) ==
-                                            1
-                                        ? "Shortlisted"
-                                        : "Not Shortlisted"
-                                    : controller.filters.values
-                                        .elementAt(index),
-                                style: const TextStyle(
-                                    fontSize: 13, color: Colors.blue),
-                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
+                          if (controller.isShortlisted.value == false)
+                            Chip(
+                              label: Text("Not Shortlisted"),
+                              backgroundColor: Colors.blue[100],
+                              shape: StadiumBorder(
+                                  side: BorderSide(
+                                      color: Get.theme.primaryColor)),
+                              onDeleted: () {
+                                controller.isShortlisted.value = null;
+                                controller.applyFilters();
+                              },
+                            ),
+                          ...controller.selectedRanks.map((rank) => Chip(
+                              onDeleted: () {
+                                controller.selectedRanks
+                                    .removeWhere((e) => e == rank);
+                                controller.applyFilters();
+                              },
+                              backgroundColor: Colors.blue[100],
+                              shape: StadiumBorder(
+                                  side: BorderSide(
+                                      color: Get.theme.primaryColor)),
+                              label: Text(controller.ranks
+                                      .firstWhereOrNull((e) => e.id == rank)
+                                      ?.name ??
+                                  ""))),
+                          if (controller.genderFilter.value != null)
+                            Chip(
+                              label: Text(
+                                  genderMap[controller.genderFilter.value] ??
+                                      ""),
+                              backgroundColor: Colors.blue[100],
+                              shape: StadiumBorder(
+                                  side: BorderSide(
+                                      color: Get.theme.primaryColor)),
+                              onDeleted: () {
+                                controller.genderFilter.value = null;
+                                controller.applyFilters();
+                              },
+                            ),
+                        ]),
+                  ),
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(
@@ -424,15 +484,19 @@ class EmployerJobApplicationsView
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         child: ListTile(
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 0),
-                          leading: Image.network(
-                            controller.jobApplications[index].profilePic!,
-                            height: 55,
-                            width: 55,
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(128),
+                            child: CachedNetworkImage(
+                                imageUrl: controller.jobApplications[index]
+                                        .userData?.profilePic ??
+                                    "",
+                                height: 55,
+                                width: 55),
                           ),
                           title: Text(
-                            controller.jobApplications[index].name!,
+                            controller.jobApplications[index].userData
+                                    ?.firstName ??
+                                "",
                             style:
                                 Get.textTheme.bodyLarge?.copyWith(fontSize: 16),
                           ),
@@ -440,39 +504,104 @@ class EmployerJobApplicationsView
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Master",
+                                controller.ranks
+                                        .firstWhereOrNull((rank) =>
+                                            rank.id ==
+                                            controller.jobApplications[index]
+                                                .userData?.rankId)
+                                        ?.name ??
+                                    "",
                                 style: Get.textTheme.bodyMedium,
                               ),
                               RichText(
                                 text: TextSpan(
                                   children: [
-                                    TextSpan(
-                                        text: "COC: ",
-                                        style: Get.textTheme.bodyMedium
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold)),
-                                    const TextSpan(text: "National"),
+                                    if (controller
+                                            .jobApplications[index]
+                                            .userDetails
+                                            ?.validCOCIssuingAuthority
+                                            ?.isNotEmpty ==
+                                        true) ...[
+                                      TextSpan(
+                                          text: "COC: ",
+                                          style: Get.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.bold)),
+                                      TextSpan(
+                                          text: controller
+                                                  .jobApplications[index]
+                                                  .userDetails
+                                                  ?.validCOCIssuingAuthority
+                                                  ?.map((e) =>
+                                                      e.issuingAuthority ??
+                                                      e.customName)
+                                                  .join(", ") ??
+                                              ""),
+                                    ],
+                                    if (controller
+                                            .jobApplications[index]
+                                            .userDetails
+                                            ?.validWatchKeepingIssuingAuthority
+                                            ?.isNotEmpty ==
+                                        true) ...[
+                                      TextSpan(
+                                          text: "WKC: ",
+                                          style: Get.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.bold)),
+                                      TextSpan(
+                                          text: controller
+                                                  .jobApplications[index]
+                                                  .userDetails
+                                                  ?.validWatchKeepingIssuingAuthority
+                                                  ?.map((e) =>
+                                                      e.issuingAuthority ??
+                                                      e.customName)
+                                                  .join(", ") ??
+                                              ""),
+                                    ]
                                   ],
                                 ),
                               ),
                             ],
                           ),
                           trailing: IconButton(
-                            onPressed: () {},
-                            icon: ImageIcon(
-                              AssetImage(
-                                  controller.jobApplications[index].shortlisted!
-                                      ? 'assets/icons/bookmark_filled.png'
-                                      : 'assets/icons/bookmark_outlined.png'),
-                              color:
-                                  controller.jobApplications[index].shortlisted!
-                                      ? Colors.blue
-                                      : Colors.black,
-                              size:
-                                  controller.jobApplications[index].shortlisted!
-                                      ? 30
-                                      : 29,
-                            ),
+                            onPressed: controller
+                                        .applicationShortListing.value ==
+                                    controller.jobApplications[index].id
+                                ? null
+                                : () {
+                                    controller.shortListApplication(
+                                        controller.jobApplications[index].id);
+                                  },
+                            icon: controller.applicationShortListing.value ==
+                                    controller.jobApplications[index].id
+                                ? const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                          height: 16,
+                                          width: 16,
+                                          child: CircularProgressIndicator())
+                                    ],
+                                  )
+                                : ImageIcon(
+                                    AssetImage(controller.jobApplications[index]
+                                                .applicationStatus ==
+                                            ApplicationStatus.SHORT_LISTED
+                                        ? 'assets/icons/bookmark_filled.png'
+                                        : 'assets/icons/bookmark_outlined.png'),
+                                    color: controller.jobApplications[index]
+                                                .applicationStatus ==
+                                            ApplicationStatus.SHORT_LISTED
+                                        ? Colors.blue
+                                        : Colors.black,
+                                    size: controller.jobApplications[index]
+                                                .applicationStatus ==
+                                            ApplicationStatus.SHORT_LISTED
+                                        ? 30
+                                        : 29,
+                                  ),
                           ),
                         ),
                       ),

@@ -20,6 +20,92 @@ class WrapperConnect extends GetConnect {
     Get.offAllNamed(Routes.INFO);
   }
 
+  Future<http.Response> _rawGetCore(String url,
+      {Map<String, String>? headers}) async {
+    var request = http.Request('GET', Uri.parse("$baseURL/$url"));
+    request.headers.addAll(headers ?? {});
+    http.StreamedResponse streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+    return response;
+  }
+
+  Future<dynamic> rawGet<T>(String url,
+      {Map<String, String>? headers, bool softRefresh = false}) async {
+    print(PreferencesHelper.instance.accessToken);
+    if (PreferencesHelper.instance.accessToken.isEmpty) {
+      print("Access Token not found, getting them");
+      bool didGetAccessTokens = await getAccessTokens();
+      if (!didGetAccessTokens && softRefresh) {
+        return null;
+      }
+    }
+    var response = await _rawGetCore(url, headers: headers);
+    if (response.statusCode == 401) {
+      print("Refreshing Access Token");
+      await refreshAccessToken();
+      response = await _rawGetCore(url, headers: headers);
+
+      if (response.statusCode == 401) {
+        print("Refreshing Access Token didnt work, getting new Tokens");
+        await getAccessTokens();
+        response = await _rawGetCore(url, headers: headers);
+        if (response.statusCode == 401) {
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {}
+      }
+    }
+
+    return jsonDecode(response.body);
+  }
+
+  Future<dynamic> httpGet<T>(
+      {Uri? uri,
+      String? url,
+      Map<String, String>? headers,
+      bool softRefresh = false}) async {
+    print(PreferencesHelper.instance.accessToken);
+    if (PreferencesHelper.instance.accessToken.isEmpty) {
+      print("Access Token not found, getting them");
+      bool didGetAccessTokens = await getAccessTokens();
+      if (!didGetAccessTokens && softRefresh) {
+        return null;
+      }
+    }
+    var response = await http.get(
+      uri ?? Uri.parse("$baseURL/$url"),
+      headers: headers ??
+          {"Authorization": "Bearer ${PreferencesHelper.instance.accessToken}"},
+    );
+    if (response.statusCode == 401) {
+      print("Refreshing Access Token");
+      await refreshAccessToken();
+      response = await http.get(
+        uri ?? Uri.parse("$baseURL/$url"),
+        headers: headers ??
+            {
+              "Authorization":
+                  "Bearer ${PreferencesHelper.instance.accessToken}"
+            },
+      );
+
+      if (response.statusCode == 401) {
+        print("Refreshing Access Token didnt work, getting new Tokens");
+        await getAccessTokens();
+        response = await http.get(uri ?? Uri.parse("$baseURL/$url"),
+            headers: headers ??
+                {
+                  "Authorization":
+                      "Bearer ${PreferencesHelper.instance.accessToken}"
+                });
+        if (response.statusCode == 401) {
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {}
+      }
+    }
+
+    return jsonDecode(response.body);
+  }
+
   @override
   Future<Response<T>> get<T>(String url,
       {Map<String, String>? headers,
@@ -496,7 +582,6 @@ class WrapperConnect extends GetConnect {
     return response;
   }
 
-  @override
   Future<Map<String, dynamic>> httpPatch<T>(
     String? url,
     dynamic body, {

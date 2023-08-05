@@ -21,11 +21,6 @@ class ApplicationProvider extends WrapperConnect {
     return response.body;
   }
 
-  Future<Application?> getApplication(int id) async {
-    final response = await get('application/$id');
-    return response.body;
-  }
-
   Future<Application?> apply(Application application) async {
     final response =
         await multipartPost('employer/apply_job', application.toJson());
@@ -37,6 +32,44 @@ class ApplicationProvider extends WrapperConnect {
       ));
       return null;
     }
+    return Application.fromJson(response);
+  }
+
+  Future<List<Application>?> getApplicationsForAJob(int jobId,
+      {List<int>? ranks,
+      List<int>? genders,
+      List<ApplicationStatus>? statuses}) async {
+    final response = await httpGet(
+        uri: Uri(
+            scheme: "https",
+            host: "designwaala.me",
+            path: "employer/applicants_list/$jobId",
+            queryParameters: {
+          if (ranks != null) "ranks": ranks.map((e) => e.toString()).toList(),
+          if (genders != null)
+            "gender": genders.map((e) => e.toString()).toList(),
+          if (statuses != null)
+            "status": statuses.map((e) => e.id.toString()).toList(),
+        })
+        // "employer/applicants_list/$jobId?${query.map((e) => "${e.key}=${e.value}").join("?")}"
+        );
+    if (response == null) {
+      return null;
+    }
+    return List<Application>.from(response.map((e) => Application.fromJson(e)));
+  }
+
+  Future<Application?> shortListApplication(int applicationId) async {
+    final response = await multipartPatch(
+        "employer/applicants_update/$applicationId",
+        Application(applicationStatus: ApplicationStatus.SHORT_LISTED)
+            .toJson());
+    return Application.fromJson(response);
+  }
+
+  Future<Application?> downloadResumeForApplication(int jobId) async {
+    final response = await multipartPatch("employer/applicants_update/$jobId",
+        Application(applicationStatus: ApplicationStatus.RESUME_DOWNLOADED));
     return Application.fromJson(response);
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:get_cli/get_cli.dart';
+import 'package:join_mp_ship/app/modules/employer_job_applications/controllers/employer_job_applications_controller.dart';
 import 'package:join_mp_ship/app/modules/employer_job_posts/controllers/employer_job_posts_controller.dart';
 import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
@@ -430,17 +431,21 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                             ),
                                             ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20))),
-                                                onPressed: () => Get.toNamed(Routes
-                                                    .EMPLOYER_JOB_APPLICATIONS),
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20))),
+                                                onPressed: () => Get.toNamed(
+                                                    Routes
+                                                        .EMPLOYER_JOB_APPLICATIONS,
+                                                    arguments:
+                                                        EmployerJobApplicationsArguments(
+                                                            jobId: controller
+                                                                .jobPosts[index]
+                                                                .id)),
                                                 child: const Text(
                                                   "Applications",
                                                   style:
