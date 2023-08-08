@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
+import '../modules/applicant_detail/bindings/applicant_detail_binding.dart';
+import '../modules/applicant_detail/views/applicant_detail_view.dart';
 import '../modules/change_password/bindings/change_password_binding.dart';
 import '../modules/change_password/views/change_password_view.dart';
 import '../modules/choose_employer/bindings/choose_employer_binding.dart';
@@ -10,6 +12,8 @@ import '../modules/choose_user/bindings/choose_user_binding.dart';
 import '../modules/choose_user/views/choose_user_view.dart';
 import '../modules/crew-onboarding/bindings/crew_onboarding_binding.dart';
 import '../modules/crew-onboarding/views/crew_onboarding_view.dart';
+import '../modules/crew_job_applications/bindings/crew_job_applications_binding.dart';
+import '../modules/crew_job_applications/views/crew_job_applications_view.dart';
 import '../modules/crew_sign_in_email/bindings/crew_sign_in_binding.dart';
 import '../modules/crew_sign_in_email/views/crew_sign_in_view.dart';
 import '../modules/crew_sign_in_mobile/bindings/crew_sign_in_mobile_binding.dart';
@@ -203,6 +207,16 @@ class AppPages {
       name: _Paths.SUCCESS,
       page: () => const SuccessView(),
       binding: SuccessBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREW_JOB_APPLICATIONS,
+      page: () => const CrewJobApplicationsView(),
+      binding: CrewJobApplicationsBinding(),
+    ),
+    GetPage(
+      name: _Paths.APPLICANT_DETAIL,
+      page: () => const ApplicantDetailView(),
+      binding: ApplicantDetailBinding(),
     ),
   ];
 }

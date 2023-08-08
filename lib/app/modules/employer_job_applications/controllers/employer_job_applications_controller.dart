@@ -92,7 +92,14 @@ class EmployerJobApplicationsController extends GetxController {
       return;
     }
     applicationShortListing.value = applicationId;
-    await getIt<ApplicationProvider>().shortListApplication(applicationId);
+    final updatedJobApplication =
+        await getIt<ApplicationProvider>().shortListApplication(applicationId);
+    if (updatedJobApplication != null) {
+      int index = jobApplications.indexWhere((e) => e.id == applicationId);
+      jobApplications
+        ..removeAt(index)
+        ..insert(index, updatedJobApplication);
+    }
     applicationShortListing.value = null;
   }
 }
