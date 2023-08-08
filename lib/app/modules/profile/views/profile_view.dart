@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/app/modules/employer_create_user/controllers/employer_create_user_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
@@ -275,9 +274,10 @@ class ProfileView extends GetView<ProfileController> {
                               Get.toNamed(Routes.CHANGE_PASSWORD);
                             }),
                         CardObject(
-                            iconPath: "assets/images/profile/help.png",
-                            text: "Help & Feedback",
-                            onTap: () {}),
+                          iconPath: "assets/images/profile/help.png",
+                          text: "Help & Feedback",
+                          onTap: () => Get.toNamed(Routes.HELP),
+                        ),
                       ].map((e) => InkWell(
                             onTap: () {
                               e.onTap();

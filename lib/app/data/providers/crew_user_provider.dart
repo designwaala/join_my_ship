@@ -23,6 +23,12 @@ class CrewUserProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
+  Future<CrewUser?> getJobApplicant(int userId) async {
+    final response = await get("crew/user_retrieve/$userId",
+        decoder: (map) => CrewUser.fromJson(map));
+    return response.body;
+  }
+
   Future<CrewUser?> getCrewUser({bool softRefresh = false}) async {
     final response = await get<CrewUser>('crew/get_user',
         softRefresh: softRefresh, decoder: (map) => CrewUser.fromJson(map));

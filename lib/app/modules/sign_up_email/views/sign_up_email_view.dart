@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'dart:math';
 
 class SignUpEmailView extends GetView<SignUpEmailController> {
   const SignUpEmailView({Key? key}) : super(key: key);
@@ -22,22 +21,20 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                   fontSize: 20,
                   fontWeight: FontWeight.w600)),
           backgroundColor: Colors.white,
-          leading: Navigator.of(context).canPop()
-              ? InkWell(
-                  onTap: Get.back,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    margin: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                        color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-                    child: const Icon(
-                      Icons.keyboard_backspace_rounded,
-                      color: Colors.black,
-                    ),
-                  ),
-                )
-              : null,
-          centerTitle: false,
+          leading: InkWell(
+            onTap: Get.back,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(
+                  color: Color(0xFFF3F3F3), shape: BoxShape.circle),
+              child: const Icon(
+                Icons.keyboard_backspace_rounded,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          centerTitle: true,
         ),
         body: Obx(() {
           return CustomScrollView(
@@ -70,13 +67,16 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                             return null;
                           },
                           decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 20),
                               fillColor: Colors.white,
                               filled: true,
                               hintText: controller.signUpType == SignUpType.crew
                                   ? "Full Name"
                                   : "Company Name",
                               border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
+                                  borderSide: const BorderSide(
+                                      color: Colors.blue, width: 2),
                                   borderRadius: BorderRadius.circular(64))),
                         ),
                         24.verticalSpace,
@@ -93,11 +93,14 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                               return null;
                             },
                             decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
                                 fillColor: Colors.white,
                                 filled: true,
                                 hintText: "Company Website",
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
+                                    borderSide: const BorderSide(
+                                        color: Colors.blue, width: 2),
                                     borderRadius: BorderRadius.circular(64))),
                           ),
                           24.verticalSpace,
@@ -115,7 +118,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                                       "mail",
                                       "protonme"
                                     ].contains(
-                                        value?.split("@")[1].split(".")[0]) &&
+                                        value.split("@")[1].split(".")[0]) &&
                                     [
                                       SignUpType.employerITF,
                                       SignUpType.employerManagementCompany
@@ -134,12 +137,16 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                             return null;
                           },
                           decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: "email@yourdomain",
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(64))),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20),
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: "email@yourdomain",
+                            border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.blue, width: 2),
+                                borderRadius: BorderRadius.circular(64)),
+                          ),
                         ),
                         24.verticalSpace,
                         TextFormField(
@@ -152,37 +159,46 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                             return null;
                           },
                           decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: "Password",
-                              suffixIcon: InkWell(
-                                onTap: () {
-                                  controller.shouldObscure.value =
-                                      !controller.shouldObscure.value;
-                                },
-                                child: Icon(Icons.remove_red_eye,
-                                    color: Get.theme.primaryColor),
-                              ),
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(64))),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20),
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: "Password",
+                            suffixIcon: InkWell(
+                              onTap: () {
+                                controller.shouldObscure.value =
+                                    !controller.shouldObscure.value;
+                              },
+                              child: Icon(
+                                  controller.shouldObscure.value
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: Get.theme.primaryColor),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 2),
+                              borderRadius: BorderRadius.circular(64),
+                            ),
+                          ),
                         ),
-                        24.verticalSpace,
+                        30.verticalSpace,
                         SizedBox(
                           width: double.maxFinite,
                           height: 64.h,
                           child: controller.isAdding.value
-                              ? Row(
+                              ? const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const CircularProgressIndicator(),
+                                    CircularProgressIndicator(),
                                   ],
                                 )
                               : ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(64))),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(64),
+                                    ),
+                                  ),
                                   onPressed: controller.addEmail,
                                   child: const Text("SIGN UP")),
                         ),
@@ -190,8 +206,12 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.info_outline,
-                                color: Color(0xFF407BFF)),
+                            const Icon(
+                              Icons.info_outline,
+                              color: Colors.blue,
+                              size: 16,
+                            ),
+                            2.horizontalSpace,
                             InkWell(
                               onTap: () {
                                 Get.toNamed(Routes.HELP);
@@ -199,32 +219,45 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                               child: Text(
                                 'Help',
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14.sp,
-                                    color: const Color(0xFF407BFF)),
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.sp,
+                                  color: Colors.blue,
+                                ),
                               ),
                             )
                           ],
                         ),
-                        32.verticalSpace,
-                        const Center(child: Text("Already have an account?")),
-                        16.verticalSpace,
+                        const Spacer(),
                         const Divider(),
                         16.verticalSpace,
-                        SizedBox(
-                          width: double.maxFinite,
-                          height: 64.h,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(64))),
-                              onPressed: () {
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Already have an account ?",
+                              style: Get.textTheme.bodySmall?.copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            5.horizontalSpace,
+                            InkWell(
+                              child: Text(
+                                "Login",
+                                style: Get.textTheme.bodyMedium?.copyWith(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              onTap: () {
                                 // print(
                                 //     '__value ${controller.emailController.text.split("@")[1]}  ${controller.websiteController.text}');
                                 Get.toNamed(Routes.CREW_SIGN_IN_EMAIL);
                               },
-                              child: const Text("LOGIN")),
-                        )
+                            ),
+                          ],
+                        ),
+                        20.verticalSpace,
                       ],
                     ),
                   ),

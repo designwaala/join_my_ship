@@ -32,6 +32,8 @@ abstract class Routes {
   static const JOB_OPENINGS = _Paths.JOB_OPENINGS;
   static const JOB_APPLIED_SUCCESSFULLY = _Paths.JOB_APPLIED_SUCCESSFULLY;
   static const SUCCESS = _Paths.SUCCESS;
+  static const CREW_JOB_APPLICATIONS = _Paths.CREW_JOB_APPLICATIONS;
+  static const APPLICANT_DETAIL = _Paths.APPLICANT_DETAIL;
 }
 
 abstract class _Paths {
@@ -65,4 +67,6 @@ abstract class _Paths {
   static const JOB_OPENINGS = '/job-openings';
   static const JOB_APPLIED_SUCCESSFULLY = '/job-applied-successfully';
   static const SUCCESS = '/success';
+  static const CREW_JOB_APPLICATIONS = '/crew-job-applications';
+  static const APPLICANT_DETAIL = '/applicant-detail';
 }

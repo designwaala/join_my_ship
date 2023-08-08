@@ -5,7 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
@@ -484,6 +486,14 @@ class EmployerJobApplicationsView
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         child: ListTile(
+                          onTap: () {
+                            Get.toNamed(Routes.APPLICANT_DETAIL,
+                                arguments: ApplicantDetailArguments(
+                                    userId: controller
+                                        .jobApplications[index].userData?.id,
+                                    application:
+                                        controller.jobApplications[index]));
+                          },
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(128),
                             child: CachedNetworkImage(
@@ -500,8 +510,8 @@ class EmployerJobApplicationsView
                             style:
                                 Get.textTheme.bodyLarge?.copyWith(fontSize: 16),
                           ),
-                          subtitle: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          subtitle: Wrap(
+                            alignment: WrapAlignment.spaceBetween,
                             children: [
                               Text(
                                 controller.ranks
@@ -536,7 +546,8 @@ class EmployerJobApplicationsView
                                                       e.issuingAuthority ??
                                                       e.customName)
                                                   .join(", ") ??
-                                              ""),
+                                              "",
+                                          style: Get.textTheme.bodyMedium),
                                     ],
                                     if (controller
                                             .jobApplications[index]
@@ -558,7 +569,8 @@ class EmployerJobApplicationsView
                                                       e.issuingAuthority ??
                                                       e.customName)
                                                   .join(", ") ??
-                                              ""),
+                                              "",
+                                          style: Get.textTheme.bodyMedium),
                                     ]
                                   ],
                                 ),
@@ -574,34 +586,38 @@ class EmployerJobApplicationsView
                                     controller.shortListApplication(
                                         controller.jobApplications[index].id);
                                   },
-                            icon: controller.applicationShortListing.value ==
-                                    controller.jobApplications[index].id
-                                ? const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                          height: 16,
-                                          width: 16,
-                                          child: CircularProgressIndicator())
-                                    ],
-                                  )
-                                : ImageIcon(
-                                    AssetImage(controller.jobApplications[index]
-                                                .applicationStatus ==
-                                            ApplicationStatus.SHORT_LISTED
-                                        ? 'assets/icons/bookmark_filled.png'
-                                        : 'assets/icons/bookmark_outlined.png'),
-                                    color: controller.jobApplications[index]
-                                                .applicationStatus ==
-                                            ApplicationStatus.SHORT_LISTED
-                                        ? Colors.blue
-                                        : Colors.black,
-                                    size: controller.jobApplications[index]
-                                                .applicationStatus ==
-                                            ApplicationStatus.SHORT_LISTED
-                                        ? 30
-                                        : 29,
-                                  ),
+                            icon: Obx(() {
+                              return controller.applicationShortListing.value ==
+                                      controller.jobApplications[index].id
+                                  ? const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                            height: 16,
+                                            width: 16,
+                                            child: CircularProgressIndicator())
+                                      ],
+                                    )
+                                  : ImageIcon(
+                                      AssetImage(controller
+                                                  .jobApplications[index]
+                                                  .applicationStatus ==
+                                              ApplicationStatus.SHORT_LISTED
+                                          ? 'assets/icons/bookmark_filled.png'
+                                          : 'assets/icons/bookmark_outlined.png'),
+                                      color: controller.jobApplications[index]
+                                                  .applicationStatus ==
+                                              ApplicationStatus.SHORT_LISTED
+                                          ? Colors.blue
+                                          : Colors.black,
+                                      size: controller.jobApplications[index]
+                                                  .applicationStatus ==
+                                              ApplicationStatus.SHORT_LISTED
+                                          ? 30
+                                          : 29,
+                                    );
+                            }),
                           ),
                         ),
                       ),

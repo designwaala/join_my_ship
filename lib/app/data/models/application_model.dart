@@ -1,5 +1,6 @@
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
+import 'package:collection/collection.dart';
 
 enum ApplicationStatus {
   APPLIED,
@@ -42,7 +43,11 @@ class Application {
         : null;
     userDetails = json['crew_details_user'] == null
         ? null
-        : UserDetails.fromJson(json['crew_details_user']);
+        : json['crew_details_user'] is List
+            ? (json['crew_details_user'] as List).firstOrNull == null
+                ? null
+                : UserDetails.fromJson(json['crew_details_user'].first)
+            : UserDetails.fromJson(json['crew_details_user']);
     applicationStatus = () {
       switch (json['selected_jobs']) {
         case 1:

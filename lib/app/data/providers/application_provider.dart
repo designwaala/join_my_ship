@@ -45,7 +45,7 @@ class ApplicationProvider extends WrapperConnect {
             host: "designwaala.me",
             path: "employer/applicants_list/$jobId",
             queryParameters: {
-          if (ranks != null) "ranks": ranks.map((e) => e.toString()).toList(),
+          if (ranks != null) "rank": ranks.map((e) => e.toString()).toList(),
           if (genders != null)
             "gender": genders.map((e) => e.toString()).toList(),
           if (statuses != null)

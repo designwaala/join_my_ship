@@ -134,7 +134,7 @@ class HomeView extends GetView<HomeController> {
               body: () {
                 switch (controller.currentIndex.value) {
                   case 1:
-                    return _buildBody(controller: controller);
+                    return _buildBody();
                   case 2:
                     return const SizedBox();
                   case 3:
@@ -224,311 +224,311 @@ class HomeView extends GetView<HomeController> {
       );
     });
   }
-}
 
-_buildBody({required HomeController controller}) {
-  return Column(
-    children: [
-      Stack(
-        children: [
-          ClipPath(
-            clipper:
-                CustomShape(), // this is my own class which extendsCustomClipper
-            child: Container(
-              height: 210,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                Color.fromRGBO(1, 66, 211, 1),
-                Color.fromRGBO(64, 123, 255, 1)
-              ])),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  (Get.mediaQuery.viewPadding.top + 26).verticalSpace,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      16.horizontalSpace,
-                      InkWell(
-                        child:
-                            const Icon(Icons.menu_sharp, color: Colors.white),
-                        onTap: () =>
-                            controller.scaffoldKey.currentState?.openDrawer(),
-                      ),
-                      16.horizontalSpace,
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Welcome",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white)),
-                          Text("Ashutosh Mehta",
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white))
-                        ],
-                      ),
-                      const Spacer(),
-                      const Icon(Icons.notifications, color: Colors.white),
-                      16.horizontalSpace
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 28,
-            right: 28,
-            child: PhysicalModel(
-              borderRadius: BorderRadius.circular(64),
-              color: Colors.white,
-              elevation: 5.0,
-              shadowColor: const Color.fromRGBO(46, 4, 142, 0.08),
-              child: TextFormField(
-                decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    hintText: "Search job here...",
-                    prefixIcon:
-                        Icon(Icons.search, color: Get.theme.primaryColor),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(64))),
-              ),
-            ),
-          ),
-        ],
-      ),
-      Expanded(
-          child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          16.verticalSpace,
-          Stack(
-            children: [
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                height: 95.h,
-                width: double.maxFinite,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey.shade500,
-                          blurRadius: 4,
-                          offset: const Offset(4, 4))
-                    ],
-                    borderRadius: BorderRadius.circular(22.r),
-                    gradient: const LinearGradient(colors: [
-                      Color.fromRGBO(1, 66, 211, 1),
-                      Color.fromRGBO(92, 197, 255, 1)
-                    ])),
+  _buildBody() {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            ClipPath(
+              clipper:
+                  CustomShape(), // this is my own class which extendsCustomClipper
+              child: Container(
+                height: 210,
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Color.fromRGBO(1, 66, 211, 1),
+                  Color.fromRGBO(64, 123, 255, 1)
+                ])),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    10.verticalSpace,
-                    Text("Recommended Jobs",
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white)),
-                    6.verticalSpace,
-                    Text(
-                        "See our recommended jobs for \nyou based on your rank",
-                        style: TextStyle(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white))
+                    (Get.mediaQuery.viewPadding.top + 26).verticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        16.horizontalSpace,
+                        InkWell(
+                          child:
+                              const Icon(Icons.menu_sharp, color: Colors.white),
+                          onTap: () =>
+                              controller.scaffoldKey.currentState?.openDrawer(),
+                        ),
+                        16.horizontalSpace,
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Welcome",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white)),
+                            Text("Ashutosh Mehta",
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white))
+                          ],
+                        ),
+                        const Spacer(),
+                        const Icon(Icons.notifications, color: Colors.white),
+                        16.horizontalSpace
+                      ],
+                    ),
                   ],
                 ),
               ),
-              Positioned(
-                right: 32,
-                top: 0,
-                child: Image.asset(
-                  "assets/images/dashboard/recommended_jobs.png",
-                  height: 94.h,
-                  width: 99.w,
-                ),
-              )
-            ],
-          ),
-          8.verticalSpace,
-          Row(
-            children: [
-              28.horizontalSpace,
-              Text("Featured Companies",
-                  style: Get.textTheme.bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w600, fontSize: 18.sp)),
-              const Spacer(),
-              Text("More",
-                  style: Get.textTheme.bodyMedium
-                      ?.copyWith(color: Get.theme.primaryColor)),
-              28.horizontalSpace
-            ],
-          ),
-          12.verticalSpace,
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 28,
+              right: 28,
+              child: PhysicalModel(
+                borderRadius: BorderRadius.circular(64),
                 color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.1),
-                      blurRadius: 8,
-                      spreadRadius: 2)
-                ]),
-            child: Row(
+                elevation: 5.0,
+                shadowColor: const Color.fromRGBO(46, 4, 142, 0.08),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      hintText: "Search job here...",
+                      prefixIcon:
+                          Icon(Icons.search, color: Get.theme.primaryColor),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(64))),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+            child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            16.verticalSpace,
+            Stack(
               children: [
                 Container(
-                  height: 50.h,
-                  width: 50.h,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  height: 95.h,
+                  width: double.maxFinite,
                   decoration: BoxDecoration(
-                      color: const Color.fromRGBO(86, 175, 246, 1),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: const Center(
-                      child: Text("W",
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.shade500,
+                            blurRadius: 4,
+                            offset: const Offset(4, 4))
+                      ],
+                      borderRadius: BorderRadius.circular(22.r),
+                      gradient: const LinearGradient(colors: [
+                        Color.fromRGBO(1, 66, 211, 1),
+                        Color.fromRGBO(92, 197, 255, 1)
+                      ])),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      10.verticalSpace,
+                      Text("Recommended Jobs",
                           style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white))),
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      6.verticalSpace,
+                      Text(
+                          "See our recommended jobs for \nyou based on your rank",
+                          style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white))
+                    ],
+                  ),
                 ),
-                20.horizontalSpace,
-                Flexible(
-                  child: Text("Westline Ship Management Pvt. Ltd.",
-                      maxLines: 2,
-                      style: Get.textTheme.bodyMedium?.copyWith(
-                          fontSize: 16, fontWeight: FontWeight.bold)),
+                Positioned(
+                  right: 32,
+                  top: 0,
+                  child: Image.asset(
+                    "assets/images/dashboard/recommended_jobs.png",
+                    height: 94.h,
+                    width: 99.w,
+                  ),
                 )
               ],
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.1),
-                      blurRadius: 8,
-                      spreadRadius: 2)
-                ]),
-            child: Row(
+            8.verticalSpace,
+            Row(
               children: [
-                Container(
-                  height: 50.h,
-                  width: 50.h,
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(254, 151, 56, 1),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: const Center(
-                      child: Text("D",
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white))),
-                ),
-                20.horizontalSpace,
-                Flexible(
-                  child: Text("DW Maritime Pvt. Ltd.",
-                      maxLines: 2,
-                      style: Get.textTheme.bodyMedium?.copyWith(
-                          fontSize: 16, fontWeight: FontWeight.bold)),
-                )
+                28.horizontalSpace,
+                Text("Featured Companies",
+                    style: Get.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600, fontSize: 18.sp)),
+                const Spacer(),
+                Text("More",
+                    style: Get.textTheme.bodyMedium
+                        ?.copyWith(color: Get.theme.primaryColor)),
+                28.horizontalSpace
               ],
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.1),
-                      blurRadius: 8,
-                      spreadRadius: 2)
-                ]),
-            child: Row(
-              children: [
-                Container(
-                  height: 50.h,
-                  width: 50.h,
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(14, 164, 199, 1),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: const Center(
-                      child: Text("B",
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white))),
-                ),
-                20.horizontalSpace,
-                Flexible(
-                  child: Text("Bridge Ship Management",
-                      maxLines: 2,
-                      style: Get.textTheme.bodyMedium?.copyWith(
-                          fontSize: 16, fontWeight: FontWeight.bold)),
-                )
-              ],
+            12.verticalSpace,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.1),
+                        blurRadius: 8,
+                        spreadRadius: 2)
+                  ]),
+              child: Row(
+                children: [
+                  Container(
+                    height: 50.h,
+                    width: 50.h,
+                    decoration: BoxDecoration(
+                        color: const Color.fromRGBO(86, 175, 246, 1),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: const Center(
+                        child: Text("W",
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white))),
+                  ),
+                  20.horizontalSpace,
+                  Flexible(
+                    child: Text("Westline Ship Management Pvt. Ltd.",
+                        maxLines: 2,
+                        style: Get.textTheme.bodyMedium?.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  )
+                ],
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.1),
-                      blurRadius: 8,
-                      spreadRadius: 2)
-                ]),
-            child: Row(
-              children: [
-                Container(
-                  height: 50.h,
-                  width: 50.h,
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(255, 111, 127, 1),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: const Center(
-                      child: Text("R",
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white))),
-                ),
-                20.horizontalSpace,
-                Flexible(
-                  child: Text("Rk Shipping Consultants",
-                      maxLines: 2,
-                      style: Get.textTheme.bodyMedium?.copyWith(
-                          fontSize: 16, fontWeight: FontWeight.bold)),
-                )
-              ],
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.1),
+                        blurRadius: 8,
+                        spreadRadius: 2)
+                  ]),
+              child: Row(
+                children: [
+                  Container(
+                    height: 50.h,
+                    width: 50.h,
+                    decoration: BoxDecoration(
+                        color: const Color.fromRGBO(254, 151, 56, 1),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: const Center(
+                        child: Text("D",
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white))),
+                  ),
+                  20.horizontalSpace,
+                  Flexible(
+                    child: Text("DW Maritime Pvt. Ltd.",
+                        maxLines: 2,
+                        style: Get.textTheme.bodyMedium?.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  )
+                ],
+              ),
             ),
-          ),
-          16.verticalSpace
-        ],
-      )),
-      // 65.verticalSpace
-    ],
-  );
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.1),
+                        blurRadius: 8,
+                        spreadRadius: 2)
+                  ]),
+              child: Row(
+                children: [
+                  Container(
+                    height: 50.h,
+                    width: 50.h,
+                    decoration: BoxDecoration(
+                        color: const Color.fromRGBO(14, 164, 199, 1),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: const Center(
+                        child: Text("B",
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white))),
+                  ),
+                  20.horizontalSpace,
+                  Flexible(
+                    child: Text("Bridge Ship Management",
+                        maxLines: 2,
+                        style: Get.textTheme.bodyMedium?.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.1),
+                        blurRadius: 8,
+                        spreadRadius: 2)
+                  ]),
+              child: Row(
+                children: [
+                  Container(
+                    height: 50.h,
+                    width: 50.h,
+                    decoration: BoxDecoration(
+                        color: const Color.fromRGBO(255, 111, 127, 1),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: const Center(
+                        child: Text("R",
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white))),
+                  ),
+                  20.horizontalSpace,
+                  Flexible(
+                    child: Text("Rk Shipping Consultants",
+                        maxLines: 2,
+                        style: Get.textTheme.bodyMedium?.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  )
+                ],
+              ),
+            ),
+            16.verticalSpace
+          ],
+        )),
+        // 65.verticalSpace
+      ],
+    );
+  }
 }
 
 class BottomIcon {

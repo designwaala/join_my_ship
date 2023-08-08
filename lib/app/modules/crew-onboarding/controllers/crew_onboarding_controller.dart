@@ -536,7 +536,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     isUpdating.value = true;
     UserDetails? userDetails;
     try {
-      if (this.userDetails?.id == null) {
+      if (userId == null) {
         userDetails = await getIt<UserDetailsProvider>().postUserDetails(
             UserDetails(
                 userId: userId,
