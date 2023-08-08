@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
 import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
@@ -111,7 +112,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                 ), */
                                 controller.userBeingDeleted.value ==
                                         secondaryUser.id
-                                    ? CircularProgressIndicator()
+                                    ? const CircularProgressIndicator()
                                     : PopupMenuButton(
                                         onSelected: (item) {},
                                         itemBuilder: (BuildContext context) =>
@@ -121,7 +122,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                               controller.deleteUser(
                                                   secondaryUser.id ?? -1);
                                             },
-                                            child: Text("Remove"),
+                                            child: const Text("Remove"),
                                           ),
                                         ],
                                       ),
@@ -156,7 +157,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                           children: [
                                             IconButton(
                                                 onPressed: () {},
-                                                icon: Icon(Icons.close,
+                                                icon: const Icon(Icons.close,
                                                     color: Colors.transparent)),
                                             Image.asset(
                                               "assets/images/employer_invite/employer_invite.png",
@@ -166,7 +167,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                             IconButton(
                                                 padding: EdgeInsets.zero,
                                                 onPressed: Get.back,
-                                                icon: Icon(Icons.close)),
+                                                icon: const Icon(Icons.close)),
                                           ],
                                         ),
                                         16.verticalSpace,
@@ -182,7 +183,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                             style: Get.textTheme.titleSmall
                                                 ?.copyWith(
                                                     fontWeight: FontWeight.w500,
-                                                    color: Color.fromRGBO(
+                                                    color: const Color.fromRGBO(
                                                         89, 89, 89, 1))),
                                         48.verticalSpace,
                                         CustomTextFormField(
@@ -190,7 +191,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                         ),
                                         16.verticalSpace,
                                         controller.isInvitingNewUser.value
-                                            ? Row(
+                                            ? const Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
@@ -204,9 +205,10 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
-                                                    Text("Invite"),
+                                                    const Text("Invite"),
                                                     8.horizontalSpace,
-                                                    Icon(Icons.send, size: 18)
+                                                    const Icon(Icons.send,
+                                                        size: 18)
                                                   ],
                                                 )),
                                         24.verticalSpace,
@@ -232,7 +234,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                       fontSize: 16.sp))),
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text("You can add a maximum of 3 users",
                           style: Get.textTheme.bodyMedium
                               ?.copyWith(color: Colors.grey[600])),
@@ -243,7 +245,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                 borderRadius: BorderRadius.circular(64),
                               ),
                               backgroundColor: Colors.white),
-                          onPressed: () {},
+                          onPressed: () => Get.toNamed(Routes.HELP),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
