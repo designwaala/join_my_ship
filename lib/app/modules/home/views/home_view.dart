@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:join_mp_ship/app/modules/job_openings/views/job_openings_view.dart';
 import 'package:join_mp_ship/app/modules/profile/views/profile_view.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
@@ -25,37 +26,111 @@ class HomeView extends GetView<HomeController> {
           children: [
             Scaffold(
               key: controller.scaffoldKey,
-              drawer: Container(
-                  color: Colors.white,
-                  width: Get.width * 0.75,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          32.verticalSpace,
-                          TextButton.icon(
-                              onPressed: () {
-                                Get.toNamed(Routes.CREW_JOB_APPLICATIONS);
-                              },
-                              icon: Image.asset(
-                                "assets/images/dashboard/jobs.png",
-                                height: 20,
-                                width: 20,
-                              ),
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.grey.shade700,
-                              ),
-                              label: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Text("Applied Jobs"),
-                              ))
-                        ],
+              drawer: SafeArea(
+                child: Drawer(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 10),
+                    child: CustomScrollView(slivers: [
+                      SliverList(
+                          delegate: SliverChildListDelegate([
+                        const ListTile(
+                          leading: SizedBox(
+                            height: 45,
+                            width: 45,
+                            child: ImageIcon(
+                              AssetImage("assets/icons/avatar.png"),
+                            ),
+                          ),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                          title: Text("Prafull Swarnkar"),
+                          subtitle: Text(
+                            "abc@email.com",
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ),
+                        ...controller.drawerButtons.map((button) {
+                          final selected = button["title"] ==
+                              controller.selectedDrawerButton.value;
+                          return ListTile(
+                            selected: selected,
+                            selectedTileColor:
+                                const Color.fromARGB(255, 239, 246, 255),
+                            contentPadding: const EdgeInsets.all(0),
+                            title: Row(
+                              children: [
+                                15.horizontalSpace,
+                                ImageIcon(
+                                  AssetImage(button["iconPath"]),
+                                  color:
+                                      selected ? Colors.blue : Colors.black54,
+                                  size: button["iconSize"],
+                                ),
+                                (15 + 22 - button["iconSize"]).horizontalSpace,
+                                Text(
+                                  button["title"],
+                                  style: Get.textTheme.bodyMedium?.copyWith(
+                                      fontSize: 15,
+                                      color: selected
+                                          ? Colors.blue
+                                          : Colors.black),
+                                ),
+                              ],
+                            ),
+                            trailing: button['title'] == "Notifications"
+                                ? Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    color: Colors.redAccent,
+                                    child: const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 6, vertical: 1),
+                                      child: Text(
+                                        "2",
+                                        style: TextStyle(
+                                            fontSize: 11, color: Colors.white),
+                                      ),
+                                    ),
+                                  )
+                                : 0.horizontalSpace,
+                            onTap: () {
+                              controller.selectedDrawerButton.value =
+                                  button["title"];
+                              controller.scaffoldKey.currentState
+                                  ?.closeDrawer();
+                              button["onTap"].call();
+                            },
+                          );
+                        }).toList(),
+                      ])),
+                      SliverFillRemaining(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Join My Ship",
+                              style: Get.theme.textTheme.bodyMedium?.copyWith(
+                                  color: Colors.blue,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily:
+                                      GoogleFonts.racingSansOne().fontFamily),
+                            ),
+                            const Text(
+                              "www.joinmyship.com",
+                              style: TextStyle(fontSize: 10),
+                            ),
+                            30.verticalSpace,
+                          ],
+                        ),
                       ),
-                    ),
-                  )),
+                    ]),
+                  ),
+                ),
+              ),
               body: () {
                 switch (controller.currentIndex.value) {
                   case 1:
@@ -66,8 +141,8 @@ class HomeView extends GetView<HomeController> {
                     return const SizedBox();
                   case 4:
                     return UserStates.instance.crewUser?.userTypeKey == 2
-                        ? JobOpeningsView()
-                        : SizedBox();
+                        ? const JobOpeningsView()
+                        : const SizedBox();
                   case 5:
                     return const ProfileView();
                   default:
@@ -174,25 +249,22 @@ class HomeView extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         16.horizontalSpace,
-                        IconButton(
-                            onPressed: () {
-                              controller.scaffoldKey.currentState?.openDrawer();
-                            },
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(maxWidth: 24),
-                            icon: const Icon(Icons.menu_sharp,
-                                color: Colors.white)),
+                        InkWell(
+                          child:
+                              const Icon(Icons.menu_sharp, color: Colors.white),
+                          onTap: () =>
+                              controller.scaffoldKey.currentState?.openDrawer(),
+                        ),
                         16.horizontalSpace,
-                        Column(
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Welcome",
+                            Text("Welcome",
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.white)),
-                            Text(
-                                "${UserStates.instance.crewUser?.firstName} ${UserStates.instance.crewUser?.lastName}",
+                            Text("Ashutosh Mehta",
                                 style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.w600,
