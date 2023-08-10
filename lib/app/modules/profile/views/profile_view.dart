@@ -25,10 +25,30 @@ class ProfileView extends GetView<ProfileController> {
     return Scaffold(
         key: controller.parentKey,
         appBar: AppBar(
-          title: const Text('My Profile'),
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-        ),
+            foregroundColor: const Color(0xFF000000),
+            toolbarHeight: 70,
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            title: Text('Profile',
+                style: Get.theme.textTheme.headlineSmall?.copyWith(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600)),
+            leading: InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                    color: Color(0xFFF3F3F3), shape: BoxShape.circle),
+                child: const Icon(
+                  Icons.keyboard_backspace_rounded,
+                  color: Colors.black,
+                ),
+              ),
+            )),
         body: Obx(() {
           return controller.isLoading.value
               ? const Center(child: CircularProgressIndicator())
@@ -344,14 +364,15 @@ class ProfileView extends GetView<ProfileController> {
                       Center(
                         child: Text("Terms and conditions",
                             style: Get.textTheme.bodyMedium?.copyWith(
-                                fontSize: 8.sp, color: Get.theme.primaryColor)),
+                                fontSize: 12.sp,
+                                color: Get.theme.primaryColor)),
                       ),
                       6.verticalSpace,
                       Center(
                         child: Text("www.joinmyship.com",
                             style: Get.textTheme.bodyMedium?.copyWith(
                                 color: Colors.grey,
-                                fontSize: 10.sp,
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.w400)),
                       ),
                       28.verticalSpace

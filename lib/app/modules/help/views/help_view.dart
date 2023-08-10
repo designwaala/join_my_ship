@@ -45,8 +45,8 @@ class HelpView extends GetView<HelpController> {
             Center(
               child: SvgPicture.asset(
                 'assets/images/logo.svg',
-                height: 75.h,
-                width: 60.w,
+                height: 80.h,
+                width: 70.w,
                 color: const Color(0xFF407BFF),
                 // colorFilter:
                 //     ColorFilter.mode(Get.theme.primaryColor, BlendMode.srcIn),
@@ -56,7 +56,7 @@ class HelpView extends GetView<HelpController> {
               child: Text("Join My Ship",
                   style: Get.theme.textTheme.bodyMedium?.copyWith(
                       color: const Color(0xFF407BFF),
-                      fontSize: 22,
+                      fontSize: 24,
                       fontWeight: FontWeight.w400,
                       fontFamily: GoogleFonts.racingSansOne().fontFamily)),
             ),
@@ -64,7 +64,7 @@ class HelpView extends GetView<HelpController> {
               child: Text("www.joinmyship.com",
                   style: GoogleFonts.poppins(
                     color: const Color(0xFF000000),
-                    fontSize: 7,
+                    fontSize: 10,
                     fontWeight: FontWeight.w400,
                   )),
             ),
@@ -79,8 +79,8 @@ class HelpView extends GetView<HelpController> {
                 )),
             40.verticalSpace,
             Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const ImageIcon(AssetImage("assets/icons/email.png"),
                       color: Color(0xFF407BFF)),
@@ -101,8 +101,8 @@ class HelpView extends GetView<HelpController> {
                 )),
             22.verticalSpace,
             Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const ImageIcon(AssetImage("assets/icons/linkedin.png"),
                       color: Color(0xFF407BFF)),

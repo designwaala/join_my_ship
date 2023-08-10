@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:lottie/lottie.dart';
 import 'package:get/get.dart';
 
 class ResetPasswordEmailVerificationView extends GetView {
@@ -38,9 +38,16 @@ class ResetPasswordEmailVerificationView extends GetView {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/email_verification/arrow.png',
-                height: 80,
+              SizedBox(
+                width: Get.width,
+                height: 200,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Lottie.asset(
+                    'assets/animations/arrow_mail.json',
+                    animate: true,
+                  ),
+                ),
               ),
               50.verticalSpace,
               Text(

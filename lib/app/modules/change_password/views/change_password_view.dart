@@ -52,7 +52,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                     style: Get.theme.textTheme.headlineSmall?.copyWith(
                         color: Colors.black,
                         fontSize: 20,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.bold),
                   ),
                   10.verticalSpace,
                   const Text("Please enter your new password",
