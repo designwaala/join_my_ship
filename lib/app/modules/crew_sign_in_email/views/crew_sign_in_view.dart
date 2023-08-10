@@ -14,7 +14,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: controller.parentKey,
-        backgroundColor: Color(0xFFFbF6FF),
+        backgroundColor: const Color(0xFFFbF6FF),
         appBar: AppBar(
           toolbarHeight: 70,
           title: Text('JOIN MY SHIP',
@@ -28,15 +28,15 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
             child: Container(
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-              child: Icon(
+              child: const Icon(
                 Icons.keyboard_backspace_rounded,
                 color: Colors.black,
               ),
             ),
           ),
-          centerTitle: false,
+          centerTitle: true,
         ),
         body: Obx(() {
           return CustomScrollView(
@@ -53,7 +53,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                       Text("Sign In",
                           style: Get.theme.textTheme.headlineSmall
                               ?.copyWith(fontWeight: FontWeight.bold)),
-                      Text("Please sign in to your registered\naccount"),
+                      const Text("Please sign in to your registered\naccount"),
                       20.verticalSpace,
                       TextFormField(
                         controller: controller.emailController,
@@ -90,7 +90,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                         width: double.maxFinite,
                         height: 64.h,
                         child: controller.isVerifying.value
-                            ? Row(
+                            ? const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   CircularProgressIndicator(),
@@ -102,7 +102,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                                         borderRadius:
                                             BorderRadius.circular(64))),
                                 onPressed: controller.verify,
-                                child: Text("LOGIN")),
+                                child: const Text("LOGIN")),
                       ),
                       18.verticalSpace,
                       RichText(
@@ -123,7 +123,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                                     decoration: TextDecoration.underline))
                           ])),
                       38.verticalSpace,
-                      Center(child: Text("Or sign in with")),
+                      const Center(child: Text("Or sign in with")),
                       14.verticalSpace,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -138,7 +138,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(color: Colors.black)),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.phone_android_sharp,
                                 size: 32,
                               ),
@@ -147,9 +147,9 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                         ],
                       ),
                       4.verticalSpace,
-                      Center(child: Text('Mobile Number')),
-                      Spacer(),
-                      Divider(),
+                      const Center(child: Text('Mobile Number')),
+                      const Spacer(),
+                      const Divider(),
                       16.verticalSpace,
                       SizedBox(
                         width: double.maxFinite,
@@ -161,7 +161,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                             onPressed: () {
                               Get.toNamed(Routes.CHOOSE_USER);
                             },
-                            child: Text("CREATE ACCOUNT")),
+                            child: const Text("CREATE ACCOUNT")),
                       )
                     ],
                   ),

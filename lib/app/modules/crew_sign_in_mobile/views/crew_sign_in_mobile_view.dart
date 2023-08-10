@@ -17,7 +17,7 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
         key: controller.parentKey,
         backgroundColor: const Color(0xFFFbF6FF),
         appBar: AppBar(
-          toolbarHeight: 60,
+          toolbarHeight: 70,
           title: Text('JOIN MY SHIP',
               style: Get.theme.textTheme.headlineSmall?.copyWith(
                   color: Colors.black,
@@ -37,7 +37,7 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
               ),
             ),
           ),
-          centerTitle: false,
+          centerTitle: true,
         ),
         body: Obx(() {
           return CustomScrollView(
@@ -69,10 +69,10 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                               contentPadding: EdgeInsets.zero,
                               prefixIcon: Container(
                                 width: 72,
-                                margin: EdgeInsets.only(right: 8),
+                                margin: const EdgeInsets.only(right: 8),
                                 decoration: BoxDecoration(
                                     color: Colors.blue[50],
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(64),
                                         bottomLeft: Radius.circular(64))),
                                 child: InkWell(
@@ -150,10 +150,10 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                         width: double.maxFinite,
                         height: 64.h,
                         child: controller.isVerifying.value
-                            ? Row(
+                            ? const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const CircularProgressIndicator(),
+                                  CircularProgressIndicator(),
                                 ],
                               )
                             : ElevatedButton(
@@ -173,7 +173,7 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                         Center(
                             child: TextButton(
                                 onPressed: controller.sendOTP,
-                                child: Text("Resend OTP"))),
+                                child: const Text("Resend OTP"))),
                         24.verticalSpace,
                       ] else if (controller.isOTPSent.value) ...[
                         Center(
@@ -207,7 +207,7 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                       4.verticalSpace,
                       const Center(child: Text('Email Id')),
                       const Spacer(),
-                      Divider(),
+                      const Divider(),
                       16.verticalSpace,
                       SizedBox(
                         width: double.maxFinite,

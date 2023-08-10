@@ -14,9 +14,9 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: controller.parentKey,
-        backgroundColor: Color(0xFFFbF6FF),
+        backgroundColor: const Color(0xFFFbF6FF),
         appBar: AppBar(
-          toolbarHeight: 60,
+          toolbarHeight: 70,
           title: Text('JOIN MY SHIP',
               style: Get.theme.textTheme.headlineSmall?.copyWith(
                   color: Colors.black,
@@ -28,15 +28,15 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
             child: Container(
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-              child: Icon(
+              child: const Icon(
                 Icons.keyboard_backspace_rounded,
                 color: Colors.black,
               ),
             ),
           ),
-          centerTitle: false,
+          centerTitle: true,
         ),
         body: Obx(() {
           return CustomScrollView(
@@ -53,7 +53,8 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                       Text("Sign In",
                           style: Get.theme.textTheme.headlineSmall
                               ?.copyWith(fontWeight: FontWeight.bold)),
-                      Text("Please sign in to your registered mobile\nnumber"),
+                      const Text(
+                          "Please sign in to your registered mobile\nnumber"),
                       20.verticalSpace,
                       SizedBox(
                         height: 64,
@@ -67,10 +68,10 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                               contentPadding: EdgeInsets.zero,
                               prefixIcon: Container(
                                 width: 72,
-                                margin: EdgeInsets.only(right: 8),
+                                margin: const EdgeInsets.only(right: 8),
                                 decoration: BoxDecoration(
                                     color: Colors.blue[50],
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(64),
                                         bottomLeft: Radius.circular(64))),
                                 child: InkWell(
@@ -126,7 +127,7 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                       ),
                       24.verticalSpace,
                       AnimatedCrossFade(
-                          firstChild: SizedBox(),
+                          firstChild: const SizedBox(),
                           secondChild: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -148,7 +149,7 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                         width: double.maxFinite,
                         height: 64.h,
                         child: controller.isVerifying.value
-                            ? Row(
+                            ? const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   CircularProgressIndicator(),
@@ -167,7 +168,7 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                                     : "SEND OTP")),
                       ),
                       32.verticalSpace,
-                      Spacer(),
+                      const Spacer(),
                       Center(
                           child: Text("Already have an account?",
                               style: Get.textTheme.bodyMedium
@@ -183,7 +184,7 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                             onPressed: () {
                               Get.toNamed(Routes.SIGN_UP_EMAIL);
                             },
-                            child: Text("LOGIN")),
+                            child: const Text("LOGIN")),
                       )
                     ],
                   ),

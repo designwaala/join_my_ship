@@ -20,7 +20,7 @@ class JobAppliedSuccessfullyView
                 height: 180,
                 width: 180,
                 child: Lottie.asset('assets/animations/blue_tick.json',
-                    repeat: false),
+                    repeat: true),
               ),
               15.verticalSpace,
               const Text(

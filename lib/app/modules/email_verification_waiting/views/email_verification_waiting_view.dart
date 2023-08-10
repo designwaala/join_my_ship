@@ -58,7 +58,7 @@ class EmailVerificationWaitingView
                           ),
                         )
                       : null,
-              centerTitle: false,
+              centerTitle: true,
             ),
             body: Center(
               child: Column(
