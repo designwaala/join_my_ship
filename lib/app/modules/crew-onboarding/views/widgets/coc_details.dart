@@ -57,15 +57,8 @@ class COCDetails extends GetView<CrewOnboardingController> {
                     value: null,
                     isExpanded: true,
                     style: Get.textTheme.bodySmall,
-                    items: [
-                      "Indian",
-                      "UK",
-                      "Singapore",
-                      "New Zealand",
-                      "Panama",
-                      "Honduras",
-                      "Others"
-                    ]
+                    items: controller.cocs
+                        .map((e) => e.name)
                         .map((e) => DropdownMenuItem(
                             value: e,
                             onTap: () {
@@ -114,7 +107,7 @@ class COCDetails extends GetView<CrewOnboardingController> {
                                                   "You can select only 2 issuing authorities."));
                                         }
                                       }),
-                                  Text(e, style: Get.textTheme.titleMedium),
+                                  Text(e ?? "", style: Get.textTheme.titleMedium),
                                 ],
                               );
                             })))

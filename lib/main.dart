@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:join_mp_ship/app/data/providers/application_provider.dart';
+import 'package:join_mp_ship/app/data/providers/cdc_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
@@ -21,11 +22,13 @@ import 'package:join_mp_ship/app/data/providers/job_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_rank_with_wages_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_watch_keeping_post.dart';
 import 'package:join_mp_ship/app/data/providers/login_provider.dart';
+import 'package:join_mp_ship/app/data/providers/passport_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
 import 'package:join_mp_ship/app/data/providers/secondary_users_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
+import 'package:join_mp_ship/app/data/providers/stcw_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
@@ -104,5 +107,8 @@ void main() async {
     ..registerSingleton(JobCOPPostProvider())
     ..registerSingleton(JobWatchKeepingPostProvider())
     ..registerSingleton(JobRankWithWagesProvider())
-    ..registerSingleton(ApplicationProvider());
+    ..registerSingleton(ApplicationProvider())
+    ..registerSingleton(PassportIssuingAuthorityProvider())
+    ..registerSingleton(CdcIssuingAuthorityProvider())
+    ..registerSingleton(StcwIssuingAuthorityProvider());
 }

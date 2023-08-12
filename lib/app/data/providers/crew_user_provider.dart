@@ -33,7 +33,9 @@ class CrewUserProvider extends WrapperConnect {
     final response = await get<CrewUser>('crew/get_user',
         softRefresh: softRefresh, decoder: (map) => CrewUser.fromJson(map));
     UserStates.instance.crewUser = response.body;
-    await PreferencesHelper.instance.setUserId(response.body?.id);
+    if (response.body?.id != null) {
+      await PreferencesHelper.instance.setUserId(response.body!.id!);
+    }
     await PreferencesHelper.instance.setIsCrew(response.body?.userTypeKey == 2);
     return response.body;
   }

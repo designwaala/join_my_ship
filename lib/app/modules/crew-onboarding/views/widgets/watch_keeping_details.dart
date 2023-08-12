@@ -54,7 +54,8 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                   child: DropdownButton2<String>(
                     value: null,
                     isExpanded: true,
-                    items: ["Indian", "Panama", "Others"]
+                    items: controller.watchKeepings
+                        .map((e) => e.name)
                         .map((e) => DropdownMenuItem(
                             value: e,
                             onTap: () {
@@ -109,7 +110,7 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                                                   "You can select only 2 issuing authorities."));
                                         }
                                       }),
-                                  Text(e),
+                                  Text(e ?? ""),
                                 ],
                               );
                             })))

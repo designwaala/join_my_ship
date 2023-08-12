@@ -56,7 +56,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                     value: null,
                     isExpanded: true,
                     style: Get.textTheme.bodySmall,
-                    items: ["Indian", "Panama", "Others"]
+                    items: controller.cops.map((e) => e.name)
                         .map((e) => DropdownMenuItem(
                             value: e,
                             onTap: () {
@@ -105,7 +105,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                                   "You can select only 2 issuing authorities."));
                                         }
                                       }),
-                                  Text(e, style: Get.textTheme.titleMedium),
+                                  Text(e ?? "", style: Get.textTheme.titleMedium),
                                 ],
                               );
                             })))

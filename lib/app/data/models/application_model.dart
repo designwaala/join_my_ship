@@ -1,4 +1,5 @@
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/job_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
 import 'package:collection/collection.dart';
 
@@ -19,6 +20,24 @@ enum ApplicationStatus {
   }
 }
 
+class ApplicationList {
+  final int? count;
+  final int? next;
+  final int? previous;
+  final List<Application>? results;
+
+  const ApplicationList({this.count, this.next, this.previous, this.results});
+
+  factory ApplicationList.fromJson(Map<String, dynamic> json) {
+    return ApplicationList(
+        count: json['count'],
+        next: json['next'],
+        previous: json['previous'],
+        results: List<Application>.from(
+            json['results'].map((e) => Application.fromJson(e))));
+  }
+}
+
 class Application {
   int? id;
   int? userId;
@@ -26,6 +45,8 @@ class Application {
   UserDetails? userDetails;
   ApplicationStatus? applicationStatus;
   int? jobId;
+  int? rankId;
+  Job? jobData;
 
   Application(
       {this.id,
@@ -33,7 +54,9 @@ class Application {
       this.jobId,
       this.userData,
       this.applicationStatus,
-      this.userDetails});
+      this.userDetails,
+      this.rankId,
+      this.jobData});
 
   Application.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -58,7 +81,11 @@ class Application {
           return ApplicationStatus.RESUME_DOWNLOADED;
       }
     }();
-    jobId = json['job_id'];
+    rankId = json['rank_id'];
+    jobId = json['job_id'] is int? ? json['job_id'] : null;
+    jobData = json['job_id'] is Map<String, dynamic>
+        ? Job.fromJson(json['job_id'])
+        : null;
   }
 
   Map<String, String> toJson() {
@@ -67,6 +94,7 @@ class Application {
     data['user_id'] = userId?.toString();
     data['job_id'] = jobId?.toString();
     data['selected_jobs'] = applicationStatus?.id.toString();
+    data['rank_id'] = rankId?.toString();
     data.removeWhere((key, value) => value == null);
     return data.map((key, value) => MapEntry(key, value!));
   }

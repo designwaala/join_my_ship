@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 
 import '../controllers/choose_employer_controller.dart';
 
@@ -78,6 +79,15 @@ class ChooseEmployerView extends GetView<ChooseEmployerController> {
                                 fontWeight: FontWeight.bold)),
                       ),
                     )),
+            const Spacer(),
+            TextButton(
+                onPressed: () {
+                  PreferencesHelper.instance.setIsCrew(true);
+                  Get.toNamed(Routes.SIGN_UP_EMAIL,
+                      arguments: const SignUpEmailArguments(
+                          signUpType: SignUpType.crew));
+                },
+                child: const Text("Continue as Crew"))
           ],
         ),
       ),

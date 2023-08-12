@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 
 class HomeController extends GetxController {
   RxInt currentIndex = 1.obs;
@@ -34,7 +35,7 @@ class HomeController extends GetxController {
         "iconPath": "assets/icons/suitcase.png",
         "iconSize": 18.0,
         "onTap": () {
-          // TODO
+          Get.toNamed(Routes.CREW_JOB_APPLICATIONS);
         }
       },
       {

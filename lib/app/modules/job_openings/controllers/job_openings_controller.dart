@@ -20,6 +20,7 @@ import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:collection/collection.dart';
 
 class JobOpeningsController extends GetxController {
   Rxn<CrewUser> currentEmployerUser = Rxn();
@@ -44,6 +45,10 @@ class JobOpeningsController extends GetxController {
 
   RxList<Application> applications = RxList.empty();
 
+  Rxn<MapEntry<int, int>> selectedRank = Rxn();
+
+  RxnInt showErrorForJob = RxnInt();
+
   @override
   void onInit() {
     instantiate();
@@ -61,13 +66,16 @@ class JobOpeningsController extends GetxController {
       loadCOC(),
       loadCOP(),
       loadWatchKeeping(),
-      getJobApplications()
+      UserStates.instance.crewUser?.userTypeKey == 2
+          ? getJobApplications()
+          : Future.value(null)
     ]);
     isLoading.value = false;
   }
 
   Future<void> getJobApplications() async {
-    applications.value = await getIt<ApplicationProvider>().getAppliedJobList();
+    applications.value =
+        (await getIt<ApplicationProvider>().getAppliedJobList())?.results ?? [];
   }
 
   Future<void> applyFilters() async {
@@ -116,7 +124,10 @@ class JobOpeningsController extends GetxController {
     }
     applyingJob.value = jobId;
     Application? application = await getIt<ApplicationProvider>().apply(
-        Application(userId: PreferencesHelper.instance.userId, jobId: jobId));
+        Application(
+            userId: PreferencesHelper.instance.userId,
+            jobId: jobId,
+            rankId: selectedRank.value?.value));
     if (application?.id == null) {
       applyingJob.value = null;
       return;

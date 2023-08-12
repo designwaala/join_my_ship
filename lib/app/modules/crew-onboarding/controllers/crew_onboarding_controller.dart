@@ -11,26 +11,38 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:join_mp_ship/app/data/models/cdc_issuing_authority_model.dart';
+import 'package:join_mp_ship/app/data/models/coc_model.dart';
+import 'package:join_mp_ship/app/data/models/cop_model.dart';
 import 'package:join_mp_ship/app/data/models/country_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/passport_issuing_authority_model.dart';
 import 'package:join_mp_ship/app/data/models/previous_employer_model.dart';
 import 'package:join_mp_ship/app/data/models/previous_employer_reference_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
 import 'package:join_mp_ship/app/data/models/service_record_model.dart';
+import 'package:join_mp_ship/app/data/models/stcw_issuing_authority_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_type_model.dart';
+import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
+import 'package:join_mp_ship/app/data/providers/cdc_issuing_authority_provider.dart';
+import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
+import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/passport_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
 import 'package:join_mp_ship/app/data/providers/service_record_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
+import 'package:join_mp_ship/app/data/providers/stcw_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
+import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
@@ -62,6 +74,8 @@ enum Step1FormMiss {
 }
 
 enum Step2FormMiss {
+  cdcIssuingAuthority,
+  passportIssuingAuthority,
   stcwIssuingAuthority,
   cocIssuingAuthority,
   copIssuingAuthority,
@@ -176,6 +190,8 @@ class CrewOnboardingController extends GetxController with PickImage {
   RxList<IssuingAuthority> copIssuingAuthorities = RxList.empty();
   RxList<IssuingAuthority> watchKeepingIssuingAuthorities = RxList.empty();
 
+  Rxn<IssuingAuthority> cdcIssuingAuthority = Rxn();
+  Rxn<IssuingAuthority> passportIssuingAuthority = Rxn();
   int? userId;
 
   // List<VesselType> vesselTypes = [];
@@ -223,6 +239,13 @@ class CrewOnboardingController extends GetxController with PickImage {
   RxInt serviceRecordDeletingId = (-1).obs;
   RxInt previousEmployerReferenceDeletingId = (-1).obs;
 
+  List<CdcIssuingAuthority> cdcIssuingAuthorities = [];
+  List<PassportIssuingAuthority> passportIssuingAuthorities = [];
+  List<Coc> cocs = [];
+  List<Cop> cops = [];
+  List<WatchKeeping> watchKeepings = [];
+  List<StcwIssuingAuthority> stcws = [];
+
   @override
   void onInit() {
     CrewOnboardingArguments? args =
@@ -232,6 +255,24 @@ class CrewOnboardingController extends GetxController with PickImage {
     editMode = args?.editMode ?? false;
     instantiate();
     super.onInit();
+  }
+
+  Future<void> getAllIssuingAuthorities() async {
+    passportIssuingAuthorities =
+        (await getIt<PassportIssuingAuthorityProvider>()
+                .getPassportIssuingAuthority(2)) ??
+            [];
+    cdcIssuingAuthorities = (await getIt<CdcIssuingAuthorityProvider>()
+            .getCdcIssuingAuthorities(2)) ??
+        [];
+    cocs = (await getIt<CocProvider>().getCOCList(userType: 2)) ?? [];
+    cops = (await getIt<CopProvider>().getCOPList(userType: 2)) ?? [];
+    watchKeepings = (await getIt<WatchKeepingProvider>()
+            .getWatchKeepingList(userType: 2)) ??
+        [];
+    stcws = (await getIt<StcwIssuingAuthorityProvider>()
+            .getStcwIssuingAuthorities(2)) ??
+        [];
   }
 
   Future<void> getAndSetCurrentScreen() async {
@@ -246,6 +287,7 @@ class CrewOnboardingController extends GetxController with PickImage {
       userDetails =
           await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
       UserStates.instance.userDetails = userDetails;
+      await getAllIssuingAuthorities();
       await setStep2Fields();
     } else if (step.value == 3 &&
         (serviceRecords.isEmpty || previousEmployerReferences.isEmpty)) {
@@ -282,10 +324,11 @@ class CrewOnboardingController extends GetxController with PickImage {
     if (crewUser?.id != null) {
       await setStep1Fields();
     }
-    if (crewUser?.screenCheck == 1) {
+    if ((crewUser?.screenCheck ?? 0) == 1) {
       userDetails =
           await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
       UserStates.instance.userDetails = userDetails;
+      await getAllIssuingAuthorities();
       await setStep2Fields();
     } else if (crewUser?.screenCheck == 2) {
       serviceRecords.value =
@@ -327,6 +370,8 @@ class CrewOnboardingController extends GetxController with PickImage {
     copIssuingAuthorities.value = userDetails?.validCOPIssuingAuthority ?? [];
     watchKeepingIssuingAuthorities.value =
         userDetails?.validWatchKeepingIssuingAuthority ?? [];
+    cdcIssuingAuthority.value = userDetails?.cdcIssuingAuthority;
+    passportIssuingAuthority.value = userDetails?.passportIssuingAuthority;
     isHoldingValidCOC.value = cocIssuingAuthorities.isNotEmpty;
     isHoldingValidCOP.value = copIssuingAuthorities.isNotEmpty;
     isHoldingWatchKeeping.value = watchKeepingIssuingAuthorities.isNotEmpty;
@@ -467,13 +512,17 @@ class CrewOnboardingController extends GetxController with PickImage {
               addressCity: city.text,
               state: state.value?.id,
               promotionApplied: isLookingForPromotion.value,
-              screenCheck: 1,
               authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
           profilePicPath: pickedImage.value?.path,
           resumePath: pickedResume.value?.path);
       if ((statusCode ?? 999) < 300) {
         fToast.safeShowToast(
             child: successToast("Your account was successfully updated."));
+        userDetails =
+            await getIt<UserDetailsProvider>().getUserDetails(crewUser!.id!);
+        UserStates.instance.userDetails = userDetails;
+        await getAllIssuingAuthorities();
+        await setStep2Fields();
       } else {
         fToast.safeShowToast(child: errorToast("Error updating your account"));
       }
@@ -527,6 +576,12 @@ class CrewOnboardingController extends GetxController with PickImage {
         watchKeepingIssuingAuthorities.isEmpty) {
       step2FormMisses.add(Step2FormMiss.watchKeepingIssuingAuthority);
     }
+    if (cdcIssuingAuthority.value == null) {
+      step2FormMisses.add(Step2FormMiss.cdcIssuingAuthority);
+    }
+    if (passportIssuingAuthority.value == null) {
+      step2FormMisses.add(Step2FormMiss.passportIssuingAuthority);
+    }
     if (formKeyStep2.currentState?.validate() != true) {
       return false;
     }
@@ -535,10 +590,13 @@ class CrewOnboardingController extends GetxController with PickImage {
     }
     isUpdating.value = true;
     UserDetails? userDetails;
+    bool success = false;
     try {
-      if (userId == null) {
-        userDetails = await getIt<UserDetailsProvider>().postUserDetails(
-            UserDetails(
+      cdcIssuingAuthority.value?.validTill = cdcSeamanNumberValidTill.text;
+      passportIssuingAuthority.value?.validTill = passportValidTill.text;
+      if (this.userDetails?.id == null) {
+        final updatedCrewDetails = await getIt<UserDetailsProvider>()
+            .postUserDetails(UserDetails(
                 userId: userId,
                 iNDOSNumber: indosNumber.text.nullIfEmpty(),
                 cDCSeamanBookNumber: cdcSeamanNumber.text.nullIfEmpty(),
@@ -550,14 +608,21 @@ class CrewOnboardingController extends GetxController with PickImage {
                 sTCWIssuingAuthority: stcwIssuingAuthorities.nullIfEmpty(),
                 validCOCIssuingAuthority: cocIssuingAuthorities.nullIfEmpty(),
                 validCOPIssuingAuthority: copIssuingAuthorities.nullIfEmpty(),
+                cdcIssuingAuthority: cdcIssuingAuthority.value,
+                passportIssuingAuthority: passportIssuingAuthority.value,
                 validWatchKeepingIssuingAuthority:
                     watchKeepingIssuingAuthorities.nullIfEmpty(),
                 validUSVisaValidTill: usVisaValidTill.text.nullIfEmpty()));
+        userDetails = updatedCrewDetails;
         await getIt<CrewUserProvider>().updateCrewUser(
             crewId: crewUser?.id ?? -1, crewUser: CrewUser(screenCheck: 2));
+        if (updatedCrewDetails?.id != null) {
+          success = true;
+        }
+        step.value = 3;
       } else {
-        userDetails = await getIt<UserDetailsProvider>().patchUserDetails(
-            UserDetails(
+        final updatedCrewDetails = await getIt<UserDetailsProvider>()
+            .patchUserDetails(UserDetails(
                 id: this.userDetails?.id,
                 userId: userId,
                 iNDOSNumber: indosNumber.text.nullIfEmpty(),
@@ -570,9 +635,14 @@ class CrewOnboardingController extends GetxController with PickImage {
                 sTCWIssuingAuthority: stcwIssuingAuthorities.nullIfEmpty(),
                 validCOCIssuingAuthority: cocIssuingAuthorities.nullIfEmpty(),
                 validCOPIssuingAuthority: copIssuingAuthorities.nullIfEmpty(),
+                cdcIssuingAuthority: cdcIssuingAuthority.value,
+                passportIssuingAuthority: passportIssuingAuthority.value,
                 validWatchKeepingIssuingAuthority:
                     watchKeepingIssuingAuthorities.nullIfEmpty(),
                 validUSVisaValidTill: usVisaValidTill.text.nullIfEmpty()));
+        userDetails = updatedCrewDetails;
+        success = true;
+        step.value = 3;
       }
     } catch (e) {
       print("$e");
@@ -586,7 +656,7 @@ class CrewOnboardingController extends GetxController with PickImage {
               errorToast("Some error occurred while uploading your details"));
     }
     isUpdating.value = false;
-    return true;
+    return success;
   }
 
   step3SubmitOnPress() async {

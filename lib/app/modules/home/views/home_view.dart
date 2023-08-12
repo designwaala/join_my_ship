@@ -140,9 +140,7 @@ class HomeView extends GetView<HomeController> {
                   case 3:
                     return const SizedBox();
                   case 4:
-                    return UserStates.instance.crewUser?.userTypeKey == 2
-                        ? const JobOpeningsView()
-                        : const SizedBox();
+                    return const JobOpeningsView();
                   case 5:
                     return const ProfileView();
                   default:

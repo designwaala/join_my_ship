@@ -14,6 +14,8 @@ class UserDetails {
   List<IssuingAuthority>? validCOCIssuingAuthority;
   List<IssuingAuthority>? validCOPIssuingAuthority;
   List<IssuingAuthority>? validWatchKeepingIssuingAuthority;
+  IssuingAuthority? cdcIssuingAuthority;
+  IssuingAuthority? passportIssuingAuthority;
   bool? validUSVisa;
   String? validUSVisaValidTill;
 
@@ -31,6 +33,8 @@ class UserDetails {
       this.validCOCIssuingAuthority,
       this.validCOPIssuingAuthority,
       this.validWatchKeepingIssuingAuthority,
+      this.cdcIssuingAuthority,
+      this.passportIssuingAuthority,
       this.validUSVisa,
       this.validUSVisaValidTill});
 
@@ -86,6 +90,13 @@ class UserDetails {
                 : List<IssuingAuthority>.from(
                     jsonDecode(json['valid_Watch_keeping_Issuing_Authority'])
                         ?.map((e) => IssuingAuthority.fromJson(e)));
+    cdcIssuingAuthority = json['CDC_Issuing_Authority'] == null
+        ? null
+        : IssuingAuthority.fromJson(jsonDecode(json['CDC_Issuing_Authority']));
+    passportIssuingAuthority = json['Passport_Issuing_Authority'] == null
+        ? null
+        : IssuingAuthority.fromJson(
+            jsonDecode(json['Passport_Issuing_Authority']));
     validUSVisa = json['valid_US_Visa'];
     validUSVisaValidTill = json['valid_US_Visa_valid_till'];
   }
@@ -119,6 +130,9 @@ class UserDetails {
                 .toList());
     data['valid_US_Visa'] = validUSVisa?.toString();
     data['valid_US_Visa_valid_till'] = validUSVisaValidTill;
+    data['CDC_Issuing_Authority'] = jsonEncode(cdcIssuingAuthority?.toJson());
+    data['Passport_Issuing_Authority'] =
+        jsonEncode(passportIssuingAuthority?.toJson());
     data.removeWhere((key, value) => value == null);
     return data.map((key, value) => MapEntry(key, value!));
   }

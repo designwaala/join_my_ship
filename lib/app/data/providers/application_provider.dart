@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
+import 'package:collection/collection.dart';
 
 import '../models/application_model.dart';
 
@@ -15,9 +16,17 @@ class ApplicationProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
-  Future<List<Application>> getAppliedJobList() async {
+  Future<ApplicationList?> getAppliedJobList() async {
     final response = await get(
-        "employer/apply_job_list/${PreferencesHelper.instance.userId}");
+        "employer/apply_job_list/${PreferencesHelper.instance.userId}",
+        decoder: (map) => ApplicationList.fromJson(map));
+    return response.body;
+  }
+
+  Future<ApplicationList?> getAppliedJobListWithoutJobData() async {
+    final response = await get(
+        "employer/applled_job_list/${PreferencesHelper.instance.userId}",
+        decoder: (map) => ApplicationList.fromJson(map));
     return response.body;
   }
 

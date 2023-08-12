@@ -50,9 +50,9 @@ class PreferencesHelper {
       _sharedPreferences?.setString(_WEBSITE, value);
 
   bool? get isCrew => _sharedPreferences?.getBool(_IS_CREW);
-  Future<void>? setIsCrew(value) =>
+  Future<void>? setIsCrew(bool value) =>
       _sharedPreferences?.setBool(_IS_CREW, value);
 
   int? get userId => _sharedPreferences?.getInt(_USER_ID);
-  Future<void>? setUserId(value) => _sharedPreferences?.setInt(_USER_ID, value);
+  Future<void>? setUserId(int value) => _sharedPreferences?.setInt(_USER_ID, value);
 }

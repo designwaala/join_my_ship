@@ -7,6 +7,7 @@ import 'package:get_cli/get_cli.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
 import 'package:lottie/lottie.dart';
@@ -784,11 +785,22 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                                             mainAxisAlignment:
                                                                                 MainAxisAlignment.start,
                                                                             children: [
-                                                                              const Icon(
-                                                                                Icons.radio_button_checked,
-                                                                                color: Color.fromARGB(255, 169, 168, 170),
-                                                                                size: 20,
-                                                                              ),
+                                                                              UserStates.instance.crewUser?.rankId == rankWithWages.rankNumber || (UserStates.instance.crewUser?.promotionApplied == true && controller.ranks.firstWhereOrNull((rank) => UserStates.instance.crewUser?.rankId == rank.id)?.promotedTo == rankWithWages.rankNumber)
+                                                                                  ? SizedBox(
+                                                                                      height: 20,
+                                                                                      width: 20,
+                                                                                      child: Radio<int?>(
+                                                                                          value: controller.jobOpenings[index].id == controller.selectedRank.value?.key ? controller.selectedRank.value?.value : null,
+                                                                                          groupValue: rankWithWages.rankNumber,
+                                                                                          onChanged: (_) {
+                                                                                            print(controller.selectedRank);
+                                                                                            controller.selectedRank.value = MapEntry(controller.jobOpenings[index].id ?? -1, rankWithWages.rankNumber ?? -1);
+                                                                                          }))
+                                                                                  : const Icon(
+                                                                                      Icons.radio_button_checked,
+                                                                                      color: Color.fromARGB(255, 169, 168, 170),
+                                                                                      size: 20,
+                                                                                    ),
                                                                               10.horizontalSpace,
                                                                               Text(
                                                                                 controller.ranks.firstWhereOrNull((rank) => rank.id == rankWithWages.rankNumber)?.name ?? "",
@@ -801,6 +813,30 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                                     .toList() ??
                                                                 []),
                                                       ),
+                                                      if (controller
+                                                                  .selectedRank
+                                                                  .value
+                                                                  ?.key !=
+                                                              controller
+                                                                  .jobOpenings[
+                                                                      index]
+                                                                  .id &&
+                                                          controller
+                                                                  .showErrorForJob
+                                                                  .value ==
+                                                              controller
+                                                                  .jobOpenings[
+                                                                      index]
+                                                                  .id)
+                                                        Text(
+                                                            "Please select atleast one rank",
+                                                            style: Get.textTheme
+                                                                .bodySmall
+                                                                ?.copyWith(
+                                                                    color: Get
+                                                                        .theme
+                                                                        .colorScheme
+                                                                        .error)),
                                                       if (controller
                                                                   .jobOpenings[
                                                                       index]
@@ -1056,12 +1092,18 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                                       shape: RoundedRectangleBorder(
                                                                           borderRadius:
                                                                               BorderRadius.circular(18))),
-                                                                  onPressed: controller.applications.any((application) =>
-                                                                              application.jobId ==
-                                                                              controller.jobOpenings[index].id) ==
-                                                                          true
+                                                                  onPressed: controller.applications.any((application) => application.jobId == controller.jobOpenings[index].id || application.jobData?.id == controller.jobOpenings[index].id) ==
+                                                                              true ||
+                                                                          controller.jobOpenings[index].jobRankWithWages?.none((rankWithWage) => rankWithWage.rankNumber == UserStates.instance.crewUser?.rankId || (rankWithWage.rankNumber == controller.ranks.firstWhereOrNull((rank) => rank.id == UserStates.instance.crewUser?.rankId)?.promotedTo)) ==
+                                                                              true
                                                                       ? null
                                                                       : () {
+                                                                          if (controller.selectedRank.value?.key !=
+                                                                              controller.jobOpenings[index].id) {
+                                                                            controller.showErrorForJob.value =
+                                                                                controller.jobOpenings[index].id;
+                                                                            return;
+                                                                          }
                                                                           showDialog(
                                                                             context:
                                                                                 context,
@@ -1121,8 +1163,8 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                                         },
                                                                   child: Text(
                                                                     controller.applications.any((application) =>
-                                                                                application.jobId ==
-                                                                                controller.jobOpenings[index].id) ==
+                                                                                application.jobId == controller.jobOpenings[index].id ||
+                                                                                application.jobData?.id == controller.jobOpenings[index].id) ==
                                                                             true
                                                                         ? "APPLIED"
                                                                         : "APPLY NOW",

@@ -68,7 +68,7 @@ class EmployerJobApplicationsController extends GetxController {
     }
     jobApplications.value = (await getIt<ApplicationProvider>()
             .getApplicationsForAJob(args!.jobId!,
-                ranks: selectedRanks.value.nullIfEmpty(),
+                ranks: selectedRanks.nullIfEmpty(),
                 genders:
                     genderFilter.value == null ? null : [genderFilter.value!],
                 statuses: isShortlisted.value == null
