@@ -25,6 +25,7 @@ class JobProvider extends WrapperConnect {
             host: "designwaala.me",
             path: "employer/post_job_list",
             queryParameters: {
+          if (employerId != null) "emp_id": "$employerId",
           if (ranks?.isNotEmpty == true)
             "rank": ranks?.map((e) => e.toString()),
           if (vesselIds?.isNotEmpty == true)

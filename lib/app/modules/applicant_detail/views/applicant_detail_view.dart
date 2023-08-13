@@ -21,7 +21,7 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
         ),
         body: Obx(() {
           return controller.isLoading.value
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Center(
@@ -32,20 +32,44 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           children: [
                             36.verticalSpace,
-                            Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Get.theme.primaryColor),
-                                  shape: BoxShape.circle),
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(128),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        controller.applicant?.profilePic ?? "",
-                                    height: 100,
-                                    width: 100,
-                                  )),
+                            InkWell(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          content: CachedNetworkImage(
+                                              imageUrl: controller
+                                                      .applicant?.profilePic ??
+                                                  ""),
+                                          actions: [
+                                            FilledButton(
+                                                onPressed: Get.back,
+                                                child: Text("Cancel")),
+                                            8.horizontalSpace
+                                          ],
+                                        ));
+                              },
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    controller.applicant?.profilePic ?? "",
+                                height: 120,
+                                width: 120,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Get.theme.primaryColor),
+                                  ),
+                                  padding: const EdgeInsets.all(4),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover))),
+                                ),
+                              ),
                             ),
                             8.verticalSpace,
                             Center(
@@ -131,6 +155,48 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                                     textAlign: TextAlign.end,
                                   )
                                 ]),
+                                if (controller.applicantDetails
+                                        ?.cdcIssuingAuthority !=
+                                    null)
+                                  TableRow(children: [
+                                    Text("CDC",
+                                        style: Get.textTheme.titleMedium
+                                            ?.copyWith(
+                                                color: Get.theme.primaryColor)),
+                                    Text(
+                                      controller
+                                              .applicantDetails
+                                              ?.cdcIssuingAuthority
+                                              ?.customName ??
+                                          controller
+                                              .applicantDetails
+                                              ?.cdcIssuingAuthority
+                                              ?.issuingAuthority ??
+                                          "",
+                                      textAlign: TextAlign.end,
+                                    )
+                                  ]),
+                                if (controller.applicantDetails
+                                        ?.passportIssuingAuthority !=
+                                    null)
+                                  TableRow(children: [
+                                    Text("Passport",
+                                        style: Get.textTheme.titleMedium
+                                            ?.copyWith(
+                                                color: Get.theme.primaryColor)),
+                                    Text(
+                                      controller
+                                              .applicantDetails
+                                              ?.passportIssuingAuthority
+                                              ?.customName ??
+                                          controller
+                                              .applicantDetails
+                                              ?.passportIssuingAuthority
+                                              ?.issuingAuthority ??
+                                          "",
+                                      textAlign: TextAlign.end,
+                                    )
+                                  ]),
                                 if (controller
                                         .applicantDetails
                                         ?.validCOCIssuingAuthority
@@ -194,6 +260,25 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                                       textAlign: TextAlign.end,
                                     )
                                   ]),
+                                if (controller.applicantDetails
+                                        ?.sTCWIssuingAuthority?.isNotEmpty ==
+                                    true)
+                                  TableRow(children: [
+                                    Text("STCW",
+                                        style: Get.textTheme.titleMedium
+                                            ?.copyWith(
+                                                color: Get.theme.primaryColor)),
+                                    Text(
+                                      controller.applicantDetails
+                                              ?.sTCWIssuingAuthority
+                                              ?.map((e) =>
+                                                  e.issuingAuthority ??
+                                                  e.customName)
+                                              .join(", ") ??
+                                          "",
+                                      textAlign: TextAlign.end,
+                                    )
+                                  ]),
                               ]
                                   .map((e) => [
                                         e,
@@ -209,18 +294,81 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                         ),
                       ),
                       16.verticalSpace,
-                      Row(
-                        children: [
-                          Image.asset(
-                            controller.args?.application?.applicationStatus ==
-                                    ApplicationStatus.SHORT_LISTED
-                                ? 'assets/icons/bookmark_filled.png'
-                                : 'assets/icons/bookmark_outlined.png',
-                            height: 28,
-                            width: 28,
-                          )
-                        ],
-                      )
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Row(
+                          children: [
+                            controller.isShortListing.value
+                                ? CircularProgressIndicator()
+                                : InkWell(
+                                    onTap: controller.shortList,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                              color: Get.theme.primaryColor)),
+                                      child: Image.asset(
+                                        controller.application.value
+                                                    ?.shortlistedStatus ==
+                                                true
+                                            ? 'assets/icons/bookmark_filled.png'
+                                            : 'assets/icons/bookmark_outlined.png',
+                                        height: 28,
+                                        width: 28,
+                                        color: Get.theme.primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                            const Spacer(),
+                            controller.isGettingResume.value
+                                ? CircularProgressIndicator()
+                                : InkWell(
+                                    onTap: controller.downloadResume,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 8),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(64),
+                                          gradient:
+                                              const LinearGradient(colors: [
+                                            Color(0xFF386BF6),
+                                            Color(0xFF22D1EE),
+                                          ])),
+                                      child: Row(
+                                        children: [
+                                          Text("Download Resume",
+                                              style: Get.textTheme.titleMedium
+                                                  ?.copyWith(
+                                                      color: Colors.white)),
+                                          4.horizontalSpace,
+                                          const Icon(
+                                            Icons.download,
+                                            color: Colors.white,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Image.asset(
+                                controller.application.value
+                                            ?.shortlistedStatus ==
+                                        true
+                                    ? 'assets/icons/bookmark_filled.png'
+                                    : 'assets/icons/bookmark_outlined.png',
+                                height: 28,
+                                width: 28,
+                                color: Colors.transparent,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      32.verticalSpace,
                     ],
                   ),
                 );

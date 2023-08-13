@@ -312,6 +312,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.parentKey,
       appBar: AppBar(
         toolbarHeight: 70,
         backgroundColor: Colors.white,
@@ -502,7 +503,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                                             .jobOpenings[
                                                                                 index]
                                                                             .employerDetails
-                                                                            ?.username ??
+                                                                            ?.companyName ??
                                                                         "",
                                                                 overflow:
                                                                     TextOverflow
@@ -539,36 +540,52 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                               MainAxisAlignment
                                                                   .end,
                                                           children: [
-                                                            TextButton.icon(
-                                                              onPressed: () {},
-                                                              icon: const Icon(
-                                                                Icons.add,
-                                                                size: 20,
-                                                              ),
-                                                              label: const Text(
-                                                                  "Follow"),
-                                                              style: TextButton
-                                                                  .styleFrom(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left: 8,
-                                                                        right:
-                                                                            15),
-                                                                foregroundColor:
-                                                                    Colors
-                                                                        .white,
-                                                                backgroundColor:
-                                                                    Colors.blue,
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
-                                                                ),
-                                                              ),
-                                                            )
+                                                            UserStates
+                                                                        .instance
+                                                                        .crewUser
+                                                                        ?.userTypeKey ==
+                                                                    2
+                                                                ? controller.followingJob
+                                                                            .value ==
+                                                                        controller
+                                                                            .jobOpenings[
+                                                                                index]
+                                                                            .id
+                                                                    ? CircularProgressIndicator()
+                                                                    : TextButton
+                                                                        .icon(
+                                                                        onPressed:
+                                                                            () {
+                                                                          controller.followJob(
+                                                                              controller.jobOpenings[index].employerDetails?.id,
+                                                                              controller.jobOpenings[index].id);
+                                                                        },
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .add,
+                                                                          size:
+                                                                              20,
+                                                                        ),
+                                                                        label: const Text(
+                                                                            "Follow"),
+                                                                        style: TextButton
+                                                                            .styleFrom(
+                                                                          padding: const EdgeInsets.only(
+                                                                              left: 8,
+                                                                              right: 15),
+                                                                          foregroundColor:
+                                                                              Colors.white,
+                                                                          backgroundColor:
+                                                                              Colors.blue,
+                                                                          shape:
+                                                                              RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(20),
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                : const SizedBox()
                                                           ],
                                                         ),
                                                       !controller.isReferredJob
@@ -1092,10 +1109,11 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                                       shape: RoundedRectangleBorder(
                                                                           borderRadius:
                                                                               BorderRadius.circular(18))),
-                                                                  onPressed: controller.applications.any((application) => application.jobId == controller.jobOpenings[index].id || application.jobData?.id == controller.jobOpenings[index].id) ==
-                                                                              true ||
+                                                                  onPressed: controller.applications.any((application) => application.jobId == controller.jobOpenings[index].id || application.jobData?.id == controller.jobOpenings[index].id) == true ||
                                                                           controller.jobOpenings[index].jobRankWithWages?.none((rankWithWage) => rankWithWage.rankNumber == UserStates.instance.crewUser?.rankId || (rankWithWage.rankNumber == controller.ranks.firstWhereOrNull((rank) => rank.id == UserStates.instance.crewUser?.rankId)?.promotedTo)) ==
-                                                                              true
+                                                                              true ||
+                                                                          UserStates.instance.crewUser?.userTypeKey !=
+                                                                              2
                                                                       ? null
                                                                       : () {
                                                                           if (controller.selectedRank.value?.key !=

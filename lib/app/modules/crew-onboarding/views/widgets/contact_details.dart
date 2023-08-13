@@ -24,8 +24,12 @@ class ContactDetails extends GetView<CrewOnboardingController> {
           Text("Contact details", style: headingStyle),
           16.verticalSpace,
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Mobile Number"),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: const Text("Mobile Number"),
+              ),
               32.horizontalSpace,
               Expanded(
                   child: Column(

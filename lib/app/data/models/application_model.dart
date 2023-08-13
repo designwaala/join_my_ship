@@ -3,7 +3,7 @@ import 'package:join_mp_ship/app/data/models/job_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
 import 'package:collection/collection.dart';
 
-enum ApplicationStatus {
+/* enum ApplicationStatus {
   APPLIED,
   SHORT_LISTED,
   RESUME_DOWNLOADED;
@@ -18,7 +18,7 @@ enum ApplicationStatus {
         return 3;
     }
   }
-}
+} */
 
 class ApplicationList {
   final int? count;
@@ -43,20 +43,28 @@ class Application {
   int? userId;
   CrewUser? userData;
   UserDetails? userDetails;
-  ApplicationStatus? applicationStatus;
+  // ApplicationStatus? applicationStatus;
   int? jobId;
   int? rankId;
   Job? jobData;
+  bool? appliedStatus;
+  bool? shortlistedStatus;
+  bool? resumeStatus;
+  bool? viewedStatus;
 
   Application(
       {this.id,
       this.userId,
       this.jobId,
       this.userData,
-      this.applicationStatus,
+      // this.applicationStatus,
       this.userDetails,
       this.rankId,
-      this.jobData});
+      this.jobData,
+      this.appliedStatus,
+      this.shortlistedStatus,
+      this.resumeStatus,
+      this.viewedStatus});
 
   Application.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -71,21 +79,26 @@ class Application {
                 ? null
                 : UserDetails.fromJson(json['crew_details_user'].first)
             : UserDetails.fromJson(json['crew_details_user']);
-    applicationStatus = () {
-      switch (json['selected_jobs']) {
-        case 1:
-          return ApplicationStatus.APPLIED;
-        case 2:
-          return ApplicationStatus.SHORT_LISTED;
-        case 3:
-          return ApplicationStatus.RESUME_DOWNLOADED;
-      }
-    }();
+    // applicationStatus = () {
+    //   switch (json['selected_jobs']) {
+    //     case 1:
+    //       return ApplicationStatus.APPLIED;
+    //     case 2:
+    //       return ApplicationStatus.SHORT_LISTED;
+    //     case 3:
+    //       return ApplicationStatus.RESUME_DOWNLOADED;
+    //   }
+    // }();
+
     rankId = json['rank_id'];
     jobId = json['job_id'] is int? ? json['job_id'] : null;
     jobData = json['job_id'] is Map<String, dynamic>
         ? Job.fromJson(json['job_id'])
         : null;
+    appliedStatus = json['aplied_status'];
+    shortlistedStatus = json['shortlisted_status'];
+    resumeStatus = json['resume_status'];
+    viewedStatus = json['viewed_status'];
   }
 
   Map<String, String> toJson() {
@@ -93,8 +106,11 @@ class Application {
     data['id'] = id?.toString();
     data['user_id'] = userId?.toString();
     data['job_id'] = jobId?.toString();
-    data['selected_jobs'] = applicationStatus?.id.toString();
     data['rank_id'] = rankId?.toString();
+    data['aplied_status'] = appliedStatus?.toString();
+    data['shortlisted_status'] = shortlistedStatus?.toString();
+    data['resume_status'] = resumeStatus?.toString();
+    data['viewed_status'] = viewedStatus?.toString();
     data.removeWhere((key, value) => value == null);
     return data.map((key, value) => MapEntry(key, value!));
   }

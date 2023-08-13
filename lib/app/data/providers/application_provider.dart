@@ -23,10 +23,11 @@ class ApplicationProvider extends WrapperConnect {
     return response.body;
   }
 
-  Future<ApplicationList?> getAppliedJobListWithoutJobData() async {
+  Future<List<Application>?> getAppliedJobListWithoutJobData() async {
     final response = await get(
         "employer/applled_job_list/${PreferencesHelper.instance.userId}",
-        decoder: (map) => ApplicationList.fromJson(map));
+        decoder: (map) =>
+            List<Application>.from((map).map((e) => Application.fromJson(e))));
     return response.body;
   }
 
@@ -47,7 +48,10 @@ class ApplicationProvider extends WrapperConnect {
   Future<List<Application>?> getApplicationsForAJob(int jobId,
       {List<int>? ranks,
       List<int>? genders,
-      List<ApplicationStatus>? statuses}) async {
+      int? appliedStatus,
+      int? shortlistedStatus,
+      int? resumeStatus,
+      int? viewedStatus}) async {
     final response = await httpGet(
         uri: Uri(
             scheme: "https",
@@ -57,8 +61,11 @@ class ApplicationProvider extends WrapperConnect {
           if (ranks != null) "rank": ranks.map((e) => e.toString()).toList(),
           if (genders != null)
             "gender": genders.map((e) => e.toString()).toList(),
-          if (statuses != null)
-            "status": statuses.map((e) => e.id.toString()).toList(),
+          if (appliedStatus != null) "aplied_status": appliedStatus.toString(),
+          if (shortlistedStatus != null)
+            "shortlisted_status": shortlistedStatus.toString(),
+          if (resumeStatus != null) "resume_status": resumeStatus.toString(),
+          if (viewedStatus != null) "viewed_status": viewedStatus.toString()
         })
         // "employer/applicants_list/$jobId?${query.map((e) => "${e.key}=${e.value}").join("?")}"
         );
@@ -71,17 +78,26 @@ class ApplicationProvider extends WrapperConnect {
   Future<Application?> shortListApplication(int applicationId) async {
     final response = await multipartPatch(
         "employer/applicants_update/$applicationId",
-        Application(applicationStatus: ApplicationStatus.SHORT_LISTED)
-            .toJson());
+        Application(shortlistedStatus: true).toJson());
     return Application.fromJson(response);
   }
 
-  Future<Application?> downloadResumeForApplication(int jobId) async {
+  Future<Application?> viewApplication(int applicationId) async {
+    final response = await multipartPatch(
+        "employer/applicants_update/$applicationId",
+        Application(viewedStatus: true).toJson());
+    return Application.fromJson(response);
+  }
+
+/*   Future<Application?> downloadResumeForApplication(int jobId) async {
     final response = await multipartPatch("employer/applicants_update/$jobId",
         Application(applicationStatus: ApplicationStatus.RESUME_DOWNLOADED));
     return Application.fromJson(response);
-  }
+  } */
 
-  Future<Response> deleteApplication(int id) async =>
-      await delete('application/$id');
+  Future<String?> downloadResumeForApplication(int jobId, int crewId) async {
+    final response = await get("crew/resume/download/$crewId/$jobId",
+        decoder: (map) => map['resume_download_url']);
+    return response.body;
+  }
 }

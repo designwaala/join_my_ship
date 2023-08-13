@@ -58,23 +58,13 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                           SizedBox(
                             height: 20.h,
                           ),
-                          Text(
-                            'Create User Profile',
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                          Text('Create User Profile',
+                              style: Get.theme.textTheme.headlineSmall
+                                  ?.copyWith(fontSize: 20)),
                           9.verticalSpace,
-                          Text(
-                            'Please complete your profile',
-                            style: GoogleFonts.poppins(
-                              color: const Color(0xFF585858),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
+                          Text('Please complete your profile',
+                              style: Get.textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.grey)),
                           25.verticalSpace,
                           InkWell(
                               onTap: controller.pickSource,
@@ -148,21 +138,16 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                                     )),
                           12.verticalSpace,
                           Center(
-                            child: Text(
-                              'Upload Profile Pic',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                color: const Color(0xFF407BFF),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
+                            child: Text('Upload Profile Pic',
+                                textAlign: TextAlign.center,
+                                style: Get.textTheme.bodyMedium
+                                    ?.copyWith(color: Get.theme.primaryColor)),
                           ),
                           if (controller.step1FormMisses.contains(
                               Step1FormMiss.didNotSelectProfilePic)) ...[
                             Center(
                               child: Text("Please select a Profile Pic",
-                                  style: Get.textTheme.bodyMedium
+                                  style: Get.textTheme.bodySmall
                                       ?.copyWith(color: Colors.red)),
                             )
                           ],
@@ -211,6 +196,54 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                                   controller.websiteController.text.isEmpty,
                               readOnly:
                                   controller.websiteController.text.isNotEmpty),
+                          24.verticalSpace,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Gender",
+                                    style: Get.textTheme.titleSmall?.copyWith(
+                                        color: Get.theme.primaryColor)),
+                              ),
+                              20.horizontalSpace,
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 16,
+                                      width: 16,
+                                      child: Radio<int?>(
+                                          value: controller.gender.value,
+                                          groupValue: 1,
+                                          onChanged: (_) {
+                                            controller.gender.value = 1;
+                                          }),
+                                    ),
+                                    8.horizontalSpace,
+                                    const Text("Male"),
+                                    16.horizontalSpace,
+                                    SizedBox(
+                                      height: 16,
+                                      width: 16,
+                                      child: Radio<int?>(
+                                          value: controller.gender.value,
+                                          groupValue: 2,
+                                          onChanged: (_) {
+                                            controller.gender.value = 2;
+                                          }),
+                                    ),
+                                    8.horizontalSpace,
+                                    const Text("Female"),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          if (controller.step1FormMisses
+                              .contains(Step1FormMiss.didNotSelectGender))
+                            Text("Please select gender",
+                                style: Get.textTheme.bodySmall?.copyWith(
+                                    color: Get.theme.colorScheme.error)),
                           15.verticalSpace,
                           if (controller.editMode) ...[
                             Row(
@@ -419,14 +452,9 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                             ),
                             15.verticalSpace,
                           ],
-                          Text(
-                            'Company Address',
-                            style: GoogleFonts.poppins(
-                              color: const Color(0xFF407BFF),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                          Text('Company Address',
+                              style: Get.textTheme.titleSmall
+                                  ?.copyWith(color: Get.theme.primaryColor)),
                           20.verticalSpace,
                           Row(
                             children: [
@@ -627,6 +655,7 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                                       )),
                                 ),
                           20.verticalSpace,
+                          MediaQuery.of(context).viewInsets.bottom.verticalSpace
                         ],
                       ),
                     ),
@@ -654,15 +683,10 @@ class CustomRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          FieldName,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.poppins(
-            color: const Color(0xFF407BFF),
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        Text(FieldName,
+            textAlign: TextAlign.center,
+            style: Get.textTheme.titleSmall
+                ?.copyWith(color: Get.theme.primaryColor)),
         SizedBox(
             // height: 40.h,
             width: 170.w,

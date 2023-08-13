@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/data/models/coc_model.dart';
@@ -11,6 +13,7 @@ import 'package:join_mp_ship/app/data/providers/application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
@@ -18,9 +21,11 @@ import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/app/modules/success/controllers/success_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:collection/collection.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 class JobOpeningsController extends GetxController {
   Rxn<CrewUser> currentEmployerUser = Rxn();
@@ -48,11 +53,22 @@ class JobOpeningsController extends GetxController {
   Rxn<MapEntry<int, int>> selectedRank = Rxn();
 
   RxnInt showErrorForJob = RxnInt();
+  RxnInt followingJob = RxnInt();
+
+  final parentKey = GlobalKey();
+
+  final fToast = FToast();
 
   @override
   void onInit() {
     instantiate();
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    fToast.init(parentKey.currentContext!);
   }
 
   instantiate() async {
@@ -74,8 +90,9 @@ class JobOpeningsController extends GetxController {
   }
 
   Future<void> getJobApplications() async {
-    applications.value =
-        (await getIt<ApplicationProvider>().getAppliedJobList())?.results ?? [];
+    applications.value = (await getIt<ApplicationProvider>()
+            .getAppliedJobListWithoutJobData()) ??
+        [];
   }
 
   Future<void> applyFilters() async {
@@ -137,5 +154,17 @@ class JobOpeningsController extends GetxController {
         arguments:
             SuccessArguments(message: "YOU HAVE APPLIED\nSUCCESSFULLY!"));
     applyingJob.value = null;
+  }
+
+  Future<void> followJob(int? theirUserId, int? jobId) async {
+    if (theirUserId == null || jobId == null) {
+      return;
+    }
+    followingJob.value = jobId;
+    final follow = await getIt<FollowProvider>().follow(theirUserId);
+    followingJob.value = null;
+    if (follow?.id != null) {
+      fToast.safeShowToast(child: successToast("Successfully followed"));
+    }
   }
 }

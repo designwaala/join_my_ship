@@ -602,18 +602,18 @@ class EmployerJobApplicationsView
                                   : ImageIcon(
                                       AssetImage(controller
                                                   .jobApplications[index]
-                                                  .applicationStatus ==
-                                              ApplicationStatus.SHORT_LISTED
+                                                  .shortlistedStatus ==
+                                             true
                                           ? 'assets/icons/bookmark_filled.png'
                                           : 'assets/icons/bookmark_outlined.png'),
                                       color: controller.jobApplications[index]
-                                                  .applicationStatus ==
-                                              ApplicationStatus.SHORT_LISTED
+                                                  .shortlistedStatus ==
+                                              true
                                           ? Colors.blue
                                           : Colors.black,
                                       size: controller.jobApplications[index]
-                                                  .applicationStatus ==
-                                              ApplicationStatus.SHORT_LISTED
+                                                  .shortlistedStatus ==
+                                              true
                                           ? 30
                                           : 29,
                                     );

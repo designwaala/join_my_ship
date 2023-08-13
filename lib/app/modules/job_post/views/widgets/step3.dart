@@ -52,7 +52,7 @@ class JobPostStep3 extends GetView<JobPostController> {
                           children: [
                             Text("JOB BY: ${controller.user?.firstName}",
                                 style: Get.textTheme.s14w600),
-                            Text(controller.user?.username ?? "",
+                            Text(controller.user?.companyName ?? "",
                                 style: Get.textTheme.s12w500)
                           ],
                         )

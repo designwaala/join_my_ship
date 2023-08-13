@@ -23,7 +23,8 @@ import '../../../data/models/state_model.dart';
 enum Step1FormMiss {
   didNotSelectProfilePic,
   didNotSelectCountry,
-  didNotSelectState
+  didNotSelectState,
+  didNotSelectGender
 }
 
 class EmployerCreateUserController extends GetxController {
@@ -48,6 +49,7 @@ class EmployerCreateUserController extends GetxController {
   final ImagePicker imagePicker = ImagePicker();
   RxnString uploadedImagePath = RxnString();
   RxList<StateModel> states = RxList.empty();
+  RxnInt gender = RxnInt();
 
   final parentKey = GlobalKey();
   FToast fToast = FToast();
@@ -122,8 +124,9 @@ class EmployerCreateUserController extends GetxController {
       addressLine1Controller.text = crewUser?.addressLine1 ?? "";
       addressLine2Controller.text = crewUser?.addressLine2 ?? "";
       zipCodeController.text = crewUser?.pincode ?? "";
-      companyNameController.text = crewUser?.username ?? "";
+      companyNameController.text = crewUser?.companyName ?? "";
       websiteController.text = crewUser?.website ?? "";
+      gender.value = crewUser?.gender;
       emailController.text = FirebaseAuth.instance.currentUser?.email ?? "";
 
       uploadedImagePath.value = crewUser?.profilePic;
@@ -151,6 +154,9 @@ class EmployerCreateUserController extends GetxController {
     if (state.value == null) {
       step1FormMisses.add(Step1FormMiss.didNotSelectState);
     }
+    if (gender.value == null) {
+      step1FormMisses.add(Step1FormMiss.didNotSelectGender);
+    }
 
     if (formKey.currentState?.validate() != true) {
       return false;
@@ -158,7 +164,8 @@ class EmployerCreateUserController extends GetxController {
 
     if ((crewUser?.id == null && pickedImage.value?.path == null) ||
         country.value == null ||
-        state.value == null) {
+        state.value == null ||
+        gender.value == null) {
       return false;
     }
     if (formKey.currentState?.validate() != true) {
@@ -186,14 +193,14 @@ class EmployerCreateUserController extends GetxController {
               email: FirebaseAuth.instance.currentUser?.email,
               userTypeKey: 3,
               screenCheck: 1,
-              gender: 3,
-              username: companyNameController.text.nullIfEmpty(),
+              gender: gender.value,
+              companyName: companyNameController.text.nullIfEmpty(),
               authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
           profilePicPath: pickedImage.value?.path);
       if (statusCode < 300) {
         fToast.safeShowToast(
             child: successToast("Your account was successfully created."));
-        Get.toNamed(Routes.HOME);
+        Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
       } else {
         fToast.safeShowToast(child: errorToast("Error creating your account"));
       }
@@ -214,8 +221,8 @@ class EmployerCreateUserController extends GetxController {
               addressCity: cityController.text,
               state: state.value?.id,
               screenCheck: 1,
-              gender: 3,
-              username: companyNameController.text.nullIfEmpty(),
+              gender: gender.value,
+              companyName: companyNameController.text.nullIfEmpty(),
               authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
           profilePicPath: pickedImage.value?.path);
       if ((statusCode ?? 0) < 300) {

@@ -1,6 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 
 class HomeController extends GetxController {
   RxInt currentIndex = 1.obs;
@@ -16,8 +22,22 @@ class HomeController extends GetxController {
     _initialize();
   }
 
-  _initialize() {
+  _initialize() async {
     _addDrawerButtons();
+    if (PreferencesHelper.instance.localFCMToken == null) {
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      if (fcmToken != null) {
+        PreferencesHelper.instance.setFCMToken(fcmToken);
+        getIt<FcmTokenProvider>().postFCMToken(fcmToken);
+      }
+    }
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+      if (PreferencesHelper.instance.localFCMToken != newToken) {
+        getIt<FcmTokenProvider>()
+            .postFCMToken(newToken)
+            .then((value) => PreferencesHelper.instance.setFCMToken(newToken));
+      }
+    });
   }
 
   _addDrawerButtons() {
@@ -30,14 +50,15 @@ class HomeController extends GetxController {
           // TODO
         }
       },
-      {
-        "title": "Applied Jobs",
-        "iconPath": "assets/icons/suitcase.png",
-        "iconSize": 18.0,
-        "onTap": () {
-          Get.toNamed(Routes.CREW_JOB_APPLICATIONS);
-        }
-      },
+      if (UserStates.instance.crewUser?.userTypeKey == 2)
+        {
+          "title": "Applied Jobs",
+          "iconPath": "assets/icons/suitcase.png",
+          "iconSize": 18.0,
+          "onTap": () {
+            Get.toNamed(Routes.CREW_JOB_APPLICATIONS);
+          }
+        },
       {
         "title": "Liked Jobs",
         "iconPath": "assets/icons/like.png",

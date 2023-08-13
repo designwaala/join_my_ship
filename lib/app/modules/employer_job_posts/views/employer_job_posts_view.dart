@@ -76,8 +76,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                                   ""),
                                         ),
                                         10.horizontalSpace,
-                                        Flexible(
-                                          flex: 15,
+                                        Expanded(
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -95,7 +94,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                                   controller
                                                           .jobPosts[index]
                                                           .employerDetails
-                                                          ?.username ??
+                                                          ?.companyName ??
                                                       "",
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -108,7 +107,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                             ],
                                           ),
                                         ),
-                                        const Spacer(),
+                                        // const Spacer(),
                                         controller.jobIdBeingDeleted.value ==
                                                 controller.jobPosts[index].id
                                             ? const SizedBox(
@@ -158,7 +157,8 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                                   ),
                                                 ],
                                                 onOpened: () {},
-                                              )
+                                              ),
+                                        16.horizontalSpace,
                                       ],
                                     ),
                                   ),

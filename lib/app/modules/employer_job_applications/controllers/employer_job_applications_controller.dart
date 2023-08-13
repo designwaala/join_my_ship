@@ -66,21 +66,19 @@ class EmployerJobApplicationsController extends GetxController {
     if (args?.jobId == null) {
       return;
     }
-    jobApplications.value = (await getIt<ApplicationProvider>()
-            .getApplicationsForAJob(args!.jobId!,
-                ranks: selectedRanks.nullIfEmpty(),
-                genders:
-                    genderFilter.value == null ? null : [genderFilter.value!],
-                statuses: isShortlisted.value == null
-                    ? null
-                    : [
-                        if (isShortlisted.value == true) ...[
-                          ApplicationStatus.SHORT_LISTED,
-                          ApplicationStatus.RESUME_DOWNLOADED
-                        ] else
-                          ApplicationStatus.APPLIED
-                      ])) ??
-        [];
+    jobApplications.value =
+        (await getIt<ApplicationProvider>().getApplicationsForAJob(
+              args!.jobId!,
+              ranks: selectedRanks.nullIfEmpty(),
+              genders:
+                  genderFilter.value == null ? null : [genderFilter.value!],
+              shortlistedStatus: isShortlisted.value == null
+                  ? null
+                  : isShortlisted.value == true
+                      ? 1
+                      : 0,
+            )) ??
+            [];
   }
 
   Future<void> loadRanks() async {

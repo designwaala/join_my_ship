@@ -22,7 +22,8 @@ class PreferencesHelper {
       _COMPANY_NAME = "company_name",
       _WEBSITE = "webiste",
       _IS_CREW = "is-crew",
-      _USER_ID = "user-id";
+      _USER_ID = "user-id",
+      _FCM_TOKEN = "fcm-token";
 
   Future<void> setAccessToken(String? value) =>
       value == null || _sharedPreferences == null
@@ -54,5 +55,10 @@ class PreferencesHelper {
       _sharedPreferences?.setBool(_IS_CREW, value);
 
   int? get userId => _sharedPreferences?.getInt(_USER_ID);
-  Future<void>? setUserId(int value) => _sharedPreferences?.setInt(_USER_ID, value);
+  Future<void>? setUserId(int value) =>
+      _sharedPreferences?.setInt(_USER_ID, value);
+
+  String? get localFCMToken => _sharedPreferences?.getString(_FCM_TOKEN);
+  Future<void>? setFCMToken(String value) =>
+      _sharedPreferences?.setString(_FCM_TOKEN, value);
 }

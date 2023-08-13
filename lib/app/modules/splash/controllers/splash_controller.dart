@@ -22,12 +22,6 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
     super.onInit();
     animationController.forward(from: 0);
     redirection();
-    getFCMToken();
-  }
-
-  getFCMToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    print(token);
   }
 
   redirection() async {
@@ -72,7 +66,7 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
     else {
       if (FirebaseAuth.instance.currentUser?.email == null) {
         Get.offAllNamed(Routes.CHOOSE_EMPLOYER);
-      } else if (FirebaseAuth.instance.currentUser?.emailVerified != null) {
+      } else if (FirebaseAuth.instance.currentUser?.emailVerified != true) {
         Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING,
             arguments: const EmailVerificationArguments(isCrew: false));
       } else if (user?.screenCheck == 1) {

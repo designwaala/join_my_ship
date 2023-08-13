@@ -7,6 +7,7 @@ class Job {
   List<JobCop>? jobCop;
   List<JobWatchKeeping>? jobWatchKeeping;
   CrewUser? employerDetails;
+  int? employerId;
   List<JobRankWithWages>? jobRankWithWages;
   String? tentativeJoining;
   String? gRT;
@@ -27,6 +28,7 @@ class Job {
       this.jobCop,
       this.jobWatchKeeping,
       this.employerDetails,
+      this.employerId,
       this.jobRankWithWages,
       this.tentativeJoining,
       this.gRT,
@@ -64,7 +66,10 @@ class Job {
         : List<JobRankWithWages>.from(
             json['Job_Rank_wages'].map((e) => JobRankWithWages.fromJson(e)));
     employerDetails =
-        json['posted_by'] == null ? null : CrewUser.fromJson(json['posted_by']);
+        json['posted_by'] == null || json['posted_by'] is! Map<String, dynamic>
+            ? null
+            : CrewUser.fromJson(json['posted_by']);
+    employerId = json['posted_by'] is int? ? json['posted_by'] : null;
     tentativeJoining = json['tentative_joining'];
     gRT = json['GRT'];
     mailInfo = json['mail_info'];
