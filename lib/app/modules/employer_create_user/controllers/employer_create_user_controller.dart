@@ -210,7 +210,6 @@ class EmployerCreateUserController extends GetxController {
           crewUser: CrewUser(
               firstName: FirebaseAuth.instance.currentUser?.displayName,
               lastName: "_",
-              password: "Demo@123",
               email: FirebaseAuth.instance.currentUser?.email,
               website: websiteController.text.nullIfEmpty(),
               addressLine1: addressLine1Controller.text,
