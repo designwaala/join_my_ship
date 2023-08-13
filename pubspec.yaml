@@ -1,5 +1,5 @@
 name: join_mp_ship
-version: 1.0.19+19
+version: 1.0.20+20
 publish_to: none
 description: A new Flutter project.
 environment:
@@ -38,6 +38,7 @@ dependencies:
   flutter_document_picker: ^5.2.3
   text_form_field_validator: ^0.0.3
   url_launcher: ^6.1.12
+  timelines: ^0.1.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

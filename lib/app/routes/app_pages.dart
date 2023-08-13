@@ -4,6 +4,8 @@ import '../modules/account_under_verification/bindings/account_under_verificatio
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
 import '../modules/applicant_detail/bindings/applicant_detail_binding.dart';
 import '../modules/applicant_detail/views/applicant_detail_view.dart';
+import '../modules/application_status/bindings/application_status_binding.dart';
+import '../modules/application_status/views/application_status_view.dart';
 import '../modules/change_password/bindings/change_password_binding.dart';
 import '../modules/change_password/views/change_password_view.dart';
 import '../modules/choose_employer/bindings/choose_employer_binding.dart';
@@ -217,6 +219,11 @@ class AppPages {
       name: _Paths.APPLICANT_DETAIL,
       page: () => const ApplicantDetailView(),
       binding: ApplicantDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.APPLICATION_STATUS,
+      page: () => const ApplicationStatusView(),
+      binding: ApplicationStatusBinding(),
     ),
   ];
 }

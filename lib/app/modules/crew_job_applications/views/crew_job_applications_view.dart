@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_cli/extensions/string.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
+import 'package:join_mp_ship/app/modules/application_status/controllers/application_status_controller.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 
 import '../controllers/crew_job_applications_controller.dart';
 
@@ -203,10 +205,15 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          const Icon(
-                                            Icons.radio_button_checked,
-                                            color: Color.fromARGB(
-                                                255, 169, 168, 170),
+                                          Icon(
+                                            application.rankId ==
+                                                    rankWithWages.rankNumber
+                                                ? Icons.radio_button_checked
+                                                : Icons.radio_button_off,
+                                            color: application.rankId ==
+                                                    rankWithWages.rankNumber
+                                                ? Get.theme.primaryColor
+                                                : Colors.grey,
                                             size: 20,
                                           ),
                                           10.horizontalSpace,
@@ -317,6 +324,43 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                         ),
                       ],
                     ),
+                  16.verticalSpace,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton.icon(
+                          onPressed: () {
+                            // TODO: Like
+                          },
+                          icon: const Icon(
+                            Icons.thumb_up_alt_outlined,
+                            size: 18,
+                          ),
+                          label: const Text(
+                            "Like",
+                            style: TextStyle(fontSize: 13),
+                          )),
+                      FilledButton(
+                          onPressed: () {
+                            /* Get.toNamed(Routes.APPLICATION_STATUS,
+                                arguments: ApplicationStatusArguments(
+                                    application: application)); */
+                          },
+                          child: Text("Check Status")),
+                      TextButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.share_sharp,
+                          size: 18,
+                          color: Colors.black,
+                        ),
+                        label: const Text(
+                          "Share",
+                          style: TextStyle(fontSize: 13, color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
                   18.verticalSpace,
                 ],
               ),
