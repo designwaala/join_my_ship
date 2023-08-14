@@ -10,6 +10,7 @@ import 'package:join_mp_ship/app/modules/email_verification_waiting/controllers/
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 
 class SplashController extends GetxController with GetTickerProviderStateMixin {
   late AnimationController animationController;
@@ -41,8 +42,6 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
     if (FirebaseAuth.instance.currentUser == null) {
       await FirebaseAuth.instance.signOut();
       await PreferencesHelper.instance.clearAll();
-    }
-    if (FirebaseAuth.instance.currentUser == null) {
       Get.offAllNamed(Routes.INFO);
       return;
     }
@@ -64,8 +63,12 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
     }
     //EMPLOYER FLOW
     else {
-      if (FirebaseAuth.instance.currentUser?.email == null) {
+      if (PreferencesHelper.instance.employerType == null ||
+          FirebaseAuth.instance.currentUser?.phoneNumber == null) {
         Get.offAllNamed(Routes.CHOOSE_EMPLOYER);
+      } else if (FirebaseAuth.instance.currentUser?.email?.nullIfEmpty() ==
+          null) {
+        Get.offAllNamed(Routes.SIGN_UP_EMAIL);
       } else if (FirebaseAuth.instance.currentUser?.emailVerified != true) {
         Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING,
             arguments: const EmailVerificationArguments(isCrew: false));

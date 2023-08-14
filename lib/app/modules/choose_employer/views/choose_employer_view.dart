@@ -46,6 +46,7 @@ class ChooseEmployerView extends GetView<ChooseEmployerController> {
             ...["ITF / Ownership", "Management Company", "Crewing Agent"]
                 .mapIndexed((index, e) => InkWell(
                       onTap: () {
+                        PreferencesHelper.instance.setEmployerType(index);
                         Get.toNamed(Routes.SIGN_UP_PHONE_NUMBER, arguments: {
                           "company_type": () {
                             switch (index) {

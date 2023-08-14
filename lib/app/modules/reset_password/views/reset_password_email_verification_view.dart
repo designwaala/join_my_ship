@@ -1,82 +1,112 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:lottie/lottie.dart';
 
 class ResetPasswordEmailVerificationView extends GetView {
   const ResetPasswordEmailVerificationView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 70,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text('Reset Password',
-            style: Get.theme.textTheme.headlineSmall?.copyWith(
+        appBar: AppBar(
+          toolbarHeight: 70,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text('Reset Password',
+              style: Get.theme.textTheme.headlineSmall?.copyWith(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600)),
+          leading: InkWell(
+            onTap: Get.back,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(
+                  color: Color(0xFFF3F3F3), shape: BoxShape.circle),
+              child: const Icon(
+                Icons.keyboard_backspace_rounded,
                 color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w600)),
-        leading: InkWell(
-          onTap: Get.back,
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            margin: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-                color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-            child: const Icon(
-              Icons.keyboard_backspace_rounded,
-              color: Colors.black,
+              ),
             ),
           ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(40),
-        child: Center(
+        body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/email_verification/arrow.png',
-                height: 80,
+              const Spacer(),
+              SizedBox(
+                width: Get.width,
+                height: 200,
+                child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Lottie.asset('assets/arrow_animation.json')),
               ),
-              50.verticalSpace,
-              Text(
-                'Check Your Email Address',
-                style: TextStyle(
-                    fontSize: 20,
-                    color: Get.theme.colorScheme.primary,
-                    fontWeight: FontWeight.w600),
-              ),
-              18.verticalSpace,
-              const Text(
-                'This action requires email verification.'
-                ' Please check your inbox and follow the instructions.',
-                textAlign: TextAlign.center,
-              ),
-              50.verticalSpace,
-              MaterialButton(
-                minWidth: 250,
-                height: 50,
-                color: Colors.blue,
-                textColor: Colors.white,
-                shape: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                onPressed: Get.back,
-                child: const Text(
-                  "OK",
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-              150.verticalSpace
+              Text("Check Your Email",
+                  style: Get.textTheme.bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w600, fontSize: 20)),
+              16.verticalSpace,
+              Text(FirebaseAuth.instance.currentUser?.email ?? ""),
+              16.verticalSpace,
+              Text("""
+      This action requires email 
+      verification. Please check your 
+      inbox and follow the instructions.
+              """,
+                  textAlign: TextAlign.center,
+                  style: Get.textTheme.bodyMedium
+                      ?.copyWith(color: const Color.fromRGBO(88, 88, 88, 1))),
+              32.verticalSpace,
+              controller.isRefreshing.value
+                  ? const CircularProgressIndicator()
+                  : TextButton(
+                      onPressed: () async {
+                        await controller.refresh();
+                        if (FirebaseAuth.instance.currentUser?.emailVerified ==
+                            true) {
+                          if (PreferencesHelper.instance.isCrew == true) {
+                            Get.offNamed(Routes.CREW_ONBOARDING);
+                          } else {
+                            Get.offNamed(Routes.EMPLOYER_CREATE_USER);
+                          }
+                        }
+                      },
+                      child: const Text("Refresh")),
+              32.verticalSpace,
+              controller.isResendingEmail.value
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(64))),
+                      onPressed: controller.resendEmail,
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text("Resend email"),
+                      )),
+              32.verticalSpace,
+              RichText(
+                  text: TextSpan(style: Get.textTheme.bodyMedium, children: [
+                // const TextSpan(text: "Already have an account? "),
+                TextSpan(
+                    text: "Login",
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async {
+                        await FirebaseAuth.instance.signOut();
+                        Get.offAllNamed(Routes.SPLASH);
+                      },
+                    style: Get.textTheme.bodyMedium
+                        ?.copyWith(color: Get.theme.primaryColor))
+              ])),
+              const Spacer(),
             ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

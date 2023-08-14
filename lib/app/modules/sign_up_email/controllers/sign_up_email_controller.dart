@@ -8,8 +8,10 @@ import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 class SignUpEmailController extends GetxController {
-  SignUpEmailArguments? args;
-  SignUpType? signUpType = SignUpType.crew;
+  // SignUpEmailArguments? args;
+  SignUpType? signUpType = PreferencesHelper.instance.isCrew == true
+      ? SignUpType.crew
+      : PreferencesHelper.instance.employerType;
 
   final parentKey = GlobalKey();
 
@@ -27,10 +29,10 @@ class SignUpEmailController extends GetxController {
 
   @override
   void onInit() {
-    if (Get.arguments is SignUpEmailArguments) {
+    /* if (Get.arguments is SignUpEmailArguments) {
       args = (Get.arguments as SignUpEmailArguments);
       signUpType = args?.signUpType;
-    }
+    } */
 
     super.onInit();
   }
@@ -139,7 +141,20 @@ enum SignUpType {
   crew,
   employerITF,
   employerManagementCompany,
-  employerCrewingAgent
+  employerCrewingAgent;
+
+  int get backendIndex {
+    switch (this) {
+      case SignUpType.crew:
+        return 2;
+      case SignUpType.employerITF:
+        return 3;
+      case SignUpType.employerManagementCompany:
+        return 4;
+      case SignUpType.employerCrewingAgent:
+        return 5;
+    }
+  }
 }
 
 class SignUpEmailArguments {

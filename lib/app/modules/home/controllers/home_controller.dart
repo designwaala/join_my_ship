@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
@@ -16,6 +17,8 @@ class HomeController extends GetxController {
   RxString selectedDrawerButton = "Home".obs;
   List<Map<String, dynamic>> drawerButtons = [];
 
+  RxBool isLoading = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -23,6 +26,11 @@ class HomeController extends GetxController {
   }
 
   _initialize() async {
+    isLoading.value = true;
+    if (UserStates.instance.crewUser == null) {
+      UserStates.instance.crewUser =
+          await getIt<CrewUserProvider>().getCrewUser();
+    }
     _addDrawerButtons();
     if (PreferencesHelper.instance.localFCMToken == null) {
       String? fcmToken = await FirebaseMessaging.instance.getToken();
@@ -38,6 +46,7 @@ class HomeController extends GetxController {
             .then((value) => PreferencesHelper.instance.setFCMToken(newToken));
       }
     });
+    isLoading.value = false;
   }
 
   _addDrawerButtons() {

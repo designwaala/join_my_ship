@@ -49,82 +49,86 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                   30.verticalSpace,
                   Text(
                     "Change Password",
-                    style: Get.theme.textTheme.headlineSmall?.copyWith(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500),
+                    style: Get.theme.textTheme.headlineSmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   10.verticalSpace,
                   const Text("Please enter your new password",
                       style: TextStyle(fontSize: 14)),
                   30.verticalSpace,
-                  TextFormField(
-                    validator: (value) => FormValidator.validate(value,
-                        required: true,
-                        requiredMessage: "Enter a password",
-                        min: 6,
-                        minMessage: "Minimum password length should be 6"),
-                    controller: controller.passwordController,
-                    obscureText: controller.shouldObscurePassword.value,
-                    decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: "Enter your new password",
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 20),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            controller.shouldObscurePassword.value =
-                                !controller.shouldObscurePassword.value;
-                          },
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          icon: Icon(
-                              controller.shouldObscurePassword.value
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Get.theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Colors.blue, width: 2),
-                            borderRadius: BorderRadius.circular(64))),
+                  SizedBox(
+                    height: 64,
+                    child: TextFormField(
+                      validator: (value) => FormValidator.validate(value,
+                          required: true,
+                          requiredMessage: "Enter a password",
+                          min: 6,
+                          minMessage: "Minimum password length should be 6"),
+                      controller: controller.passwordController,
+                      obscureText: controller.shouldObscurePassword.value,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          hintText: "Enter your new password",
+                          contentPadding: EdgeInsets.only(left: 16),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              controller.shouldObscurePassword.value =
+                                  !controller.shouldObscurePassword.value;
+                            },
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            icon: Icon(
+                                controller.shouldObscurePassword.value
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Get.theme.primaryColor),
+                          ),
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 2),
+                              borderRadius: BorderRadius.circular(64))),
+                    ),
                   ),
-                  20.verticalSpace,
-                  TextFormField(
-                    validator: (value) => FormValidator.validate(value,
-                        required: true,
-                        requiredMessage: "Re-enter password",
-                        match: controller.passwordController.text.trim(),
-                        matchMessage: "Passwords do not match"),
-                    controller: controller.confirmPasswordController,
-                    obscureText: controller.shouldObscureConfirmPassword.value,
-                    decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: "Confirm password",
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 20),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            controller.shouldObscureConfirmPassword.value =
-                                !controller.shouldObscureConfirmPassword.value;
-                          },
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          icon: Icon(
-                              controller.shouldObscureConfirmPassword.value
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Get.theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Colors.blue, width: 2),
-                            borderRadius: BorderRadius.circular(64))),
+                  16.verticalSpace,
+                  SizedBox(
+                    height: 64,
+                    child: TextFormField(
+                      validator: (value) => FormValidator.validate(value,
+                          required: true,
+                          requiredMessage: "Re-enter password",
+                          match: controller.passwordController.text.trim(),
+                          matchMessage: "Passwords do not match"),
+                      controller: controller.confirmPasswordController,
+                      obscureText:
+                          controller.shouldObscureConfirmPassword.value,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          hintText: "Confirm password",
+                          contentPadding: EdgeInsets.only(left: 16),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              controller.shouldObscureConfirmPassword.value =
+                                  !controller
+                                      .shouldObscureConfirmPassword.value;
+                            },
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            icon: Icon(
+                                controller.shouldObscureConfirmPassword.value
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Get.theme.primaryColor),
+                          ),
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 2),
+                              borderRadius: BorderRadius.circular(64))),
+                    ),
                   ),
-                  40.verticalSpace,
+                  32.verticalSpace,
                   MaterialButton(
                       minWidth: double.infinity,
-                      height: 60,
+                      height: 48,
                       color: Colors.blue,
                       textColor: Colors.white,
                       shape: OutlineInputBorder(

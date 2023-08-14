@@ -131,22 +131,24 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
               ),
-              body: () {
-                switch (controller.currentIndex.value) {
-                  case 1:
-                    return _buildBody();
-                  case 2:
-                    return const SizedBox();
-                  case 3:
-                    return const SizedBox();
-                  case 4:
-                    return const JobOpeningsView();
-                  case 5:
-                    return const ProfileView();
-                  default:
-                    return const SizedBox();
-                }
-              }(),
+              body: controller.isLoading.value
+                  ? Center(child: CircularProgressIndicator())
+                  : () {
+                      switch (controller.currentIndex.value) {
+                        case 1:
+                          return _buildBody();
+                        case 2:
+                          return const SizedBox();
+                        case 3:
+                          return const SizedBox();
+                        case 4:
+                          return const JobOpeningsView();
+                        case 5:
+                          return const ProfileView();
+                        default:
+                          return const SizedBox();
+                      }
+                    }(),
               // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
               bottomNavigationBar: CurvedNavigationBar(
                 height: 64,
@@ -254,15 +256,16 @@ class HomeView extends GetView<HomeController> {
                               controller.scaffoldKey.currentState?.openDrawer(),
                         ),
                         16.horizontalSpace,
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Welcome",
+                            const Text("Welcome",
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.white)),
-                            Text("Ashutosh Mehta",
+                            Text(
+                                "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastName ?? ""}",
                                 style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.w600,

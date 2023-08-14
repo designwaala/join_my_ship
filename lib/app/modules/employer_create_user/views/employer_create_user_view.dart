@@ -250,15 +250,10 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "Mobile Number",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                    color: const Color(0xFF407BFF),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+                                Text("Mobile Number",
+                                    textAlign: TextAlign.center,
+                                    style: Get.textTheme.titleSmall?.copyWith(
+                                        color: Get.theme.primaryColor)),
                                 SizedBox(
                                   width: 170.w,
                                   child: Column(
@@ -435,14 +430,9 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                                     controller.phoneNumberController,
                                 readOnly: false), */
                             15.verticalSpace,
-                            Text(
-                              'Email Address',
-                              style: GoogleFonts.poppins(
-                                color: const Color(0xFF407BFF),
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                            Text('Email Address',
+                                style: Get.textTheme.titleSmall
+                                    ?.copyWith(color: Get.theme.primaryColor)),
                             15.verticalSpace,
                             CustomTextFormField(
                               controller: controller.emailController,

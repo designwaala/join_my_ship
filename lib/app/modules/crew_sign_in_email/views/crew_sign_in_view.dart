@@ -78,7 +78,10 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                                 controller.shouldObscure.value =
                                     !controller.shouldObscure.value;
                               },
-                              child: Icon(Icons.remove_red_eye,
+                              child: Icon(
+                                  controller.shouldObscure.value
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
                                   color: Get.theme.primaryColor),
                             ),
                             border: OutlineInputBorder(

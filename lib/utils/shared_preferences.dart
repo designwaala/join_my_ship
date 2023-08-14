@@ -1,5 +1,6 @@
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 
 class PreferencesHelper {
   PreferencesHelper._();
@@ -23,7 +24,8 @@ class PreferencesHelper {
       _WEBSITE = "webiste",
       _IS_CREW = "is-crew",
       _USER_ID = "user-id",
-      _FCM_TOKEN = "fcm-token";
+      _FCM_TOKEN = "fcm-token",
+      _EMPLOYER_TYPE = "employer-type";
 
   Future<void> setAccessToken(String? value) =>
       value == null || _sharedPreferences == null
@@ -61,4 +63,17 @@ class PreferencesHelper {
   String? get localFCMToken => _sharedPreferences?.getString(_FCM_TOKEN);
   Future<void>? setFCMToken(String value) =>
       _sharedPreferences?.setString(_FCM_TOKEN, value);
+
+  SignUpType? get employerType {
+    switch (_sharedPreferences?.getInt(_EMPLOYER_TYPE)) {
+      case 0:
+        return SignUpType.employerITF;
+      case 1:
+        return SignUpType.employerManagementCompany;
+      case 2:
+        return SignUpType.employerCrewingAgent;
+    }
+  }
+  Future<void>? setEmployerType(int value) =>
+      _sharedPreferences?.setInt(_EMPLOYER_TYPE, value);
 }

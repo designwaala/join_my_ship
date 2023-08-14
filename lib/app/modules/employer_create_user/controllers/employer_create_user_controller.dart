@@ -191,7 +191,8 @@ class EmployerCreateUserController extends GetxController {
               pincode: zipCodeController.text.nullIfEmpty(),
               password: "Demo@123",
               email: FirebaseAuth.instance.currentUser?.email,
-              userTypeKey: 3,
+              userTypeKey:
+                  PreferencesHelper.instance.employerType?.backendIndex,
               screenCheck: 1,
               gender: gender.value,
               companyName: companyNameController.text.nullIfEmpty(),
@@ -215,7 +216,6 @@ class EmployerCreateUserController extends GetxController {
               addressLine1: addressLine1Controller.text,
               pincode: zipCodeController.text,
               country: country.value?.id,
-              userTypeKey: 3,
               addressLine2: addressLine2Controller.text.nullIfEmpty(),
               addressCity: cityController.text,
               state: state.value?.id,

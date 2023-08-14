@@ -56,6 +56,11 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+/*   await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+    androidProvider: AndroidProvider.playIntegrity,
+    appleProvider: AppleProvider.appAttest
+  ); */
   PreferencesHelper.instance.init();
   try {
     print(await FirebaseAuth.instance.currentUser?.getIdToken());

@@ -15,21 +15,41 @@ class ResetPasswordController extends GetxController {
   final parentKey = GlobalKey();
   final formKey = GlobalKey<FormState>();
 
+  RxBool checkEmailView = false.obs;
+  RxBool isResendingEmail = false.obs;
+
   @override
   void onReady() {
     super.onReady();
     fToast.init(parentKey.currentContext!);
   }
 
+  Future<void> resendEmail() async {
+    isResendingEmail.value = true;
+    await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: emailController.text.trim());
+    isResendingEmail.value = false;
+  }
+
   void resetPassword() async {
     if (formKey.currentState!.validate()) {
-      Get.to(const CircularProgressIndicatorAlertDialog());
+      showDialog(
+          context: Get.context!,
+          builder: (context) => const AlertDialog(
+                title: Text("Please wait..."),
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              ));
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim())
           .then((value) {
         fToast.safeShowToast(child: successToast("Passowrd reset email sent"));
         Get.back();
-        Get.offAndToNamed(Routes.RESET_PASSWORD_EMAIL_VERIFICATION);
+        checkEmailView.value = true;
       }).onError((error, stackTrace) {
         Get.back();
         fToast.safeShowToast(child: errorToast(error.toString()));
