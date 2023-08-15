@@ -64,12 +64,20 @@ class ChooseUserView extends GetView<ChooseUserController> {
                   onTap: () {
                     if (index == 0) {
                       PreferencesHelper.instance.setIsCrew(true);
-                      Get.toNamed(Routes.SIGN_UP_EMAIL,
-                          arguments: const SignUpEmailArguments(
-                              signUpType: SignUpType.crew));
+                      if (controller.args?.redirection == null) {
+                        Get.toNamed(Routes.SIGN_UP_EMAIL,
+                            arguments: const SignUpEmailArguments(
+                                signUpType: SignUpType.crew));
+                      } else {
+                        controller.args?.redirection?.call();
+                      }
                     } else {
                       PreferencesHelper.instance.setIsCrew(false);
-                      Get.toNamed(Routes.CHOOSE_EMPLOYER);
+                      if (controller.args?.redirection == null) {
+                        Get.toNamed(Routes.CHOOSE_EMPLOYER);
+                      } else {
+                        controller.args?.redirection?.call();
+                      }
                     }
                   },
                   child: Container(

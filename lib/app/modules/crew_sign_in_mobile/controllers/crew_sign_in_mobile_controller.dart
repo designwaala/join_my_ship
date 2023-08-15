@@ -6,13 +6,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/modules/splash/controllers/splash_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
-class CrewSignInMobileController extends GetxController {
+class CrewSignInMobileController extends GetxController with RedirectionMixin {
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   RxString selectedCountryCode = "+91".obs;
@@ -32,13 +33,13 @@ class CrewSignInMobileController extends GetxController {
 
   CrewUser? crewUser;
 
-  Function(String phoneNumber, String dialCode)? redirection;
+  Function(String phoneNumber, String dialCode)? customRedirection;
 
   @override
   void onInit() {
     if (Get.arguments is CrewSignInMobileArguments) {
       CrewSignInMobileArguments args = Get.arguments;
-      redirection = args.redirection;
+      customRedirection = args.redirection;
       phoneController.text = args.phoneNumber ?? "";
       selectedCountryCode.value = args.countryCode ?? "";
     }
@@ -104,17 +105,18 @@ class CrewSignInMobileController extends GetxController {
                   ?.linkWithCredential(credential)
               : await FirebaseAuth.instance.currentUser
                   ?.updatePhoneNumber(credential);
+      await redirection(customRedirection: customRedirection);
     } catch (e) {
       fToast.safeShowToast(child: errorToast("$e"));
       isVerifying.value = false;
       return;
     }
-    if (FirebaseAuth.instance.currentUser?.emailVerified != true) {
+/*     if (FirebaseAuth.instance.currentUser?.emailVerified != true) {
       await FirebaseAuth.instance.signOut();
       fToast.safeShowToast(child: errorToast("Email not Verified"));
     } else if (FirebaseAuth.instance.currentUser != null) {
-      if (redirection != null) {
-        redirection!(phoneController.text, selectedCountryCode.value);
+      if (customRedirection != null) {
+        customRedirection!(phoneController.text, selectedCountryCode.value);
       } else {
         crewUser = await getIt<CrewUserProvider>().getCrewUser();
         UserStates.instance.crewUser = crewUser;
@@ -139,7 +141,7 @@ class CrewSignInMobileController extends GetxController {
       fToast.safeShowToast(child: successToast("Authentication Successful"));
     } else {
       fToast.safeShowToast(child: errorToast("Authentication Failed"));
-    }
+    } */
     isVerifying.value = false;
   }
 }

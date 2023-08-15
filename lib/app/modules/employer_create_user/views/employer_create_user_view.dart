@@ -34,12 +34,17 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
         appBar: AppBar(
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
-          title: Text(
-            'EMPLOYER',
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
+          title: GestureDetector(
+            onTap: () {
+              controller.isUpdating.value = false;
+            },
+            child: Text(
+              'EMPLOYER',
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           centerTitle: true,

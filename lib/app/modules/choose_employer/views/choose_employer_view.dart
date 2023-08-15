@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -46,19 +47,27 @@ class ChooseEmployerView extends GetView<ChooseEmployerController> {
             ...["ITF / Ownership", "Management Company", "Crewing Agent"]
                 .mapIndexed((index, e) => InkWell(
                       onTap: () {
-                        PreferencesHelper.instance.setEmployerType(index);
-                        Get.toNamed(Routes.SIGN_UP_PHONE_NUMBER, arguments: {
-                          "company_type": () {
-                            switch (index + 3) {
-                              case 3:
-                                return SignUpType.employerITF;
-                              case 4:
-                                return SignUpType.employerManagementCompany;
-                              case 5:
-                                return SignUpType.employerCrewingAgent;
-                            }
-                          }()
-                        });
+                        PreferencesHelper.instance.setEmployerType(index + 3);
+                        if (FirebaseAuth.instance.currentUser?.phoneNumber ==
+                            null) {
+                          Get.toNamed(Routes.SIGN_UP_PHONE_NUMBER, arguments: {
+                            "company_type": () {
+                              switch (index + 3) {
+                                case 3:
+                                  return SignUpType.employerITF;
+                                case 4:
+                                  return SignUpType.employerManagementCompany;
+                                case 5:
+                                  return SignUpType.employerCrewingAgent;
+                              }
+                            }()
+                          });
+                        } else if (FirebaseAuth.instance.currentUser?.email ==
+                            null) {
+                          Get.toNamed(Routes.SIGN_UP_EMAIL);
+                        } else {
+                          Get.offAllNamed(Routes.EMPLOYER_CREATE_USER);
+                        }
                       },
                       child: Container(
                         width: double.maxFinite,

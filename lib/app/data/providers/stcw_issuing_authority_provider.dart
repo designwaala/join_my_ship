@@ -17,7 +17,7 @@ class StcwIssuingAuthorityProvider extends WrapperConnect {
 
   Future<List<StcwIssuingAuthority>?> getStcwIssuingAuthorities(
       int userType) async {
-    final response = await get('stcwissuingauthority/$userType');
+    final response = await get('employer/stcw_list/$userType');
     return response.body;
   }
 }

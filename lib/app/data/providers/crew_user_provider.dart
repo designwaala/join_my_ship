@@ -36,7 +36,10 @@ class CrewUserProvider extends WrapperConnect {
     if (response.body?.id != null) {
       await PreferencesHelper.instance.setUserId(response.body!.id!);
     }
-    await PreferencesHelper.instance.setIsCrew(response.body?.userTypeKey == 2);
+    if (response.body?.userTypeKey != null) {
+      await PreferencesHelper.instance
+          .setIsCrew(response.body?.userTypeKey == 2);
+    }
     return response.body;
   }
 

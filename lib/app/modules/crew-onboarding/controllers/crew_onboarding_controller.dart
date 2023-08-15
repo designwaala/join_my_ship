@@ -527,6 +527,7 @@ class CrewOnboardingController extends GetxController with PickImage {
         fToast.safeShowToast(child: errorToast("Error updating your account"));
       }
     }
+    await getAllIssuingAuthorities();
     isUpdating.value = false;
 
     return (statusCode ?? 0) < 300;
@@ -679,7 +680,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     await getIt<CrewUserProvider>().updateCrewUser(
         crewId: crewUser?.id ?? -1, crewUser: CrewUser(screenCheck: 3));
     isUpdating.value = false;
-    Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+    Get.offNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
   }
 
   calculateDuration() {

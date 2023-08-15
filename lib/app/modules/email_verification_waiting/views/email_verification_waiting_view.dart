@@ -25,10 +25,7 @@ class EmailVerificationWaitingView
             backgroundColor: const Color(0xFFFbF6FF),
             appBar: AppBar(
               toolbarHeight: 70,
-              title: Text(
-                  PreferencesHelper.instance.isCrew == true
-                      ? 'CREW'
-                      : "EMPLOYER",
+              title: Text("EMAIL VERIFICATION",
                   style: Get.theme.textTheme.headlineSmall?.copyWith(
                       color: Colors.black,
                       fontSize: 20,
@@ -95,7 +92,14 @@ class EmailVerificationWaitingView
                             if (FirebaseAuth
                                     .instance.currentUser?.emailVerified ==
                                 true) {
-                              if (PreferencesHelper.instance.isCrew == true) {
+                              if (controller.args?.redirection != null) {
+                                controller.args?.redirection?.call();
+                                return;
+                              } else if (PreferencesHelper.instance.isCrew ==
+                                  null) {
+                                Get.offAllNamed(Routes.SPLASH);
+                              } else if (PreferencesHelper.instance.isCrew ==
+                                  true) {
                                 Get.offNamed(Routes.CREW_ONBOARDING);
                               } else {
                                 Get.offNamed(Routes.EMPLOYER_CREATE_USER);
