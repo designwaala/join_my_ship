@@ -353,6 +353,11 @@ class JobPostStep1 extends GetView<JobPostController> {
                           ],
                         );
                       })),
+                  if (controller.step1Misses
+                      .contains(Step1Miss.crewRequirements))
+                    Text(Step1Miss.crewRequirements.errorMessage,
+                        style: Get.textTheme.bodySmall
+                            ?.copyWith(color: Get.theme.colorScheme.error)),
                   32.verticalSpace,
                   Center(
                     child: SizedBox(

@@ -49,12 +49,12 @@ class ChooseEmployerView extends GetView<ChooseEmployerController> {
                         PreferencesHelper.instance.setEmployerType(index);
                         Get.toNamed(Routes.SIGN_UP_PHONE_NUMBER, arguments: {
                           "company_type": () {
-                            switch (index) {
-                              case 0:
+                            switch (index + 3) {
+                              case 3:
                                 return SignUpType.employerITF;
-                              case 1:
+                              case 4:
                                 return SignUpType.employerManagementCompany;
-                              case 2:
+                              case 5:
                                 return SignUpType.employerCrewingAgent;
                             }
                           }()

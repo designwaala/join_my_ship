@@ -58,134 +58,147 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                             ? "Please sign up from your email account"
                             : "Please enter your company details"),
                         20.verticalSpace,
-                        TextFormField(
-                          controller: controller.fullNameController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter your Company Name";
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              fillColor: Colors.white,
-                              filled: true,
-                              hintText: controller.signUpType == SignUpType.crew
-                                  ? "Full Name"
-                                  : "Company Name",
-                              border: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Colors.blue, width: 2),
-                                  borderRadius: BorderRadius.circular(64))),
-                        ),
-                        24.verticalSpace,
-                        if (controller.signUpType != SignUpType.crew) ...[
-                          TextFormField(
-                            controller: controller.websiteController,
+                        SizedBox(
+                          height: 64,
+                          child: TextFormField(
+                            controller: controller.fullNameController,
                             validator: (value) {
-                              if (controller.signUpType == SignUpType.crew) {
-                                return null;
-                              }
                               if (value == null || value.isEmpty) {
-                                return "Please enter your Company Website";
+                                return "Please enter your Company Name";
                               }
                               return null;
                             },
                             decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
                                 fillColor: Colors.white,
                                 filled: true,
-                                hintText: "Company Website",
+                                hintText:
+                                    controller.signUpType == SignUpType.crew
+                                        ? "Full Name"
+                                        : "Company Name",
                                 border: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                         color: Colors.blue, width: 2),
                                     borderRadius: BorderRadius.circular(64))),
                           ),
-                          24.verticalSpace,
+                        ),
+                        8.verticalSpace,
+                        if (controller.signUpType != SignUpType.crew) ...[
+                          SizedBox(
+                            height: 64,
+                            child: TextFormField(
+                              controller: controller.websiteController,
+                              validator: (value) {
+                                if (controller.signUpType == SignUpType.crew) {
+                                  return null;
+                                }
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter your Company Website";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  hintText: "Company Website",
+                                  border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color: Colors.blue, width: 2),
+                                      borderRadius: BorderRadius.circular(64))),
+                            ),
+                          ),
+                          8.verticalSpace,
                         ],
-                        TextFormField(
-                          controller: controller.emailController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter your email";
-                            }
-                            if (([
-                                      "gmail",
-                                      "yahoo",
-                                      "hotmail",
-                                      "mail",
-                                      "protonme"
-                                    ].contains(
-                                        value.split("@")[1].split(".")[0]) &&
-                                    [
-                                      SignUpType.employerITF,
-                                      SignUpType.employerManagementCompany
-                                    ].contains(controller.signUpType))
-                                /* &&
-                                value?.split("@")[1].split(".")[0] ==
-                                    controller.websiteController.text
-                                        .replaceAll("https", "")
-                                        .replaceAll("http", "")
-                                        .split(".")
-                                        .reduce((a, b) =>
-                                            a.length > b.length ? a : b) */
-                                ) {
-                              return "Please use your company domain email address";
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 20),
-                            fillColor: Colors.white,
-                            filled: true,
-                            hintText: "email@yourdomain",
-                            border: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Colors.blue, width: 2),
-                                borderRadius: BorderRadius.circular(64)),
+                        SizedBox(
+                          height: 64,
+                          child: TextFormField(
+                            controller: controller.emailController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please enter your email";
+                              }
+                              if (([
+                                        "gmail",
+                                        "yahoo",
+                                        "hotmail",
+                                        "mail",
+                                        "protonme"
+                                      ].contains(
+                                          value.split("@")[1].split(".")[0]) &&
+                                      [
+                                        SignUpType.employerITF,
+                                        SignUpType.employerManagementCompany
+                                      ].contains(controller.signUpType))
+                                  /* &&
+                                  value?.split("@")[1].split(".")[0] ==
+                                      controller.websiteController.text
+                                          .replaceAll("https", "")
+                                          .replaceAll("http", "")
+                                          .split(".")
+                                          .reduce((a, b) =>
+                                              a.length > b.length ? a : b) */
+                                  ) {
+                                return "Please use your company domain email address";
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              fillColor: Colors.white,
+                              filled: true,
+                              hintText: "email@yourdomain",
+                              border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.blue, width: 2),
+                                  borderRadius: BorderRadius.circular(64)),
+                            ),
                           ),
                         ),
-                        24.verticalSpace,
-                        TextFormField(
-                          controller: controller.passwordController,
-                          obscureText: controller.shouldObscure.value,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please create a password";
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 20),
-                            fillColor: Colors.white,
-                            filled: true,
-                            hintText: "Password",
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                controller.shouldObscure.value =
-                                    !controller.shouldObscure.value;
-                              },
-                              child: Icon(
-                                  controller.shouldObscure.value
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: Get.theme.primaryColor),
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.blue, width: 2),
-                              borderRadius: BorderRadius.circular(64),
+                        8.verticalSpace,
+                        SizedBox(
+                          height: 64,
+                          child: TextFormField(
+                            controller: controller.passwordController,
+                            obscureText: controller.shouldObscure.value,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please create a password";
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              fillColor: Colors.white,
+                              filled: true,
+                              hintText: "Password",
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  controller.shouldObscure.value =
+                                      !controller.shouldObscure.value;
+                                },
+                                child: Icon(
+                                    controller.shouldObscure.value
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: Get.theme.primaryColor),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.blue, width: 2),
+                                borderRadius: BorderRadius.circular(64),
+                              ),
                             ),
                           ),
                         ),
                         30.verticalSpace,
                         SizedBox(
                           width: double.maxFinite,
-                          height: 64.h,
+                          height: 64,
                           child: controller.isAdding.value
                               ? const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +215,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                                   onPressed: controller.addEmail,
                                   child: const Text("SIGN UP")),
                         ),
-                        32.verticalSpace,
+                        24.verticalSpace,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -237,7 +250,6 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                               "Already have an account ?",
                               style: Get.textTheme.bodySmall?.copyWith(
                                 fontSize: 14,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             5.horizontalSpace,
@@ -246,7 +258,6 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                                 "Login",
                                 style: Get.textTheme.bodyMedium?.copyWith(
                                   color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               onTap: () {

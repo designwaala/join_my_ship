@@ -198,16 +198,15 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                                   controller.websiteController.text.isNotEmpty),
                           24.verticalSpace,
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
-                                child: Text("Gender",
-                                    style: Get.textTheme.titleSmall?.copyWith(
-                                        color: Get.theme.primaryColor)),
-                              ),
-                              20.horizontalSpace,
-                              Expanded(
+                              Text("Gender",
+                                  style: Get.textTheme.titleSmall?.copyWith(
+                                      color: Get.theme.primaryColor)),
+                              SizedBox(
+                                width: 170.w,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     SizedBox(
                                       height: 16,
@@ -596,11 +595,19 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                             },
                             controller: controller.addressLine1Controller,
                             hintText: 'Address Line 1',
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r"^[a-zA-Z0-9,.-/- ]+"))
+                            ],
                           ),
                           15.verticalSpace,
                           CustomTextFormField(
                             controller: controller.addressLine2Controller,
                             hintText: 'Address Line 2',
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r"^[a-zA-Z0-9,.-/- ]+"))
+                            ],
                           ),
                           15.verticalSpace,
                           CustomTextFormField(
@@ -609,6 +616,7 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                                 return "Please enter your Zip Code";
                               }
                             },
+                            keyboardType: TextInputType.number,
                             controller: controller.zipCodeController,
                             hintText: 'Zip Code',
                           ),

@@ -342,9 +342,9 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                           )),
                       FilledButton(
                           onPressed: () {
-                            /* Get.toNamed(Routes.APPLICATION_STATUS,
+                            Get.toNamed(Routes.APPLICATION_STATUS,
                                 arguments: ApplicationStatusArguments(
-                                    application: application)); */
+                                    application: application));
                           },
                           child: Text("Check Status")),
                       TextButton.icon(

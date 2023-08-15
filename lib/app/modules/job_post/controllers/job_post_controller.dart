@@ -32,7 +32,9 @@ enum Step1Miss {
   grt,
   deckRank,
   engineRank,
-  galleyRank;
+  galleyRank,
+  crewRequirements,
+  ;
 
   String get errorMessage {
     switch (this) {
@@ -48,17 +50,28 @@ enum Step1Miss {
         return "Please select atleast one rank.";
       case Step1Miss.galleyRank:
         return "Please select atleast one rank.";
+      case Step1Miss.crewRequirements:
+        return "Please select at least one Crew Requirements";
     }
   }
 }
 
 enum Step2Miss {
-  jobExpiry;
+  jobExpiry,
+  coc,
+  cop,
+  watchKeeping;
 
   String get errorMessage {
     switch (this) {
       case Step2Miss.jobExpiry:
         return "Please select Job Expiry";
+      case Step2Miss.coc:
+        return "Please choose a COC Issuing Authority";
+      case Step2Miss.cop:
+        return "Please choose a COP Issuing Authority";
+      case Step2Miss.watchKeeping:
+        return "Please choose a Watch Keeping Authority";
     }
   }
 }
@@ -243,6 +256,9 @@ class JobPostController extends GetxController {
         galleyRankWithWages.isEmpty) {
       step1Misses.add(Step1Miss.galleyRank);
     }
+    if (crewRequirements.isEmpty) {
+      step1Misses.add(Step1Miss.crewRequirements);
+    }
     if (step1Misses.isEmpty) {
       currentStep.value = 2;
     }
@@ -250,6 +266,19 @@ class JobPostController extends GetxController {
 
   validateStep2() {
     step2Misses.clear();
+    if (needCOCRequirements.value && cocRequirementsSelected.isEmpty) {
+      step2Misses.add(Step2Miss.coc);
+    }
+    if (needCOPRequirements.value && copRequirementsSelected.isEmpty) {
+      step2Misses.add(Step2Miss.cop);
+    }
+    if (needWatchKeepingRequirements.value &&
+        watchKeepingRequirementsSelected.isEmpty) {
+      step2Misses.add(Step2Miss.watchKeeping);
+    }
+    if (step2Misses.isEmpty) {
+      currentStep.value = 3;
+    }
     // if(jobExpiry)
   }
 

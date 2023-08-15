@@ -12,6 +12,10 @@ class PreferencesHelper {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 
+  Future<void> reload() async {
+    return await _sharedPreferences?.reload();
+  }
+
   Future<bool>? clearAll() {
     UserStates.instance.reset();
     return _sharedPreferences?.clear();
@@ -66,14 +70,17 @@ class PreferencesHelper {
 
   SignUpType? get employerType {
     switch (_sharedPreferences?.getInt(_EMPLOYER_TYPE)) {
-      case 0:
-        return SignUpType.employerITF;
-      case 1:
-        return SignUpType.employerManagementCompany;
       case 2:
+        return SignUpType.crew;
+      case 3:
+        return SignUpType.employerITF;
+      case 4:
+        return SignUpType.employerManagementCompany;
+      case 5:
         return SignUpType.employerCrewingAgent;
     }
   }
+
   Future<void>? setEmployerType(int value) =>
       _sharedPreferences?.setInt(_EMPLOYER_TYPE, value);
 }

@@ -116,6 +116,12 @@ class JobPostStep2 extends GetView<JobPostController> {
                     ),
                 ],
               ),
+              if (controller.step2Misses.contains(Step2Miss.coc)) ...[
+                8.verticalSpace,
+                Text(Step2Miss.coc.errorMessage,
+                    style: Get.textTheme.bodySmall
+                        ?.copyWith(color: Get.theme.colorScheme.error)),
+              ],
               8.verticalSpace,
               Wrap(
                   spacing: 16,
@@ -218,6 +224,12 @@ class JobPostStep2 extends GetView<JobPostController> {
                     ),
                 ],
               ),
+              if (controller.step2Misses.contains(Step2Miss.cop)) ...[
+                8.verticalSpace,
+                Text(Step2Miss.cop.errorMessage,
+                    style: Get.textTheme.bodySmall
+                        ?.copyWith(color: Get.theme.colorScheme.error)),
+              ],
               8.verticalSpace,
               Wrap(
                   spacing: 16,
@@ -325,6 +337,12 @@ class JobPostStep2 extends GetView<JobPostController> {
                     ),
                 ],
               ),
+              if (controller.step2Misses.contains(Step2Miss.watchKeeping)) ...[
+                8.verticalSpace,
+                Text(Step2Miss.watchKeeping.errorMessage,
+                    style: Get.textTheme.bodySmall
+                        ?.copyWith(color: Get.theme.colorScheme.error)),
+              ],
               8.verticalSpace,
               Wrap(
                   spacing: 16,
@@ -443,9 +461,7 @@ class JobPostStep2 extends GetView<JobPostController> {
                 child: SizedBox(
                   width: 232,
                   child: CustomElevatedButon(
-                      onPressed: () {
-                        controller.currentStep.value = 3;
-                      },
+                      onPressed: controller.validateStep2,
                       child: const Text("SAVE & CONTINUE")),
                 ),
               ),

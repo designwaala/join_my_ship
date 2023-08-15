@@ -45,6 +45,10 @@ class SplashController extends GetxController with GetTickerProviderStateMixin {
       Get.offAllNamed(Routes.INFO);
       return;
     }
+    if (PreferencesHelper.instance.employerType == null &&
+        user?.userTypeKey != null) {
+      await PreferencesHelper.instance.setEmployerType(user!.userTypeKey!);
+    }
     //CREW FLOW
     if (PreferencesHelper.instance.isCrew == true || user?.userTypeKey == 2) {
       if (FirebaseAuth.instance.currentUser?.emailVerified != true) {

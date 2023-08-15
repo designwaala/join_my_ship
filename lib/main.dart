@@ -61,7 +61,7 @@ void main() async {
     androidProvider: AndroidProvider.playIntegrity,
     appleProvider: AppleProvider.appAttest
   ); */
-  PreferencesHelper.instance.init();
+  await PreferencesHelper.instance.init();
   try {
     print(await FirebaseAuth.instance.currentUser?.getIdToken());
   } catch (e) {

@@ -23,7 +23,7 @@ class JobPostedSuccessfullyView
             height: 180,
             width: 180,
             child:
-                Lottie.asset('assets/animations/blue_tick.json', repeat: false),
+                Lottie.asset('assets/animations/blue_tick.json', repeat: true),
           ),
           26.verticalSpace,
           Text(controller.args?.message ?? "JOB PUBLISHED\nSUCCESSFULLY!",
