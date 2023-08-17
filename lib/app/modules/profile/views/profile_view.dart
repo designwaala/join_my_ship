@@ -318,6 +318,7 @@ class ProfileView extends GetView<ProfileController> {
                           )),
                       InkWell(
                         onTap: () async {
+                          UserStates.instance.reset();
                           await FirebaseAuth.instance.signOut();
                           await PreferencesHelper.instance.clearAll();
                           Get.offAllNamed(Routes.SPLASH);

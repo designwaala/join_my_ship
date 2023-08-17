@@ -35,6 +35,7 @@ abstract class Routes {
   static const CREW_JOB_APPLICATIONS = _Paths.CREW_JOB_APPLICATIONS;
   static const APPLICANT_DETAIL = _Paths.APPLICANT_DETAIL;
   static const APPLICATION_STATUS = _Paths.APPLICATION_STATUS;
+  static const ERROR_OCCURRED = _Paths.ERROR_OCCURRED;
 }
 
 abstract class _Paths {
@@ -71,4 +72,5 @@ abstract class _Paths {
   static const CREW_JOB_APPLICATIONS = '/crew-job-applications';
   static const APPLICANT_DETAIL = '/applicant-detail';
   static const APPLICATION_STATUS = '/application-status';
+  static const ERROR_OCCURRED = '/error-occurred';
 }

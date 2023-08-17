@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,6 +16,7 @@ import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 class SplashController extends GetxController
@@ -52,116 +54,203 @@ class SplashController extends GetxController
 mixin RedirectionMixin {
   FToast fToast = FToast();
   CrewUser? user;
+  Function eq = const ListEquality().equals;
+
+  Future<void> getUser() async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      return;
+    } else if (UserStates.instance.crewUser != null) {
+      user = UserStates.instance.crewUser;
+    } else {
+      user = await getIt<CrewUserProvider>().getCrewUser();
+      UserStates.instance.crewUser = user;
+    }
+  }
+
+  Future<void> intentionalDelay() async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      await Future.delayed(const Duration(seconds: 1));
+    } else if (UserStates.instance.crewUser != null) {
+      await Future.delayed(const Duration(seconds: 1));
+    } else {
+      await Future.delayed(const Duration(seconds: 3));
+    }
+  }
+
   Future<void> redirection({Function? customRedirection}) async {
     try {
-      await Future.wait([
-        FirebaseAuth.instance.currentUser == null
-            ? Future.value(null)
-            : getIt<CrewUserProvider>()
-                .getCrewUser()
-                .then((value) => user = value),
-        Future.delayed(const Duration(seconds: 3))
-      ]);
+      await Future.wait([getUser(), intentionalDelay()]);
     } catch (e) {
       print("$e");
-    }
-    if (FirebaseAuth.instance.currentUser == null) {
-      await FirebaseAuth.instance.signOut();
-      await PreferencesHelper.instance.clearAll();
-      Get.offAllNamed(Routes.INFO);
-      return;
-    }
-    if (PreferencesHelper.instance.employerType == null &&
-        user?.userTypeKey != null) {
-      await PreferencesHelper.instance.setEmployerType(user!.userTypeKey!);
-    }
-
-    //USER WAS NOT CREATED ON DJANGO
-    if (user == null) {
-      if (FirebaseAuth.instance.currentUser?.email == null) {
-        if (PreferencesHelper.instance.isCrew == null) {
-          Get.offAllNamed(Routes.CHOOSE_USER);
-        } else if (PreferencesHelper.instance.isCrew == true ||
-            PreferencesHelper.instance.employerType != null) {
-          Get.offAllNamed(Routes.SIGN_UP_EMAIL);
-        } else {
-          Get.offAllNamed(Routes.CHOOSE_EMPLOYER);
-        }
-        return;
-      }
-
-      if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
-        if (PreferencesHelper.instance.isCrew == null) {
-          Get.offAllNamed(Routes.CHOOSE_USER,
-              arguments: ChooseUserArguments(redirection: () {
-            if (PreferencesHelper.instance.isCrew == true) {
-              Get.offAllNamed(Routes.CREW_ONBOARDING);
-            } else if (PreferencesHelper.instance.employerType == null) {
-              Get.offAllNamed(Routes.CHOOSE_EMPLOYER);
-            } else {
-              Get.offAllNamed(Routes.EMPLOYER_CREATE_USER);
-            }
-          }));
-        } else if (PreferencesHelper.instance.isCrew == true) {
-          Get.offAllNamed(Routes.CREW_ONBOARDING);
-        } else if (PreferencesHelper.instance.employerType == null) {
-          Get.offAllNamed(Routes.CHOOSE_EMPLOYER);
-        } else {
-          Get.offAllNamed(Routes.EMPLOYER_CREATE_USER);
-        }
-      } else {
-        fToast.safeShowToast(child: errorToast("Email Not Verified"));
-        Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING,
-            arguments: EmailVerificationArguments(redirection: () {
-          Get.offAllNamed(Routes.SPLASH);
-        }));
-      }
-
-      return;
     }
     if (customRedirection != null) {
       customRedirection.call();
       return;
     }
-    //CREW FLOW
-    if (PreferencesHelper.instance.isCrew == true || user?.userTypeKey == 2) {
-      if (FirebaseAuth.instance.currentUser?.emailVerified != true) {
-        fToast.safeShowToast(child: errorToast("Email Not Verified"));
-        Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING,
-            arguments: const EmailVerificationArguments(isCrew: true));
-      } else if (user?.screenCheck == 3) {
-        if (user?.isVerified == 1) {
-          Get.offAllNamed(Routes.HOME);
-        } else {
-          Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
-        }
+    if (FirebaseAuth.instance.currentUser == null &&
+        user == null &&
+        (UserStates.instance.isCrew == null)) {
+      return Get.offAllNamed(Routes.INFO);
+    }
+    if (FirebaseAuth.instance.currentUser != null &&
+        user == null &&
+        (UserStates.instance.isCrew == null ||
+            UserStates.instance.employerType == null)) {
+      //ENFORCE CHOOSE USER FLOW
+      Get.offAllNamed(Routes.CHOOSE_USER);
+      return;
+    }
+
+    if (user != null) {
+      UserStates.instance.isCrew = user?.userTypeKey == 2;
+    }
+
+    List<bool> truths = [
+      FirebaseAuth.instance.currentUser != null,
+      user != null,
+      UserStates.instance.isCrew == true,
+      FirebaseAuth.instance.currentUser?.email?.nullIfEmpty() != null,
+      FirebaseAuth.instance.currentUser?.emailVerified == true,
+      FirebaseAuth.instance.currentUser?.phoneNumber != null
+    ];
+
+    if (eq(truths, [false, false, false, false, false, false])) {
+      Get.offAllNamed(Routes.SIGN_UP_PHONE_NUMBER);
+      return;
+    } else if (eq(truths, [false, false, false, false, false, true])) {
+      return;
+    } else if (eq(truths, [false, false, false, false, true, false])) {
+      return;
+    } else if (eq(truths, [false, false, false, false, true, true])) {
+      return;
+    } else if (eq(truths, [false, false, false, true, false, false])) {
+      return;
+    } else if (eq(truths, [false, false, false, true, false, true])) {
+      return;
+    } else if (eq(truths, [false, false, false, true, true, false])) {
+      return;
+    } else if (eq(truths, [false, false, false, true, true, true])) {
+      return;
+    } else if (eq(truths, [false, false, true, false, false, false])) {
+      return Get.offAllNamed(Routes.SIGN_UP_EMAIL);
+    } else if (eq(truths, [false, false, true, false, false, true])) {
+      return;
+    } else if (eq(truths, [false, false, true, false, true, false])) {
+      return;
+    } else if (eq(truths, [false, false, true, false, true, true])) {
+      return;
+    } else if (eq(truths, [false, false, true, true, false, false])) {
+      return;
+    } else if (eq(truths, [false, false, true, true, false, true])) {
+      return;
+    } else if (eq(truths, [false, false, true, true, true, false])) {
+      return;
+    } else if (eq(truths, [false, false, true, true, true, true])) {
+      return;
+    } else if (eq(truths, [false, true, false, false, false, false])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [false, true, false, false, false, true])) {
+      return;
+    } else if (eq(truths, [false, true, false, false, true, false])) {
+      return;
+    } else if (eq(truths, [false, true, false, false, true, true])) {
+      return;
+    } else if (eq(truths, [false, true, false, true, false, false])) {
+      return;
+    } else if (eq(truths, [false, true, false, true, false, true])) {
+      return;
+    } else if (eq(truths, [false, true, false, true, true, false])) {
+      return;
+    } else if (eq(truths, [false, true, false, true, true, true])) {
+      return;
+    } else if (eq(truths, [false, true, true, false, false, false])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [false, true, true, false, false, true])) {
+      return;
+    } else if (eq(truths, [false, true, true, false, true, false])) {
+      return;
+    } else if (eq(truths, [false, true, true, false, true, true])) {
+      return;
+    } else if (eq(truths, [false, true, true, true, false, false])) {
+      return;
+    } else if (eq(truths, [false, true, true, true, false, true])) {
+      return;
+    } else if (eq(truths, [false, true, true, true, true, false])) {
+      return;
+    } else if (eq(truths, [false, true, true, true, true, true])) {
+      return;
+    } else if (eq(truths, [true, false, false, false, false, false])) {
+      return;
+    } else if (eq(truths, [true, false, false, false, false, true])) {
+      return Get.offAllNamed(Routes.SIGN_UP_EMAIL);
+    } else if (eq(truths, [true, false, false, false, true, false])) {
+      return;
+    } else if (eq(truths, [true, false, false, false, true, true])) {
+      return;
+    } else if (eq(truths, [true, false, false, true, false, false])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [true, false, false, true, false, true])) {
+      return Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING);
+    } else if (eq(truths, [true, false, false, true, true, false])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [true, false, false, true, true, true])) {
+      return Get.offAllNamed(Routes.EMPLOYER_CREATE_USER);
+    } else if (eq(truths, [true, false, true, false, false, false])) {
+      return Get.offAllNamed(Routes.SIGN_UP_EMAIL);
+    } else if (eq(truths, [true, false, true, false, false, true])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [true, false, true, false, true, false])) {
+      return;
+    } else if (eq(truths, [true, false, true, false, true, true])) {
+      return;
+    } else if (eq(truths, [true, false, true, true, false, false])) {
+      return Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING);
+    } else if (eq(truths, [true, false, true, true, false, true])) {
+      return Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING);
+    } else if (eq(truths, [true, false, true, true, true, false])) {
+      return Get.offAllNamed(Routes.CREW_ONBOARDING);
+    } else if (eq(truths, [true, false, true, true, true, true])) {
+      return Get.offAllNamed(Routes.CREW_ONBOARDING);
+    } else if (eq(truths, [true, true, false, false, false, false])) {
+      return;
+    } else if (eq(truths, [true, true, false, false, false, true])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [true, true, false, false, true, false])) {
+      return;
+    } else if (eq(truths, [true, true, false, false, true, true])) {
+      return;
+    } else if (eq(truths, [true, true, false, true, false, false])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [true, true, false, true, false, true])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [true, true, false, true, true, false])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [true, true, false, true, true, true])) {
+      return Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+    } else if (eq(truths, [true, true, true, false, false, false])) {
+      return;
+    } else if (eq(truths, [true, true, true, false, false, true])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [true, true, true, false, true, false])) {
+      return;
+    } else if (eq(truths, [true, true, true, false, true, true])) {
+      return;
+    } else if (eq(truths, [true, true, true, true, false, false])) {
+      return Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING);
+    } else if (eq(truths, [true, true, true, true, false, true])) {
+      return Get.offAllNamed(Routes.ERROR_OCCURRED);
+    } else if (eq(truths, [true, true, true, true, true, false])) {
+      if (user?.userTypeKey == 3) {
+        Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
       } else {
         Get.offAllNamed(Routes.CREW_ONBOARDING);
       }
-      return;
-    }
-    //EMPLOYER FLOW
-    else {
-      if (PreferencesHelper.instance.employerType == null ||
-          FirebaseAuth.instance.currentUser?.phoneNumber == null) {
-        Get.offAllNamed(Routes.CHOOSE_EMPLOYER);
-      } else if (FirebaseAuth.instance.currentUser?.email?.nullIfEmpty() ==
-          null) {
-        Get.offAllNamed(Routes.SIGN_UP_EMAIL);
-      } else if (FirebaseAuth.instance.currentUser?.emailVerified != true) {
-        fToast.safeShowToast(child: errorToast("Email Not Verified"));
-        Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING,
-            arguments: const EmailVerificationArguments(isCrew: false));
-      } else if (user?.screenCheck == 1) {
-        if (user?.isVerified == 1) {
-          Get.offAllNamed(Routes.HOME);
-        } else {
-          Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
-        }
+    } else if (eq(truths, [true, true, true, true, true, true])) {
+      if (user?.userTypeKey == 3) {
+        Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
       } else {
-        Get.offAllNamed(Routes.EMPLOYER_CREATE_USER);
+        Get.offAllNamed(Routes.CREW_ONBOARDING);
       }
-      return;
     }
   }
 }

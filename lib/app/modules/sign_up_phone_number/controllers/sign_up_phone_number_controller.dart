@@ -62,7 +62,7 @@ class SignUpPhoneNumberController extends GetxController {
     if (FirebaseAuth.instance.currentUser != null) {
       Get.offAllNamed(Routes.SIGN_UP_EMAIL,
           arguments: SignUpEmailArguments(
-              signUpType: Get.arguments["company_type"],
+              signUpType: Get.arguments?["company_type"],
               smsCode: otpController.text,
               verificationId: verificationId));
       fToast.safeShowToast(child: successToast("Authentication Successful"));

@@ -5,14 +5,15 @@ import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/change_password/controllers/change_password_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 class SignUpEmailController extends GetxController with RequiresRecentLogin {
   // SignUpEmailArguments? args;
-  SignUpType? signUpType = PreferencesHelper.instance.isCrew == true
+  SignUpType? signUpType = UserStates.instance.isCrew == true
       ? SignUpType.crew
-      : PreferencesHelper.instance.employerType;
+      : UserStates.instance.employerType;
 
   final parentKey = GlobalKey();
 
