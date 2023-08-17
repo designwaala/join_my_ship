@@ -14,29 +14,9 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
       key: controller.parentKey,
       appBar: AppBar(
           foregroundColor: const Color(0xFF000000),
-          toolbarHeight: 70,
           backgroundColor: Colors.white,
           centerTitle: true,
-          title: Text('Change Password',
-              style: Get.theme.textTheme.headlineSmall?.copyWith(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600)),
-          leading: InkWell(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                  color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-              child: const Icon(
-                Icons.keyboard_backspace_rounded,
-                color: Colors.black,
-              ),
-            ),
-          )),
+          title: const Text('Change Password')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: Obx(

@@ -13,10 +13,27 @@ import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
+enum Miss {
+  countryCode,
+  mobileNumber;
+
+  String get error {
+    switch (this) {
+      case Miss.countryCode:
+        return "Please select your country code";
+      case Miss.mobileNumber:
+        return "Please enter your mobile number";
+    }
+  }
+}
+
 class CrewSignInMobileController extends GetxController with RedirectionMixin {
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   RxString selectedCountryCode = "+91".obs;
+
+  RxList<Miss> misses = RxList.empty();
+  final formKey = GlobalKey<FormState>();
 
   RxBool isOTPSent = false.obs;
   RxBool isVerifying = false.obs;
@@ -41,7 +58,7 @@ class CrewSignInMobileController extends GetxController with RedirectionMixin {
       CrewSignInMobileArguments args = Get.arguments;
       customRedirection = args.redirection;
       phoneController.text = args.phoneNumber ?? "";
-      selectedCountryCode.value = args.countryCode ?? "";
+      selectedCountryCode.value = args.countryCode ?? selectedCountryCode.value;
     }
     super.onInit();
   }
@@ -61,6 +78,14 @@ class CrewSignInMobileController extends GetxController with RedirectionMixin {
   String? verificationId;
   int? forceResendingToken;
   sendOTP() async {
+    misses.clear();
+    if (phoneController.text.isEmpty) {
+      misses.add(Miss.mobileNumber);
+    }
+    if (misses.isNotEmpty) {
+      return;
+    }
+
     isVerifying.value = true;
     isOTPSent.value = false;
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -105,7 +130,13 @@ class CrewSignInMobileController extends GetxController with RedirectionMixin {
                   ?.linkWithCredential(credential)
               : await FirebaseAuth.instance.currentUser
                   ?.updatePhoneNumber(credential);
-      await redirection(customRedirection: customRedirection);
+      await redirection(
+          customRedirection: customRedirection == null
+              ? null
+              : () {
+                  customRedirection?.call(
+                      phoneController.text, selectedCountryCode.value);
+                });
     } catch (e) {
       fToast.safeShowToast(child: errorToast("$e"));
       isVerifying.value = false;

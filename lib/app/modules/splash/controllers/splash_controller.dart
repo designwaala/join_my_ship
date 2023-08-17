@@ -55,8 +55,7 @@ mixin RedirectionMixin {
   Future<void> redirection({Function? customRedirection}) async {
     try {
       await Future.wait([
-        FirebaseAuth.instance.currentUser == null ||
-                PreferencesHelper.instance.accessToken.isEmpty
+        FirebaseAuth.instance.currentUser == null
             ? Future.value(null)
             : getIt<CrewUserProvider>()
                 .getCrewUser()

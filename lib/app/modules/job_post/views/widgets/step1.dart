@@ -45,9 +45,9 @@ class JobPostStep1 extends GetView<JobPostController> {
                             onTap: () async {
                               DateTime? selectedDateTime = await showDatePicker(
                                   context: Get.context!,
-                                  initialDate: DateTime.parse("1990-01-01"),
-                                  firstDate: DateTime.parse("1950-01-01"),
-                                  lastDate: DateTime.now());
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime.parse("2050-01-01"));
                               controller.tentativeJoining.text =
                                   selectedDateTime?.getServerDate() ?? "";
                             },
@@ -293,6 +293,7 @@ class JobPostStep1 extends GetView<JobPostController> {
                                                   rankWithWage.key?.id)
                                               ?.value
                                               .toString(),
+                                          labelText: "Wages(\$)",
 
                                           onChanged: (value) {
                                             if (value.isEmpty) {
@@ -319,7 +320,9 @@ class JobPostStep1 extends GetView<JobPostController> {
                                                     rankWithWage.key?.id);
                                           },
                                           padding: EdgeInsets.zero,
-                                          icon: const Icon(Icons.remove))
+                                          icon: const Icon(
+                                              Icons.remove_circle_outline,
+                                              color: Colors.red))
                                     ],
                                   ),
                                 )),
@@ -362,7 +365,15 @@ class JobPostStep1 extends GetView<JobPostController> {
                   Center(
                     child: SizedBox(
                       width: 232,
-                      child: CustomElevatedButon(
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.h, horizontal: 45.w),
+                            backgroundColor: const Color(0xFF407BFF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(36.21),
+                            ),
+                          ),
                           onPressed: () {
                             controller.validateStep1();
                           },

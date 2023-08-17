@@ -460,7 +460,15 @@ class JobPostStep2 extends GetView<JobPostController> {
               Center(
                 child: SizedBox(
                   width: 232,
-                  child: CustomElevatedButon(
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.h, horizontal: 45.w),
+                        backgroundColor: const Color(0xFF407BFF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(36.21),
+                        ),
+                      ),
                       onPressed: controller.validateStep2,
                       child: const Text("SAVE & CONTINUE")),
                 ),

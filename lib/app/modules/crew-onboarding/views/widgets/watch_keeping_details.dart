@@ -48,83 +48,86 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
           if (controller.isHoldingWatchKeeping.value == true) ...[
             Row(
               children: [
-                const Text("Issuing Authority"),
-                const Spacer(),
-                DropdownButtonHideUnderline(
-                  child: DropdownButton2<String>(
-                    value: null,
-                    isExpanded: true,
-                    items: controller.watchKeepings
-                        .map((e) => e.name)
-                        .map((e) => DropdownMenuItem(
-                            value: e,
-                            onTap: () {
-                              if (controller.watchKeepingIssuingAuthorities.any(
-                                  (issuingAuthority) =>
-                                      issuingAuthority.issuingAuthority == e)) {
-                                controller.watchKeepingIssuingAuthorities
-                                    .removeWhere((element) =>
-                                        element.issuingAuthority == e);
-                              } else if (controller
-                                      .watchKeepingIssuingAuthorities.length <
-                                  2) {
-                                controller.watchKeepingIssuingAuthorities
-                                    .add(IssuingAuthority(issuingAuthority: e));
-                              } else {
-                                controller.fToast.safeShowToast(
-                                    child: errorToast(
-                                        "You can select only 2 issuing authorities."));
-                              }
-                            },
-                            child: Obx(() {
-                              return Row(
-                                children: [
-                                  Checkbox(
-                                      value: controller
-                                          .watchKeepingIssuingAuthorities
-                                          .any((element) =>
-                                              element.issuingAuthority == e),
-                                      onChanged: (value) {
-                                        if (controller
+                const Expanded(child: Text("Issuing Authority")),
+                20.horizontalSpace,
+                Expanded(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2<String>(
+                      value: null,
+                      isExpanded: true,
+                      style: Get.textTheme.bodySmall,
+                      items: controller.watchKeepings
+                          .map((e) => e.name)
+                          .map((e) => DropdownMenuItem(
+                              value: e,
+                              onTap: () {
+                                if (controller.watchKeepingIssuingAuthorities
+                                    .any((issuingAuthority) =>
+                                        issuingAuthority.issuingAuthority ==
+                                        e)) {
+                                  controller.watchKeepingIssuingAuthorities
+                                      .removeWhere((element) =>
+                                          element.issuingAuthority == e);
+                                } else if (controller
+                                        .watchKeepingIssuingAuthorities.length <
+                                    2) {
+                                  controller.watchKeepingIssuingAuthorities.add(
+                                      IssuingAuthority(issuingAuthority: e));
+                                } else {
+                                  controller.fToast.safeShowToast(
+                                      child: errorToast(
+                                          "You can select only 2 issuing authorities."));
+                                }
+                              },
+                              child: Obx(() {
+                                return Row(
+                                  children: [
+                                    Checkbox(
+                                        value: controller
                                             .watchKeepingIssuingAuthorities
-                                            .any((issuingAuthority) =>
-                                                issuingAuthority
-                                                    .issuingAuthority ==
-                                                e)) {
-                                          controller
+                                            .any((element) =>
+                                                element.issuingAuthority == e),
+                                        onChanged: (value) {
+                                          if (controller
                                               .watchKeepingIssuingAuthorities
-                                              .removeWhere((element) =>
-                                                  element.issuingAuthority ==
-                                                  e);
-                                        } else if (controller
+                                              .any((issuingAuthority) =>
+                                                  issuingAuthority
+                                                      .issuingAuthority ==
+                                                  e)) {
+                                            controller
                                                 .watchKeepingIssuingAuthorities
-                                                .length <
-                                            2) {
-                                          controller
-                                              .watchKeepingIssuingAuthorities
-                                              .add(IssuingAuthority(
-                                                  issuingAuthority: e));
-                                        } else {
-                                          controller.fToast.safeShowToast(
-                                              child: errorToast(
-                                                  "You can select only 2 issuing authorities."));
-                                        }
-                                      }),
-                                  Text(e ?? ""),
-                                ],
-                              );
-                            })))
-                        .toList(),
-                    onChanged: (value) {},
-                    hint: const Text("Select"),
-                    buttonStyleData: ButtonStyleData(
-                        height: 40,
-                        width: 200,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(64),
-                          border: Border.all(color: Get.theme.primaryColor),
-                        )),
+                                                .removeWhere((element) =>
+                                                    element.issuingAuthority ==
+                                                    e);
+                                          } else if (controller
+                                                  .watchKeepingIssuingAuthorities
+                                                  .length <
+                                              2) {
+                                            controller
+                                                .watchKeepingIssuingAuthorities
+                                                .add(IssuingAuthority(
+                                                    issuingAuthority: e));
+                                          } else {
+                                            controller.fToast.safeShowToast(
+                                                child: errorToast(
+                                                    "You can select only 2 issuing authorities."));
+                                          }
+                                        }),
+                                    Text(e ?? ""),
+                                  ],
+                                );
+                              })))
+                          .toList(),
+                      onChanged: (value) {},
+                      hint: const Text("Select"),
+                      buttonStyleData: ButtonStyleData(
+                          height: 40,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(64),
+                            border: Border.all(color: Get.theme.primaryColor),
+                          )),
+                    ),
                   ),
                 ),
               ],
@@ -182,7 +185,7 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                                     hintText: "Issuing Authority");
                               }),
                             ),
-                            16.horizontalSpace,
+                            20.horizontalSpace,
                             Expanded(
                               child: Builder(builder: (context) {
                                 TextEditingController textEditingController =
@@ -243,6 +246,7 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                             Expanded(
                                 child: Text(
                                     issuingAuthority.issuingAuthority ?? "")),
+                            20.horizontalSpace,
                             Expanded(
                               child: Builder(builder: (context) {
                                 TextEditingController textEditingController =

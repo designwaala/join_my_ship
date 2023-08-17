@@ -14,27 +14,10 @@ class ResetPasswordEmailVerificationView extends GetView {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 70,
           backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
           centerTitle: true,
-          title: Text('Reset Password',
-              style: Get.theme.textTheme.headlineSmall?.copyWith(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600)),
-          leading: InkWell(
-            onTap: Get.back,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                  color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-              child: const Icon(
-                Icons.keyboard_backspace_rounded,
-                color: Colors.black,
-              ),
-            ),
-          ),
+          title: const Text('Reset Password'),
         ),
         body: Center(
           child: Column(

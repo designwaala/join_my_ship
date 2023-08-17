@@ -16,27 +16,10 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
         key: controller.parentKey,
         backgroundColor: Color(0xFFFbF6FF),
         appBar: AppBar(
-          toolbarHeight: 60,
-          title: Text('JOIN MY SHIP',
-              style: Get.theme.textTheme.headlineSmall?.copyWith(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600)),
+          title: Text('JOIN MY SHIP'),
           backgroundColor: Colors.white,
-          leading: InkWell(
-            onTap: Get.back,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-              child: Icon(
-                Icons.keyboard_backspace_rounded,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          centerTitle: false,
+          foregroundColor: Colors.black,
+          centerTitle: true,
         ),
         body: Obx(() {
           return CustomScrollView(
@@ -181,7 +164,7 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(64))),
                             onPressed: () {
-                              Get.toNamed(Routes.SIGN_UP_EMAIL);
+                              Get.toNamed(Routes.CREW_SIGN_IN_MOBILE);
                             },
                             child: Text("LOGIN")),
                       )

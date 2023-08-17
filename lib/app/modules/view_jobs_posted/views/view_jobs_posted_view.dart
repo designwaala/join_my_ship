@@ -11,6 +11,8 @@ class ViewJobsPostedView extends GetView<ViewJobsPostedController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ViewJobsPostedView'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         centerTitle: true,
       ),
       body: const Center(

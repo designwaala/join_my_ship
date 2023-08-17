@@ -16,27 +16,10 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
         key: controller.parentKey,
         backgroundColor: Color(0xFFFbF6FF),
         appBar: AppBar(
-          toolbarHeight: 70,
-          title: Text('JOIN MY SHIP',
-              style: Get.theme.textTheme.headlineSmall?.copyWith(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600)),
+          title: const Text('JOIN MY SHIP'),
+          foregroundColor: Colors.black,
           backgroundColor: Colors.white,
-          leading: InkWell(
-            onTap: Get.back,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: Color(0xFFF3F3F3), shape: BoxShape.circle),
-              child: Icon(
-                Icons.keyboard_backspace_rounded,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          centerTitle: false,
+          centerTitle: true,
         ),
         body: Obx(() {
           return CustomScrollView(
@@ -109,22 +92,23 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                       ),
                       18.verticalSpace,
                       RichText(
+                          textAlign: TextAlign.center,
                           text: TextSpan(
                               style: Get.theme.textTheme.bodyMedium,
                               children: [
-                            TextSpan(
-                                text: "Forgot your password? ",
-                                style: Get.textTheme.bodySmall),
-                            TextSpan(
-                                text: "Reset here",
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Get.toNamed(Routes.RESET_PASSWORD);
-                                  },
-                                style: Get.textTheme.bodyMedium?.copyWith(
-                                    color: Get.theme.primaryColor,
-                                    decoration: TextDecoration.underline))
-                          ])),
+                                TextSpan(
+                                    text: "Forgot your password? ",
+                                    style: Get.textTheme.bodySmall),
+                                TextSpan(
+                                    text: "Reset here",
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Get.toNamed(Routes.RESET_PASSWORD);
+                                      },
+                                    style: Get.textTheme.bodyMedium?.copyWith(
+                                        color: Get.theme.primaryColor,
+                                        decoration: TextDecoration.underline))
+                              ])),
                       38.verticalSpace,
                       Center(child: Text("Or sign in with")),
                       14.verticalSpace,

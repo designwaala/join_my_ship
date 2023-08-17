@@ -49,77 +49,78 @@ class COPDetails extends GetView<CrewOnboardingController> {
           if (controller.isHoldingValidCOP.value == true) ...[
             Row(
               children: [
-                const Text("Issuing Authority"),
-                const Spacer(),
-                DropdownButtonHideUnderline(
-                  child: DropdownButton2<String>(
-                    value: null,
-                    isExpanded: true,
-                    style: Get.textTheme.bodySmall,
-                    items: controller.cops.map((e) => e.name)
-                        .map((e) => DropdownMenuItem(
-                            value: e,
-                            onTap: () {
-                              if (controller.copIssuingAuthorities.any(
-                                  (issuingAuthority) =>
-                                      issuingAuthority.issuingAuthority == e)) {
-                                controller.copIssuingAuthorities.removeWhere(
-                                    (element) => element.issuingAuthority == e);
-                              } else if (controller
-                                      .copIssuingAuthorities.length <
-                                  2) {
-                                controller.copIssuingAuthorities
-                                    .add(IssuingAuthority(issuingAuthority: e));
-                              } else {
-                                controller.fToast.safeShowToast(
-                                    child: errorToast(
-                                        "You can select only 2 issuing authorities."));
-                              }
-                            },
-                            child: Obx(() {
-                              return Row(
-                                children: [
-                                  Checkbox(
-                                      value: controller.copIssuingAuthorities
-                                          .any((element) =>
-                                              element.issuingAuthority == e),
-                                      onChanged: (value) {
-                                        if (controller.copIssuingAuthorities
-                                            .any((issuingAuthority) =>
-                                                issuingAuthority
-                                                    .issuingAuthority ==
-                                                e)) {
-                                          controller.copIssuingAuthorities
-                                              .removeWhere((element) =>
-                                                  element.issuingAuthority ==
-                                                  e);
-                                        } else if (controller
-                                                .copIssuingAuthorities.length <
-                                            2) {
-                                          controller.copIssuingAuthorities.add(
-                                              IssuingAuthority(
-                                                  issuingAuthority: e));
-                                        } else {
-                                          controller.fToast.safeShowToast(
-                                              child: errorToast(
-                                                  "You can select only 2 issuing authorities."));
-                                        }
-                                      }),
-                                  Text(e ?? "", style: Get.textTheme.titleMedium),
-                                ],
-                              );
-                            })))
-                        .toList(),
-                    onChanged: (value) {},
-                    hint: const Text("Select"),
-                    buttonStyleData: ButtonStyleData(
-                        height: 40,
-                        width: 200,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(64),
-                          border: Border.all(color: Get.theme.primaryColor),
-                        )),
+                const Expanded(child: Text("Issuing Authority")),
+                20.horizontalSpace,
+                Expanded(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2<String>(
+                      value: null,
+                      isExpanded: true,
+                      style: Get.textTheme.bodySmall,
+                      items: controller.cops.map((e) => e.name)
+                          .map((e) => DropdownMenuItem(
+                              value: e,
+                              onTap: () {
+                                if (controller.copIssuingAuthorities.any(
+                                    (issuingAuthority) =>
+                                        issuingAuthority.issuingAuthority == e)) {
+                                  controller.copIssuingAuthorities.removeWhere(
+                                      (element) => element.issuingAuthority == e);
+                                } else if (controller
+                                        .copIssuingAuthorities.length <
+                                    2) {
+                                  controller.copIssuingAuthorities
+                                      .add(IssuingAuthority(issuingAuthority: e));
+                                } else {
+                                  controller.fToast.safeShowToast(
+                                      child: errorToast(
+                                          "You can select only 2 issuing authorities."));
+                                }
+                              },
+                              child: Obx(() {
+                                return Row(
+                                  children: [
+                                    Checkbox(
+                                        value: controller.copIssuingAuthorities
+                                            .any((element) =>
+                                                element.issuingAuthority == e),
+                                        onChanged: (value) {
+                                          if (controller.copIssuingAuthorities
+                                              .any((issuingAuthority) =>
+                                                  issuingAuthority
+                                                      .issuingAuthority ==
+                                                  e)) {
+                                            controller.copIssuingAuthorities
+                                                .removeWhere((element) =>
+                                                    element.issuingAuthority ==
+                                                    e);
+                                          } else if (controller
+                                                  .copIssuingAuthorities.length <
+                                              2) {
+                                            controller.copIssuingAuthorities.add(
+                                                IssuingAuthority(
+                                                    issuingAuthority: e));
+                                          } else {
+                                            controller.fToast.safeShowToast(
+                                                child: errorToast(
+                                                    "You can select only 2 issuing authorities."));
+                                          }
+                                        }),
+                                    Text(e ?? "", style: Get.textTheme.titleMedium),
+                                  ],
+                                );
+                              })))
+                          .toList(),
+                      onChanged: (value) {},
+                      hint: const Text("Select"),
+                      buttonStyleData: ButtonStyleData(
+                          height: 40,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(64),
+                            border: Border.all(color: Get.theme.primaryColor),
+                          )),
+                    ),
                   ),
                 ),
               ],
@@ -180,7 +181,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                         hintText: "Issuing Authority");
                                   }),
                                 ),
-                                16.horizontalSpace,
+                                20.horizontalSpace,
                                 Expanded(
                                   child: Builder(builder: (context) {
                                     TextEditingController
@@ -243,6 +244,7 @@ class COPDetails extends GetView<CrewOnboardingController> {
                             Expanded(
                                 child: Text(
                                     issuingAuthority.issuingAuthority ?? "")),
+                            20.horizontalSpace,
                             Expanded(
                               child: Builder(builder: (context) {
                                 TextEditingController textEditingController =

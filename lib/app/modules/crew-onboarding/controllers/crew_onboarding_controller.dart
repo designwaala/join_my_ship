@@ -1,9 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide State;
 import 'package:flutter_document_picker/flutter_document_picker.dart';
@@ -18,14 +15,11 @@ import 'package:join_mp_ship/app/data/models/country_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/models/passport_issuing_authority_model.dart';
 import 'package:join_mp_ship/app/data/models/previous_employer_model.dart';
-import 'package:join_mp_ship/app/data/models/previous_employer_reference_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
-import 'package:join_mp_ship/app/data/models/service_record_model.dart';
 import 'package:join_mp_ship/app/data/models/stcw_issuing_authority_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
-import 'package:join_mp_ship/app/data/models/vessel_type_model.dart';
 import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
 import 'package:join_mp_ship/app/data/providers/cdc_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
@@ -36,21 +30,17 @@ import 'package:join_mp_ship/app/data/providers/passport_issuing_authority_provi
 import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
-import 'package:join_mp_ship/app/data/providers/service_record_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
 import 'package:join_mp_ship/app/data/providers/stcw_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
-import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
 import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
-import 'package:join_mp_ship/utils/secure_storage.dart';
 import 'package:join_mp_ship/app/data/models/state_model.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:time_machine/time_machine.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
@@ -930,7 +920,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     } */
   }
 
-  Future<bool> checkStoragePermission() async {
+  /* Future<bool> checkStoragePermission() async {
     PermissionStatus status;
     status = await Permission.storage.request();
     if (Platform.isAndroid) {
@@ -959,7 +949,7 @@ class CrewOnboardingController extends GetxController with PickImage {
       case PermissionStatus.provisional:
         return true;
     }
-  }
+  } */
 }
 
 class CrewOnboardingArguments {

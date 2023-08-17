@@ -24,6 +24,8 @@ class ProfileController extends GetxController with PickImage {
               (rank) => rank.id == (crewUser.value?.rankId ?? -1))
           ?.name ??
       "";
+  String? version = packageInfo?.version;
+  String? buildNumber = packageInfo?.buildNumber;
 
   @override
   void onInit() {

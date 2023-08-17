@@ -17,7 +17,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
+    return Builder(builder: (context) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -27,7 +27,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 16),
+                padding: const EdgeInsets.only(top: 12),
                 child: const Text("Mobile Number"),
               ),
               32.horizontalSpace,
@@ -43,7 +43,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                         filled: true,
                         hintStyle: Get.textTheme.bodySmall,
                         isDense: true,
-                        prefixIcon: Container(
+                        /* prefixIcon: Container(
                           width: 48,
                           margin: const EdgeInsets.only(right: 8, left: 4),
                           decoration: const BoxDecoration(
@@ -80,7 +80,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                               ],
                             ),
                           ),
-                        ),
+                        ), */
                         suffixIcon: Padding(
                           padding: const EdgeInsets.only(right: 8),
                           child:
@@ -107,7 +107,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                           Routes.CREW_SIGN_IN_MOBILE,
                           arguments: CrewSignInMobileArguments(
                               phoneNumber: controller.phoneNumber.text,
-                              countryCode: controller.selectedCountryCode.value,
+                              // countryCode: controller.selectedCountryCode.value,
                               redirection: (phoneNumber, dialCode) {
                                 Get.back(result: {
                                   "phone_number": phoneNumber,
@@ -133,7 +133,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text("Verify",
+                        Text("Add",
                             style: Get.textTheme.bodySmall
                                 ?.copyWith(color: Get.theme.primaryColor)),
                         Icon(Icons.keyboard_arrow_right,

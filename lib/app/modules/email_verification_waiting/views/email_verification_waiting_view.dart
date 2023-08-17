@@ -24,13 +24,9 @@ class EmailVerificationWaitingView
         child: Scaffold(
             backgroundColor: const Color(0xFFFbF6FF),
             appBar: AppBar(
-              toolbarHeight: 70,
-              title: Text("EMAIL VERIFICATION",
-                  style: Get.theme.textTheme.headlineSmall?.copyWith(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600)),
+              title: const Text("EMAIL VERIFICATION"),
               backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
               leading: controller.isSigningOut.value
                   ? const Center(
                       child: SizedBox(
@@ -46,7 +42,6 @@ class EmailVerificationWaitingView
                             padding: const EdgeInsets.all(8),
                             margin: const EdgeInsets.all(8),
                             decoration: const BoxDecoration(
-                                color: Color(0xFFF3F3F3),
                                 shape: BoxShape.circle),
                             child: const Icon(
                               Icons.keyboard_backspace_rounded,
@@ -55,7 +50,7 @@ class EmailVerificationWaitingView
                           ),
                         )
                       : null,
-              centerTitle: false,
+              centerTitle: true,
             ),
             body: Center(
               child: Column(

@@ -34,19 +34,7 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
         appBar: AppBar(
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
-          title: GestureDetector(
-            onTap: () {
-              controller.isUpdating.value = false;
-            },
-            child: Text(
-              'EMPLOYER',
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+          title: const Text('EMPLOYER'),
           centerTitle: true,
         ),
         body: Obx(() {
@@ -251,13 +239,16 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                           15.verticalSpace,
                           if (controller.editMode) ...[
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Mobile Number",
-                                    textAlign: TextAlign.center,
-                                    style: Get.textTheme.titleSmall?.copyWith(
-                                        color: Get.theme.primaryColor)),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 16),
+                                  child: Text("Mobile Number",
+                                      textAlign: TextAlign.center,
+                                      style: Get.textTheme.titleSmall?.copyWith(
+                                          color: Get.theme.primaryColor)),
+                                ),
                                 SizedBox(
                                   width: 170.w,
                                   child: Column(
@@ -368,22 +359,20 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                                                   Routes.CREW_SIGN_IN_MOBILE,
                                                   arguments:
                                                       CrewSignInMobileArguments(
-                                                          phoneNumber: controller
+                                                          /* phoneNumber: controller
                                                               .phoneNumberController
                                                               .text,
                                                           countryCode: controller
                                                               .selectedCountryCode
-                                                              .value,
+                                                              .value, */
                                                           redirection:
                                                               (phoneNumber,
                                                                   dialCode) {
-                                                            Get.back(result: {
-                                                              "phone_number":
-                                                                  phoneNumber,
-                                                              "dial_code":
-                                                                  dialCode
-                                                            });
-                                                          }));
+                                            Get.back(result: {
+                                              "phone_number": phoneNumber,
+                                              "dial_code": dialCode
+                                            });
+                                          }));
 
                                           controller
                                                   .phoneNumberController.text =
@@ -412,7 +401,7 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: [
-                                            Text("Verify",
+                                            Text("Add",
                                                 style: Get.textTheme.bodySmall
                                                     ?.copyWith(
                                                         color: Get.theme

@@ -269,7 +269,15 @@ class JobPostStep3 extends GetView<JobPostController> {
                 : SizedBox(
                     width: 231,
                     height: 46,
-                    child: CustomElevatedButon(
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.h, horizontal: 45.w),
+                          backgroundColor: const Color(0xFF407BFF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(36.21),
+                          ),
+                        ),
                         onPressed: controller.hasAgreed.value
                             ? () async {
                                 await controller.postJob();

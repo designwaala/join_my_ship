@@ -204,16 +204,31 @@ class HomeView extends GetView<HomeController> {
                       ? IntrinsicWidth(
                           child: Column(
                             children: [
-                              CustomElevatedButon(
-                                  onPressed: () {
-                                    Get.toNamed(Routes.JOB_POST);
-                                  },
-                                  child: const Text("Post a new job")),
-                              CustomElevatedButon(
-                                  onPressed: () {
-                                    Get.toNamed(Routes.EMPLOYER_JOB_POSTS);
-                                  },
-                                  child: const Text("View posted jobs")),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: CustomElevatedButon(
+                                        onPressed: () {
+                                          Get.toNamed(Routes.JOB_POST);
+                                        },
+                                        child: const Text("Post a new job")),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: CustomElevatedButon(
+                                        onPressed: () {
+                                          Get.toNamed(
+                                              Routes.EMPLOYER_JOB_POSTS);
+                                        },
+                                        child: const Text("View posted jobs")),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         )

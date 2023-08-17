@@ -20,7 +20,7 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           title: const Text('Jobs Applied'),
-          // centerTitle: true,
+          centerTitle: true,
         ),
         body: Obx(() {
           return controller.isLoading.value

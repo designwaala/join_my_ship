@@ -25,12 +25,8 @@ class CrewOnboardingView extends GetView<CrewOnboardingController> {
           key: controller.parentKey,
           backgroundColor: const Color(0xFFFbF6FF),
           appBar: AppBar(
-            toolbarHeight: 70,
-            title: Text('CREW',
-                style: Get.theme.textTheme.headlineSmall?.copyWith(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600)),
+            title: const Text('CREW'),
+            foregroundColor: Colors.black,
             backgroundColor: Colors.white,
             leading: InkWell(
               onTap: () {
@@ -44,8 +40,6 @@ class CrewOnboardingView extends GetView<CrewOnboardingController> {
               child: Container(
                 padding: const EdgeInsets.all(8),
                 margin: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                    color: Color(0xFFF3F3F3), shape: BoxShape.circle),
                 child: const Icon(
                   Icons.keyboard_backspace_rounded,
                   color: Colors.black,

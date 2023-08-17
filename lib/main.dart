@@ -38,12 +38,14 @@ import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/firebase_options.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/toasts/unfocus_gesture.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'app/routes/app_pages.dart';
 
 String baseURL = "";
 
 GetIt getIt = GetIt.instance;
+PackageInfo? packageInfo;
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -61,6 +63,7 @@ void main() async {
     androidProvider: AndroidProvider.playIntegrity,
     appleProvider: AppleProvider.appAttest
   ); */
+  packageInfo = await PackageInfo.fromPlatform();
   await PreferencesHelper.instance.init();
   try {
     print(await FirebaseAuth.instance.currentUser?.getIdToken());

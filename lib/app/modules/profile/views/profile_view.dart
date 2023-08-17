@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -28,6 +28,7 @@ class ProfileView extends GetView<ProfileController> {
           title: const Text('My Profile'),
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
+          centerTitle: true,
         ),
         body: Obx(() {
           return controller.isLoading.value
@@ -118,6 +119,26 @@ class ProfileView extends GetView<ProfileController> {
                                   color: Colors.grey)),
                         ),
                         24.verticalSpace,
+                      ] else if (controller.crewUser.value?.userTypeKey ==
+                          3) ...[
+                        Center(
+                          child: Text(
+                              controller.crewUser.value?.designation ?? "",
+                              style: Get.textTheme.bodyMedium?.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey)),
+                        ),
+                        2.verticalSpace,
+                        Center(
+                          child: Text(
+                              controller.crewUser.value?.companyName ?? "",
+                              style: Get.textTheme.bodyMedium?.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey)),
+                        ),
+                        24.verticalSpace,
                       ],
                       if (FirebaseAuth.instance.currentUser?.phoneNumber ==
                               null ||
@@ -164,29 +185,16 @@ class ProfileView extends GetView<ProfileController> {
                       if (controller.crewUser.value?.userTypeKey == 2) ...[
                         InkWell(
                           onTap: () async {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
-                            if (result == null) {
+                            final path =
+                                await FlutterDocumentPicker.openDocument(
+                                    params: FlutterDocumentPickerParams(
+                              allowedFileExtensions: ['pdf', 'doc', 'docx'],
+                            ));
+                            if (path == null) {
                               return;
                             }
-                            if (![
-                              "doc",
-                              "docx",
-                              "pdf"
-                            ].contains(result.files.single.extension ?? "")) {
-                              controller.fToast.safeShowToast(
-                                  child: errorToast(
-                                      "Please pick your resume in supported file format"));
-                              return;
-                            }
-
-                            if (result.files.single.path != null) {
-                              controller.pickedResume.value =
-                                  File(result.files.single.path!);
-                              controller.updateResume();
-                            } else {
-                              controller.pickedResume.value = null;
-                            }
+                            controller.pickedResume.value = File(path);
+                            controller.updateResume();
                           },
                           child: Container(
                             height: 62.h,
@@ -344,16 +352,24 @@ class ProfileView extends GetView<ProfileController> {
                       Center(
                         child: Text("Terms and conditions",
                             style: Get.textTheme.bodyMedium?.copyWith(
-                                fontSize: 8.sp, color: Get.theme.primaryColor)),
+                                fontSize: 12.sp,
+                                color: Get.theme.primaryColor)),
                       ),
                       6.verticalSpace,
                       Center(
                         child: Text("www.joinmyship.com",
                             style: Get.textTheme.bodyMedium?.copyWith(
                                 color: Colors.grey,
-                                fontSize: 10.sp,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w400)),
                       ),
+                      if (controller.version != null &&
+                          controller.buildNumber != null)
+                        Center(
+                            child: Text(
+                                "${controller.version} (${controller.buildNumber ?? ""})",
+                                style: Get.textTheme.bodySmall
+                                    ?.copyWith(color: Colors.grey))),
                       28.verticalSpace
                     ],
                   ),

@@ -16,7 +16,6 @@ import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
 import 'package:flutter/services.dart';
 import 'package:join_mp_ship/widgets/top_modal_sheet.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
   const CrewonboardingStep1({Key? key}) : super(key: key);
@@ -585,7 +584,6 @@ class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
                                               32.horizontalSpace,
                                               OutlinedButton(
                                                   onPressed: () async {
-                                                    await openAppSettings();
                                                     Get.back();
                                                     /* PermissionStatus status =
                                                     await Permission
