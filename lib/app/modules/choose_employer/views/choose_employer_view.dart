@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 
 import '../controllers/choose_employer_controller.dart';
 
@@ -45,14 +46,13 @@ class ChooseEmployerView extends GetView<ChooseEmployerController> {
                         ?.copyWith(fontWeight: FontWeight.bold)),
               ),
               24.verticalSpace,
-              ...[
-                "ITF / Ownership",
-                "Management Company",
-                "Crewing Agent"
-              ].mapIndexed((index, e) => InkWell(
-                    onTap: () {
-                      PreferencesHelper.instance.setEmployerType(index + 3);
-                      if (FirebaseAuth.instance.currentUser?.phoneNumber ==
+              ...["ITF / Ownership", "Management Company", "Crewing Agent"]
+                  .mapIndexed((index, e) => InkWell(
+                        onTap: () {
+                          PreferencesHelper.instance.setEmployerType(index + 3);
+                          UserStates.instance.setEmployerTypeIndex(index + 3);
+                          Get.offAllNamed(Routes.SPLASH);
+                          /* if (FirebaseAuth.instance.currentUser?.phoneNumber ==
                           null) {
                         Get.toNamed(Routes.SIGN_UP_PHONE_NUMBER, arguments: {
                           "company_type": () {
@@ -71,35 +71,33 @@ class ChooseEmployerView extends GetView<ChooseEmployerController> {
                         Get.toNamed(Routes.SIGN_UP_EMAIL);
                       } else {
                         Get.offAllNamed(Routes.EMPLOYER_CREATE_USER);
-                      }
-                    },
-                    child: Container(
-                      width: double.maxFinite,
-                      margin: EdgeInsets.symmetric(vertical: 12.h),
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(24.r),
-                          boxShadow: const [
-                            BoxShadow(
-                                color: Color.fromRGBO(64, 24, 157, 0.15),
-                                blurRadius: 5,
-                                offset: Offset(-5, 5))
-                          ]),
-                      child: Text(e,
-                          textAlign: TextAlign.center,
-                          style: Get.theme.textTheme.bodyMedium?.copyWith(
-                              color: Get.theme.primaryColor,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  )),
+                      } */
+                        },
+                        child: Container(
+                          width: double.maxFinite,
+                          margin: EdgeInsets.symmetric(vertical: 12.h),
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(24.r),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Color.fromRGBO(64, 24, 157, 0.15),
+                                    blurRadius: 5,
+                                    offset: Offset(-5, 5))
+                              ]),
+                          child: Text(e,
+                              textAlign: TextAlign.center,
+                              style: Get.theme.textTheme.bodyMedium?.copyWith(
+                                  color: Get.theme.primaryColor,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      )),
               const Spacer(),
               TextButton(
                   onPressed: () {
                     PreferencesHelper.instance.setIsCrew(true);
-                    Get.toNamed(Routes.SIGN_UP_EMAIL,
-                        arguments: const SignUpEmailArguments(
-                            signUpType: SignUpType.crew));
+                    Get.toNamed(Routes.SIGN_UP_EMAIL);
                   },
                   child: const Text("Continue as Crew"))
             ],

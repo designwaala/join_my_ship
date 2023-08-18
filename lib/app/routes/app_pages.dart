@@ -32,6 +32,8 @@ import '../modules/employer_job_posts/bindings/employer_job_posts_binding.dart';
 import '../modules/employer_job_posts/views/employer_job_posts_view.dart';
 import '../modules/employer_manage_users/bindings/employer_manage_users_binding.dart';
 import '../modules/employer_manage_users/views/employer_manage_users_view.dart';
+import '../modules/error_occurred/bindings/error_occurred_binding.dart';
+import '../modules/error_occurred/views/error_occurred_view.dart';
 import '../modules/help/bindings/help_binding.dart';
 import '../modules/help/views/help_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -165,11 +167,11 @@ class AppPages {
       page: () => const ResetPasswordView(),
       binding: ResetPasswordBinding(),
     ),
-    GetPage(
+/*     GetPage(
       name: _Paths.RESET_PASSWORD_EMAIL_VERIFICATION,
       page: () => const ResetPasswordEmailVerificationView(),
       binding: ResetPasswordBinding(),
-    ),
+    ), */
     GetPage(
       name: _Paths.JOB_POST,
       page: () => const JobPostView(),
@@ -224,6 +226,11 @@ class AppPages {
       name: _Paths.APPLICATION_STATUS,
       page: () => const ApplicationStatusView(),
       binding: ApplicationStatusBinding(),
+    ),
+    GetPage(
+      name: _Paths.ERROR_OCCURRED,
+      page: () => const ErrorOccurredView(),
+      binding: ErrorOccurredBinding(),
     ),
   ];
 }

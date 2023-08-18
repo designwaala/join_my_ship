@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 
 import '../controllers/email_verification_waiting_controller.dart';
 import 'package:lottie/lottie.dart';
@@ -41,8 +42,8 @@ class EmailVerificationWaitingView
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             margin: const EdgeInsets.all(8),
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle),
+                            decoration:
+                                const BoxDecoration(shape: BoxShape.circle),
                             child: const Icon(
                               Icons.keyboard_backspace_rounded,
                               color: Colors.black,
@@ -90,11 +91,9 @@ class EmailVerificationWaitingView
                               if (controller.args?.redirection != null) {
                                 controller.args?.redirection?.call();
                                 return;
-                              } else if (PreferencesHelper.instance.isCrew ==
-                                  null) {
+                              } else if (UserStates.instance.isCrew == null) {
                                 Get.offAllNamed(Routes.SPLASH);
-                              } else if (PreferencesHelper.instance.isCrew ==
-                                  true) {
+                              } else if (UserStates.instance.isCrew == true) {
                                 Get.offNamed(Routes.CREW_ONBOARDING);
                               } else {
                                 Get.offNamed(Routes.EMPLOYER_CREATE_USER);

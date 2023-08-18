@@ -4,6 +4,7 @@ import 'package:join_mp_ship/app/data/models/previous_employer_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
+import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 
 class UserStates {
   UserStates._();
@@ -14,9 +15,34 @@ class UserStates {
   UserDetails? userDetails;
   List<SeaServiceRecord>? serviceRecords;
   List<PreviousEmployerReference>? previousEmployerReferences;
+  bool? _isCrew;
+  SignUpType? employerType;
+
+  set isCrew(bool? value) {
+    _isCrew = value;
+    if (_isCrew == true) {
+      employerType = SignUpType.crew;
+    }
+  }
+
+  bool? get isCrew => _isCrew;
+
+  setEmployerTypeIndex(int index) {
+    switch (index) {
+      case 3:
+        employerType = SignUpType.employerITF;
+        break;
+      case 4:
+        employerType = SignUpType.employerManagementCompany;
+        break;
+      case 5:
+        employerType = SignUpType.employerCrewingAgent;
+        break;
+    }
+  }
 
   reset() {
-    ranks = countries = crewUser =
-        userDetails = serviceRecords = previousEmployerReferences = null;
+    ranks = countries = crewUser = userDetails = serviceRecords =
+        previousEmployerReferences = _isCrew = employerType = null;
   }
 }

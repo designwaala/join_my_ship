@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_picker/country_picker.dart' as CountryPicker;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +35,11 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
         appBar: AppBar(
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
-          title: const Text('EMPLOYER'),
+          title: InkWell(
+              onTap: () {
+                controller.isUpdating.value = false;
+              },
+              child: const Text('EMPLOYER')),
           centerTitle: true,
         ),
         body: Obx(() {
@@ -647,6 +652,7 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
                                       )),
                                 ),
                           20.verticalSpace,
+                          if (kDebugMode) 500.verticalSpace,
                           MediaQuery.of(context).viewInsets.bottom.verticalSpace
                         ],
                       ),
