@@ -119,7 +119,8 @@ class ProfileView extends GetView<ProfileController> {
                                   color: Colors.grey)),
                         ),
                         24.verticalSpace,
-                      ] else if (controller.crewUser.value?.userTypeKey ==
+                      ] else if ((controller.crewUser.value?.userTypeKey ??
+                              0) >=
                           3) ...[
                         Center(
                           child: Text(

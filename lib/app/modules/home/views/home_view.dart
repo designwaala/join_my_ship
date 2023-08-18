@@ -199,7 +199,8 @@ class HomeView extends GetView<HomeController> {
                 right: 0,
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  child: UserStates.instance.crewUser?.userTypeKey == 3 &&
+                  child: (UserStates.instance.crewUser?.userTypeKey ?? 0) >=
+                              3 &&
                           controller.showJobButtons.value
                       ? IntrinsicWidth(
                           child: Column(

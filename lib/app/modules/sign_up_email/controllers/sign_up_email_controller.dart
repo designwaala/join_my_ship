@@ -167,10 +167,10 @@ enum SignUpType {
   }
 }
 
-class SignUpEmailArguments {
+/* class SignUpEmailArguments {
   final String? verificationId;
   final String? smsCode;
   final SignUpType signUpType;
   const SignUpEmailArguments(
       {this.smsCode, this.verificationId, required this.signUpType});
-}
+} */

@@ -17,6 +17,7 @@ import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_mp_ship/utils/wrapper_connect.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 class SplashController extends GetxController
@@ -27,7 +28,7 @@ class SplashController extends GetxController
   @override
   void onInit() {
     animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
     super.onInit();
     animationController.forward(from: 0);
     redirection();
@@ -62,8 +63,16 @@ mixin RedirectionMixin {
     } else if (UserStates.instance.crewUser != null) {
       user = UserStates.instance.crewUser;
     } else {
-      user = await getIt<CrewUserProvider>().getCrewUser();
-      UserStates.instance.crewUser = user;
+      if (PreferencesHelper.instance.accessToken.nullIfEmpty() == null) {
+        print("Getting Access Tokens, -> Splash");
+        await getIt<CrewUserProvider>().getAccessTokens();
+      }
+      if (PreferencesHelper.instance.accessToken.nullIfEmpty() != null) {
+        user = await getIt<CrewUserProvider>().getCrewUser();
+        UserStates.instance.crewUser = user;
+      } else {
+        print("Access Tokens not found. -> Splash");
+      }
     }
   }
 
@@ -73,7 +82,7 @@ mixin RedirectionMixin {
     } else if (UserStates.instance.crewUser != null) {
       await Future.delayed(const Duration(seconds: 1));
     } else {
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 2));
     }
   }
 
@@ -226,7 +235,12 @@ mixin RedirectionMixin {
     } else if (eq(truths, [true, true, false, true, true, false])) {
       return Get.offAllNamed(Routes.ERROR_OCCURRED);
     } else if (eq(truths, [true, true, false, true, true, true])) {
-      return Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+      if (user?.isVerified == 1) {
+        Get.offAllNamed(Routes.HOME);
+      } else {
+        Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+      }
+      return;
     } else if (eq(truths, [true, true, true, false, false, false])) {
       return;
     } else if (eq(truths, [true, true, true, false, false, true])) {
@@ -240,17 +254,26 @@ mixin RedirectionMixin {
     } else if (eq(truths, [true, true, true, true, false, true])) {
       return Get.offAllNamed(Routes.ERROR_OCCURRED);
     } else if (eq(truths, [true, true, true, true, true, false])) {
-      if (user?.userTypeKey == 3) {
-        Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+      if (user?.screenCheck == 3) {
+        if (user?.isVerified == 1) {
+          Get.offAllNamed(Routes.HOME);
+        } else {
+          Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+        }
       } else {
         Get.offAllNamed(Routes.CREW_ONBOARDING);
       }
     } else if (eq(truths, [true, true, true, true, true, true])) {
-      if (user?.userTypeKey == 3) {
-        Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+      if (user?.screenCheck == 3) {
+        if (user?.isVerified == 1) {
+          Get.offAllNamed(Routes.HOME);
+        } else {
+          Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+        }
       } else {
         Get.offAllNamed(Routes.CREW_ONBOARDING);
       }
+      return;
     }
   }
 }

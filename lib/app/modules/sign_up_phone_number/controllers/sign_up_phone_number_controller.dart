@@ -60,11 +60,7 @@ class SignUpPhoneNumberController extends GetxController {
     UserCredential userCred =
         await FirebaseAuth.instance.signInWithCredential(credential);
     if (FirebaseAuth.instance.currentUser != null) {
-      Get.offAllNamed(Routes.SIGN_UP_EMAIL,
-          arguments: SignUpEmailArguments(
-              signUpType: Get.arguments?["company_type"],
-              smsCode: otpController.text,
-              verificationId: verificationId));
+      Get.offAllNamed(Routes.SIGN_UP_EMAIL);
       fToast.safeShowToast(child: successToast("Authentication Successful"));
     } else {
       fToast.safeShowToast(child: errorToast("Authentication Failed"));
