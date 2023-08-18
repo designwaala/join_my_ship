@@ -41,7 +41,7 @@ process is complete.
           38.verticalSpace,
           ElevatedButton(
             onPressed: () {
-              Get.toNamed(Routes.HOME);
+              Get.offAllNamed(Routes.HOME);
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

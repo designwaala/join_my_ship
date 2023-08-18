@@ -29,89 +29,104 @@ class JobPostStep2 extends GetView<JobPostController> {
               16.verticalSpace,
               Row(
                 children: [
-                  8.horizontalSpace,
-                  SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: Radio<bool>(
-                        value: controller.needCOCRequirements.value,
-                        groupValue: false,
-                        onChanged: (_) {
-                          controller.needCOCRequirements.value = false;
-                          controller.cocRequirementsSelected.clear();
-                        }),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        8.horizontalSpace,
+                        SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: Radio<bool>(
+                              value: controller.needCOCRequirements.value,
+                              groupValue: false,
+                              onChanged: (_) {
+                                controller.needCOCRequirements.value = false;
+                                controller.cocRequirementsSelected.clear();
+                              }),
+                        ),
+                        8.horizontalSpace,
+                        const Text("No"),
+                        16.horizontalSpace,
+                        SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: Radio<bool>(
+                              value: controller.needCOCRequirements.value,
+                              groupValue: true,
+                              onChanged: (_) {
+                                controller.needCOCRequirements.value = true;
+                              }),
+                        ),
+                        8.horizontalSpace,
+                        const Text("Yes"),
+                      ],
+                    ),
                   ),
-                  8.horizontalSpace,
-                  const Text("No"),
-                  16.horizontalSpace,
-                  SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: Radio<bool>(
-                        value: controller.needCOCRequirements.value,
-                        groupValue: true,
-                        onChanged: (_) {
-                          controller.needCOCRequirements.value = true;
-                        }),
-                  ),
-                  8.horizontalSpace,
-                  const Text("Yes"),
-                  const Spacer(),
+                  12.horizontalSpace,
                   if (controller.needCOCRequirements.value)
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2<Coc>(
-                        value: null,
-                        isExpanded: true,
-                        style: Get.textTheme.bodySmall,
-                        items: controller.cocs
-                            .map((e) => DropdownMenuItem(
-                                value: e,
-                                onTap: () {
-                                  if (controller.cocRequirementsSelected.any(
-                                          (element) => element.id == e.id) ==
-                                      true) {
-                                    controller.cocRequirementsSelected
-                                        .removeWhere(
-                                            (element) => element.id == e.id);
-                                  } else {
-                                    controller.cocRequirementsSelected.add(e);
-                                  }
-                                },
-                                child: Obx(() {
-                                  return Row(
-                                    children: [
-                                      Checkbox(
-                                          value: controller
-                                              .cocRequirementsSelected
-                                              .any((element) =>
-                                                  element.id == e.id),
-                                          onChanged: (value) {
-                                            if (controller
+                    Expanded(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2<Coc>(
+                          value: null,
+                          isExpanded: true,
+                          style: Get.textTheme.bodySmall,
+                          items: controller.cocs
+                              .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  onTap: () {
+                                    if (controller.cocRequirementsSelected.any(
+                                            (element) => element.id == e.id) ==
+                                        true) {
+                                      controller.cocRequirementsSelected
+                                          .removeWhere(
+                                              (element) => element.id == e.id);
+                                    } else {
+                                      controller.cocRequirementsSelected.add(e);
+                                    }
+                                  },
+                                  child: Obx(() {
+                                    return Row(
+                                      children: [
+                                        Checkbox(
+                                            value: controller
+                                                .cocRequirementsSelected
+                                                .any((element) =>
+                                                    element.id == e.id),
+                                            onChanged: (value) {
+                                              if (controller
+                                                      .cocRequirementsSelected
+                                                      .any((element) =>
+                                                          element.id == e.id) ==
+                                                  true) {
+                                                controller
                                                     .cocRequirementsSelected
-                                                    .any((element) =>
-                                                        element.id == e.id) ==
-                                                true) {
-                                              controller.cocRequirementsSelected
-                                                  .removeWhere((element) =>
-                                                      element.id == e.id);
-                                            } else {
-                                              controller.cocRequirementsSelected
-                                                  .add(e);
-                                            }
-                                          }),
-                                      Text(e.name ?? "",
-                                          style: Get.textTheme.titleMedium),
-                                    ],
-                                  );
-                                })))
-                            .toList(),
-                        onChanged: (value) {},
-                        hint: const Text("Select"),
-                        buttonStyleData: ButtonStyleData(
-                            height: 40,
-                            width: 200,
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: DropdownDecoration()),
+                                                    .removeWhere((element) =>
+                                                        element.id == e.id);
+                                              } else {
+                                                controller
+                                                    .cocRequirementsSelected
+                                                    .add(e);
+                                              }
+                                            }),
+                                        Flexible(
+                                          child: Text(
+                                            e.name ?? "",
+                                            style: Get.textTheme.titleMedium,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  })))
+                              .toList(),
+                          onChanged: (value) {},
+                          hint: const Text("Select"),
+                          buttonStyleData: ButtonStyleData(
+                              height: 40,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: DropdownDecoration()),
+                        ),
                       ),
                     ),
                 ],
@@ -137,89 +152,103 @@ class JobPostStep2 extends GetView<JobPostController> {
               16.verticalSpace,
               Row(
                 children: [
-                  8.horizontalSpace,
-                  SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: Radio<bool>(
-                        value: controller.needCOPRequirements.value,
-                        groupValue: false,
-                        onChanged: (_) {
-                          controller.needCOPRequirements.value = false;
-                          controller.copRequirementsSelected.clear();
-                        }),
-                  ),
-                  8.horizontalSpace,
-                  const Text("No"),
-                  16.horizontalSpace,
-                  SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: Radio<bool>(
-                        value: controller.needCOPRequirements.value,
-                        groupValue: true,
-                        onChanged: (_) {
-                          controller.needCOPRequirements.value = true;
-                        }),
-                  ),
-                  8.horizontalSpace,
-                  const Text("Yes"),
-                  const Spacer(),
+                  Expanded(
+                      child: Row(
+                    children: [
+                      8.horizontalSpace,
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: Radio<bool>(
+                            value: controller.needCOPRequirements.value,
+                            groupValue: false,
+                            onChanged: (_) {
+                              controller.needCOPRequirements.value = false;
+                              controller.copRequirementsSelected.clear();
+                            }),
+                      ),
+                      8.horizontalSpace,
+                      const Text("No"),
+                      16.horizontalSpace,
+                      SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: Radio<bool>(
+                            value: controller.needCOPRequirements.value,
+                            groupValue: true,
+                            onChanged: (_) {
+                              controller.needCOPRequirements.value = true;
+                            }),
+                      ),
+                      8.horizontalSpace,
+                      const Text("Yes"),
+                    ],
+                  )),
+                  12.horizontalSpace,
                   if (controller.needCOPRequirements.value)
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2<Cop>(
-                        value: null,
-                        isExpanded: true,
-                        style: Get.textTheme.bodySmall,
-                        items: controller.cops
-                            .map((e) => DropdownMenuItem(
-                                value: e,
-                                onTap: () {
-                                  if (controller.copRequirementsSelected.any(
-                                          (element) => element.id == e.id) ==
-                                      true) {
-                                    controller.copRequirementsSelected
-                                        .removeWhere(
-                                            (element) => element.id == e.id);
-                                  } else {
-                                    controller.copRequirementsSelected.add(e);
-                                  }
-                                },
-                                child: Obx(() {
-                                  return Row(
-                                    children: [
-                                      Checkbox(
-                                          value: controller
-                                              .copRequirementsSelected
-                                              .any((element) =>
-                                                  element.id == e.id),
-                                          onChanged: (value) {
-                                            if (controller
+                    Expanded(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2<Cop>(
+                          value: null,
+                          isExpanded: true,
+                          style: Get.textTheme.bodySmall,
+                          items: controller.cops
+                              .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  onTap: () {
+                                    if (controller.copRequirementsSelected.any(
+                                            (element) => element.id == e.id) ==
+                                        true) {
+                                      controller.copRequirementsSelected
+                                          .removeWhere(
+                                              (element) => element.id == e.id);
+                                    } else {
+                                      controller.copRequirementsSelected.add(e);
+                                    }
+                                  },
+                                  child: Obx(() {
+                                    return Row(
+                                      children: [
+                                        Checkbox(
+                                            value: controller
+                                                .copRequirementsSelected
+                                                .any((element) =>
+                                                    element.id == e.id),
+                                            onChanged: (value) {
+                                              if (controller
+                                                      .copRequirementsSelected
+                                                      .any((element) =>
+                                                          element.id == e.id) ==
+                                                  true) {
+                                                controller
                                                     .copRequirementsSelected
-                                                    .any((element) =>
-                                                        element.id == e.id) ==
-                                                true) {
-                                              controller.copRequirementsSelected
-                                                  .removeWhere((element) =>
-                                                      element.id == e.id);
-                                            } else {
-                                              controller.copRequirementsSelected
-                                                  .add(e);
-                                            }
-                                          }),
-                                      Text(e.name ?? "",
-                                          style: Get.textTheme.titleMedium),
-                                    ],
-                                  );
-                                })))
-                            .toList(),
-                        onChanged: (value) {},
-                        hint: const Text("Select"),
-                        buttonStyleData: ButtonStyleData(
-                            height: 40,
-                            width: 200,
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: DropdownDecoration()),
+                                                    .removeWhere((element) =>
+                                                        element.id == e.id);
+                                              } else {
+                                                controller
+                                                    .copRequirementsSelected
+                                                    .add(e);
+                                              }
+                                            }),
+                                        Flexible(
+                                          child: Text(
+                                            e.name ?? "",
+                                            style: Get.textTheme.titleMedium,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  })))
+                              .toList(),
+                          onChanged: (value) {},
+                          hint: const Text("Select"),
+                          buttonStyleData: ButtonStyleData(
+                              height: 40,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: DropdownDecoration()),
+                        ),
                       ),
                     ),
                 ],
@@ -245,94 +274,108 @@ class JobPostStep2 extends GetView<JobPostController> {
               16.verticalSpace,
               Row(
                 children: [
-                  8.horizontalSpace,
-                  SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: Radio<bool>(
-                        value: controller.needWatchKeepingRequirements.value,
-                        groupValue: false,
-                        onChanged: (_) {
-                          controller.needWatchKeepingRequirements.value = false;
-                          controller.watchKeepingRequirementsSelected.clear();
-                        }),
-                  ),
-                  8.horizontalSpace,
-                  const Text("No"),
-                  16.horizontalSpace,
-                  SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: Radio<bool>(
-                        value: controller.needWatchKeepingRequirements.value,
-                        groupValue: true,
-                        onChanged: (_) {
-                          controller.needWatchKeepingRequirements.value = true;
-                        }),
-                  ),
-                  8.horizontalSpace,
-                  const Text("Yes"),
-                  const Spacer(),
+                  Expanded(
+                      child: Row(
+                    children: [
+                      8.horizontalSpace,
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: Radio<bool>(
+                            value:
+                                controller.needWatchKeepingRequirements.value,
+                            groupValue: false,
+                            onChanged: (_) {
+                              controller.needWatchKeepingRequirements.value =
+                                  false;
+                              controller.watchKeepingRequirementsSelected
+                                  .clear();
+                            }),
+                      ),
+                      8.horizontalSpace,
+                      const Text("No"),
+                      16.horizontalSpace,
+                      SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: Radio<bool>(
+                            value:
+                                controller.needWatchKeepingRequirements.value,
+                            groupValue: true,
+                            onChanged: (_) {
+                              controller.needWatchKeepingRequirements.value =
+                                  true;
+                            }),
+                      ),
+                      8.horizontalSpace,
+                      const Text("Yes"),
+                    ],
+                  )),
+                  12.horizontalSpace,
                   if (controller.needWatchKeepingRequirements.value)
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2<WatchKeeping>(
-                        value: null,
-                        isExpanded: true,
-                        style: Get.textTheme.bodySmall,
-                        items: controller.watchKeepings
-                            .map((e) => DropdownMenuItem(
-                                value: e,
-                                onTap: () {
-                                  if (controller
+                    Expanded(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2<WatchKeeping>(
+                          value: null,
+                          isExpanded: true,
+                          style: Get.textTheme.bodySmall,
+                          items: controller.watchKeepings
+                              .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  onTap: () {
+                                    if (controller
+                                            .watchKeepingRequirementsSelected
+                                            .any((element) =>
+                                                element.id == e.id) ==
+                                        true) {
+                                      controller
                                           .watchKeepingRequirementsSelected
-                                          .any((element) =>
-                                              element.id == e.id) ==
-                                      true) {
-                                    controller.watchKeepingRequirementsSelected
-                                        .removeWhere(
-                                            (element) => element.id == e.id);
-                                  } else {
-                                    controller.watchKeepingRequirementsSelected
-                                        .add(e);
-                                  }
-                                },
-                                child: Obx(() {
-                                  return Row(
-                                    children: [
-                                      Checkbox(
-                                          value: controller
-                                              .watchKeepingRequirementsSelected
-                                              .any((element) =>
-                                                  element.id == e.id),
-                                          onChanged: (value) {
-                                            if (controller
+                                          .removeWhere(
+                                              (element) => element.id == e.id);
+                                    } else {
+                                      controller
+                                          .watchKeepingRequirementsSelected
+                                          .add(e);
+                                    }
+                                  },
+                                  child: Obx(() {
+                                    return Row(
+                                      children: [
+                                        Checkbox(
+                                            value: controller
+                                                .watchKeepingRequirementsSelected
+                                                .any((element) =>
+                                                    element.id == e.id),
+                                            onChanged: (value) {
+                                              if (controller
+                                                      .watchKeepingRequirementsSelected
+                                                      .any((element) =>
+                                                          element.id == e.id) ==
+                                                  true) {
+                                                controller
                                                     .watchKeepingRequirementsSelected
-                                                    .any((element) =>
-                                                        element.id == e.id) ==
-                                                true) {
-                                              controller
-                                                  .watchKeepingRequirementsSelected
-                                                  .removeWhere((element) =>
-                                                      element.id == e.id);
-                                            } else {
-                                              controller
-                                                  .watchKeepingRequirementsSelected
-                                                  .add(e);
-                                            }
-                                          }),
-                                      Text(e.name ?? "",
-                                          style: Get.textTheme.titleMedium),
-                                    ],
-                                  );
-                                })))
-                            .toList(),
-                        onChanged: (value) {},
-                        hint: const Text("Select"),
-                        buttonStyleData: ButtonStyleData(
-                            height: 40,
-                            width: 200,
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: DropdownDecoration()),
+                                                    .removeWhere((element) =>
+                                                        element.id == e.id);
+                                              } else {
+                                                controller
+                                                    .watchKeepingRequirementsSelected
+                                                    .add(e);
+                                              }
+                                            }),
+                                        Text(e.name ?? "",
+                                            style: Get.textTheme.titleMedium),
+                                      ],
+                                    );
+                                  })))
+                              .toList(),
+                          onChanged: (value) {},
+                          hint: const Text("Select"),
+                          buttonStyleData: ButtonStyleData(
+                              height: 40,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: DropdownDecoration()),
+                        ),
                       ),
                     ),
                 ],
@@ -387,6 +430,7 @@ class JobPostStep2 extends GetView<JobPostController> {
                   ),
                   8.horizontalSpace,
                   const Text("Yes"),
+                  8.horizontalSpace
                 ],
               ),
               16.verticalSpace,
@@ -421,37 +465,40 @@ class JobPostStep2 extends GetView<JobPostController> {
                   ),
                   8.horizontalSpace,
                   const Text("Yes"),
+                  8.horizontalSpace
                 ],
               ),
               16.verticalSpace,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Job post expiry",
-                      style: Get.textTheme.formFieldHeading),
-                  Spacer(),
-                  16.horizontalSpace,
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2<int>(
-                      value: controller.jobExpiry.value,
-                      isExpanded: true,
-                      style: Get.textTheme.bodySmall,
-                      items: [1, 7, 15, 30]
-                          .map((e) => DropdownMenuItem<int>(
-                              value: e,
-                              onTap: () {
-                                controller.jobExpiry.value = e;
-                              },
-                              child: Text("$e days",
-                                  style: Get.textTheme.titleMedium)))
-                          .toList(),
-                      onChanged: (value) {},
-                      hint: const Text("Select"),
-                      buttonStyleData: ButtonStyleData(
-                          height: 40,
-                          width: 160,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: DropdownDecoration()),
+                  Expanded(
+                    child: Text("Job post expiry",
+                        style: Get.textTheme.formFieldHeading),
+                  ),
+                  12.horizontalSpace,
+                  Expanded(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2<int>(
+                        value: controller.jobExpiry.value,
+                        isExpanded: true,
+                        style: Get.textTheme.bodySmall,
+                        items: [1, 7, 15, 30]
+                            .map((e) => DropdownMenuItem<int>(
+                                value: e,
+                                onTap: () {
+                                  controller.jobExpiry.value = e;
+                                },
+                                child: Text("$e days",
+                                    style: Get.textTheme.titleMedium)))
+                            .toList(),
+                        onChanged: (value) {},
+                        hint: const Text("Select"),
+                        buttonStyleData: ButtonStyleData(
+                            height: 40,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            decoration: DropdownDecoration()),
+                      ),
                     ),
                   ),
                 ],

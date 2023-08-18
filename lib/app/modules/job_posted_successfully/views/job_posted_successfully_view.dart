@@ -35,7 +35,7 @@ class JobPostedSuccessfullyView
             width: 231,
             child: CustomElevatedButon(
                 onPressed: () {
-                  Get.toNamed(Routes.HOME);
+                  Get.offAllNamed(Routes.HOME);
                 },
                 child: Text("Let’s Discover ")),
           ),

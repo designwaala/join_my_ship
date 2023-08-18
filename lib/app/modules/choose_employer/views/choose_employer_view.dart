@@ -94,12 +94,6 @@ class ChooseEmployerView extends GetView<ChooseEmployerController> {
                         ),
                       )),
               const Spacer(),
-              TextButton(
-                  onPressed: () {
-                    PreferencesHelper.instance.setIsCrew(true);
-                    Get.toNamed(Routes.SIGN_UP_EMAIL);
-                  },
-                  child: const Text("Continue as Crew"))
             ],
           ),
         ),

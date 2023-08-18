@@ -123,6 +123,7 @@ mixin RedirectionMixin {
       FirebaseAuth.instance.currentUser?.phoneNumber != null
     ];
 
+    //THRUTH TABLE
     if (eq(truths, [false, false, false, false, false, false])) {
       Get.offAllNamed(Routes.SIGN_UP_PHONE_NUMBER);
       return;

@@ -18,6 +18,16 @@ class JobPostView extends GetView<JobPostController> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         centerTitle: true,
+        leading: InkWell(
+          onTap: () {
+            if (controller.currentStep.value <= 1) {
+              Get.back();
+            } else {
+              controller.currentStep.value = controller.currentStep.value - 1;
+            }
+          },
+          child: Icon(Icons.arrow_back),
+        ),
       ),
       body: Obx(() {
         return controller.currentStep.value == 1

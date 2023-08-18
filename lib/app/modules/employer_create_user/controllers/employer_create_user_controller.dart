@@ -145,7 +145,7 @@ class EmployerCreateUserController extends GetxController {
 
   Future<bool> postEmployerUser() async {
     step1FormMisses.clear();
-    if (pickedImage.value?.path == null) {
+    if (pickedImage.value?.path == null && uploadedImagePath.value == null) {
       step1FormMisses.add(Step1FormMiss.didNotSelectProfilePic);
     }
     if (country.value == null) {
@@ -162,7 +162,9 @@ class EmployerCreateUserController extends GetxController {
       return false;
     }
 
-    if ((crewUser?.id == null && pickedImage.value?.path == null) ||
+    if ((crewUser?.id == null &&
+            (pickedImage.value?.path == null ||
+                uploadedImagePath.value == null)) ||
         country.value == null ||
         state.value == null ||
         gender.value == null) {
@@ -209,7 +211,7 @@ class EmployerCreateUserController extends GetxController {
           crewId: crewUser!.id!,
           crewUser: CrewUser(
               firstName: FirebaseAuth.instance.currentUser?.displayName,
-              lastName: "_",
+              lastName: lastNameController.text,
               email: FirebaseAuth.instance.currentUser?.email,
               website: websiteController.text.nullIfEmpty(),
               addressLine1: addressLine1Controller.text,

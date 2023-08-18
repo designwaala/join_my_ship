@@ -67,8 +67,8 @@ class CrewUserProvider extends WrapperConnect {
     http.StreamedResponse streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
     if (streamedResponse.statusCode < 300) {
-      UserStates.instance.crewUser =
-          CrewUser.fromJson(jsonDecode(response.body));
+      /* UserStates.instance.crewUser =
+          CrewUser.fromJson(jsonDecode(response.body)); */
       // print(await streamedResponse.stream.bytesToString());
     } else {
       // print(streamedResponse.reasonPhrase);
