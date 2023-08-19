@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +19,42 @@ class UnFocusGesture extends StatefulWidget {
   _UnFocusGestureState createState() => _UnFocusGestureState();
 }
 
+ConnectivityResult? latestConnectivity;
+
 class _UnFocusGestureState extends State<UnFocusGesture> {
   late FocusNode node;
+  StreamSubscription<ConnectivityResult>? connectivity;
+
   @override
   void initState() {
+    Connectivity()
+        .checkConnectivity()
+        .then((value) => latestConnectivity = value);
+    connectivity = Connectivity().onConnectivityChanged.listen((event) {
+      print(Get.currentRoute);
+      latestConnectivity = event;
+      if (event == ConnectivityResult.none) {
+        if (Get.currentRoute != Routes.CONNECTIVITY_LOST &&
+            Get.currentRoute != Routes.INFO) {
+          Get.toNamed(Routes.CONNECTIVITY_LOST);
+        }
+      } else {
+        if (Get.currentRoute == Routes.CONNECTIVITY_LOST) {
+          if (Navigator.canPop(context)) {
+            Get.back();
+          } else {
+            Get.offAllNamed(Routes.SPLASH);
+          }
+        }
+      }
+    });
     node = FocusNode();
     super.initState();
   }
 
   @override
   void dispose() {
+    connectivity?.cancel();
     node.dispose();
     super.dispose();
   }

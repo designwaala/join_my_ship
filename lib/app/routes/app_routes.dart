@@ -37,6 +37,7 @@ abstract class Routes {
   static const APPLICATION_STATUS = _Paths.APPLICATION_STATUS;
   static const ERROR_OCCURRED = _Paths.ERROR_OCCURRED;
   static const JOB_OPENING = _Paths.JOB_OPENING;
+  static const CONNECTIVITY_LOST = _Paths.CONNECTIVITY_LOST;
 }
 
 abstract class _Paths {
@@ -75,4 +76,5 @@ abstract class _Paths {
   static const APPLICATION_STATUS = '/application-status';
   static const ERROR_OCCURRED = '/error-occurred';
   static const JOB_OPENING = '/job-opening';
+  static const CONNECTIVITY_LOST = '/connectivity-lost';
 }

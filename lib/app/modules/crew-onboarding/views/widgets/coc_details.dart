@@ -111,8 +111,12 @@ class COCDetails extends GetView<CrewOnboardingController> {
                                                     "You can select only 2 issuing authorities."));
                                           }
                                         }),
-                                    Text(e ?? "",
-                                        style: Get.textTheme.titleMedium),
+                                    Flexible(
+                                        child: Text(
+                                      e ?? "",
+                                      style: Get.textTheme.titleMedium,
+                                      overflow: TextOverflow.ellipsis,
+                                    )),
                                   ],
                                 );
                               })))

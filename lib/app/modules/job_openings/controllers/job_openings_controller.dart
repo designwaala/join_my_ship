@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
@@ -18,6 +21,7 @@ import 'package:join_mp_ship/app/data/providers/job_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
+import 'package:join_mp_ship/app/modules/crew_job_applications/controllers/crew_job_applications_controller.dart';
 import 'package:join_mp_ship/app/modules/success/controllers/success_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
@@ -26,6 +30,9 @@ import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:collection/collection.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 
 class JobOpeningsController extends GetxController {
   Rxn<CrewUser> currentEmployerUser = Rxn();
@@ -58,6 +65,13 @@ class JobOpeningsController extends GetxController {
   final parentKey = GlobalKey();
 
   final fToast = FToast();
+
+  WidgetsToImageController widgetsToImageController =
+      WidgetsToImageController();
+  Uint8List? bytes;
+  RxBool buildCaptureWidget = false.obs;
+  RxBool isSharing = false.obs;
+  Job? jobToBuild;
 
   @override
   void onInit() {
@@ -166,5 +180,38 @@ class JobOpeningsController extends GetxController {
     if (follow?.id != null) {
       fToast.safeShowToast(child: successToast("Successfully followed"));
     }
+  }
+
+  Future<void> captureWidget(Job job) async {
+    jobToBuild = job;
+    buildCaptureWidget.value = true;
+    try {
+      await Future.delayed(const Duration(milliseconds: 200));
+      bytes = await widgetsToImageController.capture();
+      if (bytes == null) {
+        Share.share('''
+Click on this link to view this Job
+http://joinmyship.jms/job/?job_id=${job.id}
+''');
+        buildCaptureWidget.value = false;
+        return;
+      }
+      final String path = (await getApplicationDocumentsDirectory()).path;
+      File newImage =
+          await File('$path/job_${job.id}.png').writeAsBytes(bytes!);
+      Share.shareXFiles([XFile(newImage.path)],
+          subject: "Hey wanna apply to this Job?",
+          text: '''
+Click on this link to view this Job
+http://joinmyship.jms/job/?job_id=${job.id}
+''');
+    } catch (e) {
+      Share.share('''
+Click on this link to view this Job
+http://joinmyship.jms/job/?job_id=${job.id}
+''');
+    }
+    buildCaptureWidget.value = false;
+    print(bytes);
   }
 }

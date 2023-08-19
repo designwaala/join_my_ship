@@ -38,7 +38,7 @@
                 <data android:scheme="http" 
                 android:host="www.designwaala.me" />
                 <data android:scheme="http"
-                  android:host="joinmyship"
+                  android:host="joinmyship.jms"
                   android:pathPrefix=""/> 
             </intent-filter>
         </activity>

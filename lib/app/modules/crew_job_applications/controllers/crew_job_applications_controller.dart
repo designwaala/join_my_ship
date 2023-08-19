@@ -43,28 +43,36 @@ class CrewJobApplicationsController extends GetxController {
   }
 
   Future<void> captureWidget(Application application) async {
-    isSharing.value = true;
     applicationToBuild = application;
     buildCaptureWidget.value = true;
-    await Future.delayed(const Duration(milliseconds: 200));
-    bytes = await widgetsToImageController.capture();
-    if (bytes == null) {
-      buildCaptureWidget.value = false;
-    }
-    File file = File.fromRawPath(bytes!);
-    final String path = (await getApplicationDocumentsDirectory()).path;
-    File newImage =
-        await File('$path/job_${application.id}.png').writeAsBytes(bytes!);
-    // final File newImage = await file.copy('$path/job_${application.id}.png');
-    Share.shareXFiles([XFile(newImage.path)],
-        subject: "Hey wanna apply to this Job?",
-        text: '''
+    try {
+      await Future.delayed(const Duration(milliseconds: 200));
+      bytes = await widgetsToImageController.capture();
+      if (bytes == null) {
+        Share.share('''
 Click on this link to view this Job
-http://joinmyship.com/job/?job_id=${application.jobData?.id}
+http://joinmyship.jms/job/?job_id=${application.jobData?.id}
 ''');
+        buildCaptureWidget.value = false;
+        return;
+      }
+      final String path = (await getApplicationDocumentsDirectory()).path;
+      File newImage =
+          await File('$path/job_${application.id}.png').writeAsBytes(bytes!);
+      Share.shareXFiles([XFile(newImage.path)],
+          subject: "Hey wanna apply to this Job?",
+          text: '''
+Click on this link to view this Job
+http://joinmyship.jms/job/?job_id=${application.jobData?.id}
+''');
+    } catch (e) {
+      Share.share('''
+Click on this link to view this Job
+http://joinmyship.jms/job/?job_id=${application.jobData?.id}
+''');
+    }
     buildCaptureWidget.value = false;
     print(bytes);
-    isSharing.value = false;
   }
 
   instantiate() async {

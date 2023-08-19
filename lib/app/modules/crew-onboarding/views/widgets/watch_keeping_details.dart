@@ -55,7 +55,6 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                     child: DropdownButton2<String>(
                       value: null,
                       isExpanded: true,
-                      style: Get.textTheme.bodySmall,
                       items: controller.watchKeepings
                           .map((e) => e.name)
                           .map((e) => DropdownMenuItem(

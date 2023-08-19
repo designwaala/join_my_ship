@@ -458,7 +458,7 @@ class CrewOnboardingController extends GetxController with PickImage {
       statusCode = await getIt<CrewUserProvider>().createCrewUser(
           crewUser: CrewUser(
               firstName: FirebaseAuth.instance.currentUser?.displayName,
-              lastName: "_",
+              // lastName: "_",
               password: "Demo@123",
               email: FirebaseAuth.instance.currentUser?.email,
               addressLine1: addressLine1.text,
@@ -488,7 +488,7 @@ class CrewOnboardingController extends GetxController with PickImage {
           crewId: crewUser!.id!,
           crewUser: CrewUser(
               firstName: FirebaseAuth.instance.currentUser?.displayName,
-              lastName: "_",
+              // lastName: "_",
               email: FirebaseAuth.instance.currentUser?.email,
               addressLine1: addressLine1.text,
               pincode: zipCode.text,

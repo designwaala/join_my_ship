@@ -1,4 +1,7 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/widgets/toasts/unfocus_gesture.dart';
 
 import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
@@ -12,6 +15,8 @@ import '../modules/choose_employer/bindings/choose_employer_binding.dart';
 import '../modules/choose_employer/views/choose_employer_view.dart';
 import '../modules/choose_user/bindings/choose_user_binding.dart';
 import '../modules/choose_user/views/choose_user_view.dart';
+import '../modules/connectivity_lost/bindings/connectivity_lost_binding.dart';
+import '../modules/connectivity_lost/views/connectivity_lost_view.dart';
 import '../modules/crew-onboarding/bindings/crew_onboarding_binding.dart';
 import '../modules/crew-onboarding/views/crew_onboarding_view.dart';
 import '../modules/crew_job_applications/bindings/crew_job_applications_binding.dart';
@@ -75,169 +80,181 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
-      page: () => const HomeView(),
-      bindings: [HomeBinding(), ProfileBinding(), JobOpeningsBinding()],
-    ),
+        name: _Paths.HOME,
+        page: () => const HomeView(),
+        bindings: [HomeBinding(), ProfileBinding(), JobOpeningsBinding()],
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.SPLASH,
-      page: () => const SplashView(),
-      binding: SplashBinding(),
-    ),
+        name: _Paths.SPLASH,
+        page: () => const SplashView(),
+        binding: SplashBinding()),
     GetPage(
-      name: _Paths.INFO,
-      page: () => const InfoView(),
-      binding: InfoBinding(),
-    ),
+        name: _Paths.INFO,
+        page: () => const InfoView(),
+        binding: InfoBinding()),
     GetPage(
-      name: _Paths.CHOOSE_USER,
-      page: () => const ChooseUserView(),
-      binding: ChooseUserBinding(),
-    ),
+        name: _Paths.CHOOSE_USER,
+        page: () => const ChooseUserView(),
+        binding: ChooseUserBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.CREW_SIGN_IN_EMAIL,
-      page: () => const CrewSignInEmailView(),
-      binding: CrewSignInBinding(),
-    ),
+        name: _Paths.CREW_SIGN_IN_EMAIL,
+        page: () => const CrewSignInEmailView(),
+        binding: CrewSignInBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.CREW_SIGN_IN_MOBILE,
-      page: () => const CrewSignInMobileView(),
-      binding: CrewSignInMobileBinding(),
-    ),
+        name: _Paths.CREW_SIGN_IN_MOBILE,
+        page: () => const CrewSignInMobileView(),
+        binding: CrewSignInMobileBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.SIGN_UP_EMAIL,
-      page: () => const SignUpEmailView(),
-      binding: SignUpEmailBinding(),
-    ),
+        name: _Paths.SIGN_UP_EMAIL,
+        page: () => const SignUpEmailView(),
+        binding: SignUpEmailBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.CHOOSE_EMPLOYER,
-      page: () => const ChooseEmployerView(),
-      binding: ChooseEmployerBinding(),
-    ),
+        name: _Paths.CHOOSE_EMPLOYER,
+        page: () => const ChooseEmployerView(),
+        binding: ChooseEmployerBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.SIGN_UP_PHONE_NUMBER,
-      page: () => const SignUpPhoneNumberView(),
-      binding: SignUpPhoneNumberBinding(),
-    ),
+        name: _Paths.SIGN_UP_PHONE_NUMBER,
+        page: () => const SignUpPhoneNumberView(),
+        binding: SignUpPhoneNumberBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.CREW_ONBOARDING,
-      page: () => const CrewOnboardingView(),
-      binding: CrewOnboardingBinding(),
-    ),
+        name: _Paths.CREW_ONBOARDING,
+        page: () => const CrewOnboardingView(),
+        binding: CrewOnboardingBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.EMAIL_VERIFICATION_WAITING,
-      page: () => const EmailVerificationWaitingView(),
-      binding: EmailVerificationWaitingBinding(),
-    ),
+        name: _Paths.EMAIL_VERIFICATION_WAITING,
+        page: () => const EmailVerificationWaitingView(),
+        binding: EmailVerificationWaitingBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.ACCOUNT_UNDER_VERIFICATION,
-      page: () => const AccountUnderVerificationView(),
-      binding: AccountUnderVerificationBinding(),
-    ),
+        name: _Paths.ACCOUNT_UNDER_VERIFICATION,
+        page: () => const AccountUnderVerificationView(),
+        binding: AccountUnderVerificationBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.PROFILE,
-      page: () => const ProfileView(),
-      binding: ProfileBinding(),
-    ),
+        name: _Paths.PROFILE,
+        page: () => const ProfileView(),
+        binding: ProfileBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.HELP,
-      page: () => const HelpView(),
-      binding: HelpBinding(),
-    ),
+        name: _Paths.HELP,
+        page: () => const HelpView(),
+        binding: HelpBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.EMPLOYER_CREATE_USER,
-      page: () => const EmployerCreateUserView(),
-      binding: EmployerCreateUserBinding(),
-    ),
+        name: _Paths.EMPLOYER_CREATE_USER,
+        page: () => const EmployerCreateUserView(),
+        binding: EmployerCreateUserBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.EMPLOYER_INVITE_NEW_MEMBERS,
-      page: () => const EmployerInviteNewMembersView(),
-      binding: EmployerInviteNewMembersBinding(),
-    ),
+        name: _Paths.EMPLOYER_INVITE_NEW_MEMBERS,
+        page: () => const EmployerInviteNewMembersView(),
+        binding: EmployerInviteNewMembersBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.EMPLOYER_MANAGE_USERS,
-      page: () => const EmployerManageUsersView(),
-      binding: EmployerManageUsersBinding(),
-    ),
+        name: _Paths.EMPLOYER_MANAGE_USERS,
+        page: () => const EmployerManageUsersView(),
+        binding: EmployerManageUsersBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.CHANGE_PASSWORD,
-      page: () => const ChangePasswordView(),
-      binding: ChangePasswordBinding(),
-    ),
+        name: _Paths.CHANGE_PASSWORD,
+        page: () => const ChangePasswordView(),
+        binding: ChangePasswordBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.RESET_PASSWORD,
-      page: () => const ResetPasswordView(),
-      binding: ResetPasswordBinding(),
-    ),
+        name: _Paths.RESET_PASSWORD,
+        page: () => const ResetPasswordView(),
+        binding: ResetPasswordBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
 /*     GetPage(
       name: _Paths.RESET_PASSWORD_EMAIL_VERIFICATION,
       page: () => const ResetPasswordEmailVerificationView(),
       binding: ResetPasswordBinding(),
     ), */
     GetPage(
-      name: _Paths.JOB_POST,
-      page: () => const JobPostView(),
-      binding: JobPostBinding(),
-    ),
+        name: _Paths.JOB_POST,
+        page: () => const JobPostView(),
+        binding: JobPostBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.JOB_POSTED_SUCCESSFULLY,
-      page: () => const JobPostedSuccessfullyView(),
-      binding: JobPostedSuccessfullyBinding(),
-    ),
+        name: _Paths.JOB_POSTED_SUCCESSFULLY,
+        page: () => const JobPostedSuccessfullyView(),
+        binding: JobPostedSuccessfullyBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.VIEW_JOBS_POSTED,
-      page: () => const ViewJobsPostedView(),
-      binding: ViewJobsPostedBinding(),
-    ),
+        name: _Paths.VIEW_JOBS_POSTED,
+        page: () => const ViewJobsPostedView(),
+        binding: ViewJobsPostedBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.EMPLOYER_JOB_POSTS,
-      page: () => const EmployerJobPostsView(),
-      binding: EmployerJobPostsBinding(),
-    ),
+        name: _Paths.EMPLOYER_JOB_POSTS,
+        page: () => const EmployerJobPostsView(),
+        binding: EmployerJobPostsBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.EMPLOYER_JOB_APPLICATIONS,
-      page: () => const EmployerJobApplicationsView(),
-      binding: EmployerJobApplicationsBinding(),
-    ),
+        name: _Paths.EMPLOYER_JOB_APPLICATIONS,
+        page: () => const EmployerJobApplicationsView(),
+        binding: EmployerJobApplicationsBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.JOB_OPENINGS,
-      page: () => const JobOpeningsView(),
-      binding: JobOpeningsBinding(),
-    ),
+        name: _Paths.JOB_OPENINGS,
+        page: () => const JobOpeningsView(),
+        binding: JobOpeningsBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.JOB_APPLIED_SUCCESSFULLY,
-      page: () => const JobAppliedSuccessfullyView(),
-      binding: JobAppliedSuccessfullyBinding(),
-    ),
+        name: _Paths.JOB_APPLIED_SUCCESSFULLY,
+        page: () => const JobAppliedSuccessfullyView(),
+        binding: JobAppliedSuccessfullyBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.SUCCESS,
-      page: () => const SuccessView(),
-      binding: SuccessBinding(),
-    ),
+        name: _Paths.SUCCESS,
+        page: () => const SuccessView(),
+        binding: SuccessBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.CREW_JOB_APPLICATIONS,
-      page: () => const CrewJobApplicationsView(),
-      binding: CrewJobApplicationsBinding(),
-    ),
+        name: _Paths.CREW_JOB_APPLICATIONS,
+        page: () => const CrewJobApplicationsView(),
+        binding: CrewJobApplicationsBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.APPLICANT_DETAIL,
-      page: () => const ApplicantDetailView(),
-      binding: ApplicantDetailBinding(),
-    ),
+        name: _Paths.APPLICANT_DETAIL,
+        page: () => const ApplicantDetailView(),
+        binding: ApplicantDetailBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.APPLICATION_STATUS,
-      page: () => const ApplicationStatusView(),
-      binding: ApplicationStatusBinding(),
-    ),
+        name: _Paths.APPLICATION_STATUS,
+        page: () => const ApplicationStatusView(),
+        binding: ApplicationStatusBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
-      name: _Paths.ERROR_OCCURRED,
-      page: () => const ErrorOccurredView(),
-      binding: ErrorOccurredBinding(),
-    ),
+        name: _Paths.ERROR_OCCURRED,
+        page: () => const ErrorOccurredView(),
+        binding: ErrorOccurredBinding(),
+        middlewares: [ConnectivityMiddleWare()]),
     GetPage(
       name: _Paths.JOB_OPENING,
       page: () => const JobOpeningView(),
       binding: JobOpeningBinding(),
+      middlewares: [ConnectivityMiddleWare()],
+    ),
+    GetPage(
+      name: _Paths.CONNECTIVITY_LOST,
+      page: () => const ConnectivityLostView(),
+      binding: ConnectivityLostBinding(),
     ),
   ];
+}
+
+class ConnectivityMiddleWare extends GetMiddleware {
+  @override
+  GetPage? onPageCalled(GetPage? page) => page;
+
+  @override
+  RouteSettings? redirect(String? route) => null;
 }

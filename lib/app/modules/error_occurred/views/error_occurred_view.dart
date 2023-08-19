@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:lottie/lottie.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/error_occurred_controller.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
@@ -63,7 +65,22 @@ class ErrorOccurredView extends GetView<ErrorOccurredController> {
                       backgroundColor: Colors.white,
                       foregroundColor: Get.theme.primaryColor,
                       elevation: 4),
-                  onPressed: () {},
+                  onPressed: () {
+                    launchUrl(Uri(
+                      scheme: 'mailto',
+                      path: 'joinmyship22@gmail.com',
+                      query: '''subject=App Feedback&body=
+Firebase User: ${FirebaseAuth.instance.currentUser != null}
+Django User: ${UserStates.instance.crewUser != null},
+Is Crew: ${UserStates.instance.isCrew}
+Email: ${FirebaseAuth.instance.currentUser?.email?.nullIfEmpty() != null}
+Email Verified: ${FirebaseAuth.instance.currentUser?.emailVerified}
+Phone Number: ${FirebaseAuth.instance.currentUser?.phoneNumber?.nullIfEmpty() != null}
+Version Number: ${packageInfo?.version}                     
+Build Number: ${packageInfo?.buildNumber}
+                          ''',
+                    ));
+                  },
                   icon: Icon(Icons.email),
                   label: Text("Contact Us")),
               40.verticalSpace
