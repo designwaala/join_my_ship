@@ -36,6 +36,10 @@ dependencies:
   text_form_field_validator: ^0.0.3
   url_launcher: ^6.1.12
   package_info_plus: ^4.1.0
+  uni_links: ^0.5.1
+  share_plus: ^7.1.0
+  widgets_to_image: ^0.0.2
+  path_provider: ^2.1.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

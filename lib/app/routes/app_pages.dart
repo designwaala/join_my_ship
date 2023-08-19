@@ -42,6 +42,8 @@ import '../modules/info/bindings/info_binding.dart';
 import '../modules/info/views/info_view.dart';
 import '../modules/job_applied_successfully/bindings/job_applied_successfully_binding.dart';
 import '../modules/job_applied_successfully/views/job_applied_successfully_view.dart';
+import '../modules/job_opening/bindings/job_opening_binding.dart';
+import '../modules/job_opening/views/job_opening_view.dart';
 import '../modules/job_openings/bindings/job_openings_binding.dart';
 import '../modules/job_openings/views/job_openings_view.dart';
 import '../modules/job_post/bindings/job_post_binding.dart';
@@ -231,6 +233,11 @@ class AppPages {
       name: _Paths.ERROR_OCCURRED,
       page: () => const ErrorOccurredView(),
       binding: ErrorOccurredBinding(),
+    ),
+    GetPage(
+      name: _Paths.JOB_OPENING,
+      page: () => const JobOpeningView(),
+      binding: JobOpeningBinding(),
     ),
   ];
 }

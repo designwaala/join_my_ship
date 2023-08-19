@@ -13,6 +13,12 @@ class JobProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
+  Future<Job?> getJob(int jobId) async {
+    final response = await get("employer/post_job_retrieve/$jobId",
+        decoder: (data) => Job.fromJson(data));
+    return response.body;
+  }
+
   Future<List<Job>?> getJobList(
       {int? employerId, List<int>? ranks, List<int>? vesselIds}) async {
     List<MapEntry<String, String>> queries = [

@@ -8,6 +8,8 @@ import 'package:get_cli/extensions/string.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/modules/application_status/controllers/application_status_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 
 import '../controllers/crew_job_applications_controller.dart';
 
@@ -27,18 +29,49 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Column(
-                    children: controller.applications
-                        .map((application) => _buildCard(application))
-                        .toList(),
-                  ));
+              : controller.buildCaptureWidget.value
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Please Wait"),
+                                SizedBox(
+                                    height: 16,
+                                    width: 16,
+                                    child: CircularProgressIndicator())
+                              ],
+                            ),
+                          ),
+                          8.verticalSpace,
+                          WidgetsToImage(
+                              controller: controller.widgetsToImageController,
+                              child: Column(
+                                children: [
+                                  _buildCard(controller.applicationToBuild!,
+                                      shareView: true),
+                                ],
+                              )),
+                        ],
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Column(
+                        children: controller.applications
+                            .map((application) => _buildCard(application))
+                            .toList(),
+                      ));
         }));
   }
 
-  Widget _buildCard(Application application) {
+  Widget _buildCard(Application application, {bool shareView = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Card(
@@ -325,42 +358,45 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                       ],
                     ),
                   16.verticalSpace,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton.icon(
+                  if (!shareView)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton.icon(
+                            onPressed: () {
+                              // TODO: Like
+                            },
+                            icon: const Icon(
+                              Icons.thumb_up_alt_outlined,
+                              size: 18,
+                            ),
+                            label: const Text(
+                              "Like",
+                              style: TextStyle(fontSize: 13),
+                            )),
+                        FilledButton(
+                            onPressed: () {
+                              Get.toNamed(Routes.APPLICATION_STATUS,
+                                  arguments: ApplicationStatusArguments(
+                                      application: application));
+                            },
+                            child: Text("Check Status")),
+                        TextButton.icon(
                           onPressed: () {
-                            // TODO: Like
+                            controller.captureWidget(application);
                           },
                           icon: const Icon(
-                            Icons.thumb_up_alt_outlined,
+                            Icons.share_sharp,
                             size: 18,
+                            color: Colors.black,
                           ),
                           label: const Text(
-                            "Like",
-                            style: TextStyle(fontSize: 13),
-                          )),
-                      FilledButton(
-                          onPressed: () {
-                            Get.toNamed(Routes.APPLICATION_STATUS,
-                                arguments: ApplicationStatusArguments(
-                                    application: application));
-                          },
-                          child: Text("Check Status")),
-                      TextButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.share_sharp,
-                          size: 18,
-                          color: Colors.black,
+                            "Share",
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
                         ),
-                        label: const Text(
-                          "Share",
-                          style: TextStyle(fontSize: 13, color: Colors.black),
-                        ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   18.verticalSpace,
                 ],
               ),

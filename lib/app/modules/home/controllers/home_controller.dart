@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
+import 'package:join_mp_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:uni_links/uni_links.dart';
 
 class HomeController extends GetxController {
   RxInt currentIndex = 1.obs;
@@ -19,14 +23,40 @@ class HomeController extends GetxController {
 
   RxBool isLoading = false.obs;
 
+  StreamSubscription<String?>? uriStream;
+
   @override
   void onInit() {
+    uriStream = linkStream.listen((event) {
+      Uri uri = Uri.parse(event ?? "");
+      _handleLink(uri);
+    });
     super.onInit();
     _initialize();
   }
 
+  _handleLink(Uri uri) {
+    switch (uri.path) {
+      case "/job/":
+        Get.toNamed(Routes.JOB_OPENING,
+            arguments: JobOpeningArguments(
+                jobId: int.tryParse(uri.queryParameters['job_id'] ?? "")),
+            preventDuplicates: false);
+    }
+  }
+
+  @override
+  void onClose() {
+    uriStream?.cancel();
+    super.onClose();
+  }
+
   _initialize() async {
     isLoading.value = true;
+    final uri = await getInitialUri();
+    if (uri != null) {
+      _handleLink(uri);
+    }
     if (UserStates.instance.crewUser == null) {
       UserStates.instance.crewUser =
           await getIt<CrewUserProvider>().getCrewUser();

@@ -63,6 +63,9 @@ mixin RedirectionMixin {
     } else if (UserStates.instance.crewUser != null) {
       user = UserStates.instance.crewUser;
     } else {
+      FirebaseAuth.instance.currentUser
+          ?.getIdToken()
+          .then((value) => print(value));
       if (PreferencesHelper.instance.accessToken.nullIfEmpty() == null) {
         print("Getting Access Tokens, -> Splash");
         await getIt<CrewUserProvider>().getAccessTokens();
@@ -120,8 +123,10 @@ mixin RedirectionMixin {
       UserStates.instance.isCrew == true,
       FirebaseAuth.instance.currentUser?.email?.nullIfEmpty() != null,
       FirebaseAuth.instance.currentUser?.emailVerified == true,
-      FirebaseAuth.instance.currentUser?.phoneNumber != null
+      FirebaseAuth.instance.currentUser?.phoneNumber?.nullIfEmpty() != null
     ];
+
+    print(truths);
 
     //THRUTH TABLE
     if (eq(truths, [false, false, false, false, false, false])) {

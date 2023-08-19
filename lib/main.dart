@@ -65,12 +65,12 @@ void main() async {
   ); */
   packageInfo = await PackageInfo.fromPlatform();
   await PreferencesHelper.instance.init();
-  try {
+  /* try {
     print(await FirebaseAuth.instance.currentUser?.getIdToken());
   } catch (e) {
     await FirebaseAuth.instance.signOut();
     PreferencesHelper.instance.clearAll();
-  }
+  } */
   baseURL = "https://designwaala.me/";
   runApp(
     ScreenUtilInit(
