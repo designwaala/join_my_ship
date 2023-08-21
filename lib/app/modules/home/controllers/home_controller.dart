@@ -11,7 +11,7 @@ import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:uni_links/uni_links.dart';
-
+import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 class HomeController extends GetxController {
   RxInt currentIndex = 1.obs;
   RxBool showJobButtons = false.obs;
@@ -63,8 +63,8 @@ class HomeController extends GetxController {
     _addDrawerButtons();
     if (PreferencesHelper.instance.localFCMToken == null) {
       String? fcmToken = await FirebaseMessaging.instance.getToken();
-      if (fcmToken != null) {
-        PreferencesHelper.instance.setFCMToken(fcmToken);
+      if (fcmToken?.nullIfEmpty() != null) {
+        PreferencesHelper.instance.setFCMToken(fcmToken!);
         getIt<FcmTokenProvider>().postFCMToken(fcmToken);
       }
     }

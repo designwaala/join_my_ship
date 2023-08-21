@@ -46,8 +46,11 @@ class ApplicantDetailController extends GetxController {
     ranks = await getIt<RanksProvider>().getRankList();
     countries = await getIt<CountryProvider>().getCountry();
     isLoading.value = false;
-    if (application.value?.viewedStatus != true) {
-      getIt<ApplicationProvider>().viewApplication(application.value?.id ?? -1);
+    if (application.value?.viewedStatus != true &&
+        applicant?.id != null &&
+        application.value?.jobData?.id != null) {
+      getIt<ApplicationProvider>().viewApplication(
+          applicant?.id ?? -1, application.value?.jobData?.id ?? -1);
     }
   }
 
@@ -62,12 +65,24 @@ class ApplicantDetailController extends GetxController {
   }
 
   shortList() async {
-    if (application.value?.shortlistedStatus == true) {
+    if (application.value?.id == null) {
       return;
     }
     isShortListing.value = true;
-    application.value = await getIt<ApplicationProvider>()
-        .shortListApplication(args?.application?.id ?? -1);
+    if (application.value?.shortlistedStatus != true) {
+      int? statusCode = await getIt<ApplicationProvider>()
+          .shortListApplication(application.value!);
+      if (statusCode == 200) {
+        application.value?.shortlistedStatus = true;
+      }
+    } else {
+      Application? updatedApplication = await getIt<ApplicationProvider>()
+          .unshortListApplication(application.value!.id!);
+      if (updatedApplication != null) {
+        application.value = updatedApplication;
+      }
+    }
+
     isShortListing.value = false;
   }
 

@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.example.join_mp_ship",
+      "sha256_cert_fingerprints":
+      ["92:73:e8:a0:7c:4e:73:e8:31:17:0e:c6:1b:e8:65:1e:36:10:89:c7:d8:4d:91:1e:88:c4:c7:83:52:69:a6:86"]
+    }
+  }]

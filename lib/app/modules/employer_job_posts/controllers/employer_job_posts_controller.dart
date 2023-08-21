@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:join_mp_ship/app/data/models/coc_model.dart';
 import 'package:join_mp_ship/app/data/models/cop_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
@@ -16,6 +20,9 @@ import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 
 class EmployerJobPostsController extends GetxController {
   RxList<Job> jobPosts = RxList.empty();
@@ -34,6 +41,13 @@ class EmployerJobPostsController extends GetxController {
   RxBool isLoading = false.obs;
 
   RxnInt jobIdBeingDeleted = RxnInt();
+
+  WidgetsToImageController widgetsToImageController =
+      WidgetsToImageController();
+  Uint8List? bytes;
+  RxBool buildCaptureWidget = false.obs;
+  RxBool isSharing = false.obs;
+  Job? jobToBuild;
 
   @override
   void onInit() {
@@ -91,5 +105,38 @@ class EmployerJobPostsController extends GetxController {
       jobPosts.removeWhere((jobPost) => jobPost.id == jobId);
     }
     jobIdBeingDeleted.value = null;
+  }
+
+  Future<void> captureWidget(Job job) async {
+    jobToBuild = job;
+    buildCaptureWidget.value = true;
+    try {
+      await Future.delayed(const Duration(milliseconds: 200));
+      bytes = await widgetsToImageController.capture();
+      if (bytes == null) {
+        Share.share('''
+Click on this link to view this Job
+http://designwaala.me/job/?job_id=${job.id}
+''');
+        buildCaptureWidget.value = false;
+        return;
+      }
+      final String path = (await getApplicationDocumentsDirectory()).path;
+      File newImage =
+          await File('$path/job_${job.id}.png').writeAsBytes(bytes!);
+      Share.shareXFiles([XFile(newImage.path)],
+          subject: "Hey wanna apply to this Job?",
+          text: '''
+Click on this link to view this Job
+http://designwaala.me/job/?job_id=${job.id}
+''');
+    } catch (e) {
+      Share.share('''
+Click on this link to view this Job
+http://designwaala.me/job/?job_id=${job.id}
+''');
+    }
+    buildCaptureWidget.value = false;
+    print(bytes);
   }
 }

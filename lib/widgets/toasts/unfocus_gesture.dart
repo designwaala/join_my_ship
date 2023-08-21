@@ -40,11 +40,7 @@ class _UnFocusGestureState extends State<UnFocusGesture> {
         }
       } else {
         if (Get.currentRoute == Routes.CONNECTIVITY_LOST) {
-          if (Navigator.canPop(context)) {
-            Get.back();
-          } else {
-            Get.offAllNamed(Routes.SPLASH);
-          }
+          Get.back();
         }
       }
     });

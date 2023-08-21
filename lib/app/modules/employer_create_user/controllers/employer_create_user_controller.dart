@@ -163,7 +163,7 @@ class EmployerCreateUserController extends GetxController {
     }
 
     if ((crewUser?.id == null &&
-            (pickedImage.value?.path == null ||
+            (pickedImage.value?.path == null &&
                 uploadedImagePath.value == null)) ||
         country.value == null ||
         state.value == null ||

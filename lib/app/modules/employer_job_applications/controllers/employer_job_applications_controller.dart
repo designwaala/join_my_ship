@@ -86,18 +86,37 @@ class EmployerJobApplicationsController extends GetxController {
   }
 
   Future<void> shortListApplication(int? applicationId) async {
-    if (applicationId == null) {
+    if (applicationId == null ||
+        jobApplications.any((e) => e.id == applicationId) != true) {
       return;
     }
     applicationShortListing.value = applicationId;
-    final updatedJobApplication =
-        await getIt<ApplicationProvider>().shortListApplication(applicationId);
-    if (updatedJobApplication != null) {
-      int index = jobApplications.indexWhere((e) => e.id == applicationId);
-      jobApplications
-        ..removeAt(index)
-        ..insert(index, updatedJobApplication);
+    if (jobApplications
+            .firstWhereOrNull((application) => application.id == applicationId)
+            ?.shortlistedStatus !=
+        true) {
+      int? statusCode = await getIt<ApplicationProvider>().shortListApplication(
+          jobApplications.firstWhereOrNull(
+              (application) => application.id == applicationId)!);
+      if (statusCode == 200) {
+        int index = jobApplications.indexWhere((e) => e.id == applicationId);
+        Application application = jobApplications[index];
+        application.shortlistedStatus = true;
+        jobApplications
+          ..removeAt(index)
+          ..insert(index, application);
+      }
+    } else {
+      Application? updatedApplication = await getIt<ApplicationProvider>()
+          .unshortListApplication(applicationId);
+      if (updatedApplication != null) {
+        int index = jobApplications.indexWhere((e) => e.id == applicationId);
+        jobApplications
+          ..removeAt(index)
+          ..insert(index, updatedApplication);
+      }
     }
+
     applicationShortListing.value = null;
   }
 }

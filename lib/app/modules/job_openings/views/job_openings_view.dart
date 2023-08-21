@@ -80,6 +80,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                           style: Get.textTheme.bodyLarge
                               ?.copyWith(color: Colors.blue, fontSize: 18),
                         ),
+                        20.horizontalSpace,
                         DropdownButtonHideUnderline(
                           child: DropdownButton2<Rank>(
                             isExpanded: true,
@@ -133,7 +134,6 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                             hint: const Text("Select Rank"),
                             buttonStyleData: ButtonStyleData(
                                 height: 40,
-                                width: 200,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8),
                                 decoration: DropdownDecoration()),
@@ -150,6 +150,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                           style: Get.textTheme.bodyLarge
                               ?.copyWith(color: Colors.blue, fontSize: 18),
                         ),
+                        20.horizontalSpace,
                         DropdownButtonHideUnderline(
                           child: DropdownButton2<int>(
                             isExpanded: true,
@@ -236,7 +237,6 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                             hint: const Text("Select Vessel"),
                             buttonStyleData: ButtonStyleData(
                                 height: 40,
-                                width: 200,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8),
                                 decoration: BoxDecoration(
@@ -528,170 +528,94 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (!controller.isReferredJob.value)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      UserStates.instance.crewUser?.userTypeKey == 2
-                          ? controller.followingJob.value == job.id
-                              ? const CircularProgressIndicator()
-                              : TextButton.icon(
-                                  onPressed: () {
-                                    controller.followJob(
-                                        job.employerDetails?.id, job.id);
-                                  },
-                                  icon: const Icon(
-                                    Icons.add,
-                                    size: 20,
-                                  ),
-                                  label: const Text("Follow"),
-                                  style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.only(
-                                        left: 8, right: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    UserStates.instance.crewUser?.userTypeKey == 2
+                        ? controller.followingJob.value == job.id
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton.icon(
+                                onPressed: () {
+                                  controller.followJob(
+                                      job.employerDetails?.id, job.id);
+                                },
+                                icon: const Icon(
+                                  Icons.add,
+                                  size: 20,
+                                ),
+                                label: const Text("Follow"),
+                                style: FilledButton.styleFrom(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                     foregroundColor: Colors.white,
-                                    backgroundColor: Colors.blue,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                )
-                          : const SizedBox()
-                    ],
-                  ),
-                !controller.isReferredJob.value
-                    ? Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text("Tentative Joining Date: ",
-                                  style: Get.textTheme.bodyLarge),
-                              Text(
-                                job.tentativeJoining!,
-                                style: Get.textTheme.bodyMedium
-                                    ?.copyWith(fontSize: 14),
+                                    backgroundColor: Get.theme.primaryColor,
+                                    shape: StadiumBorder()),
                               )
-                            ],
-                          ),
-                          // Flexible(
-                          //   child:
-                          //       RichText(
-                          //     maxLines: 2,
-                          //     text:
-                          //         TextSpan(
-                          //       children: [
-                          //         TextSpan(
-                          //             text:
-                          //                 "Vessel Type: ",
-                          //             style:
-                          //                 Get.textTheme.bodyLarge),
-                          //         TextSpan(
-                          //             text:
-                          //                 controller.vesselList?.vessels?.map((e) => e.subVessels ?? []).expand((e) => e).firstWhereOrNull((e) => e.id == job.vesselId)?.name ?? ""),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text("Vessel Type: ",
-                                    maxLines: 2,
-                                    style: Get.textTheme.bodyLarge),
-                              ),
-                              Text(controller.vesselList?.vessels
-                                      ?.map((e) => e.subVessels ?? [])
-                                      .expand((e) => e)
-                                      .firstWhereOrNull(
-                                          (e) => e.id == job.vesselId)
-                                      ?.name ??
-                                  ""),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("GRT: ", style: Get.textTheme.bodyLarge),
-                              Text(job.gRT.toString())
-                            ],
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text("Rank: ", style: Get.textTheme.bodyLarge),
-                              const Text("Second Engineer"
-                                  // controller
-                                  //   .jobOpenings[index]
-                                  //   .rank
-                                  //   .toString(),
-                                  )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Vessel IMO No: ",
-                                  style: Get.textTheme.bodyLarge),
-                              const Text("988441"
-                                  // controller
-                                  // .jobOpenings[index]
-                                  // .vesselImoNo
-                                  // .toString(),
-                                  )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Vessel Type: ",
-                                  style: Get.textTheme.bodyLarge),
-                              Text(controller.vesselList?.vessels
-                                      ?.map((e) => e.subVessels ?? [])
-                                      .expand((e) => e)
-                                      .firstWhereOrNull(
-                                          (e) => e.id == job.vesselId)
-                                      ?.name ??
-                                  ""),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Flag: ", style: Get.textTheme.bodyLarge),
-                              const Text("INDIA"
-                                  // controller
-                                  // .jobOpenings[index]
-                                  // .flag
-                                  // .toString(),
-                                  )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Joining Port: ",
-                                  style: Get.textTheme.bodyLarge),
-                              const Text(
-                                "Kochi",
-                                // controller
-                                // .jobOpenings[index]
-                                // .joiningPort
-                                // .toString(),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Tentative Joining Date: ",
-                                  style: Get.textTheme.bodyLarge),
-                              Text(
-                                job.tentativeJoining.toString(),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                        : const SizedBox()
+                  ],
+                ),
+                8.verticalSpace,
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text("Tentative Joining Date: ",
+                            style: Get.textTheme.bodyLarge),
+                        Text(
+                          job.tentativeJoining!,
+                          style:
+                              Get.textTheme.bodyMedium?.copyWith(fontSize: 14),
+                        )
+                      ],
+                    ),
+                    // Flexible(
+                    //   child:
+                    //       RichText(
+                    //     maxLines: 2,
+                    //     text:
+                    //         TextSpan(
+                    //       children: [
+                    //         TextSpan(
+                    //             text:
+                    //                 "Vessel Type: ",
+                    //             style:
+                    //                 Get.textTheme.bodyLarge),
+                    //         TextSpan(
+                    //             text:
+                    //                 controller.vesselList?.vessels?.map((e) => e.subVessels ?? []).expand((e) => e).firstWhereOrNull((e) => e.id == job.vesselId)?.name ?? ""),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text("Vessel Type: ",
+                              maxLines: 2, style: Get.textTheme.bodyLarge),
+                        ),
+                        Text(controller.vesselList?.vessels
+                                ?.map((e) => e.subVessels ?? [])
+                                .expand((e) => e)
+                                .firstWhereOrNull((e) => e.id == job.vesselId)
+                                ?.name ??
+                            ""),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text("GRT: ", style: Get.textTheme.bodyLarge),
+                        Text(job.gRT.toString())
+                      ],
+                    ),
+                  ],
+                ),
+
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 3),

@@ -496,6 +496,7 @@ class JobPostStep2 extends GetView<JobPostController> {
                         hint: const Text("Select"),
                         buttonStyleData: ButtonStyleData(
                             height: 40,
+                            width: 200,
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: DropdownDecoration()),
                       ),

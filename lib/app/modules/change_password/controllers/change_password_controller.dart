@@ -107,6 +107,7 @@ mixin RequiresRecentLogin {
                   hintText: "Password",
                   controller: passwordController,
                   obscureText: true,
+                  autofocus: true,
                 )
               ],
             ),
@@ -262,6 +263,7 @@ mixin RequiresRecentLogin {
                         children: [
                           Pinput(
                             length: 6,
+                            autofocus: true,
                             controller: otpController,
                             onCompleted: (_) {
                               verify();

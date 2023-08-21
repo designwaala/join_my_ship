@@ -26,16 +26,14 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  30.verticalSpace,
+                  14.verticalSpace,
                   Text(
                     "Change Password",
                     style: Get.theme.textTheme.headlineSmall
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  10.verticalSpace,
-                  const Text("Please enter your new password",
-                      style: TextStyle(fontSize: 14)),
-                  30.verticalSpace,
+                  const Text("Please enter your new password"),
+                  20.verticalSpace,
                   SizedBox(
                     height: 64,
                     child: TextFormField(
@@ -69,7 +67,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                               borderRadius: BorderRadius.circular(64))),
                     ),
                   ),
-                  16.verticalSpace,
+                  24.verticalSpace,
                   SizedBox(
                     height: 64,
                     child: TextFormField(

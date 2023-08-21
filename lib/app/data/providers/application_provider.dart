@@ -75,18 +75,24 @@ class ApplicationProvider extends WrapperConnect {
     return List<Application>.from(response.map((e) => Application.fromJson(e)));
   }
 
-  Future<Application?> shortListApplication(int applicationId) async {
+  Future<int?> shortListApplication(Application application) async {
+    final response = await get(
+        "crew/profile/shortlisted/${application.userData?.id}/${application.jobData?.id ?? application.jobId}",
+        decoder: (data) => data);
+    return response.statusCode;
+  }
+
+  Future<Application?> unshortListApplication(int applicationId) async {
     final response = await multipartPatch(
         "employer/applicants_update/$applicationId",
-        Application(shortlistedStatus: true).toJson());
+        Application(shortlistedStatus: false).toJson());
     return Application.fromJson(response);
   }
 
-  Future<Application?> viewApplication(int applicationId) async {
-    final response = await multipartPatch(
-        "employer/applicants_update/$applicationId",
-        Application(viewedStatus: true).toJson());
-    return Application.fromJson(response);
+  Future<int?> viewApplication(int crewId, int jobId) async {
+    final response = await get("crew/profile/viewed/$crewId/$jobId",
+        decoder: (data) => data);
+    return response.statusCode;
   }
 
 /*   Future<Application?> downloadResumeForApplication(int jobId) async {

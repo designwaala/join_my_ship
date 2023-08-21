@@ -191,7 +191,7 @@ class JobOpeningsController extends GetxController {
       if (bytes == null) {
         Share.share('''
 Click on this link to view this Job
-http://joinmyship.jms/job/?job_id=${job.id}
+http://designwaala.me/job/?job_id=${job.id}
 ''');
         buildCaptureWidget.value = false;
         return;
@@ -203,12 +203,12 @@ http://joinmyship.jms/job/?job_id=${job.id}
           subject: "Hey wanna apply to this Job?",
           text: '''
 Click on this link to view this Job
-http://joinmyship.jms/job/?job_id=${job.id}
+http://designwaala.me/job/?job_id=${job.id}
 ''');
     } catch (e) {
       Share.share('''
 Click on this link to view this Job
-http://joinmyship.jms/job/?job_id=${job.id}
+http://designwaala.me/job/?job_id=${job.id}
 ''');
     }
     buildCaptureWidget.value = false;

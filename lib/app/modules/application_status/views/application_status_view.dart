@@ -25,15 +25,16 @@ class ApplicationStatusView extends GetView<ApplicationStatusController> {
                   child: Row(
                 children: [
                   controller.args?.application?.appliedStatus == true
-                      ? _completedTimeline()
+                      ? _completedTimeline(1)
                       : _pendingTimeline(1),
                   16.horizontalSpace,
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        2.verticalSpace,
-                        Text("Job Applied", style: Get.textTheme.titleMedium),
+                        Text("Job Applied",
+                            style: Get.textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600)),
                         Text("You have successfully applied for your job",
                             style: Get.textTheme.bodyMedium
                                 ?.copyWith(color: Colors.grey)),
@@ -47,16 +48,16 @@ class ApplicationStatusView extends GetView<ApplicationStatusController> {
                   child: Row(
                 children: [
                   controller.args?.application?.viewedStatus == true
-                      ? _completedTimeline()
+                      ? _completedTimeline(2)
                       : _pendingTimeline(2),
                   16.horizontalSpace,
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        2.verticalSpace,
                         Text("Profile Viewed",
-                            style: Get.textTheme.titleMedium),
+                            style: Get.textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600)),
                         Text("Profile has been viewed by the employer",
                             style: Get.textTheme.bodyMedium
                                 ?.copyWith(color: Colors.grey)),
@@ -70,16 +71,16 @@ class ApplicationStatusView extends GetView<ApplicationStatusController> {
                   child: Row(
                 children: [
                   controller.args?.application?.resumeStatus == true
-                      ? _completedTimeline()
+                      ? _completedTimeline(3)
                       : _pendingTimeline(3),
                   16.horizontalSpace,
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        2.verticalSpace,
                         Text("Resume Downloaded",
-                            style: Get.textTheme.titleMedium),
+                            style: Get.textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600)),
                         Text("Resume has been downloaded by the employer",
                             style: Get.textTheme.bodyMedium
                                 ?.copyWith(color: Colors.grey)),
@@ -93,15 +94,16 @@ class ApplicationStatusView extends GetView<ApplicationStatusController> {
                   child: Row(
                 children: [
                   controller.args?.application?.shortlistedStatus == true
-                      ? _completedTimeline()
+                      ? _completedTimeline(4)
                       : _pendingTimeline(4),
                   16.horizontalSpace,
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        2.verticalSpace,
-                        Text("Shortlisted", style: Get.textTheme.titleMedium),
+                        Text("Shortlisted",
+                            style: Get.textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600)),
                         Text(
                           "Congratulations! Employer has shortlisted your profile",
                           style: Get.textTheme.bodyMedium
@@ -119,7 +121,7 @@ class ApplicationStatusView extends GetView<ApplicationStatusController> {
         ));
   }
 
-  _completedTimeline() => Column(
+  _completedTimeline(int index) => Column(
         children: [
           Container(
             height: 24,
@@ -128,12 +130,13 @@ class ApplicationStatusView extends GetView<ApplicationStatusController> {
                 color: Colors.green, borderRadius: BorderRadius.circular(4)),
             child: Icon(Icons.check, color: Colors.white, size: 18),
           ),
-          Expanded(
-            child: Container(
-              width: 2,
-              decoration: BoxDecoration(color: Colors.green),
-            ),
-          )
+          if (index != 4)
+            Expanded(
+              child: Container(
+                width: 2,
+                decoration: BoxDecoration(color: Colors.green),
+              ),
+            )
         ],
       );
 

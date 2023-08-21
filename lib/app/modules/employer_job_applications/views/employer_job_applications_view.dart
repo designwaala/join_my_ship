@@ -484,6 +484,7 @@ class EmployerJobApplicationsView
                                         .userData?.profilePic ??
                                     "",
                                 height: 55,
+                                fit: BoxFit.cover,
                                 width: 55),
                           ),
                           title: Text(
@@ -586,7 +587,7 @@ class EmployerJobApplicationsView
                                       AssetImage(controller
                                                   .jobApplications[index]
                                                   .shortlistedStatus ==
-                                             true
+                                              true
                                           ? 'assets/icons/bookmark_filled.png'
                                           : 'assets/icons/bookmark_outlined.png'),
                                       color: controller.jobApplications[index]
