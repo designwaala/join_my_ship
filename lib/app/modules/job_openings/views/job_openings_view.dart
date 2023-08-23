@@ -75,68 +75,81 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Rank",
-                          style: Get.textTheme.bodyLarge
-                              ?.copyWith(color: Colors.blue, fontSize: 18),
+                        Expanded(
+                          child: Text(
+                            "Rank",
+                            style: Get.textTheme.bodyLarge
+                                ?.copyWith(color: Colors.blue, fontSize: 18),
+                          ),
                         ),
-                        20.horizontalSpace,
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton2<Rank>(
-                            isExpanded: true,
-                            style: Get.textTheme.bodySmall,
-                            items: controller.ranks
-                                    .map((e) => DropdownMenuItem<Rank>(
-                                        value: e,
-                                        child: Row(
-                                          children: [
-                                            Obx(() {
-                                              return Checkbox(
-                                                  value: controller.toApplyRanks
-                                                      .contains(e.id),
-                                                  onChanged: (_) {
-                                                    if (e.id == null) {
-                                                      return;
-                                                    }
-                                                    if (controller.toApplyRanks
-                                                        .contains(e.id)) {
-                                                      controller.toApplyRanks
-                                                          .remove(e.id);
-                                                    } else {
-                                                      controller.toApplyRanks
-                                                          .add(e.id!);
-                                                    }
-                                                  });
-                                            }),
-                                            Flexible(
-                                              child: Text(e.name ?? "",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: Get
-                                                      .textTheme.titleMedium),
-                                            ),
-                                          ],
-                                        )))
-                                    .toList() ??
-                                [],
-                            onChanged: (value) {
-                              if (value?.id == null) {
-                                return;
-                              }
-                              if (controller.toApplyRanks
-                                  .contains(value!.id!)) {
-                                controller.toApplyRanks.remove(value.id);
-                              } else {
-                                controller.toApplyRanks.add(value.id!);
-                              }
-                            },
-                            hint: const Text("Select Rank"),
-                            buttonStyleData: ButtonStyleData(
-                                height: 40,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                decoration: DropdownDecoration()),
+                        8.horizontalSpace,
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<Rank>(
+                              isExpanded: true,
+                              style: Get.textTheme.bodySmall,
+                              items: controller.ranks
+                                      .map((e) => DropdownMenuItem<Rank>(
+                                          value: e,
+                                          child: Row(
+                                            children: [
+                                              Obx(() {
+                                                return SizedBox(
+                                                  height: 8,
+                                                  width: 8,
+                                                  child: Checkbox(
+                                                      value: controller
+                                                          .toApplyRanks
+                                                          .contains(e.id),
+                                                      onChanged: (_) {
+                                                        if (e.id == null) {
+                                                          return;
+                                                        }
+                                                        if (controller
+                                                            .toApplyRanks
+                                                            .contains(e.id)) {
+                                                          controller
+                                                              .toApplyRanks
+                                                              .remove(e.id);
+                                                        } else {
+                                                          controller
+                                                              .toApplyRanks
+                                                              .add(e.id!);
+                                                        }
+                                                      }),
+                                                );
+                                              }),
+                                              16.horizontalSpace,
+                                              Flexible(
+                                                child: Text(e.name ?? "",
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: Get
+                                                        .textTheme.titleMedium),
+                                              ),
+                                            ],
+                                          )))
+                                      .toList() ??
+                                  [],
+                              onChanged: (value) {
+                                if (value?.id == null) {
+                                  return;
+                                }
+                                if (controller.toApplyRanks
+                                    .contains(value!.id!)) {
+                                  controller.toApplyRanks.remove(value.id);
+                                } else {
+                                  controller.toApplyRanks.add(value.id!);
+                                }
+                              },
+                              hint: const Text("Select Rank"),
+                              buttonStyleData: ButtonStyleData(
+                                  height: 40,
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: DropdownDecoration()),
+                            ),
                           ),
                         )
                       ],
@@ -145,105 +158,112 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Vessel Type",
-                          style: Get.textTheme.bodyLarge
-                              ?.copyWith(color: Colors.blue, fontSize: 18),
+                        Expanded(
+                          child: Text(
+                            "Vessel Type",
+                            style: Get.textTheme.bodyLarge
+                                ?.copyWith(color: Colors.blue, fontSize: 18),
+                          ),
                         ),
-                        20.horizontalSpace,
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton2<int>(
-                            isExpanded: true,
-                            style: Get.textTheme.bodySmall,
-                            items: controller.vesselList?.vessels
-                                    ?.map((e) => [
-                                          DropdownMenuItem<int>(
-                                              enabled: false,
-                                              child: Text(
-                                                e.vesselName ?? "",
-                                                maxLines: 1,
-                                                style: Get.textTheme.titleSmall
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                overflow: TextOverflow.ellipsis,
-                                              )),
-                                          ...?e.subVessels?.map(
-                                              (e) => DropdownMenuItem<int>(
-                                                  value: e.id,
-                                                  child: Row(
-                                                    children: [
-                                                      Obx(() {
-                                                        return Checkbox(
-                                                            value: controller
-                                                                .toApplyVesselTypes
-                                                                .contains(e.id),
-                                                            onChanged: (_) {
-                                                              if (e.id ==
-                                                                  null) {
-                                                                return;
-                                                              }
-                                                              if (controller
-                                                                  .toApplyVesselTypes
-                                                                  .contains(
-                                                                      e.id)) {
-                                                                controller
-                                                                    .toApplyVesselTypes
-                                                                    .remove(
-                                                                        e.id);
-                                                              } else {
-                                                                controller
-                                                                    .toApplyVesselTypes
-                                                                    .add(e.id!);
-                                                              }
-                                                            });
-                                                      }),
-                                                      Flexible(
-                                                        child: Text(
-                                                            e.name ?? "",
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: Get.textTheme
-                                                                .bodyMedium
-                                                                ?.copyWith(
-                                                                    fontSize:
-                                                                        12)),
-                                                      ),
-                                                    ],
-                                                  )))
-                                        ])
-                                    .expand((element) => element)
-                                    .toList() ??
-                                [],
+                        8.horizontalSpace,
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<int>(
+                              isExpanded: true,
+                              style: Get.textTheme.bodySmall,
+                              items: controller.vesselList?.vessels
+                                      ?.map((e) => [
+                                            DropdownMenuItem<int>(
+                                                enabled: false,
+                                                child: Text(
+                                                  e.vesselName ?? "",
+                                                  maxLines: 1,
+                                                  style: Get
+                                                      .textTheme.titleSmall
+                                                      ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )),
+                                            ...?e.subVessels
+                                                ?.map(
+                                                    (e) =>
+                                                        DropdownMenuItem<int>(
+                                                            value: e.id,
+                                                            child: Row(
+                                                              children: [
+                                                                Obx(() {
+                                                                  return SizedBox(
+                                                                    height: 8,
+                                                                    width: 8,
+                                                                    child: Checkbox(
+                                                                        value: controller.toApplyVesselTypes.contains(e.id),
+                                                                        onChanged: (_) {
+                                                                          if (e.id ==
+                                                                              null) {
+                                                                            return;
+                                                                          }
+                                                                          if (controller
+                                                                              .toApplyVesselTypes
+                                                                              .contains(e.id)) {
+                                                                            controller.toApplyVesselTypes.remove(e.id);
+                                                                          } else {
+                                                                            controller.toApplyVesselTypes.add(e.id!);
+                                                                          }
+                                                                        }),
+                                                                  );
+                                                                }),
+                                                                16.horizontalSpace,
+                                                                Flexible(
+                                                                  child: Text(
+                                                                      e.name ??
+                                                                          "",
+                                                                      maxLines:
+                                                                          1,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style: Get
+                                                                          .textTheme
+                                                                          .bodyMedium
+                                                                          ?.copyWith(
+                                                                              fontSize: 12)),
+                                                                ),
+                                                              ],
+                                                            )))
+                                          ])
+                                      .expand((element) => element)
+                                      .toList() ??
+                                  [],
 
-                            // .map((e) => DropdownMenuItem(
-                            //     value: e.name,
-                            //     child: Text(e.name ?? "",
-                            //         style: Get.textTheme.titleMedium)))
-                            // .toList(),
-                            onChanged: (value) {
-                              if (value == null) {
-                                return;
-                              }
-                              if (controller.toApplyVesselTypes
-                                  .contains(value)) {
-                                controller.toApplyVesselTypes.remove(value);
-                              } else {
-                                controller.toApplyVesselTypes.add(value);
-                              }
-                            },
-                            hint: const Text("Select Vessel"),
-                            buttonStyleData: ButtonStyleData(
-                                height: 40,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(64),
-                                  border:
-                                      Border.all(color: Get.theme.primaryColor),
-                                )),
+                              // .map((e) => DropdownMenuItem(
+                              //     value: e.name,
+                              //     child: Text(e.name ?? "",
+                              //         style: Get.textTheme.titleMedium)))
+                              // .toList(),
+                              onChanged: (value) {
+                                if (value == null) {
+                                  return;
+                                }
+                                if (controller.toApplyVesselTypes
+                                    .contains(value)) {
+                                  controller.toApplyVesselTypes.remove(value);
+                                } else {
+                                  controller.toApplyVesselTypes.add(value);
+                                }
+                              },
+                              hint: const Text("Select Vessel"),
+                              buttonStyleData: ButtonStyleData(
+                                  height: 40,
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(64),
+                                    border: Border.all(
+                                        color: Get.theme.primaryColor),
+                                  )),
+                            ),
                           ),
                         ),
                       ],

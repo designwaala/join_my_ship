@@ -14,8 +14,7 @@ class CopProvider extends WrapperConnect {
   }
 
   Future<List<Cop>?> getCOPList({required int userType}) async {
-    final response = await get('employer/cop_list/$userType');
+    final response = await get('employer/cop_list/$userType', headers: {});
     return response.body;
   }
-
 }

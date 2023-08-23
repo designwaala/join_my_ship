@@ -16,7 +16,7 @@ class CdcIssuingAuthorityProvider extends WrapperConnect {
 
   Future<List<CdcIssuingAuthority>?> getCdcIssuingAuthorities(
       int userType) async {
-    final response = await get('employer/cdc_list/$userType');
+    final response = await get('employer/cdc_list/$userType', headers: {});
     return response.body;
   }
 }

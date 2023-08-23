@@ -15,7 +15,8 @@ class WatchKeepingProvider extends WrapperConnect {
 
   Future<List<WatchKeeping>?> getWatchKeepingList(
       {required int userType}) async {
-    final response = await get('employer/watch_keeping_list/$userType');
+    final response =
+        await get('employer/watch_keeping_list/$userType', headers: {});
     return response.body;
   }
 }

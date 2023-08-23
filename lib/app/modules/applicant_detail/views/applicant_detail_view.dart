@@ -155,7 +155,7 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                                                   color: Get.theme.primaryColor,
                                                   fontWeight: FontWeight.w600)),
                                       Text(
-                                          genderMap[controller
+                                          maritalStatuses[controller
                                                       .applicant?.gender ??
                                                   -1] ??
                                               "",

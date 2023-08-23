@@ -14,7 +14,7 @@ class CocProvider extends WrapperConnect {
   }
 
   Future<List<Coc>?> getCOCList({required int userType}) async {
-    final response = await get('employer/coc_list/$userType');
+    final response = await get('employer/coc_list/$userType', headers: {});
     return response.body;
   }
 }

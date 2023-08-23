@@ -19,7 +19,7 @@ class PassportIssuingAuthorityProvider extends WrapperConnect {
 
   Future<List<PassportIssuingAuthority>?> getPassportIssuingAuthority(
       int userType) async {
-    final response = await get('employer/passport_list/$userType');
+    final response = await get('employer/passport_list/$userType', headers: {});
     return response.body;
   }
 }

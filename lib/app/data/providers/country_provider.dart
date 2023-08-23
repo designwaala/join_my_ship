@@ -15,7 +15,7 @@ class CountryProvider extends WrapperConnect {
   }
 
   Future<List<Country>?> getCountry() async {
-    final response = await get('employer/country_list');
+    final response = await get('employer/country_list', headers: {});
     return response.body;
   }
 
