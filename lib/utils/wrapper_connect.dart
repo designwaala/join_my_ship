@@ -114,7 +114,7 @@ class WrapperConnect extends GetConnect {
       Decoder<T>? decoder,
       bool softRefresh = false}) async {
     print(PreferencesHelper.instance.accessToken);
-    if (PreferencesHelper.instance.accessToken.isEmpty) {
+    if (headers == null && PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
       bool didGetAccessTokens = await getAccessTokens();
       if (!didGetAccessTokens && softRefresh) {
