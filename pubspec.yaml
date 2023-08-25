@@ -41,6 +41,7 @@ dependencies:
   widgets_to_image: ^0.0.2
   path_provider: ^2.1.0
   connectivity_plus: ^4.0.2
+  flutter_downloader: ^1.11.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

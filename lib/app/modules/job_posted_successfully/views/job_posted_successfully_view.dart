@@ -27,6 +27,7 @@ class JobPostedSuccessfullyView
           ),
           26.verticalSpace,
           Text(controller.args?.message ?? "JOB PUBLISHED\nSUCCESSFULLY!",
+              textAlign: TextAlign.center,
               style: Get.textTheme.s20w700
                   .copyWith(color: Get.theme.primaryColor)),
           20.verticalSpace,

@@ -123,8 +123,8 @@ class CDCDetails extends GetView<CrewOnboardingController> {
                       onTap: () async {
                         DateTime? selectedDateTime = await showDatePicker(
                             context: context,
-                            initialDate: DateTime.parse("1990-01-01"),
-                            firstDate: DateTime.parse("1950-01-01"),
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
                             lastDate: DateTime.parse("2050-01-01"));
                         controller.cdcSeamanNumberValidTill.text =
                             selectedDateTime?.getServerDate() ?? "";

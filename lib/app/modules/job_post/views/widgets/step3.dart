@@ -65,18 +65,16 @@ class JobPostStep3 extends GetView<JobPostController> {
                             ),
                             14.verticalSpace,
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Tentative Joining Date",
+                                Text("Tentative Joining Date: ",
                                     style: Get.textTheme.s12w500),
                                 Text(controller.tentativeJoining.text)
                               ],
                             ),
                             4.verticalSpace,
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Vessel Type",
+                                Text("Vessel Type: ",
                                     style: Get.textTheme.s12w500),
                                 Text(controller.vesselList?.vessels
                                         ?.expand((e) => e.subVessels ?? [])
@@ -89,9 +87,8 @@ class JobPostStep3 extends GetView<JobPostController> {
                             ),
                             4.verticalSpace,
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("GRT", style: Get.textTheme.s12w500),
+                                Text("GRT: ", style: Get.textTheme.s12w500),
                                 Text(controller.grt.text)
                               ],
                             ),

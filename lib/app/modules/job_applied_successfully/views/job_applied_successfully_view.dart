@@ -24,7 +24,7 @@ class JobAppliedSuccessfullyView
               ),
               15.verticalSpace,
               const Text(
-                "YOU HAVE APPLIED\nSUCCESSFULLY!",
+                "YOU HAVE APPLIED SUCCESSFULLY!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.blue,

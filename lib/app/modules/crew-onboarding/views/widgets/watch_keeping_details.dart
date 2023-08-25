@@ -212,9 +212,9 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                                           await showDatePicker(
                                               context: Get.context!,
                                               initialDate:
-                                                  DateTime.parse("1990-01-01"),
+                                                  DateTime.now(),
                                               firstDate:
-                                                  DateTime.parse("1950-01-01"),
+                                                  DateTime.now(),
                                               lastDate:
                                                   DateTime.parse("2050-01-01"));
                                       controller.watchKeepingIssuingAuthorities
@@ -273,9 +273,9 @@ class WatchKeepingDetails extends GetView<CrewOnboardingController> {
                                           await showDatePicker(
                                               context: Get.context!,
                                               initialDate:
-                                                  DateTime.parse("1990-01-01"),
+                                                  DateTime.now(),
                                               firstDate:
-                                                  DateTime.parse("1990-01-01"),
+                                                  DateTime.now(),
                                               lastDate:
                                                   DateTime.parse("2050-01-01"));
                                       controller.watchKeepingIssuingAuthorities

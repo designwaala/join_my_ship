@@ -209,10 +209,8 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                           DateTime? selectedDateTime =
                                               await showDatePicker(
                                                   context: Get.context!,
-                                                  initialDate: DateTime.parse(
-                                                      "1990-01-01"),
-                                                  firstDate: DateTime.parse(
-                                                      "1950-01-01"),
+                                                  initialDate: DateTime.now(),
+                                                  firstDate: DateTime.now(),
                                                   lastDate: DateTime.parse(
                                                       "2050-01-01"));
                                           controller.copIssuingAuthorities
@@ -272,9 +270,9 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                           await showDatePicker(
                                               context: Get.context!,
                                               initialDate:
-                                                  DateTime.parse("1990-01-01"),
+                                                  DateTime.now(),
                                               firstDate:
-                                                  DateTime.parse("1950-01-01"),
+                                                  DateTime.now(),
                                               lastDate:
                                                   DateTime.parse("2050-01-01"));
                                       controller.copIssuingAuthorities
