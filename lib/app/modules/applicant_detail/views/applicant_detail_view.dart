@@ -149,14 +149,31 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
+                                      Text("Gender",
+                                          style: Get.textTheme.titleMedium
+                                              ?.copyWith(
+                                                  color: Get.theme.primaryColor,
+                                                  fontWeight: FontWeight.w600)),
+                                      Text(
+                                          genderMap[controller
+                                                      .applicant?.gender ??
+                                                  -1] ??
+                                              "",
+                                          textAlign: TextAlign.end,
+                                          style: Get.textTheme.titleMedium)
+                                    ]),
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
                                       Text("Marital Status",
                                           style: Get.textTheme.titleMedium
                                               ?.copyWith(
                                                   color: Get.theme.primaryColor,
                                                   fontWeight: FontWeight.w600)),
                                       Text(
-                                          maritalStatuses[controller
-                                                      .applicant?.gender ??
+                                          maritalStatuses[controller.applicant
+                                                      ?.maritalStatus ??
                                                   -1] ??
                                               "",
                                           textAlign: TextAlign.end,

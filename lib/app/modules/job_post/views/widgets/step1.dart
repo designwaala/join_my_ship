@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
@@ -157,6 +158,10 @@ class JobPostStep1 extends GetView<JobPostController> {
                           child: CustomTextFormField(
                             hintText: "Enter GRT",
                             controller: controller.grt,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            keyboardType: TextInputType.number,
                           ))
                     ],
                   ),

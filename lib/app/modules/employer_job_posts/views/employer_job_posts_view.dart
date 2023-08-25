@@ -165,7 +165,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                         ],
                         onOpened: () {},
                       ),
-                16.horizontalSpace,
+                8.horizontalSpace,
               ],
             ),
           ),

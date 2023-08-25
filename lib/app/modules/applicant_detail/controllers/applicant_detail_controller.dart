@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/data/models/country_model.dart';
@@ -11,7 +14,9 @@ import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class ApplicantDetailController extends GetxController {
   CrewUser? applicant;
@@ -24,6 +29,8 @@ class ApplicantDetailController extends GetxController {
 
   ApplicantDetailArguments? args;
   Rxn<Application> application = Rxn();
+
+  String? _localPath;
 
   @override
   void onInit() {
@@ -59,9 +66,55 @@ class ApplicantDetailController extends GetxController {
     String? resume = await getIt<ApplicationProvider>()
         .downloadResumeForApplication(args?.application?.jobId ?? -1,
             args?.application?.userData?.id ?? -1);
-    launchUrl(Uri.parse("https://designwaala.me$resume"),
-        mode: LaunchMode.externalApplication);
+    await _prepareSaveDir();
+    final taskId = await FlutterDownloader.enqueue(
+      url: "https://designwaala.me$resume",
+      headers: {}, // optional: header send with url (auth token etc)
+      savedDir: _localPath ?? "",
+      saveInPublicStorage: true,
+      showNotification:
+          true, // show download progress in status bar (for Android)
+      openFileFromNotification:
+          true, // click on notification to open downloaded file (for Android)
+    );
+    // await loadPdfFromNetwork("https://designwaala.me$resume");
+    /* launchUrl(Uri.parse("https://designwaala.me$resume"),
+        mode: LaunchMode.externalApplication); */
     isGettingResume.value = false;
+  }
+
+  Future<void> _prepareSaveDir() async {
+    _localPath = (await _getSavedDir())!;
+    if (_localPath == null) {
+      return;
+    }
+    final savedDir = Directory(_localPath!);
+    if (!savedDir.existsSync()) {
+      await savedDir.create();
+    }
+  }
+
+  Future<String?> _getSavedDir() async {
+    String? externalStorageDirPath;
+
+    externalStorageDirPath =
+        (await getApplicationDocumentsDirectory()).absolute.path;
+
+    return externalStorageDirPath;
+  }
+
+  Future<File> loadPdfFromNetwork(String url) async {
+    final response = await http.get(Uri.parse(url));
+    final bytes = response.bodyBytes;
+    return _storeFile(url, bytes);
+  }
+
+  Future<File> _storeFile(String url, List<int> bytes) async {
+    final filename = "${applicant?.firstName}_${applicant?.id}";
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/$filename');
+    await file.writeAsBytes(bytes, flush: true);
+    return file;
   }
 
   shortList() async {
