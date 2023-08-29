@@ -558,7 +558,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                     UserStates.instance.crewUser?.userTypeKey == 2
                         ? controller.followingJob.value == job.id
                             ? const CircularProgressIndicator()
-                            : ElevatedButton.icon(
+                            : FilledButton.icon(
                                 onPressed: () {
                                   controller.followJob(
                                       job.employerDetails?.id, job.id);
@@ -569,13 +569,13 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                 ),
                                 label: const Text("Follow"),
                                 style: FilledButton.styleFrom(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
+                                    minimumSize: Size.zero,
+                                    padding: EdgeInsets.fromLTRB(4, 4, 8, 4),
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
                                     foregroundColor: Colors.white,
                                     backgroundColor: Get.theme.primaryColor,
-                                    shape: StadiumBorder()),
+                                    shape: const StadiumBorder()),
                               )
                         : const SizedBox()
                   ],

@@ -54,10 +54,10 @@ class ApplicantDetailController extends GetxController {
     countries = await getIt<CountryProvider>().getCountry();
     isLoading.value = false;
     if (application.value?.viewedStatus != true &&
-        applicant?.id != null &&
-        application.value?.jobData?.id != null) {
-      getIt<ApplicationProvider>().viewApplication(
-          applicant?.id ?? -1, application.value?.jobData?.id ?? -1);
+        args?.userId != null &&
+        application.value?.jobId != null) {
+      getIt<ApplicationProvider>()
+          .viewApplication(args?.userId ?? -1, application.value?.jobId ?? -1);
     }
   }
 

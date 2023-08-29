@@ -33,10 +33,10 @@ class SignUpPhoneNumberView extends GetView<SignUpPhoneNumberController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       14.verticalSpace,
-                      Text("Sign In",
+                      Text("Sign Up",
                           style: Get.theme.textTheme.headlineSmall
                               ?.copyWith(fontWeight: FontWeight.bold)),
-                      Text("Please sign in to your registered mobile\nnumber"),
+                      Text("Please sign up with your mobile\nnumber"),
                       20.verticalSpace,
                       SizedBox(
                         height: 64,
