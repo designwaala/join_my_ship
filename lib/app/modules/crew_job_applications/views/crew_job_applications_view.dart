@@ -156,29 +156,6 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                     children: [
                       Row(
                         children: [
-                          Text("Rank: ", style: Get.textTheme.bodyLarge),
-                          const Text("Second Engineer"
-                              // controller
-                              //   .jobOpenings[index]
-                              //   .rank
-                              //   .toString(),
-                              )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text("Vessel IMO No: ",
-                              style: Get.textTheme.bodyLarge),
-                          const Text("988441"
-                              // controller
-                              // .jobOpenings[index]
-                              // .vesselImoNo
-                              // .toString(),
-                              )
-                        ],
-                      ),
-                      Row(
-                        children: [
                           Text("Vessel Type: ", style: Get.textTheme.bodyLarge),
                           Text(controller.vesselList?.vessels
                                   ?.map((e) => e.subVessels ?? [])
@@ -187,30 +164,6 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                                       e.id == application.jobData?.vesselId)
                                   ?.name ??
                               ""),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text("Flag: ", style: Get.textTheme.bodyLarge),
-                          const Text("INDIA"
-                              // controller
-                              // .jobOpenings[index]
-                              // .flag
-                              // .toString(),
-                              )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text("Joining Port: ",
-                              style: Get.textTheme.bodyLarge),
-                          const Text(
-                            "Kochi",
-                            // controller
-                            // .jobOpenings[index]
-                            // .joiningPort
-                            // .toString(),
-                          )
                         ],
                       ),
                       Row(
