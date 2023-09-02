@@ -597,8 +597,8 @@ class WrapperConnect extends GetConnect {
       await getAccessTokens();
     }
 
-    var response = await http.patch(Uri.parse("$baseURL/$url"),
-        body: body is Map ? jsonEncode(body) : body,
+    var response = await http.patch(Uri.parse("$baseURL$url"),
+        body: body,// is Map ? jsonEncode(body) : body,
         headers: headers ??
             {
               "Content-Type": "multipart/form-data",
@@ -620,7 +620,7 @@ class WrapperConnect extends GetConnect {
       if (response.statusCode == 401) {
         print("Refreshing Access Token didnt work, getting new Tokens");
         await getAccessTokens();
-        response = await http.patch(Uri.parse("$baseURL/$url"),
+        response = await http.patch(Uri.parse("$baseURL$url"),
             body: jsonEncode(body),
             headers: headers ??
                 {

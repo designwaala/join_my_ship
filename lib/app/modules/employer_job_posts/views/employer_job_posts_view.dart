@@ -104,7 +104,9 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                   child: CachedNetworkImage(
                       height: 50,
                       width: 50,
-                      imageUrl: job.employerDetails?.profilePic ?? ""),
+                      imageUrl: job.employerDetails?.profilePic ?? "",
+                      fit: BoxFit.cover,
+                      ),
                 ),
                 10.horizontalSpace,
                 Expanded(

@@ -13,7 +13,7 @@ class RanksProvider extends GetConnect {
   }
 
   Future<List<Rank>?> getRankList() async {
-    final response = await get('employer/rank_list');
+    final response = await get('employer/rank_list', headers: {});
     return response.body;
   }
 

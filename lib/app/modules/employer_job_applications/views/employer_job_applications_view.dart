@@ -11,6 +11,7 @@ import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
+import 'package:lottie/lottie.dart';
 import '../controllers/employer_job_applications_controller.dart';
 
 class EmployerJobApplicationsView
@@ -458,194 +459,239 @@ class EmployerJobApplicationsView
                             ),
                         ]),
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
-                      itemCount: controller.jobApplications.length,
-                      itemBuilder: (context, index) => Card(
-                        elevation: 3,
-                        shadowColor: const Color.fromARGB(255, 237, 233, 241),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        child: InkWell(
-                          onTap: () {
-                            Get.toNamed(Routes.APPLICANT_DETAIL,
-                                arguments: ApplicantDetailArguments(
-                                    userId: controller
-                                        .jobApplications[index].userData?.id,
-                                    application:
-                                        controller.jobApplications[index]));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(128),
-                                  child: CachedNetworkImage(
-                                      imageUrl: controller
+                  controller.jobApplications.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 300,
+                                width: 300,
+                                child: Lottie.asset(
+                                  'assets/animations/no_results.json',
+                                  repeat: false,
+                                ),
+                              ),
+                              10.verticalSpace,
+                              const Text(
+                                "No Results Found!",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            itemCount: controller.jobApplications.length,
+                            itemBuilder: (context, index) => Card(
+                              elevation: 3,
+                              shadowColor:
+                                  const Color.fromARGB(255, 237, 233, 241),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: InkWell(
+                                onTap: () {
+                                  Get.toNamed(Routes.APPLICANT_DETAIL,
+                                      arguments: ApplicantDetailArguments(
+                                          userId: controller
                                               .jobApplications[index]
                                               .userData
-                                              ?.profilePic ??
-                                          "",
-                                      height: 55,
-                                      fit: BoxFit.cover,
-                                      width: 55),
-                                ),
-                                8.horizontalSpace,
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                              ?.id,
+                                          application: controller
+                                              .jobApplications[index]));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        controller.jobApplications[index]
-                                                .userData?.firstName ??
-                                            "",
-                                        style: Get.textTheme.bodyLarge
-                                            ?.copyWith(fontSize: 16),
-                                      ),
-                                      2.verticalSpace,
-                                      Wrap(
-                                        alignment: WrapAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            controller.ranks
-                                                    .firstWhereOrNull((rank) =>
-                                                        rank.id ==
-                                                        controller
-                                                            .jobApplications[
-                                                                index]
-                                                            .userData
-                                                            ?.rankId)
-                                                    ?.name ??
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(128),
+                                        child: CachedNetworkImage(
+                                            imageUrl: controller
+                                                    .jobApplications[index]
+                                                    .userData
+                                                    ?.profilePic ??
                                                 "",
-                                            style: Get.textTheme.bodyMedium,
-                                          ),
-                                          SizedBox(width: 6),
-                                          RichText(
-                                            text: TextSpan(
+                                            height: 55,
+                                            fit: BoxFit.cover,
+                                            width: 55),
+                                      ),
+                                      8.horizontalSpace,
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              controller.jobApplications[index]
+                                                      .userData?.firstName ??
+                                                  "",
+                                              style: Get.textTheme.bodyLarge
+                                                  ?.copyWith(fontSize: 16),
+                                            ),
+                                            2.verticalSpace,
+                                            Wrap(
+                                              alignment:
+                                                  WrapAlignment.spaceBetween,
                                               children: [
-                                                if (controller
-                                                        .jobApplications[index]
-                                                        .userDetails
-                                                        ?.validCOCIssuingAuthority
-                                                        ?.isNotEmpty ==
-                                                    true) ...[
-                                                  TextSpan(
-                                                      text: "COC: ",
-                                                      style: Get
-                                                          .textTheme.bodyMedium
-                                                          ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                  TextSpan(
-                                                      text: controller
+                                                Text(
+                                                  controller.ranks
+                                                          .firstWhereOrNull(
+                                                              (rank) =>
+                                                                  rank.id ==
+                                                                  controller
+                                                                      .jobApplications[
+                                                                          index]
+                                                                      .userData
+                                                                      ?.rankId)
+                                                          ?.name ??
+                                                      "",
+                                                  style:
+                                                      Get.textTheme.bodyMedium,
+                                                ),
+                                                SizedBox(width: 6),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      if (controller
                                                               .jobApplications[
                                                                   index]
                                                               .userDetails
                                                               ?.validCOCIssuingAuthority
-                                                              ?.map((e) =>
-                                                                  e.issuingAuthority ??
-                                                                  e.customName)
-                                                              .join(", ") ??
-                                                          "",
-                                                      style: Get.textTheme
-                                                          .bodyMedium),
-                                                ],
-                                                if (controller
-                                                        .jobApplications[index]
-                                                        .userDetails
-                                                        ?.validWatchKeepingIssuingAuthority
-                                                        ?.isNotEmpty ==
-                                                    true) ...[
-                                                  TextSpan(
-                                                      text: "WKC: ",
-                                                      style: Get
-                                                          .textTheme.bodyMedium
-                                                          ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                  TextSpan(
-                                                      text: controller
+                                                              ?.isNotEmpty ==
+                                                          true) ...[
+                                                        TextSpan(
+                                                            text: "COC: ",
+                                                            style: Get.textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                        TextSpan(
+                                                            text: controller
+                                                                    .jobApplications[
+                                                                        index]
+                                                                    .userDetails
+                                                                    ?.validCOCIssuingAuthority
+                                                                    ?.map((e) =>
+                                                                        e.issuingAuthority ??
+                                                                        e
+                                                                            .customName)
+                                                                    .join(
+                                                                        ", ") ??
+                                                                "",
+                                                            style: Get.textTheme
+                                                                .bodyMedium),
+                                                      ],
+                                                      if (controller
                                                               .jobApplications[
                                                                   index]
                                                               .userDetails
                                                               ?.validWatchKeepingIssuingAuthority
-                                                              ?.map((e) =>
-                                                                  e.issuingAuthority ??
-                                                                  e.customName)
-                                                              .join(", ") ??
-                                                          "",
-                                                      style: Get.textTheme
-                                                          .bodyMedium),
-                                                ]
+                                                              ?.isNotEmpty ==
+                                                          true) ...[
+                                                        TextSpan(
+                                                            text: "WKC: ",
+                                                            style: Get.textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                        TextSpan(
+                                                            text: controller
+                                                                    .jobApplications[
+                                                                        index]
+                                                                    .userDetails
+                                                                    ?.validWatchKeepingIssuingAuthority
+                                                                    ?.map((e) =>
+                                                                        e.issuingAuthority ??
+                                                                        e
+                                                                            .customName)
+                                                                    .join(
+                                                                        ", ") ??
+                                                                "",
+                                                            style: Get.textTheme
+                                                                .bodyMedium),
+                                                      ]
+                                                    ],
+                                                  ),
+                                                ),
                                               ],
-                                            ),
-                                          ),
-                                        ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: controller
+                                                    .applicationShortListing
+                                                    .value ==
+                                                controller
+                                                    .jobApplications[index].id
+                                            ? null
+                                            : () {
+                                                controller.shortListApplication(
+                                                    controller
+                                                        .jobApplications[index]
+                                                        .id);
+                                              },
+                                        icon: Obx(() {
+                                          return controller
+                                                      .applicationShortListing
+                                                      .value ==
+                                                  controller
+                                                      .jobApplications[index].id
+                                              ? const Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                        height: 16,
+                                                        width: 16,
+                                                        child:
+                                                            CircularProgressIndicator())
+                                                  ],
+                                                )
+                                              : ImageIcon(
+                                                  AssetImage(controller
+                                                              .jobApplications[
+                                                                  index]
+                                                              .shortlistedStatus ==
+                                                          true
+                                                      ? 'assets/icons/bookmark_filled.png'
+                                                      : 'assets/icons/bookmark_outlined.png'),
+                                                  color: controller
+                                                              .jobApplications[
+                                                                  index]
+                                                              .shortlistedStatus ==
+                                                          true
+                                                      ? Colors.blue
+                                                      : Colors.black,
+                                                  size: controller
+                                                              .jobApplications[
+                                                                  index]
+                                                              .shortlistedStatus ==
+                                                          true
+                                                      ? 30
+                                                      : 29,
+                                                );
+                                        }),
                                       )
                                     ],
                                   ),
                                 ),
-                                IconButton(
-                                  onPressed: controller
-                                              .applicationShortListing.value ==
-                                          controller.jobApplications[index].id
-                                      ? null
-                                      : () {
-                                          controller.shortListApplication(
-                                              controller
-                                                  .jobApplications[index].id);
-                                        },
-                                  icon: Obx(() {
-                                    return controller.applicationShortListing
-                                                .value ==
-                                            controller.jobApplications[index].id
-                                        ? const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                  height: 16,
-                                                  width: 16,
-                                                  child:
-                                                      CircularProgressIndicator())
-                                            ],
-                                          )
-                                        : ImageIcon(
-                                            AssetImage(controller
-                                                        .jobApplications[index]
-                                                        .shortlistedStatus ==
-                                                    true
-                                                ? 'assets/icons/bookmark_filled.png'
-                                                : 'assets/icons/bookmark_outlined.png'),
-                                            color: controller
-                                                        .jobApplications[index]
-                                                        .shortlistedStatus ==
-                                                    true
-                                                ? Colors.blue
-                                                : Colors.black,
-                                            size: controller
-                                                        .jobApplications[index]
-                                                        .shortlistedStatus ==
-                                                    true
-                                                ? 30
-                                                : 29,
-                                          );
-                                  }),
-                                )
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
       ),

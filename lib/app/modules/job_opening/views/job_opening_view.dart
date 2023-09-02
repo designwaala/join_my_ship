@@ -382,7 +382,7 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                "${!controller.isReferredJob.value ? "JOB BY: " : ""}${controller.jobOpening.value?.employerDetails?.firstName ?? ""} ${controller.jobOpening.value?.employerDetails?.lastName ?? ""}",
+                                                "${!controller.isReferredJob.value ? "Job By: " : ""}${controller.jobOpening.value?.employerDetails?.firstName ?? ""} ${controller.jobOpening.value?.employerDetails?.lastName ?? ""}",
                                                 overflow: TextOverflow.ellipsis,
                                                 style: Get.textTheme.bodyMedium
                                                     ?.copyWith(

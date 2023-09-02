@@ -517,9 +517,11 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(128),
                   child: CachedNetworkImage(
-                      height: 50,
-                      width: 50,
-                      imageUrl: job.employerDetails?.profilePic ?? ""),
+                    height: 50,
+                    width: 50,
+                    imageUrl: job.employerDetails?.profilePic ?? "",
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 10.horizontalSpace,
                 Flexible(
@@ -528,7 +530,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${!controller.isReferredJob.value ? "JOB BY: " : ""}${job.employerDetails?.firstName ?? ""} ${job.employerDetails?.lastName ?? ""}",
+                        "${!controller.isReferredJob.value ? "Job By: " : ""}${job.employerDetails?.firstName ?? ""} ${job.employerDetails?.lastName ?? ""}",
                         overflow: TextOverflow.ellipsis,
                         style: Get.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.bold, fontSize: 16),

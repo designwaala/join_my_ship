@@ -14,7 +14,7 @@ class VesselListProvider extends GetConnect {
   }
 
   Future<VesselList?> getVesselList() async {
-    final response = await get('employer/vessels_list');
+    final response = await get('employer/vessels_list', headers: {});
     return response.body;
   }
 

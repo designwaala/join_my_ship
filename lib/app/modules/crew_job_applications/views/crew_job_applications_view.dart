@@ -87,11 +87,13 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(128),
                     child: CachedNetworkImage(
-                        height: 50,
-                        width: 50,
-                        imageUrl:
-                            application.jobData?.employerDetails?.profilePic ??
-                                ""),
+                      height: 50,
+                      width: 50,
+                      imageUrl:
+                          application.jobData?.employerDetails?.profilePic ??
+                              "",
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   10.horizontalSpace,
                   Flexible(
@@ -100,7 +102,7 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "JOB BY: ${application.jobData?.employerDetails?.firstName ?? ""} ${application.jobData?.employerDetails?.lastName ?? ""}",
+                          "Job By: ${application.jobData?.employerDetails?.firstName ?? ""} ${application.jobData?.employerDetails?.lastName ?? ""}",
                           overflow: TextOverflow.ellipsis,
                           style: Get.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold, fontSize: 16),
@@ -131,21 +133,6 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                       ),
                       Row(
                         children: [
-                          Flexible(
-                            child: Text("Vessel Type: ",
-                                maxLines: 2, style: Get.textTheme.bodyLarge),
-                          ),
-                          Text(controller.vesselList?.vessels
-                                  ?.map((e) => e.subVessels ?? [])
-                                  .expand((e) => e)
-                                  .firstWhereOrNull((e) =>
-                                      e.id == application.jobData?.vesselId)
-                                  ?.name ??
-                              ""),
-                        ],
-                      ),
-                      Row(
-                        children: [
                           Text("GRT: ", style: Get.textTheme.bodyLarge),
                           Text(application.jobData?.gRT.toString() ?? "")
                         ],
@@ -164,16 +151,6 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
                                       e.id == application.jobData?.vesselId)
                                   ?.name ??
                               ""),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text("Tentative Joining Date: ",
-                              style: Get.textTheme.bodyLarge),
-                          Text(
-                            application.jobData?.tentativeJoining.toString() ??
-                                "",
-                          )
                         ],
                       ),
                     ],

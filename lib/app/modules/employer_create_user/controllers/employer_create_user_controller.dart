@@ -193,6 +193,8 @@ class EmployerCreateUserController extends GetxController {
               pincode: zipCodeController.text.nullIfEmpty(),
               password: "Demo@123",
               email: FirebaseAuth.instance.currentUser?.email,
+              number:
+                  FirebaseAuth.instance.currentUser?.phoneNumber?.nullIfEmpty(),
               userTypeKey: UserStates.instance.employerType?.backendIndex,
               screenCheck: 1,
               gender: gender.value,

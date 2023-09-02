@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_cli/extensions/string.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
 import 'package:join_mp_ship/app/modules/job_posted_successfully/controllers/job_posted_successfully_controller.dart';
@@ -35,6 +36,7 @@ class JobPostStep3 extends GetView<JobPostController> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 22, vertical: 16),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +57,7 @@ class JobPostStep3 extends GetView<JobPostController> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                        "JOB BY: ${controller.user?.firstName}",
+                                        "Job By: ${controller.user?.firstName}",
                                         style: Get.textTheme.s14w600),
                                     Text(controller.user?.companyName ?? "",
                                         style: Get.textTheme.s12w500)
@@ -68,7 +70,8 @@ class JobPostStep3 extends GetView<JobPostController> {
                               children: [
                                 Text("Tentative Joining Date: ",
                                     style: Get.textTheme.s12w500),
-                                Text(controller.tentativeJoining.text)
+                                Text(controller.tentativeJoining.text,
+                                    style: Get.textTheme.s12w400)
                               ],
                             ),
                             4.verticalSpace,
@@ -76,20 +79,24 @@ class JobPostStep3 extends GetView<JobPostController> {
                               children: [
                                 Text("Vessel Type: ",
                                     style: Get.textTheme.s12w500),
-                                Text(controller.vesselList?.vessels
-                                        ?.expand((e) => e.subVessels ?? [])
-                                        .firstWhereOrNull((e) =>
-                                            e.id ==
-                                            controller.recordVesselType.value)
-                                        ?.name ??
-                                    "")
+                                Text(
+                                    controller.vesselList?.vessels
+                                            ?.expand((e) => e.subVessels ?? [])
+                                            .firstWhereOrNull((e) =>
+                                                e.id ==
+                                                controller
+                                                    .recordVesselType.value)
+                                            ?.name ??
+                                        "",
+                                    style: Get.textTheme.s12w400)
                               ],
                             ),
                             4.verticalSpace,
                             Row(
                               children: [
                                 Text("GRT: ", style: Get.textTheme.s12w500),
-                                Text(controller.grt.text)
+                                Text(controller.grt.text,
+                                    style: Get.textTheme.s12w400)
                               ],
                             ),
                             4.verticalSpace,
@@ -112,32 +119,27 @@ class JobPostStep3 extends GetView<JobPostController> {
                             if (controller
                                 .cocRequirementsSelected.isNotEmpty) ...[
                               8.verticalSpace,
-                              Row(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                      flex: 57,
-                                      child: Text("COC Requirements",
-                                          style: Get.textTheme.s12w500)),
-                                  Expanded(
-                                    flex: 81,
-                                    child: Wrap(
-                                      alignment: WrapAlignment.end,
-                                      children: [
-                                        ...() {
-                                          List<String?> texts = controller
-                                              .cocRequirementsSelected
-                                              .map((e) => [e.name, " | "])
-                                              .expand((e) => e)
-                                              .toList()
-                                              .map((e) => e)
-                                              .toList();
-                                          texts.removeLast();
-                                          return texts
-                                              .map((e) => Text(e ?? ""));
-                                        }()
-                                      ],
-                                    ),
+                                  Text("COC Requirements",
+                                      style: Get.textTheme.s12w500),
+                                  Wrap(
+                                    alignment: WrapAlignment.end,
+                                    children: [
+                                      ...() {
+                                        List<String?> texts = controller
+                                            .cocRequirementsSelected
+                                            .map((e) => [e.name, " | "])
+                                            .expand((e) => e)
+                                            .toList()
+                                            .map((e) => e)
+                                            .toList();
+                                        texts.removeLast();
+                                        return texts.map((e) => Text(e ?? "",
+                                            style: Get.textTheme.s12w400));
+                                      }()
+                                    ],
                                   )
                                 ],
                               ),
@@ -145,32 +147,27 @@ class JobPostStep3 extends GetView<JobPostController> {
                             if (controller
                                 .copRequirementsSelected.isNotEmpty) ...[
                               8.verticalSpace,
-                              Row(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                      flex: 57,
-                                      child: Text("COP Requirements",
-                                          style: Get.textTheme.s12w500)),
-                                  Expanded(
-                                    flex: 81,
-                                    child: Wrap(
-                                      alignment: WrapAlignment.end,
-                                      children: [
-                                        ...() {
-                                          List<String?> texts = controller
-                                              .copRequirementsSelected
-                                              .map((e) => [e.name, " | "])
-                                              .expand((e) => e)
-                                              .toList()
-                                              .map((e) => e)
-                                              .toList();
-                                          texts.removeLast();
-                                          return texts
-                                              .map((e) => Text(e ?? ""));
-                                        }()
-                                      ],
-                                    ),
+                                  Text("COP Requirements",
+                                      style: Get.textTheme.s12w500),
+                                  Wrap(
+                                    alignment: WrapAlignment.end,
+                                    children: [
+                                      ...() {
+                                        List<String?> texts = controller
+                                            .copRequirementsSelected
+                                            .map((e) => [e.name, " | "])
+                                            .expand((e) => e)
+                                            .toList()
+                                            .map((e) => e)
+                                            .toList();
+                                        texts.removeLast();
+                                        return texts.map((e) => Text(e ?? "",
+                                            style: Get.textTheme.s12w400));
+                                      }()
+                                    ],
                                   )
                                 ],
                               )
@@ -178,32 +175,27 @@ class JobPostStep3 extends GetView<JobPostController> {
                             if (controller.watchKeepingRequirementsSelected
                                 .isNotEmpty) ...[
                               8.verticalSpace,
-                              Row(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                      flex: 57,
-                                      child: Text("Watch-Keeping Requirements",
-                                          style: Get.textTheme.s12w500)),
-                                  Expanded(
-                                    flex: 81,
-                                    child: Wrap(
-                                      alignment: WrapAlignment.end,
-                                      children: [
-                                        ...() {
-                                          List<String?> texts = controller
-                                              .watchKeepingRequirementsSelected
-                                              .map((e) => [e.name, " | "])
-                                              .expand((e) => e)
-                                              .toList()
-                                              .map((e) => e)
-                                              .toList();
-                                          texts.removeLast();
-                                          return texts
-                                              .map((e) => Text(e ?? ""));
-                                        }()
-                                      ],
-                                    ),
+                                  Text("Watch-Keeping Requirements",
+                                      style: Get.textTheme.s12w500),
+                                  Wrap(
+                                    alignment: WrapAlignment.end,
+                                    children: [
+                                      ...() {
+                                        List<String?> texts = controller
+                                            .watchKeepingRequirementsSelected
+                                            .map((e) => [e.name, " | "])
+                                            .expand((e) => e)
+                                            .toList()
+                                            .map((e) => e)
+                                            .toList();
+                                        texts.removeLast();
+                                        return texts.map((e) => Text(e ?? "",
+                                            style: Get.textTheme.s12w400));
+                                      }()
+                                    ],
                                   )
                                 ],
                               )

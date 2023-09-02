@@ -334,6 +334,7 @@ class JobPostController extends GetxController {
         //Job is not required to be updated
       } else {
         await getIt<JobProvider>().updateJob(Job(
+            id: jobToEdit?.id,
             tentativeJoining: tentativeJoining.text,
             vesselId: recordVesselType.value,
             gRT: grt.text,

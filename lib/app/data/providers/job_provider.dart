@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
 import '../models/job_model.dart';
@@ -46,7 +47,11 @@ class JobProvider extends WrapperConnect {
 
   Future<Job> updateJob(Job job) async {
     final response = await httpPatch(
-        "employer/post_job_update/${job.id}", job.jsonToUpdateJob());
+        "employer/post_job_update/${job.id}", job.jsonToUpdateJob(),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          "Authorization": "Bearer ${PreferencesHelper.instance.accessToken}"
+        });
     return Job.fromJson(response);
   }
 
