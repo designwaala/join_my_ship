@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
+import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
@@ -12,6 +15,7 @@ import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
+
 class HomeController extends GetxController {
   RxInt currentIndex = 1.obs;
   RxBool showJobButtons = false.obs;
@@ -24,14 +28,29 @@ class HomeController extends GetxController {
 
   StreamSubscription<String?>? uriStream;
 
+  List<CrewUser> featuredCompanies = [];
+
+  Rank? selectedRank;
+
+  HomeArguments? args;
+
   @override
   void onInit() {
+    if (Get.arguments is HomeArguments?) {
+      args = Get.arguments;
+      selectedRank = args?.selectedRank;
+      currentIndex.value = args?.currentIndex ?? 1;
+    }
     uriStream = linkStream.listen((event) {
       Uri uri = Uri.parse(event ?? "");
       _handleLink(uri);
     });
     super.onInit();
     _initialize();
+  }
+
+  Future<void> _getFeaturedCompanies() async {
+    featuredCompanies = await getIt<CrewUserProvider>().getFeaturedCompanies();
   }
 
   _handleLink(Uri uri) {
@@ -60,6 +79,11 @@ class HomeController extends GetxController {
       UserStates.instance.crewUser =
           await getIt<CrewUserProvider>().getCrewUser();
     }
+    if (UserStates.instance.ranks == null ||
+        UserStates.instance.ranks?.isEmpty == true) {
+      UserStates.instance.ranks = await getIt<RanksProvider>().getRankList();
+    }
+    await _getFeaturedCompanies();
     _addDrawerButtons();
     if (PreferencesHelper.instance.localFCMToken == null) {
       String? fcmToken = await FirebaseMessaging.instance.getToken();
@@ -147,4 +171,11 @@ class HomeController extends GetxController {
       },
     ];
   }
+}
+
+class HomeArguments {
+  final Rank? selectedRank;
+  final int? currentIndex;
+
+  const HomeArguments({this.selectedRank, this.currentIndex});
 }

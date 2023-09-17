@@ -2,9 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/modules/job_openings/controllers/job_openings_controller.dart';
 import 'package:join_mp_ship/app/modules/job_openings/views/job_openings_view.dart';
 import 'package:join_mp_ship/app/modules/profile/views/profile_view.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
@@ -306,17 +309,37 @@ class HomeView extends GetView<HomeController> {
                 color: Colors.white,
                 elevation: 5.0,
                 shadowColor: const Color.fromRGBO(46, 4, 142, 0.08),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: "Search job here...",
-                      prefixIcon:
-                          Icon(Icons.search, color: Get.theme.primaryColor),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(64))),
-                ),
+                child: TypeAheadField<Rank>(
+                    textFieldConfiguration: TextFieldConfiguration(
+                        decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: "Search job here...",
+                            prefixIcon: Icon(Icons.search,
+                                color: Get.theme.primaryColor),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(64)))),
+                    suggestionsCallback: (String pattern) {
+                      return UserStates.instance.ranks?.where((rank) =>
+                              rank.name
+                                  ?.toUpperCase()
+                                  .contains(pattern.toUpperCase()) ==
+                              true) ??
+                          [];
+                    },
+                    itemBuilder: (context, rank) {
+                      return Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(rank.name ?? ""),
+                      );
+                    },
+                    onSuggestionSelected: (Rank rank) async {
+                      controller.selectedRank = rank;
+                      Get.toNamed(Routes.JOB_OPENINGS,
+                          arguments: JobOpeningsArguments(rankFilter: rank),
+                          preventDuplicates: false);
+                    }),
               ),
             ),
           ],
@@ -326,55 +349,65 @@ class HomeView extends GetView<HomeController> {
           padding: EdgeInsets.zero,
           children: [
             16.verticalSpace,
-            Stack(
-              children: [
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  height: 95.h,
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.shade500,
-                            blurRadius: 4,
-                            offset: const Offset(4, 4))
+            InkWell(
+              onTap: () {
+                Get.toNamed(Routes.JOB_OPENINGS,
+                    arguments: JobOpeningsArguments(
+                        rankFilter: UserStates.instance.ranks?.firstWhereOrNull(
+                            (rank) =>
+                                rank.id ==
+                                UserStates.instance.crewUser?.rankId)));
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 28, vertical: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    height: 95.h,
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.shade500,
+                              blurRadius: 4,
+                              offset: const Offset(4, 4))
+                        ],
+                        borderRadius: BorderRadius.circular(22.r),
+                        gradient: const LinearGradient(colors: [
+                          Color.fromRGBO(1, 66, 211, 1),
+                          Color.fromRGBO(92, 197, 255, 1)
+                        ])),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        10.verticalSpace,
+                        Text("Recommended Jobs",
+                            style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white)),
+                        6.verticalSpace,
+                        Text(
+                            "See our recommended jobs for \nyou based on your rank",
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white))
                       ],
-                      borderRadius: BorderRadius.circular(22.r),
-                      gradient: const LinearGradient(colors: [
-                        Color.fromRGBO(1, 66, 211, 1),
-                        Color.fromRGBO(92, 197, 255, 1)
-                      ])),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      10.verticalSpace,
-                      Text("Recommended Jobs",
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white)),
-                      6.verticalSpace,
-                      Text(
-                          "See our recommended jobs for \nyou based on your rank",
-                          style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white))
-                    ],
+                    ),
                   ),
-                ),
-                Positioned(
-                  right: 32,
-                  top: 0,
-                  child: Image.asset(
-                    "assets/images/dashboard/recommended_jobs.png",
-                    height: 94.h,
-                    width: 99.w,
-                  ),
-                )
-              ],
+                  Positioned(
+                    right: 32,
+                    top: 0,
+                    child: Image.asset(
+                      "assets/images/dashboard/recommended_jobs.png",
+                      height: 94.h,
+                      width: 99.w,
+                    ),
+                  )
+                ],
+              ),
             ),
             8.verticalSpace,
             Row(
@@ -391,152 +424,45 @@ class HomeView extends GetView<HomeController> {
               ],
             ),
             12.verticalSpace,
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  color: Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.1),
-                        blurRadius: 8,
-                        spreadRadius: 2)
-                  ]),
-              child: Row(
-                children: [
-                  Container(
-                    height: 50.h,
-                    width: 50.h,
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(86, 175, 246, 1),
-                        borderRadius: BorderRadius.circular(8)),
-                    child: const Center(
-                        child: Text("W",
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white))),
-                  ),
-                  20.horizontalSpace,
-                  Flexible(
-                    child: Text("Westline Ship Management Pvt. Ltd.",
-                        maxLines: 2,
-                        style: Get.textTheme.bodyMedium?.copyWith(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  color: Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.1),
-                        blurRadius: 8,
-                        spreadRadius: 2)
-                  ]),
-              child: Row(
-                children: [
-                  Container(
-                    height: 50.h,
-                    width: 50.h,
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(254, 151, 56, 1),
-                        borderRadius: BorderRadius.circular(8)),
-                    child: const Center(
-                        child: Text("D",
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white))),
-                  ),
-                  20.horizontalSpace,
-                  Flexible(
-                    child: Text("DW Maritime Pvt. Ltd.",
-                        maxLines: 2,
-                        style: Get.textTheme.bodyMedium?.copyWith(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  color: Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.1),
-                        blurRadius: 8,
-                        spreadRadius: 2)
-                  ]),
-              child: Row(
-                children: [
-                  Container(
-                    height: 50.h,
-                    width: 50.h,
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(14, 164, 199, 1),
-                        borderRadius: BorderRadius.circular(8)),
-                    child: const Center(
-                        child: Text("B",
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white))),
-                  ),
-                  20.horizontalSpace,
-                  Flexible(
-                    child: Text("Bridge Ship Management",
-                        maxLines: 2,
-                        style: Get.textTheme.bodyMedium?.copyWith(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  color: Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.1),
-                        blurRadius: 8,
-                        spreadRadius: 2)
-                  ]),
-              child: Row(
-                children: [
-                  Container(
-                    height: 50.h,
-                    width: 50.h,
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(255, 111, 127, 1),
-                        borderRadius: BorderRadius.circular(8)),
-                    child: const Center(
-                        child: Text("R",
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white))),
-                  ),
-                  20.horizontalSpace,
-                  Flexible(
-                    child: Text("Rk Shipping Consultants",
-                        maxLines: 2,
-                        style: Get.textTheme.bodyMedium?.copyWith(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                  )
-                ],
+            ...controller.featuredCompanies.map(
+              (company) => Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.1),
+                          blurRadius: 8,
+                          spreadRadius: 2)
+                    ]),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 50.h,
+                      width: 50.h,
+                      decoration: BoxDecoration(
+                          color: const Color.fromRGBO(86, 175, 246, 1),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Center(
+                          child: Text(
+                              company.companyName?.split("").firstOrNull ?? "C",
+                              style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white))),
+                    ),
+                    20.horizontalSpace,
+                    Flexible(
+                      child: Text(company.companyName ?? "",
+                          maxLines: 2,
+                          style: Get.textTheme.bodyMedium?.copyWith(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                    )
+                  ],
+                ),
               ),
             ),
             16.verticalSpace

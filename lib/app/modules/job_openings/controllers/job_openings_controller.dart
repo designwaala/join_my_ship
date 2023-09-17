@@ -73,8 +73,15 @@ class JobOpeningsController extends GetxController {
   RxBool isSharing = false.obs;
   Job? jobToBuild;
 
+  JobOpeningsArguments? args;
+
   @override
   void onInit() {
+    if (Get.arguments is JobOpeningsArguments?) {
+      args = Get.arguments;
+      selectedRanks.value =
+          args?.rankFilter?.id == null ? [] : [args!.rankFilter!.id!];
+    }
     instantiate();
     super.onInit();
   }
@@ -214,4 +221,9 @@ http://designwaala.me/job/?job_id=${job.id}
     buildCaptureWidget.value = false;
     print(bytes);
   }
+}
+
+class JobOpeningsArguments {
+  final Rank? rankFilter;
+  const JobOpeningsArguments({this.rankFilter});
 }
