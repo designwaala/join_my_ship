@@ -313,4 +313,9 @@ class CrewUserProvider extends WrapperConnect {
     final response = await get("crew/user_priority_list");
     return response.body;
   }
+
+  Future<List<CrewUser>> getAllCompanies() async {
+    final response = await get("crew/company_list");
+    return response.body;
+  }
 }

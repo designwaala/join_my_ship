@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/modules/company_detail/controllers/company_detail_controller.dart';
 import 'package:join_mp_ship/app/modules/job_openings/controllers/job_openings_controller.dart';
 import 'package:join_mp_ship/app/modules/job_openings/views/job_openings_view.dart';
 import 'package:join_mp_ship/app/modules/profile/views/profile_view.dart';
@@ -417,51 +420,64 @@ class HomeView extends GetView<HomeController> {
                     style: Get.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600, fontSize: 18.sp)),
                 const Spacer(),
-                Text("More",
-                    style: Get.textTheme.bodyMedium
-                        ?.copyWith(color: Get.theme.primaryColor)),
+                TextButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.COMPANIES);
+                    },
+                    child: Text("More",
+                        style: Get.textTheme.bodyMedium
+                            ?.copyWith(color: Get.theme.primaryColor))),
                 28.horizontalSpace
               ],
             ),
             12.verticalSpace,
             ...controller.featuredCompanies.map(
-              (company) => Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.r),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.1),
-                          blurRadius: 8,
-                          spreadRadius: 2)
-                    ]),
-                child: Row(
-                  children: [
-                    Container(
-                      height: 50.h,
-                      width: 50.h,
-                      decoration: BoxDecoration(
-                          color: const Color.fromRGBO(86, 175, 246, 1),
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Center(
-                          child: Text(
-                              company.companyName?.split("").firstOrNull ?? "C",
-                              style: const TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white))),
-                    ),
-                    20.horizontalSpace,
-                    Flexible(
-                      child: Text(company.companyName ?? "",
-                          maxLines: 2,
-                          style: Get.textTheme.bodyMedium?.copyWith(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                    )
-                  ],
+              (company) => InkWell(
+                onTap: () {
+                  Get.toNamed(Routes.COMPANY_DETAIL,
+                      arguments: CompanyDetailArguments(employer: company));
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.1),
+                            blurRadius: 8,
+                            spreadRadius: 2)
+                      ]),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 50.h,
+                        width: 50.h,
+                        decoration: BoxDecoration(
+                            color: Color(Random().nextInt(0xffffffff))
+                                .withAlpha(0xff),
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Center(
+                            child: Text(
+                                company.companyName?.split("").firstOrNull ??
+                                    "",
+                                style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white))),
+                      ),
+                      20.horizontalSpace,
+                      Flexible(
+                        child: Text(company.companyName ?? "",
+                            maxLines: 2,
+                            style: Get.textTheme.bodyMedium?.copyWith(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

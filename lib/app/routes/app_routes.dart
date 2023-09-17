@@ -38,6 +38,8 @@ abstract class Routes {
   static const ERROR_OCCURRED = _Paths.ERROR_OCCURRED;
   static const JOB_OPENING = _Paths.JOB_OPENING;
   static const CONNECTIVITY_LOST = _Paths.CONNECTIVITY_LOST;
+  static const COMPANIES = _Paths.COMPANIES;
+  static const COMPANY_DETAIL = _Paths.COMPANY_DETAIL;
 }
 
 abstract class _Paths {
@@ -77,4 +79,6 @@ abstract class _Paths {
   static const ERROR_OCCURRED = '/error-occurred';
   static const JOB_OPENING = '/job-opening';
   static const CONNECTIVITY_LOST = '/connectivity-lost';
+  static const COMPANIES = '/companies';
+  static const COMPANY_DETAIL = '/company-detail';
 }

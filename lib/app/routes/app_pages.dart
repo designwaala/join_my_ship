@@ -1,8 +1,9 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:join_mp_ship/widgets/toasts/unfocus_gesture.dart';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:get/get.dart';
+
+import '../../widgets/toasts/unfocus_gesture.dart';
 import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
 import '../modules/applicant_detail/bindings/applicant_detail_binding.dart';
@@ -15,6 +16,10 @@ import '../modules/choose_employer/bindings/choose_employer_binding.dart';
 import '../modules/choose_employer/views/choose_employer_view.dart';
 import '../modules/choose_user/bindings/choose_user_binding.dart';
 import '../modules/choose_user/views/choose_user_view.dart';
+import '../modules/companies/bindings/companies_binding.dart';
+import '../modules/companies/views/companies_view.dart';
+import '../modules/company_detail/bindings/company_detail_binding.dart';
+import '../modules/company_detail/views/company_detail_view.dart';
 import '../modules/connectivity_lost/bindings/connectivity_lost_binding.dart';
 import '../modules/connectivity_lost/views/connectivity_lost_view.dart';
 import '../modules/crew-onboarding/bindings/crew_onboarding_binding.dart';
@@ -247,6 +252,16 @@ class AppPages {
       name: _Paths.CONNECTIVITY_LOST,
       page: () => const ConnectivityLostView(),
       binding: ConnectivityLostBinding(),
+    ),
+    GetPage(
+      name: _Paths.COMPANIES,
+      page: () => const CompaniesView(),
+      binding: CompaniesBinding(),
+    ),
+    GetPage(
+      name: _Paths.COMPANY_DETAIL,
+      page: () => const CompanyDetailView(),
+      binding: CompanyDetailBinding(),
     ),
   ];
 }
