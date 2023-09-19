@@ -35,7 +35,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 
-class JobOpeningsController extends GetxController {
+class LikedJobsController extends GetxController {
+
   Rxn<CrewUser> currentEmployerUser = Rxn();
   RxList<Job> jobOpenings = RxList.empty();
   VesselList? vesselList;
@@ -131,17 +132,12 @@ class JobOpeningsController extends GetxController {
   }
 
   Future<void> loadJobOpenings() async {
-    if (args?.likedJobsView == true) {
       jobOpenings.value = (await getIt<LikedPostProvider>().getLikedPost())
               ?.where((e) => e.likedPostDetail != null)
               .map((e) => e.likedPostDetail!)
               .toList() ??
           [];
-    } else {
-      jobOpenings.value = (await getIt<JobProvider>().getJobList(
-              ranks: selectedRanks, vesselIds: selectedVesselTypes)) ??
-          [];
-    }
+    
   }
 
   Future<void> loadVesselTypes() async {
@@ -251,7 +247,6 @@ http://designwaala.me/job/?job_id=${job.id}
 }
 
 class JobOpeningsArguments {
-  final bool? likedJobsView;
   final Rank? rankFilter;
-  const JobOpeningsArguments({this.rankFilter, this.likedJobsView});
+  const JobOpeningsArguments({this.rankFilter});
 }

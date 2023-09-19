@@ -33,7 +33,18 @@ class FollowProvider extends WrapperConnect {
   Future<List<Follow>?> getMyFollowings() async {
     //API NOT WORKING PROPERLY
     final response =
+        await get("crew/followed_to_list/${PreferencesHelper.instance.userId}");
+    return response.body;
+  }
+
+  Future<List<Follow>?> getMyFollowers() async {
+    final response =
         await get("crew/followed_by_list/${PreferencesHelper.instance.userId}");
     return response.body;
+  }
+
+  Future<int?> unfollow(int followId) async {
+    final response = await delete("crew/followed_by_destroy/$followId");
+    return response.statusCode;
   }
 }

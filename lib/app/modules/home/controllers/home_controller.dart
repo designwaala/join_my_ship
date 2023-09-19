@@ -8,7 +8,9 @@ import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_mp_ship/app/modules/follow/controllers/followings_controller.dart';
 import 'package:join_mp_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
+import 'package:join_mp_ship/app/modules/job_openings/controllers/job_openings_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
@@ -126,9 +128,31 @@ class HomeController extends GetxController {
         "iconPath": "assets/icons/like.png",
         "iconSize": 20.0,
         "onTap": () {
-          // TODO
+          Get.toNamed(Routes.LIKED_JOBS);
         }
       },
+      if (PreferencesHelper.instance.isCrew == true)
+        {
+          "title": "Followings",
+          "iconPath": "assets/icons/like.png",
+          "iconSize": 20.0,
+          "onTap": () {
+            Get.toNamed(Routes.FOLLOW,
+                arguments:
+                    const FollowArguments(viewType: FollowViewType.following));
+          }
+        },
+      if (PreferencesHelper.instance.isCrew != true)
+        {
+          "title": "Followers",
+          "iconPath": "assets/icons/like.png",
+          "iconSize": 20.0,
+          "onTap": () {
+            Get.toNamed(Routes.FOLLOW,
+                arguments:
+                    const FollowArguments(viewType: FollowViewType.followers));
+          }
+        },
       {
         "title": "Find Jobs",
         "iconPath": "assets/icons/search.png",

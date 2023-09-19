@@ -43,6 +43,7 @@ class CrewUser {
   int? screenCheck;
   int? gender;
   String? companyName;
+  bool? followStatus;
 
   CrewUser(
       {this.id,
@@ -86,7 +87,8 @@ class CrewUser {
       this.authKey,
       this.screenCheck,
       this.gender,
-      this.companyName});
+      this.companyName,
+      this.followStatus});
 
   CrewUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -133,6 +135,7 @@ class CrewUser {
     screenCheck = json['screen_check'];
     gender = json['gender'];
     companyName = json['company_name'];
+    followStatus = json['userfollow_status'];
     // if (json['user_permissions'] != null) {
     //   userPermissions = <Null>[];
     //   json['user_permissions'].forEach((v) {

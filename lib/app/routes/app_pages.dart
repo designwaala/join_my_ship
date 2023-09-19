@@ -44,6 +44,8 @@ import '../modules/employer_manage_users/bindings/employer_manage_users_binding.
 import '../modules/employer_manage_users/views/employer_manage_users_view.dart';
 import '../modules/error_occurred/bindings/error_occurred_binding.dart';
 import '../modules/error_occurred/views/error_occurred_view.dart';
+import '../modules/follow/bindings/followings_binding.dart';
+import '../modules/follow/views/followings_view.dart';
 import '../modules/help/bindings/help_binding.dart';
 import '../modules/help/views/help_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -60,6 +62,8 @@ import '../modules/job_post/bindings/job_post_binding.dart';
 import '../modules/job_post/views/job_post_view.dart';
 import '../modules/job_posted_successfully/bindings/job_posted_successfully_binding.dart';
 import '../modules/job_posted_successfully/views/job_posted_successfully_view.dart';
+import '../modules/liked_jobs/bindings/liked_jobs_binding.dart';
+import '../modules/liked_jobs/views/liked_jobs_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/reset_password/bindings/reset_password_binding.dart';
@@ -262,6 +266,16 @@ class AppPages {
       name: _Paths.COMPANY_DETAIL,
       page: () => const CompanyDetailView(),
       binding: CompanyDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.FOLLOW,
+      page: () => const FollowingsView(),
+      binding: FollowingsBinding(),
+    ),
+    GetPage(
+      name: _Paths.LIKED_JOBS,
+      page: () => const LikedJobsView(),
+      binding: LikedJobsBinding(),
     ),
   ];
 }

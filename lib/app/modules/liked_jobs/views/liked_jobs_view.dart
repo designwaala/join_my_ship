@@ -1,3 +1,9 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+
+import '../controllers/liked_jobs_controller.dart';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -16,10 +22,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:collection/collection.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 
-import '../controllers/job_openings_controller.dart';
-
-class JobOpeningsView extends GetView<JobOpeningsController> {
-  const JobOpeningsView({Key? key}) : super(key: key);
+class LikedJobsView extends GetView<LikedJobsController> {
+  const LikedJobsView({Key? key}) : super(key: key);
 
   _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -336,18 +340,10 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
     return Scaffold(
       key: controller.parentKey,
       appBar: AppBar(
-        leading: controller.args?.likedJobsView == true
-            ? InkWell(
-                onTap: () {
-                  Get.offNamed(Routes.HOME);
-                },
-                child: Icon(Icons.keyboard_arrow_left))
-            : null,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         centerTitle: true,
-        title: Text(
-            controller.args?.likedJobsView == true ? 'Liked Jobs' : 'Jobs'),
+        title: const Text( 'Liked Jobs'),
       ),
       body: Obx(
         () => controller.isLoading.value
@@ -357,76 +353,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (controller.args?.likedJobsView != true) ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Job Openings",
-                              style: Get.textTheme.bodyLarge
-                                  ?.copyWith(fontSize: 16),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                if (!controller.filterOn.value) {
-                                  _showBottomSheet(context);
-                                } else {
-                                  controller.filterOn.value = false;
-                                  controller.removeFilters();
-                                }
-                              },
-                              icon: ImageIcon(
-                                const AssetImage("assets/icons/equalizer.png"),
-                                size: 24,
-                                color: controller.filterOn.value
-                                    ? Colors.blue
-                                    : Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Wrap(spacing: 8, runSpacing: 8, children: [
-                          ...controller.selectedRanks.map((rank) => Chip(
-                              onDeleted: () {
-                                controller.selectedRanks
-                                    .removeWhere((e) => e == rank);
-                                controller.applyFilters();
-                              },
-                              backgroundColor: Colors.blue[100],
-                              shape: StadiumBorder(
-                                  side: BorderSide(
-                                      color: Get.theme.primaryColor)),
-                              label: Text(controller.ranks
-                                      .firstWhereOrNull((e) => e.id == rank)
-                                      ?.name ??
-                                  ""))),
-                          ...controller.selectedVesselTypes.map((vessel) =>
-                              Chip(
-                                  onDeleted: () {
-                                    controller.selectedVesselTypes
-                                        .removeWhere((e) => e == vessel);
-                                    controller.applyFilters();
-                                  },
-                                  backgroundColor: Colors.blue[100],
-                                  shape: StadiumBorder(
-                                      side: BorderSide(
-                                          color: Get.theme.primaryColor)),
-                                  label: Text(controller.vesselList?.vessels
-                                          ?.map((vessel) =>
-                                              vessel.subVessels ?? [])
-                                          .expand((e) => e)
-                                          .firstWhereOrNull(
-                                              (e) => e.id == vessel)
-                                          ?.name ??
-                                      "")))
-                        ]),
-                      ),
-                    ],
+                   
                     controller.jobOpenings.isEmpty
                         ? Center(
                             child: Column(
@@ -443,7 +370,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                 ),
                                 10.verticalSpace,
                                 const Text(
-                                  "No Results Found!",
+                                  "No Liked Jobs Found!",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600),
@@ -1038,3 +965,4 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
     );
   }
 }
+

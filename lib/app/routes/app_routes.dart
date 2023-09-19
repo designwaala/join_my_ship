@@ -40,6 +40,8 @@ abstract class Routes {
   static const CONNECTIVITY_LOST = _Paths.CONNECTIVITY_LOST;
   static const COMPANIES = _Paths.COMPANIES;
   static const COMPANY_DETAIL = _Paths.COMPANY_DETAIL;
+  static const FOLLOW = _Paths.FOLLOW;
+  static const LIKED_JOBS = _Paths.LIKED_JOBS;
 }
 
 abstract class _Paths {
@@ -81,4 +83,6 @@ abstract class _Paths {
   static const CONNECTIVITY_LOST = '/connectivity-lost';
   static const COMPANIES = '/companies';
   static const COMPANY_DETAIL = '/company-detail';
+  static const FOLLOW = '/follow';
+  static const LIKED_JOBS = '/liked-jobs';
 }
