@@ -57,12 +57,19 @@ class SignUpPhoneNumberController extends GetxController {
     isVerifying.value = true;
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId!, smsCode: otpController.text);
-    UserCredential userCred =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    if (FirebaseAuth.instance.currentUser != null) {
-      Get.offAllNamed(Routes.SIGN_UP_EMAIL);
-      fToast.safeShowToast(child: successToast("Authentication Successful"));
-    } else {
+    try {
+      UserCredential userCred =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      if (userCred.additionalUserInfo?.isNewUser == false) {
+        fToast.safeShowToast(
+            child: errorToast("This mobile number is already registered."));
+      } else if (FirebaseAuth.instance.currentUser != null) {
+        Get.offAllNamed(Routes.SIGN_UP_EMAIL);
+        fToast.safeShowToast(child: successToast("Authentication Successful"));
+      } else {
+        fToast.safeShowToast(child: errorToast("Authentication Failed"));
+      }
+    } catch (e) {
       fToast.safeShowToast(child: errorToast("Authentication Failed"));
     }
     isVerifying.value = false;
