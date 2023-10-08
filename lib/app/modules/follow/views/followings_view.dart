@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/modules/crew_detail/controllers/crew_detail_controller.dart';
+import 'package:join_mp_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 
@@ -40,8 +40,8 @@ class FollowingsView extends GetView<FollowingsController> {
   Widget _userCard(CrewUser user, int? followId) {
     return InkWell(
       onTap: () {
-        Get.toNamed(Routes.CREW_DETAIL,
-            arguments: CrewDetailArguments(userId: user.id));
+        Get.toNamed(Routes.APPLICANT_DETAIL,
+            arguments: ApplicantDetailArguments(userId: user.id, viewType: ViewType.crewDetail));
       },
       child: Card(
         elevation: 3,

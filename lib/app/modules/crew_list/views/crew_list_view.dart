@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
-import 'package:join_mp_ship/app/modules/crew_detail/controllers/crew_detail_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:lottie/lottie.dart';
