@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:get_cli/common/utils/json_serialize/json_ast/utils/grapheme_splitter.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 
@@ -14,7 +15,9 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Applicants'),
+          title: Text(controller.args?.viewType == ViewType.crewDetail
+              ? "Crew"
+              : 'Applicants'),
           centerTitle: true,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
@@ -386,24 +389,26 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Row(
                           children: [
-                            controller.isShortListing.value
-                                ? SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: const CircularProgressIndicator())
-                                : InkWell(
-                                    onTap: controller.shortList,
-                                    child: Image.asset(
-                                      controller.application.value
-                                                  ?.shortlistedStatus ==
-                                              true
-                                          ? 'assets/icons/bookmark_filled.png'
-                                          : 'assets/icons/bookmark_outlined.png',
-                                      height: 32,
-                                      width: 32,
-                                      color: Get.theme.primaryColor,
+                            if (controller.args?.viewType !=
+                                ViewType.crewDetail)
+                              controller.isShortListing.value
+                                  ? SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: const CircularProgressIndicator())
+                                  : InkWell(
+                                      onTap: controller.shortList,
+                                      child: Image.asset(
+                                        controller.application.value
+                                                    ?.shortlistedStatus ==
+                                                true
+                                            ? 'assets/icons/bookmark_filled.png'
+                                            : 'assets/icons/bookmark_outlined.png',
+                                        height: 32,
+                                        width: 32,
+                                        color: Get.theme.primaryColor,
+                                      ),
                                     ),
-                                  ),
                             const Spacer(),
                             controller.isGettingResume.value
                                 ? const CircularProgressIndicator()
@@ -411,19 +416,28 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                                     onPressed: controller.downloadResume,
                                     child: const Text("Download Resume")),
                             const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Image.asset(
-                                controller.application.value
-                                            ?.shortlistedStatus ==
-                                        true
-                                    ? 'assets/icons/bookmark_filled.png'
-                                    : 'assets/icons/bookmark_outlined.png',
-                                height: 28,
-                                width: 28,
-                                color: Colors.transparent,
-                              ),
-                            ),
+                            controller.isFollowing.value
+                                ? SizedBox(
+                                    height: 16,
+                                    width: 16,
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : FilledButton(
+                                        onPressed: controller.follow,
+                                        child: Text("Save Profile")) ??
+                                    Padding(
+                                      padding: const EdgeInsets.all(4),
+                                      child: Image.asset(
+                                        controller.application.value
+                                                    ?.shortlistedStatus ==
+                                                true
+                                            ? 'assets/icons/bookmark_filled.png'
+                                            : 'assets/icons/bookmark_outlined.png',
+                                        height: 28,
+                                        width: 28,
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
                           ],
                         ),
                       ),

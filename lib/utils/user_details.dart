@@ -4,7 +4,10 @@ import 'package:join_mp_ship/app/data/models/previous_employer_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
+import 'package:join_mp_ship/app/data/providers/country_provider.dart';
+import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
+import 'package:join_mp_ship/main.dart';
 
 class UserStates {
   UserStates._();
@@ -38,6 +41,18 @@ class UserStates {
       case 5:
         employerType = SignUpType.employerCrewingAgent;
         break;
+    }
+  }
+
+  Future<void> getRanksIfEmpty() async {
+    if (ranks == null || ranks?.isEmpty == true) {
+      ranks = await getIt<RanksProvider>().getRankList();
+    }
+  }
+
+  Future<void> getCOuntriesIfEmpty() async {
+    if (countries == null || countries?.isEmpty == true) {
+      countries = await getIt<CountryProvider>().getCountry();
     }
   }
 

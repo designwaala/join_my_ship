@@ -4,8 +4,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/employer_counts_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/employer_counts_provider.dart';
 import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/modules/follow/controllers/followings_controller.dart';
@@ -35,6 +37,8 @@ class HomeController extends GetxController {
   Rank? selectedRank;
 
   HomeArguments? args;
+
+  EmployerCounts? employerCounts;
 
   @override
   void onInit() {
@@ -77,9 +81,11 @@ class HomeController extends GetxController {
     if (uri != null) {
       _handleLink(uri);
     }
-    if (UserStates.instance.crewUser == null) {
-      UserStates.instance.crewUser =
-          await getIt<CrewUserProvider>().getCrewUser();
+    UserStates.instance.crewUser ??=
+        await getIt<CrewUserProvider>().getCrewUser();
+    if (UserStates.instance.crewUser?.userTypeKey != 2) {
+      employerCounts =
+          await getIt<EmployerCountsProvider>().getEmployerCounts();
     }
     if (UserStates.instance.ranks == null ||
         UserStates.instance.ranks?.isEmpty == true) {

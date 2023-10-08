@@ -16,6 +16,7 @@ import 'package:join_mp_ship/app/data/providers/application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_provider.dart';
+import 'package:join_mp_ship/app/data/providers/liked_post_provider.dart';
 import 'package:join_mp_ship/app/modules/success/controllers/success_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
@@ -74,6 +75,7 @@ class CompanyDetailController extends GetxController {
   RxBool buildCaptureWidget = false.obs;
   RxBool isSharing = false.obs;
   Job? jobToBuild;
+  RxnInt likingJob = RxnInt();
 
   @override
   void onInit() {
@@ -105,6 +107,18 @@ class CompanyDetailController extends GetxController {
           : Future.value(null)
     ]);
     isLoading.value = false;
+  }
+
+  Future<void> likeJob(int? jobId) async {
+    if (jobId == null) {
+      return;
+    }
+    likingJob.value = jobId;
+    final response = await getIt<LikedPostProvider>().likePost(jobId);
+    likingJob.value = null;
+    if (response.statusCode == 201) {
+      fToast.safeShowToast(child: successToast("Job Liked"));
+    }
   }
 
   @override

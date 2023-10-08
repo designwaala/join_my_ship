@@ -318,4 +318,16 @@ class CrewUserProvider extends WrapperConnect {
     final response = await get("crew/company_list");
     return response.body;
   }
+
+  Future<List<CrewUser>> findCompany(String companyName) async {
+    final response = await get("crew/search_filter",
+        query: {"search_type": "1", "search_key": companyName});
+    return response.body;
+  }
+
+  Future<List<CrewUser>> findCrewByRank(String rank) async {
+    final response = await get("crew/search_filter",
+        query: {"search_type": "2", "search_key": rank});
+    return response.body;
+  }
 }

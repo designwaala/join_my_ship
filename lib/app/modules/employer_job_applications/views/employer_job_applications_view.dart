@@ -501,8 +501,9 @@ class EmployerJobApplicationsView
                                               .jobApplications[index]
                                               .userData
                                               ?.id,
-                                          application: controller
-                                              .jobApplications[index]));
+                                          application:
+                                              controller.jobApplications[index],
+                                          viewType: ViewType.applicant));
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),

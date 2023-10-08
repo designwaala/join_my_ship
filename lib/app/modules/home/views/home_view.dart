@@ -10,6 +10,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/modules/company_detail/controllers/company_detail_controller.dart';
+import 'package:join_mp_ship/app/modules/crew_list/controllers/crew_list_controller.dart';
+import 'package:join_mp_ship/app/modules/follow/controllers/followings_controller.dart';
 import 'package:join_mp_ship/app/modules/job_openings/controllers/job_openings_controller.dart';
 import 'package:join_mp_ship/app/modules/job_openings/views/job_openings_view.dart';
 import 'package:join_mp_ship/app/modules/profile/views/profile_view.dart';
@@ -138,11 +140,13 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
               body: controller.isLoading.value
-                  ? Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : () {
                       switch (controller.currentIndex.value) {
                         case 1:
-                          return _buildBody();
+                          return UserStates.instance.crewUser?.userTypeKey == 2
+                              ? _buildBody()
+                              : _buildEmployerDashboard();
                         case 2:
                           return const SizedBox();
                         case 3:
@@ -247,14 +251,13 @@ class HomeView extends GetView<HomeController> {
     });
   }
 
-  _buildBody() {
+  _buildEmployerDashboard() {
     return Column(
       children: [
         Stack(
           children: [
             ClipPath(
-              clipper:
-                  CustomShape(), // this is my own class which extendsCustomClipper
+              clipper: CustomShape(),
               child: Container(
                 height: 210,
                 decoration: const BoxDecoration(
@@ -288,7 +291,276 @@ class HomeView extends GetView<HomeController> {
                                     color: Colors.white)),
                             Text(
                                 "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastName ?? ""}",
+                                style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white))
+                          ],
+                        ),
+                        const Spacer(),
+                        const Icon(Icons.notifications, color: Colors.white),
+                        16.horizontalSpace
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 28,
+              right: 28,
+              child: PhysicalModel(
+                borderRadius: BorderRadius.circular(64),
+                color: Colors.white,
+                elevation: 5.0,
+                shadowColor: const Color.fromRGBO(46, 4, 142, 0.08),
+                child: TypeAheadField<Rank>(
+                    textFieldConfiguration: TextFieldConfiguration(
+                        decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: "Search CV here...",
+                            prefixIcon: Icon(Icons.search,
+                                color: Get.theme.primaryColor),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(64)))),
+                    suggestionsCallback: (String pattern) {
+                      return UserStates.instance.ranks?.where((rank) =>
+                              rank.name
+                                  ?.toUpperCase()
+                                  .contains(pattern.toUpperCase()) ==
+                              true) ??
+                          [];
+                    },
+                    itemBuilder: (context, rank) {
+                      return Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(rank.name ?? ""),
+                      );
+                    },
+                    onSuggestionSelected: (Rank rank) async {
+                      controller.selectedRank = rank;
+                      Get.toNamed(Routes.CREW_LIST,
+                          arguments: CrewListArguments(rank: rank),
+                          preventDuplicates: false);
+                    }),
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+            child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            16.verticalSpace,
+            Row(children: [
+              28.horizontalSpace,
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    Get.toNamed(Routes.EMPLOYER_JOB_POSTS);
+                  },
+                  child: Container(
+                    height: 93,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          const BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.03),
+                              blurRadius: 4,
+                              spreadRadius: 2)
+                        ],
+                        borderRadius: BorderRadius.circular(22),
+                        gradient: const LinearGradient(colors: [
+                          Color(0xFFFBFBFB),
+                          Color(0xFFFFFFFF),
+                        ])),
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text("${controller.employerCounts?.jobCount ?? 0}",
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.w700)),
+                            8.horizontalSpace,
+                            const Icon(Icons.keyboard_arrow_right, color: Colors.grey)
+                          ],
+                        ),
+                        const Text("Jobs Posted",
+                            style: TextStyle(fontSize: 14, color: Colors.grey))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              18.horizontalSpace,
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    Get.toNamed(Routes.FOLLOW,
+                        arguments: const FollowArguments(
+                            viewType: FollowViewType.following));
+                  },
+                  child: Container(
+                    height: 93,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          const BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.03),
+                              blurRadius: 4,
+                              spreadRadius: 2)
+                        ],
+                        borderRadius: BorderRadius.circular(22),
+                        gradient: const LinearGradient(colors: [
+                          Color(0xFFFBFBFB),
+                          Color(0xFFFFFFFF),
+                        ])),
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                                "${controller.employerCounts?.followCount ?? 0}",
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.w700)),
+                            8.horizontalSpace,
+                            const Icon(Icons.keyboard_arrow_right, color: Colors.grey)
+                          ],
+                        ),
+                        const Text("Saved Profiles",
+                            style: TextStyle(fontSize: 14, color: Colors.grey))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              28.horizontalSpace
+            ]),
+            8.verticalSpace,
+            Row(
+              children: [
+                28.horizontalSpace,
+                Text("Featured Companies",
+                    style: Get.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600, fontSize: 18.sp)),
+                const Spacer(),
+                TextButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.COMPANIES);
+                    },
+                    child: Text("More",
+                        style: Get.textTheme.bodyMedium
+                            ?.copyWith(color: Get.theme.primaryColor))),
+                28.horizontalSpace
+              ],
+            ),
+            12.verticalSpace,
+            ...controller.featuredCompanies.map(
+              (company) => InkWell(
+                onTap: () {
+                  Get.toNamed(Routes.COMPANY_DETAIL,
+                      arguments: CompanyDetailArguments(employer: company));
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.1),
+                            blurRadius: 8,
+                            spreadRadius: 2)
+                      ]),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 50.h,
+                        width: 50.h,
+                        decoration: BoxDecoration(
+                            color: Color(Random().nextInt(0xffffffff))
+                                .withAlpha(0xff),
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Center(
+                            child: Text(
+                                company.companyName?.split("").firstOrNull ??
+                                    "",
+                                style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white))),
+                      ),
+                      20.horizontalSpace,
+                      Flexible(
+                        child: Text(company.companyName ?? "",
+                            maxLines: 2,
+                            style: Get.textTheme.bodyMedium?.copyWith(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            16.verticalSpace
+          ],
+        )),
+        // 65.verticalSpace
+      ],
+    );
+  }
+
+  _buildBody() {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            ClipPath(
+              clipper: CustomShape(),
+              child: Container(
+                height: 210,
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Color.fromRGBO(1, 66, 211, 1),
+                  Color.fromRGBO(64, 123, 255, 1)
+                ])),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    (Get.mediaQuery.viewPadding.top + 26).verticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        16.horizontalSpace,
+                        InkWell(
+                          child:
+                              const Icon(Icons.menu_sharp, color: Colors.white),
+                          onTap: () =>
+                              controller.scaffoldKey.currentState?.openDrawer(),
+                        ),
+                        16.horizontalSpace,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Welcome",
                                 style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white)),
+                            Text(
+                                "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastName ?? ""}",
+                                style: const TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white))

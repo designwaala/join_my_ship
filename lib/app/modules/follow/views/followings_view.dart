@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/modules/crew_detail/controllers/crew_detail_controller.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 
 import '../controllers/followings_controller.dart';
@@ -36,54 +38,60 @@ class FollowingsView extends GetView<FollowingsController> {
   }
 
   Widget _userCard(CrewUser user, int? followId) {
-    return Card(
-      elevation: 3,
-      shadowColor: const Color.fromARGB(255, 237, 233, 241),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(128),
-              child: CachedNetworkImage(
-                  imageUrl: user.profilePic ?? "",
-                  height: 55,
-                  fit: BoxFit.cover,
-                  width: 55),
-            ),
-            8.horizontalSpace,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${user.firstName ?? ""} ${user.lastName ?? ""}",
-                    style: Get.textTheme.bodyLarge?.copyWith(fontSize: 16),
-                  ),
-                  2.verticalSpace,
-                  Text(
-                      controller.args?.viewType == FollowViewType.following
-                          ? (user.companyName ?? "")
-                          : (UserStates.instance.ranks
-                                  ?.firstWhereOrNull(
-                                      (rank) => rank.id == user.rankId)
-                                  ?.name ??
-                              ""),
-                      style: Get.textTheme.bodySmall)
-                ],
+    return InkWell(
+      onTap: () {
+        Get.toNamed(Routes.CREW_DETAIL,
+            arguments: CrewDetailArguments(userId: user.id));
+      },
+      child: Card(
+        elevation: 3,
+        shadowColor: const Color.fromARGB(255, 237, 233, 241),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(128),
+                child: CachedNetworkImage(
+                    imageUrl: user.profilePic ?? "",
+                    height: 55,
+                    fit: BoxFit.cover,
+                    width: 55),
               ),
-            ),
-            if (controller.args?.viewType == FollowViewType.following)
-              controller.unfollowId.value == user.id
-                  ? const CircularProgressIndicator()
-                  : TextButton(
-                      onPressed: () {
-                        controller.unfollow(followId ?? -1);
-                      },
-                      child: const Text("Unfollow"))
-          ],
+              8.horizontalSpace,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${user.firstName ?? ""} ${user.lastName ?? ""}",
+                      style: Get.textTheme.bodyLarge?.copyWith(fontSize: 16),
+                    ),
+                    2.verticalSpace,
+                    Text(
+                        controller.args?.viewType == FollowViewType.following
+                            ? (user.companyName ?? "")
+                            : (UserStates.instance.ranks
+                                    ?.firstWhereOrNull(
+                                        (rank) => rank.id == user.rankId)
+                                    ?.name ??
+                                ""),
+                        style: Get.textTheme.bodySmall)
+                  ],
+                ),
+              ),
+              if (controller.args?.viewType == FollowViewType.following)
+                controller.unfollowId.value == user.id
+                    ? const CircularProgressIndicator()
+                    : TextButton(
+                        onPressed: () {
+                          controller.unfollow(followId ?? -1);
+                        },
+                        child: const Text("Unfollow"))
+            ],
+          ),
         ),
       ),
     );

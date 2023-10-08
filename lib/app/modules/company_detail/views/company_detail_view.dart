@@ -48,10 +48,11 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 5),
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    height: 50.h,
-                                    width: 50.h,
+                                    height: 64.h,
+                                    width: 64.h,
                                     decoration: BoxDecoration(
                                         color:
                                             Color(Random().nextInt(0xffffffff))
@@ -70,33 +71,59 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                                   ),
                                   20.horizontalSpace,
                                   Expanded(
-                                    child: Text(
-                                        controller.employer?.companyName ?? "",
-                                        maxLines: 2,
-                                        style: Get.textTheme.bodyMedium
-                                            ?.copyWith(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold)),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // 4.verticalSpace,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                  controller.employer
+                                                          ?.companyName ??
+                                                      "",
+                                                  maxLines: 2,
+                                                  style: Get
+                                                      .textTheme.bodyMedium
+                                                      ?.copyWith(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                            ),
+                                            8.horizontalSpace,
+                                            Icon(Icons.verified_user,
+                                                color: Get.theme.primaryColor)
+                                          ],
+                                        ),
+                                        12.verticalSpace,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Icon(Icons.location_on),
+                                            8.horizontalSpace,
+                                            Text(UserStates.instance.countries
+                                                    ?.firstWhereOrNull(
+                                                        (country) =>
+                                                            country.id ==
+                                                            controller.employer
+                                                                ?.country)
+                                                    ?.countryName ??
+                                                "")
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Icon(Icons.verified_user,
-                                      color: Get.theme.primaryColor)
                                 ],
                               ),
                             ),
-                            Row(
-                              children: [
-                                64.horizontalSpace,
-                                Icon(Icons.location_on),
-                                8.horizontalSpace,
-                                Text(UserStates.instance.countries
-                                        ?.firstWhereOrNull((country) =>
-                                            country.id ==
-                                            controller.employer?.country)
-                                        ?.countryName ??
-                                    "")
-                              ],
-                            ),
-                            32.verticalSpace
+                            16.verticalSpace
                           ],
                         ))
                   ],
@@ -525,18 +552,20 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton.icon(
-                          onPressed: () {
-                            // TODO: Like
-                          },
-                          icon: const Icon(
-                            Icons.thumb_up_alt_outlined,
-                            size: 18,
-                          ),
-                          label: const Text(
-                            "Like",
-                            style: TextStyle(fontSize: 13),
-                          )),
+                      controller.likingJob.value == job.id
+                          ? CircularProgressIndicator()
+                          : TextButton.icon(
+                              onPressed: () {
+                                controller.likeJob(job.id);
+                              },
+                              icon: const Icon(
+                                Icons.thumb_up_alt_outlined,
+                                size: 18,
+                              ),
+                              label: const Text(
+                                "Like",
+                                style: TextStyle(fontSize: 13),
+                              )),
                       controller.applyingJob.value == job.id
                           ? const Row(
                               mainAxisAlignment: MainAxisAlignment.center,

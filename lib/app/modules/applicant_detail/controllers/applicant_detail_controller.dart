@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/data/models/country_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/follow_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
 import 'package:join_mp_ship/app/data/providers/application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
@@ -31,6 +33,8 @@ class ApplicantDetailController extends GetxController {
   Rxn<Application> application = Rxn();
 
   String? _localPath;
+
+  RxBool isFollowing = false.obs;
 
   @override
   void onInit() {
@@ -139,6 +143,15 @@ class ApplicantDetailController extends GetxController {
     isShortListing.value = false;
   }
 
+  Future<void> follow() async {
+    if (applicant?.id == null) {
+      return;
+    }
+    isFollowing.value = true;
+    Follow? follow = await getIt<FollowProvider>().follow(applicant!.id!);
+    isFollowing.value = false;
+  }
+
   @override
   void onReady() {
     super.onReady();
@@ -148,5 +161,8 @@ class ApplicantDetailController extends GetxController {
 class ApplicantDetailArguments {
   final int? userId;
   final Application? application;
-  const ApplicantDetailArguments({this.userId, this.application});
+  final ViewType? viewType;
+  const ApplicantDetailArguments({this.userId, this.application, this.viewType});
 }
+
+enum ViewType { applicant, crewDetail }

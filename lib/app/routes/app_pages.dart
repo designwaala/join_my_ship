@@ -26,6 +26,8 @@ import '../modules/crew-onboarding/bindings/crew_onboarding_binding.dart';
 import '../modules/crew-onboarding/views/crew_onboarding_view.dart';
 import '../modules/crew_job_applications/bindings/crew_job_applications_binding.dart';
 import '../modules/crew_job_applications/views/crew_job_applications_view.dart';
+import '../modules/crew_list/bindings/crew_list_binding.dart';
+import '../modules/crew_list/views/crew_list_view.dart';
 import '../modules/crew_sign_in_email/bindings/crew_sign_in_binding.dart';
 import '../modules/crew_sign_in_email/views/crew_sign_in_view.dart';
 import '../modules/crew_sign_in_mobile/bindings/crew_sign_in_mobile_binding.dart';
@@ -276,6 +278,11 @@ class AppPages {
       name: _Paths.LIKED_JOBS,
       page: () => const LikedJobsView(),
       binding: LikedJobsBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREW_LIST,
+      page: () => const CrewListView(),
+      binding: CrewListBinding(),
     ),
   ];
 }

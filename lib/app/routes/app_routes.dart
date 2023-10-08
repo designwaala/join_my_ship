@@ -42,6 +42,7 @@ abstract class Routes {
   static const COMPANY_DETAIL = _Paths.COMPANY_DETAIL;
   static const FOLLOW = _Paths.FOLLOW;
   static const LIKED_JOBS = _Paths.LIKED_JOBS;
+  static const CREW_LIST = _Paths.CREW_LIST;
 }
 
 abstract class _Paths {
@@ -85,4 +86,5 @@ abstract class _Paths {
   static const COMPANY_DETAIL = '/company-detail';
   static const FOLLOW = '/follow';
   static const LIKED_JOBS = '/liked-jobs';
+  static const CREW_LIST = '/crew-list';
 }

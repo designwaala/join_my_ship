@@ -15,6 +15,7 @@ import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/employer_counts_provider.dart';
 import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
@@ -131,5 +132,6 @@ void main() async {
     ..registerSingleton(StcwIssuingAuthorityProvider())
     ..registerSingleton(FollowProvider())
     ..registerSingleton(FcmTokenProvider())
-    ..registerSingleton(LikedPostProvider());
+    ..registerSingleton(LikedPostProvider())
+    ..registerSingleton(EmployerCountsProvider());
 }
