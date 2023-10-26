@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
@@ -6,6 +8,8 @@ import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 class EmployerJobApplicationsController extends GetxController {
   RxList<Application> jobApplications = RxList();
@@ -26,6 +30,9 @@ class EmployerJobApplicationsController extends GetxController {
 
   RxnInt applicationShortListing = RxnInt();
 
+  FToast fToast = FToast();
+  final parentKey = GlobalKey();
+
   @override
   void onInit() {
     if (Get.arguments is EmployerJobApplicationsArguments?) {
@@ -33,6 +40,12 @@ class EmployerJobApplicationsController extends GetxController {
     }
     instantiate();
     super.onInit();
+  }
+
+  @override
+  onReady() {
+    super.onReady();
+    fToast.init(parentKey.currentContext!);
   }
 
   instantiate() async {
@@ -86,6 +99,13 @@ class EmployerJobApplicationsController extends GetxController {
   }
 
   Future<void> shortListApplication(int? applicationId) async {
+    if (jobApplications
+            .firstWhereOrNull((element) => element.id == applicationId)
+            ?.resumeStatus !=
+        true) {
+      fToast.safeShowToast(child: errorToast("Please download resume first"));
+      return;
+    }
     if (applicationId == null ||
         jobApplications.any((e) => e.id == applicationId) != true) {
       return;

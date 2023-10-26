@@ -264,12 +264,15 @@ class ProfileView extends GetView<ProfileController> {
                             iconPath: "assets/images/profile/wallet.png",
                             text: "Wallet",
                             onTap: () {}),
-                        CardObject(
-                            iconPath: "assets/images/profile/manage_users.png",
-                            text: "Manage User",
-                            onTap: () {
-                              Get.toNamed(Routes.EMPLOYER_MANAGE_USERS);
-                            }),
+                        if (controller.crewUser.value?.userTypeKey != 5 &&
+                            controller.crewUser.value?.isPrimaryUser == true)
+                          CardObject(
+                              iconPath:
+                                  "assets/images/profile/manage_users.png",
+                              text: "Manage User",
+                              onTap: () {
+                                Get.toNamed(Routes.EMPLOYER_MANAGE_USERS);
+                              }),
                         CardObject(
                             iconPath:
                                 "assets/images/profile/my_subscription.png",

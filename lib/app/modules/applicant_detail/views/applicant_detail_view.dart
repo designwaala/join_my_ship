@@ -14,6 +14,7 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.parentKey,
         appBar: AppBar(
           title: Text(controller.args?.viewType == ViewType.crewDetail
               ? "Crew"

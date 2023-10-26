@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,8 +41,10 @@ import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
 import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/firebase_options.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/unfocus_gesture.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:uni_links/uni_links.dart';
 
 import 'app/routes/app_pages.dart';
 
@@ -134,4 +137,51 @@ void main() async {
     ..registerSingleton(FcmTokenProvider())
     ..registerSingleton(LikedPostProvider())
     ..registerSingleton(EmployerCountsProvider());
+  StreamSubscription<String?>? uriStream;
+
+  uriStream = linkStream.listen((event) {
+    Uri uri = Uri.parse(event ?? "");
+    _handleLink(uri);
+  });
+}
+
+_handleLink(Uri uri) async {
+  switch (uri.path.split("/")[1]) {
+    case "new-user":
+      UserStates.instance.isCrew = false;
+      showDialog(
+          context: Get.context!,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Please wait while we fetch your details"),
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                ],
+              ),
+            );
+          });
+      UserStates.instance.userLink = uri.path.split("/").last;
+      PreferencesHelper.instance.setUserLink(uri.path.split("/").last);
+      await getIt<CrewUserProvider>()
+          .fetchSubUserDetails(uri.path.split("/").last);
+      Get.back();
+      Get.toNamed(Routes.CHOOSE_EMPLOYER, preventDuplicates: false);
+  }
+}
+
+class WaitingScreen extends StatelessWidget {
+  const WaitingScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text("Please wait while we fetch your details"),
+        16.verticalSpace,
+        CircularProgressIndicator()
+      ],
+    );
+  }
 }

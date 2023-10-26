@@ -62,6 +62,10 @@ mixin RedirectionMixin {
       return;
     } else if (UserStates.instance.crewUser != null) {
       user = UserStates.instance.crewUser;
+    } else if (PreferencesHelper.instance.userLink != null) {
+      user = (await getIt<CrewUserProvider>()
+              .fetchSubUserDetails(PreferencesHelper.instance.userLink!))
+          ?.firstOrNull;
     } else {
       FirebaseAuth.instance.currentUser
           ?.getIdToken()
@@ -127,6 +131,56 @@ mixin RedirectionMixin {
     ];
 
     print(truths);
+
+    if (UserStates.instance.userLink != null ||
+        (PreferencesHelper.instance.userLink != null)) {
+      List<bool> subUserTruths = [
+        FirebaseAuth.instance.currentUser?.phoneNumber?.nullIfEmpty() != null,
+        FirebaseAuth.instance.currentUser?.email?.nullIfEmpty() != null,
+        UserStates.instance.crewUser?.addressLine1 != null
+      ];
+      if (eq(subUserTruths, [false, false, false])) {
+        Get.offAllNamed(Routes.SIGN_UP_PHONE_NUMBER);
+        return;
+      } else if (eq(subUserTruths, [false, false, true])) {
+        Get.offAllNamed(Routes.ERROR_OCCURRED);
+        return;
+      } else if (eq(subUserTruths, [false, true, false])) {
+        Get.offAllNamed(Routes.ERROR_OCCURRED);
+        return;
+      } else if (eq(subUserTruths, [false, true, true])) {
+        Get.offAllNamed(Routes.ERROR_OCCURRED);
+        return;
+      } else if (eq(subUserTruths, [true, false, false])) {
+        if (await confirmContinueSubUserOnboarding() == true) {
+          Get.offAllNamed(Routes.SIGN_UP_EMAIL);
+        } else {
+          await logout();
+        }
+        return;
+      } else if (eq(subUserTruths, [true, false, true])) {
+        Get.offAllNamed(Routes.ERROR_OCCURRED);
+        return;
+      } else if (eq(subUserTruths, [true, true, false])) {
+        if (await confirmContinueSubUserOnboarding() == true) {
+          if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
+            Get.offAllNamed(Routes.EMPLOYER_CREATE_USER);
+          } else {
+            Get.offAllNamed(Routes.EMAIL_VERIFICATION_WAITING);
+          }
+        } else {
+          await logout();
+        }
+        return;
+      } else if (eq(subUserTruths, [true, true, true])) {
+        if (user?.isVerified == 1) {
+          Get.offAllNamed(Routes.HOME);
+        } else {
+          Get.offAllNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+        }
+        return;
+      }
+    }
 
     //THRUTH TABLE
     if (eq(truths, [false, false, false, false, false, false])) {
@@ -281,5 +335,46 @@ mixin RedirectionMixin {
       }
       return;
     }
+  }
+
+  Future<void> logout() async {
+    UserStates.instance.reset();
+    await FirebaseAuth.instance.signOut();
+    await PreferencesHelper.instance.clearAll();
+    Get.offAllNamed(Routes.SPLASH);
+    return;
+  }
+
+  Future<bool?> confirmContinueSubUserOnboarding() {
+    if (UserStates.instance.userLink != null) {
+      return Future.value(true);
+    }
+    return showDialog<bool?>(
+        context: Get.context!,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Onboarding Pending"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    "We found that you were trying to onboard as a referred Employer.\nUser Link shared with you was ${PreferencesHelper.instance.userLink}"),
+                Text("Would you like to continue Onboarding?")
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Get.back(result: false);
+                  },
+                  child: Text("No Start afresh")),
+              FilledButton(
+                  onPressed: () {
+                    Get.back(result: true);
+                  },
+                  child: Text("Yes"))
+            ],
+          );
+        });
   }
 }

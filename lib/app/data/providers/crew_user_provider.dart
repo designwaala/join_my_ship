@@ -11,6 +11,7 @@ import 'package:join_mp_ship/widgets/top_modal_sheet.dart';
 
 import '../../../main.dart';
 import '../models/crew_user_model.dart';
+import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 
 class CrewUserProvider extends WrapperConnect {
@@ -330,4 +331,28 @@ class CrewUserProvider extends WrapperConnect {
         query: {"search_type": "2", "search_key": rank});
     return response.body;
   }
+
+  Future<CrewUser?> createSubUser(String email) async {
+    final response =
+        await multipartPost("crew/referral_create_user", {"email": email});
+    return CrewUser.fromJson(response);
+  }
+
+  Future<List<CrewUser>?> fetchSubUserDetails(String userLink) async {
+    final response = await get<List<CrewUser>?>("crew/referral_list/$userLink",
+        headers: {}, decoder: (map) {
+      return List<CrewUser>.from(map.map((x) => CrewUser.fromJson(x)));
+    });
+    UserStates.instance.crewUser = response.body?.firstOrNull;
+    return response.body;
+  }
+
+  Future<List<CrewUser>?> getSubUsers() async {
+    final response =
+        await get("crew/manage_user_list/${PreferencesHelper.instance.userId}");
+    return response.body;
+  }
+
+  Future<int?> deleteSubUser(int userId) async =>
+      (await delete("crew/user_retrieve_destroy/$userId")).statusCode;
 }

@@ -341,7 +341,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                 onTap: () {
                   Get.offNamed(Routes.HOME);
                 },
-                child: Icon(Icons.keyboard_arrow_left))
+                child: const Icon(Icons.keyboard_arrow_left))
             : null,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -591,7 +591,8 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                 label: const Text("Follow"),
                                 style: FilledButton.styleFrom(
                                     minimumSize: Size.zero,
-                                    padding: EdgeInsets.fromLTRB(4, 4, 8, 4),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(4, 4, 8, 4),
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
                                     foregroundColor: Colors.white,
@@ -656,7 +657,6 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                     ),
                   ],
                 ),
-
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -829,83 +829,81 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                     ],
                   ),
                 4.verticalSpace,
-                //TODO: Waiting for Prince
-                /* Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.center,
-                                                    children: [
-                                                      17.horizontalSpace,
-                                                      TextButton.icon(
-                                                          onPressed: () {},
-                                                          icon: const Icon(
-                                                            Icons.thumb_up,
-                                                            size: 18,
-                                                            color: Colors.blue,
-                                                          ),
-                                                          style: TextButton.styleFrom(
-                                                            splashFactory:
-                                                                NoSplash.splashFactory,
-                                                            padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 10),
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        15),
-                                                                side: const BorderSide(
-                                                                    width: 1.8,
-                                                                    color: Colors.blue)),
-                                                          ),
-                                                          label: Text(
-                                                            " Likes ${job.likes}",
-                                                            style: Get
-                                                                .textTheme.bodyMedium
-                                                                ?.copyWith(
-                                                                    color: Colors.blue),
-                                                          )),
-                                                    ],
-                                                  ), */
                 10.verticalSpace,
                 if (!shareView)
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       controller.likingJob.value == job.id
-                          ? CircularProgressIndicator()
+                          ? const CircularProgressIndicator()
                           : TextButton.icon(
                               onPressed: () {
+                                if (job.isJobLiked == true) {
+                                  return;
+                                }
                                 controller.likeJob(job.id);
                               },
-                              icon: const Icon(
-                                Icons.thumb_up_alt_outlined,
+                              icon: Icon(
+                                job.isJobLiked == true
+                                    ? Icons.thumb_up_alt_rounded
+                                    : Icons.thumb_up_alt_outlined,
                                 size: 18,
                               ),
-                              label: const Text(
-                                "Like",
+                              label: Text(
+                                job.isJobLiked == true ? "Liked!" : "Like",
                                 style: TextStyle(fontSize: 13),
                               )),
-                      controller.applyingJob.value == job.id
-                          ? const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [CircularProgressIndicator()],
-                            )
-                          : ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18))),
-                              onPressed: controller.applications.any(
-                                              (application) =>
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton.icon(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.thumb_up,
+                                    size: 18,
+                                    color: Colors.blue,
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    splashFactory: NoSplash.splashFactory,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                        side: const BorderSide(
+                                            width: 1.8, color: Colors.blue)),
+                                  ),
+                                  label: Text(
+                                    " Likes ${job.jobLikeCount}",
+                                    style: Get.textTheme.bodyMedium
+                                        ?.copyWith(color: Colors.blue),
+                                  )),
+                            ],
+                          ),
+                          controller.applyingJob.value == job.id
+                              ? const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [CircularProgressIndicator()],
+                                )
+                              : ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18))),
+                                  onPressed: controller.applications.any((application) =>
                                                   application.jobId == job.id ||
                                                   application.jobData?.id ==
                                                       job.id) ==
-                                          true ||
-                                      job.jobRankWithWages?.none(
-                                              (rankWithWage) =>
+                                              true ||
+                                          job.jobRankWithWages?.none((rankWithWage) =>
                                                   rankWithWage.rankNumber ==
-                                                      UserStates.instance.crewUser
-                                                          ?.rankId ||
+                                                      UserStates.instance
+                                                          .crewUser?.rankId ||
                                                   (rankWithWage.rankNumber ==
                                                       controller.ranks
                                                           .firstWhereOrNull(
@@ -916,93 +914,103 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                                       .crewUser
                                                                       ?.rankId)
                                                           ?.promotedTo)) ==
-                                          true ||
-                                      UserStates
-                                              .instance.crewUser?.userTypeKey !=
-                                          2
-                                  ? null
-                                  : () {
-                                      if (controller.selectedRank.value?.key !=
-                                          job.id) {
-                                        controller.showErrorForJob.value =
-                                            job.id;
-                                        return;
-                                      }
-                                      showDialog(
-                                        context: Get.context!,
-                                        barrierDismissible: false,
-                                        builder: (context) => AlertDialog(
-                                          title: const Text(
-                                            "Are You Sure ?",
-                                            textAlign: TextAlign.center,
-                                            style:
-                                                TextStyle(color: Colors.blue),
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          actionsPadding:
-                                              const EdgeInsets.only(bottom: 25),
-                                          content: const Text(
-                                            "Are you sure you want to use your 100 credits?",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 14.5,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          actions: [
-                                            ElevatedButton(
-                                              onPressed: Get.back,
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.white,
-                                                foregroundColor: Colors.black,
-                                                elevation: 3,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 35),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
+                                              true ||
+                                          UserStates.instance.crewUser?.userTypeKey != 2
+                                      ? null
+                                      : () {
+                                          if (controller
+                                                  .selectedRank.value?.key !=
+                                              job.id) {
+                                            controller.showErrorForJob.value =
+                                                job.id;
+                                            return;
+                                          }
+                                          showDialog(
+                                            context: Get.context!,
+                                            barrierDismissible: false,
+                                            builder: (context) => AlertDialog(
+                                              title: const Text(
+                                                "Are You Sure ?",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.blue),
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              actionsPadding:
+                                                  const EdgeInsets.only(
+                                                      bottom: 25),
+                                              content: const Text(
+                                                "Are you sure you want to use your 100 credits?",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 14.5,
+                                                  fontWeight: FontWeight.w600,
                                                 ),
                                               ),
-                                              child: const Text("NO"),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () async {
-                                                Get.back();
-                                                controller.apply(job.id);
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                elevation: 3,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
+                                              actionsAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              actions: [
+                                                ElevatedButton(
+                                                  onPressed: Get.back,
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    foregroundColor:
+                                                        Colors.black,
+                                                    elevation: 3,
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
                                                         horizontal: 35),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                  child: const Text("NO"),
                                                 ),
-                                              ),
-                                              child: const Text("YES"),
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    Get.back();
+                                                    controller.apply(job.id);
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    elevation: 3,
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 35),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                  child: const Text("YES"),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                              child: Text(
-                                controller.applications.any((application) =>
-                                            application.jobId == job.id ||
-                                            application.jobData?.id ==
-                                                job.id) ==
-                                        true
-                                    ? "APPLIED"
-                                    : "APPLY NOW",
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ),
+                                          );
+                                        },
+                                  child: Text(
+                                    controller.applications.any((application) =>
+                                                application.jobId == job.id ||
+                                                application.jobData?.id ==
+                                                    job.id) ==
+                                            true
+                                        ? "APPLIED"
+                                        : "APPLY NOW",
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                        ],
+                      ),
                       TextButton.icon(
                         onPressed: () {
                           controller.captureWidget(job);

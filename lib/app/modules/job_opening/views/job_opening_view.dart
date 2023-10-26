@@ -881,10 +881,9 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
+                                            controller.likingJob.value ? CircularProgressIndicator():
                                             TextButton.icon(
-                                                onPressed: () {
-                                                  // TODO: Like
-                                                },
+                                                onPressed: controller.likeJob,
                                                 icon: const Icon(
                                                   Icons.thumb_up_alt_outlined,
                                                   size: 18,

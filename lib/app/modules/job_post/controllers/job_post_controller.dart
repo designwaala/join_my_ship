@@ -133,6 +133,8 @@ class JobPostController extends GetxController {
   RxBool isPostingJob = false.obs;
   //
   Job? jobToEdit;
+  //
+  final formKey = GlobalKey<FormState>();
 
   @override
   void onInit() {
@@ -231,6 +233,9 @@ class JobPostController extends GetxController {
   }
 
   validateStep1() {
+    if (formKey.currentState?.validate() != true) {
+      return;
+    }
     step1Misses.clear();
     deckRankWithWages.removeWhere((e) => e.key == null);
     engineRankWithWages.removeWhere((e) => e.key == null);

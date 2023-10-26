@@ -44,6 +44,8 @@ class CrewUser {
   int? gender;
   String? companyName;
   bool? followStatus;
+  String? userLink;
+  int? userStatus;
 
   CrewUser(
       {this.id,
@@ -88,7 +90,11 @@ class CrewUser {
       this.screenCheck,
       this.gender,
       this.companyName,
-      this.followStatus});
+      this.followStatus,
+      this.userLink,
+      this.userStatus});
+
+  bool get isPrimaryUser => userStatus == 1;
 
   CrewUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -101,9 +107,11 @@ class CrewUser {
     isStaff = json['is_staff'];
     isActive = json['is_active'];
     dateJoined = json['date_joined'];
-    profilePic = json['profilePic']?.contains(baseURL) == true
-        ? json['profilePic']
-        : "${baseURL.substring(0, baseURL.length - 1)}${json['profilePic']}";
+    profilePic = json['profilePic'] == null
+        ? null
+        : json['profilePic']?.contains(baseURL) == true
+            ? json['profilePic']
+            : "${baseURL.substring(0, baseURL.length - 1)}${json['profilePic']}";
     resume = json['resume'];
     email = json['email'];
     extraaPass = json['extraa_pass'];
@@ -136,6 +144,8 @@ class CrewUser {
     gender = json['gender'];
     companyName = json['company_name'];
     followStatus = json['userfollow_status'];
+    userLink = json['user_link'];
+    userStatus = json['is_prime'];
     // if (json['user_permissions'] != null) {
     //   userPermissions = <Null>[];
     //   json['user_permissions'].forEach((v) {

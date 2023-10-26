@@ -35,7 +35,9 @@ class SignUpEmailController extends GetxController with RequiresRecentLogin {
       args = (Get.arguments as SignUpEmailArguments);
       signUpType = args?.signUpType;
     } */
-
+    emailController.text = UserStates.instance.crewUser?.email ?? "";
+    fullNameController.text = UserStates.instance.crewUser?.companyName ?? "";
+    websiteController.text = UserStates.instance.crewUser?.website ?? "";
     super.onInit();
   }
 

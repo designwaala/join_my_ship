@@ -357,6 +357,7 @@ class EmployerJobApplicationsView
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.parentKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,

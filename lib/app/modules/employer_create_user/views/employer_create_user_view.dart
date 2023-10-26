@@ -35,11 +35,7 @@ class EmployerCreateUserView extends GetView<EmployerCreateUserController> {
         appBar: AppBar(
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
-          title: InkWell(
-              onTap: () {
-                controller.isUpdating.value = false;
-              },
-              child: const Text('EMPLOYER')),
+          title: const Text('EMPLOYER'),
           centerTitle: true,
         ),
         body: Obx(() {

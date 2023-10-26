@@ -21,6 +21,8 @@ class Job {
   String? modifiedAt;
   int? vesselId;
   dynamic postedBy;
+  int? jobLikeCount;
+  bool? isJobLiked;
 
   Job(
       {this.id,
@@ -41,7 +43,9 @@ class Job {
       this.createdAt,
       this.modifiedAt,
       this.vesselId,
-      this.postedBy});
+      this.postedBy,
+      this.jobLikeCount,
+      this.isJobLiked});
 
   Job.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -82,6 +86,8 @@ class Job {
     modifiedAt = json['modified_at'];
     vesselId = json['vessel_id'];
     postedBy = json['posted_by'];
+    jobLikeCount = json['joblike_count'];
+    isJobLiked = json['userlikedjob_status'];
   }
 
   Map<String, String> jsonToUpdateJob() => {

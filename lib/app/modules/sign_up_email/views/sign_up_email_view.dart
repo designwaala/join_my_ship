@@ -45,6 +45,7 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                           height: 64,
                           child: TextFormField(
                             controller: controller.fullNameController,
+                            enabled: controller.fullNameController.text.isEmpty,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Please enter your Company Name";
@@ -72,6 +73,8 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                             height: 64,
                             child: TextFormField(
                               controller: controller.websiteController,
+                              enabled:
+                                  controller.websiteController.text.isEmpty,
                               validator: (value) {
                                 if (controller.signUpType == SignUpType.crew) {
                                   return null;
@@ -99,7 +102,9 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                           height: 64,
                           child: TextFormField(
                             controller: controller.emailController,
+                            enabled: controller.emailController.text.isEmpty,
                             validator: (value) {
+                              return null;
                               if (value == null || value.isEmpty) {
                                 return "Please enter your email";
                               }

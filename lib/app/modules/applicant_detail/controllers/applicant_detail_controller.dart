@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/data/models/country_model.dart';
@@ -16,6 +18,8 @@ import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -36,6 +40,9 @@ class ApplicantDetailController extends GetxController {
 
   RxBool isFollowing = false.obs;
 
+  FToast fToast = FToast();
+  final parentKey = GlobalKey();
+
   @override
   void onInit() {
     if (Get.arguments is ApplicantDetailArguments?) {
@@ -44,6 +51,12 @@ class ApplicantDetailController extends GetxController {
     }
     instantiate();
     super.onInit();
+  }
+
+  @override
+  onReady() {
+    super.onReady();
+    fToast.init(parentKey.currentContext!);
   }
 
   instantiate() async {
@@ -66,10 +79,68 @@ class ApplicantDetailController extends GetxController {
   }
 
   downloadResume() async {
+    bool? shouldDownload = await showDialog(
+      context: Get.context!,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          "Are You Sure ?",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.blue),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        actionsPadding: const EdgeInsets.only(bottom: 25),
+        content: const Text(
+          "Are you sure you want to use your 100 credits?",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 14.5,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        actionsAlignment: MainAxisAlignment.spaceEvenly,
+        actions: [
+          ElevatedButton(
+            onPressed: Get.back,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
+              elevation: 3,
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: const Text("NO"),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Get.back(result: true);
+            },
+            style: ElevatedButton.styleFrom(
+              elevation: 3,
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: const Text("YES"),
+          ),
+        ],
+      ),
+    );
+    if (shouldDownload != true) {
+      return;
+    }
     isGettingResume.value = true;
     String? resume = await getIt<ApplicationProvider>()
         .downloadResumeForApplication(args?.application?.jobId ?? -1,
             args?.application?.userData?.id ?? -1);
+    if (resume != null) {
+      application.value?.resumeStatus = true;
+    }
     await _prepareSaveDir();
     final taskId = await FlutterDownloader.enqueue(
       url: "https://designwaala.me$resume",
@@ -122,6 +193,10 @@ class ApplicantDetailController extends GetxController {
   }
 
   shortList() async {
+    if (application.value?.resumeStatus != true) {
+      fToast.safeShowToast(child: errorToast("Please download resume first"));
+      return;
+    }
     if (application.value?.id == null) {
       return;
     }
@@ -151,18 +226,14 @@ class ApplicantDetailController extends GetxController {
     Follow? follow = await getIt<FollowProvider>().follow(applicant!.id!);
     isFollowing.value = false;
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
 }
 
 class ApplicantDetailArguments {
   final int? userId;
   final Application? application;
   final ViewType? viewType;
-  const ApplicantDetailArguments({this.userId, this.application, this.viewType});
+  const ApplicantDetailArguments(
+      {this.userId, this.application, this.viewType});
 }
 
 enum ViewType { applicant, crewDetail }

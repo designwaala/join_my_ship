@@ -20,6 +20,8 @@ class UserStates {
   List<PreviousEmployerReference>? previousEmployerReferences;
   bool? _isCrew;
   SignUpType? employerType;
+  CrewUser? prefilledDetails;
+  String? userLink;
 
   set isCrew(bool? value) {
     _isCrew = value;

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
+import 'package:join_mp_ship/app/modules/splash/controllers/splash_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
-class SignUpPhoneNumberController extends GetxController {
+class SignUpPhoneNumberController extends GetxController with RedirectionMixin {
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   RxString selectedCountryCode = "+91".obs;
@@ -61,8 +63,12 @@ class SignUpPhoneNumberController extends GetxController {
       UserCredential userCred =
           await FirebaseAuth.instance.signInWithCredential(credential);
       if (userCred.additionalUserInfo?.isNewUser == false) {
-        fToast.safeShowToast(
-            child: errorToast("This mobile number is already registered."));
+        if (PreferencesHelper.instance.userLink == null) {
+          fToast.safeShowToast(
+              child: errorToast("This mobile number is already registered."));
+        } else {
+          redirection();
+        }
       } else if (FirebaseAuth.instance.currentUser != null) {
         Get.offAllNamed(Routes.SIGN_UP_EMAIL);
         fToast.safeShowToast(child: successToast("Authentication Successful"));

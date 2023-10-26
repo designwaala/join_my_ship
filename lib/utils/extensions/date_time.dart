@@ -15,3 +15,7 @@ extension ConvertToServer on String {
     return split("-").reversed.join("-");
   }
 }
+
+extension DaoubleExt on double {
+  num get toIntIfZero => this == 0.0 ? 0 : this;
+}

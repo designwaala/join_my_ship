@@ -15,6 +15,7 @@ import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_provider.dart';
+import 'package:join_mp_ship/app/data/providers/liked_post_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
@@ -61,6 +62,8 @@ class JobOpeningController extends GetxController {
 
   JobOpeningArguments? args;
 
+  RxBool likingJob = false.obs;
+
   @override
   void onInit() {
     if (Get.arguments is JobOpeningArguments?) {
@@ -92,6 +95,18 @@ class JobOpeningController extends GetxController {
           : Future.value(null)
     ]);
     isLoading.value = false;
+  }
+
+  Future<void> likeJob() async {
+    if (jobOpening.value?.id == null) {
+      return;
+    }
+    likingJob.value = true;
+    final response = await getIt<LikedPostProvider>().likePost(jobOpening.value?.id);
+    likingJob.value = false;
+    if (response.statusCode == 201) {
+      fToast.safeShowToast(child: successToast("Job Liked"));
+    }
   }
 
   Future<void> getJobApplications() async {

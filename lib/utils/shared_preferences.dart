@@ -29,7 +29,8 @@ class PreferencesHelper {
       _IS_CREW = "is-crew",
       _USER_ID = "user-id",
       _FCM_TOKEN = "fcm-token",
-      _EMPLOYER_TYPE = "employer-type";
+      _EMPLOYER_TYPE = "employer-type",
+      _USER_LINK = "user-link";
 
   Future<void> setAccessToken(String? value) =>
       value == null || _sharedPreferences == null
@@ -83,4 +84,10 @@ class PreferencesHelper {
 
   Future<void>? setEmployerType(int value) =>
       _sharedPreferences?.setInt(_EMPLOYER_TYPE, value);
+
+  String? get userLink => _sharedPreferences?.getString(_USER_LINK);
+  Future<void>? setUserLink(String userLink) =>
+      _sharedPreferences?.setString(_USER_LINK, userLink);
+  Future<bool> clearUserLink() =>
+      _sharedPreferences?.remove(_USER_LINK) ?? Future.value(false);
 }

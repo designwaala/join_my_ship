@@ -85,6 +85,7 @@ class EmployerCreateUserController extends GetxController {
   getStates() async {
     isLoadingStates.value = true;
     if (country.value?.id == null) {
+      isLoadingStates.value = false;
       return;
     }
     state.value = null;
@@ -105,7 +106,14 @@ class EmployerCreateUserController extends GetxController {
     if (india != null) {
       countries.insert(0, india);
     }
-    if (editMode) {
+    if (PreferencesHelper.instance.userLink != null &&
+        UserStates.instance.crewUser?.addressLine1 == null) {
+      await getIt<CrewUserProvider>()
+          .fetchSubUserDetails(PreferencesHelper.instance.userLink!);
+    }
+    if (editMode ||
+        (UserStates.instance.crewUser != null &&
+            UserStates.instance.crewUser?.addressLine1 == null)) {
       crewUser = UserStates.instance.crewUser ??
           await getIt<CrewUserProvider>().getCrewUser();
       UserStates.instance.crewUser = crewUser;
@@ -215,6 +223,7 @@ class EmployerCreateUserController extends GetxController {
               firstName: FirebaseAuth.instance.currentUser?.displayName,
               lastName: lastNameController.text,
               email: FirebaseAuth.instance.currentUser?.email,
+              designation: designationController.text,
               website: websiteController.text.nullIfEmpty(),
               addressLine1: addressLine1Controller.text,
               pincode: zipCodeController.text,
@@ -228,8 +237,13 @@ class EmployerCreateUserController extends GetxController {
               authKey: await FirebaseAuth.instance.currentUser?.getIdToken()),
           profilePicPath: pickedImage.value?.path);
       if ((statusCode ?? 0) < 300) {
+        PreferencesHelper.instance.clearUserLink();
+        UserStates.instance.userLink = null;
         fToast.safeShowToast(
             child: successToast("Your account was successfully updated."));
+        if ((crewUser != null && crewUser?.addressLine1 == null)) {
+          Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
+        }
       } else {
         fToast.safeShowToast(child: errorToast("Error updating your account"));
       }

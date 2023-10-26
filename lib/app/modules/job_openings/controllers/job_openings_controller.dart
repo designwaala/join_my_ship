@@ -212,6 +212,11 @@ class JobOpeningsController extends GetxController {
     final response = await getIt<LikedPostProvider>().likePost(jobId);
     likingJob.value = null;
     if (response.statusCode == 201) {
+      int index = jobOpenings.indexWhere((element) => element.id == jobId);
+      Job job = jobOpenings.removeAt(index);
+      job.isJobLiked = true;
+      job.jobLikeCount = (job.jobLikeCount ?? 0) + 1;
+      jobOpenings.insert(index, job);
       fToast.safeShowToast(child: successToast("Job Liked"));
     }
   }

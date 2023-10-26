@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/models/secondary_users_model.dart';
+import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/secondary_users_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
 
 class EmployerManageUsersController extends GetxController {
   RxBool isLoading = false.obs;
-  RxList<SecondaryUsers> secondaryUsers = RxList.empty();
   RxnInt userBeingDeleted = RxnInt();
   RxBool isInvitingNewUser = false.obs;
+  RxList<CrewUser> subUsers = RxList.empty();
 
   TextEditingController newUserEmail = TextEditingController();
+
+  FToast fToast = FToast();
+  final parentKey = GlobalKey();
 
   @override
   void onInit() {
@@ -20,25 +28,36 @@ class EmployerManageUsersController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onReady() {
+    super.onReady();
+    fToast.init(parentKey.currentContext!);
+  }
+
   instantiate() async {
     isLoading.value = true;
-    secondaryUsers.value =
-        (await getIt<SecondaryUsersProvider>().getSecondaryUsers()) ?? [];
+    subUsers.value = await getIt<CrewUserProvider>().getSubUsers() ?? [];
     isLoading.value = false;
   }
 
   deleteUser(int userId) async {
     userBeingDeleted.value = userId;
-    await getIt<SecondaryUsersProvider>().deleteUser(userId);
+    int? statusCode = await getIt<CrewUserProvider>().deleteSubUser(userId);
+    if (statusCode == 204) {
+      fToast.safeShowToast(child: successToast("User deleted successfully."));
+      subUsers.removeWhere((e) => e.id == userId);
+    }
     userBeingDeleted.value = null;
   }
 
   inviteNewUser() async {
     isInvitingNewUser.value = true;
-    int? statusCode =
-        await getIt<SecondaryUsersProvider>().inviteNewUser(newUserEmail.text);
+    CrewUser? newUser =
+        await getIt<CrewUserProvider>().createSubUser(newUserEmail.text);
+
     Get.back();
-    if (statusCode == 200) {
+    if (newUser != null) {
+      instantiate();
       showDialog(
           context: Get.context!,
           builder: (context) {
@@ -65,7 +84,9 @@ class EmployerManageUsersController extends GetxController {
               ),
             );
           });
-    } else {}
+    } else {
+      Get.showSnackbar(GetSnackBar(message: "Something went wrong"));
+    }
     isInvitingNewUser.value = false;
   }
 }
