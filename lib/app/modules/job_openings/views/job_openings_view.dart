@@ -857,32 +857,6 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton.icon(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.thumb_up,
-                                    size: 18,
-                                    color: Colors.blue,
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    splashFactory: NoSplash.splashFactory,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                        side: const BorderSide(
-                                            width: 1.8, color: Colors.blue)),
-                                  ),
-                                  label: Text(
-                                    " Likes ${job.jobLikeCount}",
-                                    style: Get.textTheme.bodyMedium
-                                        ?.copyWith(color: Colors.blue),
-                                  )),
-                            ],
-                          ),
                           controller.applyingJob.value == job.id
                               ? const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

@@ -290,6 +290,12 @@ class ProfileView extends GetView<ProfileController> {
                           text: "Help & Feedback",
                           onTap: () => Get.toNamed(Routes.HELP),
                         ),
+                        if (controller.crewUser.value?.userTypeKey == 2)
+                          CardObject(
+                            iconPath: "assets/images/profile/help.png",
+                            text: "Higlight",
+                            onTap: controller.highlightCrew,
+                          ),
                       ].map((e) => InkWell(
                             onTap: () {
                               e.onTap();
@@ -300,6 +306,13 @@ class ProfileView extends GetView<ProfileController> {
                               margin: EdgeInsets.symmetric(vertical: 8.h),
                               decoration: BoxDecoration(
                                   color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey.shade200,
+                                        blurRadius: 1,
+                                        spreadRadius: 1,
+                                        offset: Offset(1, 1))
+                                  ],
                                   borderRadius: BorderRadius.circular(16.r)),
                               child: Row(
                                 children: [
@@ -333,6 +346,13 @@ class ProfileView extends GetView<ProfileController> {
                           margin: EdgeInsets.symmetric(vertical: 8.h),
                           decoration: BoxDecoration(
                               color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey.shade200,
+                                    blurRadius: 1,
+                                    spreadRadius: 1,
+                                    offset: Offset(1, 1))
+                              ],
                               borderRadius: BorderRadius.circular(16.r)),
                           child: Row(
                             children: [

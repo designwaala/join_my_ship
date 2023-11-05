@@ -46,6 +46,7 @@ class CrewUser {
   bool? followStatus;
   String? userLink;
   int? userStatus;
+  bool? isHighlighted;
 
   CrewUser(
       {this.id,
@@ -92,7 +93,8 @@ class CrewUser {
       this.companyName,
       this.followStatus,
       this.userLink,
-      this.userStatus});
+      this.userStatus,
+      this.isHighlighted});
 
   bool get isPrimaryUser => userStatus == 1;
 
@@ -146,6 +148,7 @@ class CrewUser {
     followStatus = json['userfollow_status'];
     userLink = json['user_link'];
     userStatus = json['is_prime'];
+    isHighlighted = json['is_highlighted'];
     // if (json['user_permissions'] != null) {
     //   userPermissions = <Null>[];
     //   json['user_permissions'].forEach((v) {

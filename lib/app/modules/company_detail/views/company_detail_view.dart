@@ -32,8 +32,8 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                       foregroundColor: Colors.black,
                     ),
                     SliverAppBar(
-                        toolbarHeight: 128,
-                        expandedHeight: 128,
+                        toolbarHeight: 84,
+                        expandedHeight: 84,
                         floating: true,
                         leading: const SizedBox(),
                         // title: const Text('Company Detail'),
@@ -88,24 +88,34 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                                                           ?.companyName ??
                                                       "",
                                                   maxLines: 2,
-                                                  style: Get
-                                                      .textTheme.bodyMedium
-                                                      ?.copyWith(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold)),
+                                                  style:
+                                                      Get.textTheme.titleLarge),
                                             ),
                                             8.horizontalSpace,
                                             Icon(Icons.verified_user,
                                                 color: Get.theme.primaryColor)
                                           ],
                                         ),
-                                        12.verticalSpace,
+                                        4.verticalSpace,
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
-                                            Icon(Icons.location_on),
+                                            Text(controller.countryList
+                                                    .firstWhereOrNull((e) =>
+                                                        e.countryCode ==
+                                                        UserStates
+                                                            .instance.countries
+                                                            ?.firstWhereOrNull(
+                                                                (country) =>
+                                                                    country
+                                                                        .id ==
+                                                                    controller
+                                                                        .employer
+                                                                        ?.country)
+                                                            ?.countryCode)
+                                                    ?.flagEmoji ??
+                                                ""),
                                             8.horizontalSpace,
                                             Text(UserStates.instance.countries
                                                     ?.firstWhereOrNull(
@@ -123,7 +133,6 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                                 ],
                               ),
                             ),
-                            16.verticalSpace
                           ],
                         ))
                   ],

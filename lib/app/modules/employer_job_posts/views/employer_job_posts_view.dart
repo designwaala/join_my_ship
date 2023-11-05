@@ -102,11 +102,11 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(128),
                   child: CachedNetworkImage(
-                      height: 50,
-                      width: 50,
-                      imageUrl: job.employerDetails?.profilePic ?? "",
-                      fit: BoxFit.cover,
-                      ),
+                    height: 50,
+                    width: 50,
+                    imageUrl: job.employerDetails?.profilePic ?? "",
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 10.horizontalSpace,
                 Expanded(
@@ -366,34 +366,68 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                 5.verticalSpace,
                 if (!shareView)
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.send,
-                          size: 18,
-                        ),
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        label: const Text(
-                          "Highlight",
-                          style: TextStyle(fontSize: 13),
-                        ),
+                      controller.highlightingJob.value == job.id
+                          ? CircularProgressIndicator()
+                          : TextButton.icon(
+                              onPressed: () {
+                                if (job.id == null) {
+                                  return;
+                                }
+                                controller.highlightJob(job.id!);
+                              },
+                              icon: const Icon(
+                                Icons.send,
+                                size: 18,
+                              ),
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero),
+                              label: const Text(
+                                "Highlight",
+                                style: TextStyle(fontSize: 13),
+                              ),
+                            ),
+                      Column(
+                        children: [
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
+                              onPressed: () => Get.toNamed(
+                                  Routes.EMPLOYER_JOB_APPLICATIONS,
+                                  arguments: EmployerJobApplicationsArguments(
+                                      jobId: job.id)),
+                              child: const Text(
+                                "Applications",
+                                style: TextStyle(fontSize: 13),
+                              )),
+                          TextButton.icon(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.thumb_up,
+                                size: 18,
+                                color: Colors.blue,
+                              ),
+                              style: TextButton.styleFrom(
+                                splashFactory: NoSplash.splashFactory,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                /* shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    side: const BorderSide(
+                                        width: 1.8, color: Colors.blue)), */
+                              ),
+                              label: Text(
+                                " ${job.jobLikeCount} Likes",
+                                style: Get.textTheme.bodyMedium
+                                    ?.copyWith(color: Colors.blue),
+                              )),
+                        ],
                       ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                          onPressed: () => Get.toNamed(
-                              Routes.EMPLOYER_JOB_APPLICATIONS,
-                              arguments: EmployerJobApplicationsArguments(
-                                  jobId: job.id)),
-                          child: const Text(
-                            "Applications",
-                            style: TextStyle(fontSize: 13),
-                          )),
                       TextButton.icon(
                         onPressed: () {},
                         icon: const Icon(
@@ -409,7 +443,6 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                       ),
                     ],
                   ),
-                10.verticalSpace,
               ],
             ),
           ),

@@ -10,6 +10,7 @@ import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:lottie/lottie.dart';
 
 class EmployerManageUsersController extends GetxController {
   RxBool isLoading = false.obs;
@@ -64,22 +65,24 @@ class EmployerManageUsersController extends GetxController {
             return AlertDialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32)),
+              titlePadding: EdgeInsets.zero,
+              title: SizedBox(
+                height: 180,
+                width: 180,
+                child: Lottie.asset('assets/animations/blue_tick.json',
+                    repeat: true),
+              ),
+              contentPadding: const EdgeInsets.only(bottom: 16),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.check_circle,
-                    color: Get.theme.primaryColor,
-                    size: 64,
-                  ),
-                  16.verticalSpace,
                   Text("Invited Successfully",
                       style: Get.textTheme.bodyMedium?.copyWith(
                           color: Get.theme.primaryColor,
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w700)),
                   16.verticalSpace,
-                  CustomElevatedButon(onPressed: Get.back, child: Text("OK"))
+                  FilledButton(onPressed: Get.back, child: const Text("Close"))
                 ],
               ),
             );

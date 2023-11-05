@@ -91,6 +91,8 @@ class CrewListView extends GetView<CrewListController> {
                                 shadowColor:
                                     const Color.fromARGB(255, 237, 233, 241),
                                 shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: controller.crewList?[index].isHighlighted == true ?
+                                  Get.theme.primaryColor : Colors.transparent),
                                     borderRadius: BorderRadius.circular(20)),
                                 child: InkWell(
                                   onTap: () {
@@ -156,6 +158,8 @@ class CrewListView extends GetView<CrewListController> {
                                             ],
                                           ),
                                         ),
+                                        if(controller.crewList?[index].isHighlighted == true)
+                                        Icon(Icons.star, color: Get.theme.primaryColor)
                                       ],
                                     ),
                                   ),

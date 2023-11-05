@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +14,7 @@ import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
@@ -23,6 +25,7 @@ import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
+import 'package:collection/collection.dart';
 
 class EmployerJobPostsController extends GetxController {
   RxList<Job> jobPosts = RxList.empty();
@@ -48,6 +51,8 @@ class EmployerJobPostsController extends GetxController {
   RxBool buildCaptureWidget = false.obs;
   RxBool isSharing = false.obs;
   Job? jobToBuild;
+  RxnInt highlightingJob = RxnInt();
+  RxList<int> ranksToHighlight = RxList.empty();
 
   @override
   void onInit() {
@@ -138,5 +143,52 @@ http://designwaala.me/job/?job_id=${job.id}
     }
     buildCaptureWidget.value = false;
     print(bytes);
+  }
+
+  Future<void> highlightJob(int jobId) async {
+    ranksToHighlight.clear();
+    await showDialog(
+        context: Get.context!,
+        builder: (context) {
+          return Obx(() {
+            return AlertDialog(
+              title: Text("Choose the ranks you wish to target"),
+              content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: jobPosts
+                          .firstWhereOrNull((e) => e.id == jobId)
+                          ?.jobRankWithWages
+                          ?.map((e) => CheckboxListTile(
+                              controlAffinity: ListTileControlAffinity.trailing,
+                              value: ranksToHighlight.contains(e.rankNumber),
+                              onChanged: (_) {
+                                if (ranksToHighlight.contains(e.rankNumber)) {
+                                  ranksToHighlight.remove(e.rankNumber);
+                                } else if (e.rankNumber != null) {
+                                  ranksToHighlight.add(e.rankNumber!);
+                                }
+                              },
+                              title: Text(ranks
+                                      .firstWhereOrNull(
+                                          (rank) => rank.id == e.rankNumber)
+                                      ?.name ??
+                                  "")))
+                          .toList() ??
+                      []),
+              actions: [
+                FilledButton(
+                    onPressed: ranksToHighlight.isEmpty ? null : Get.back,
+                    child: Text("Highlight"))
+              ],
+            );
+          });
+        });
+    if (ranksToHighlight.isEmpty) {
+      return;
+    }
+    highlightingJob.value = jobId;
+    final response = await getIt<HighlightProvider>()
+        .jobHighlight(rankIds: ranksToHighlight, jobId: jobId, subscriptionId: 10);
+    highlightingJob.value = null;
   }
 }

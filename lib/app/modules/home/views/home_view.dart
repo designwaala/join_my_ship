@@ -36,9 +36,10 @@ class HomeView extends GetView<HomeController> {
               key: controller.scaffoldKey,
               drawer: SafeArea(
                 child: Drawer(
+                  width: 256,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 25, vertical: 10),
+                        horizontal: 24, vertical: 10),
                     child: CustomScrollView(slivers: [
                       SliverList(
                           delegate: SliverChildListDelegate([
@@ -63,12 +64,9 @@ class HomeView extends GetView<HomeController> {
                               controller.selectedDrawerButton.value;
                           return ListTile(
                             selected: selected,
-                            selectedTileColor:
-                                const Color.fromARGB(255, 239, 246, 255),
                             contentPadding: const EdgeInsets.all(0),
                             title: Row(
                               children: [
-                                15.horizontalSpace,
                                 ImageIcon(
                                   AssetImage(button["iconPath"]),
                                   color:
@@ -86,23 +84,6 @@ class HomeView extends GetView<HomeController> {
                                 ),
                               ],
                             ),
-                            trailing: button['title'] == "Notifications"
-                                ? Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    color: Colors.redAccent,
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 6, vertical: 1),
-                                      child: Text(
-                                        "2",
-                                        style: TextStyle(
-                                            fontSize: 11, color: Colors.white),
-                                      ),
-                                    ),
-                                  )
-                                : 0.horizontalSpace,
                             onTap: () {
                               controller.selectedDrawerButton.value =
                                   button["title"];
@@ -259,7 +240,7 @@ class HomeView extends GetView<HomeController> {
             ClipPath(
               clipper: CustomShape(),
               child: Container(
-                height: 210,
+                height: 190,
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: [
                   Color.fromRGBO(1, 66, 211, 1),
@@ -307,7 +288,7 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             Positioned(
-              bottom: 0,
+              bottom: 16,
               left: 28,
               right: 28,
               child: PhysicalModel(
@@ -321,8 +302,14 @@ class HomeView extends GetView<HomeController> {
                             fillColor: Colors.white,
                             filled: true,
                             hintText: "Search CV here...",
-                            prefixIcon: Icon(Icons.search,
-                                color: Get.theme.primaryColor),
+                            hintStyle: Get.textTheme.bodyMedium
+                                ?.copyWith(color: Colors.grey),
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Icon(Icons.search,
+                                  color: Get.theme.primaryColor),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(vertical: 8),
                             border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius: BorderRadius.circular(64)))),
@@ -387,7 +374,8 @@ class HomeView extends GetView<HomeController> {
                                 style: const TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.w700)),
                             8.horizontalSpace,
-                            const Icon(Icons.keyboard_arrow_right, color: Colors.grey)
+                            const Icon(Icons.keyboard_arrow_right,
+                                color: Colors.grey)
                           ],
                         ),
                         const Text("Jobs Posted",
@@ -431,7 +419,8 @@ class HomeView extends GetView<HomeController> {
                                 style: const TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.w700)),
                             8.horizontalSpace,
-                            const Icon(Icons.keyboard_arrow_right, color: Colors.grey)
+                            const Icon(Icons.keyboard_arrow_right,
+                                color: Colors.grey)
                           ],
                         ),
                         const Text("Saved Profiles",
@@ -455,13 +444,13 @@ class HomeView extends GetView<HomeController> {
                     onPressed: () {
                       Get.toNamed(Routes.COMPANIES);
                     },
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     child: Text("More",
                         style: Get.textTheme.bodyMedium
                             ?.copyWith(color: Get.theme.primaryColor))),
-                28.horizontalSpace
+                16.horizontalSpace
               ],
             ),
-            12.verticalSpace,
             ...controller.featuredCompanies.map(
               (company) => InkWell(
                 onTap: () {
@@ -470,17 +459,17 @@ class HomeView extends GetView<HomeController> {
                 },
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.r),
+                      borderRadius: BorderRadius.circular(16.r),
                       color: Colors.white,
                       boxShadow: const [
                         BoxShadow(
                             color: Color.fromRGBO(0, 0, 0, 0.1),
-                            blurRadius: 8,
-                            spreadRadius: 2)
+                            blurRadius: 4,
+                            spreadRadius: 1)
                       ]),
                   child: Row(
                     children: [

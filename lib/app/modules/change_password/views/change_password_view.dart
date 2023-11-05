@@ -27,15 +27,12 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   14.verticalSpace,
-                  Text(
-                    "Change Password",
-                    style: Get.theme.textTheme.headlineSmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
+                  Text("Change Password",
+                      style: Get.theme.textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold)),
                   const Text("Please enter your new password"),
-                  20.verticalSpace,
+                  32.verticalSpace,
                   SizedBox(
-                    height: 64,
                     child: TextFormField(
                       validator: (value) => FormValidator.validate(value,
                           required: true,
@@ -47,8 +44,9 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                       decoration: InputDecoration(
                           fillColor: Colors.white,
                           filled: true,
-                          hintText: "Enter your new password",
-                          contentPadding: EdgeInsets.only(left: 16),
+                          hintText: "Enter new password",
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 20),
                           suffixIcon: IconButton(
                             onPressed: () {
                               controller.shouldObscurePassword.value =
@@ -62,14 +60,12 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                                 color: Get.theme.primaryColor),
                           ),
                           border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.blue, width: 2),
+                              borderSide: BorderSide.none,
                               borderRadius: BorderRadius.circular(64))),
                     ),
                   ),
-                  24.verticalSpace,
+                  16.verticalSpace,
                   SizedBox(
-                    height: 64,
                     child: TextFormField(
                       validator: (value) => FormValidator.validate(value,
                           required: true,
@@ -80,10 +76,11 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                       obscureText:
                           controller.shouldObscureConfirmPassword.value,
                       decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 20),
                           fillColor: Colors.white,
                           filled: true,
                           hintText: "Confirm password",
-                          contentPadding: EdgeInsets.only(left: 16),
                           suffixIcon: IconButton(
                             onPressed: () {
                               controller.shouldObscureConfirmPassword.value =
@@ -98,8 +95,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                                 color: Get.theme.primaryColor),
                           ),
                           border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.blue, width: 2),
+                              borderSide: BorderSide.none,
                               borderRadius: BorderRadius.circular(64))),
                     ),
                   ),

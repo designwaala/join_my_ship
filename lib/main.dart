@@ -19,6 +19,7 @@ import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/employer_counts_provider.dart';
 import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
+import 'package:join_mp_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_post_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_coc_post.dart';
@@ -136,7 +137,8 @@ void main() async {
     ..registerSingleton(FollowProvider())
     ..registerSingleton(FcmTokenProvider())
     ..registerSingleton(LikedPostProvider())
-    ..registerSingleton(EmployerCountsProvider());
+    ..registerSingleton(EmployerCountsProvider())
+    ..registerSingleton(HighlightProvider());
   StreamSubscription<String?>? uriStream;
 
   uriStream = linkStream.listen((event) {

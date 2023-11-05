@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -77,8 +78,13 @@ class CompanyDetailController extends GetxController {
   Job? jobToBuild;
   RxnInt likingJob = RxnInt();
 
+  final CountryService _countryService = CountryService();
+
+  List<Country> countryList = [];
+
   @override
   void onInit() {
+    countryList = _countryService.getAll();
     if (Get.arguments is CompanyDetailArguments?) {
       args = Get.arguments;
       employer = args?.employer;
