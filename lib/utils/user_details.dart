@@ -3,6 +3,7 @@ import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/models/previous_employer_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
+import 'package:join_mp_ship/app/data/models/subscription_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
@@ -22,6 +23,7 @@ class UserStates {
   SignUpType? employerType;
   CrewUser? prefilledDetails;
   String? userLink;
+  List<Subscription>? subscription;
 
   set isCrew(bool? value) {
     _isCrew = value;

@@ -21,11 +21,9 @@ class HighlightProvider extends WrapperConnect {
   }
 
   Future<Highlight> jobHighlight(
-      {required List<int> rankIds,
-      required int jobId,
-      required int subscriptionId}) async {
+      {required int jobId, required int subscriptionId}) async {
     final response = await multipartPost("crew/subscripstions_pay",
-        {"sub_id": subscriptionId.toString(), "post_ids": rankIds.join(",")});
+        {"sub_id": subscriptionId.toString(), "post_id": jobId.toString()});
     return Highlight.fromJson(response);
   }
 }

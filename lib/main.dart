@@ -36,6 +36,7 @@ import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
 import 'package:join_mp_ship/app/data/providers/secondary_users_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
 import 'package:join_mp_ship/app/data/providers/stcw_issuing_authority_provider.dart';
+import 'package:join_mp_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
@@ -138,7 +139,8 @@ void main() async {
     ..registerSingleton(FcmTokenProvider())
     ..registerSingleton(LikedPostProvider())
     ..registerSingleton(EmployerCountsProvider())
-    ..registerSingleton(HighlightProvider());
+    ..registerSingleton(HighlightProvider())
+    ..registerSingleton(SubscriptionProvider());
   StreamSubscription<String?>? uriStream;
 
   uriStream = linkStream.listen((event) {

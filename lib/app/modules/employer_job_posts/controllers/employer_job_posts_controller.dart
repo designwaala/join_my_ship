@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:join_mp_ship/app/data/models/coc_model.dart';
@@ -22,6 +23,7 @@ import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
@@ -52,7 +54,6 @@ class EmployerJobPostsController extends GetxController {
   RxBool isSharing = false.obs;
   Job? jobToBuild;
   RxnInt highlightingJob = RxnInt();
-  RxList<int> ranksToHighlight = RxList.empty();
 
   @override
   void onInit() {
@@ -146,49 +147,39 @@ http://designwaala.me/job/?job_id=${job.id}
   }
 
   Future<void> highlightJob(int jobId) async {
-    ranksToHighlight.clear();
-    await showDialog(
-        context: Get.context!,
-        builder: (context) {
-          return Obx(() {
-            return AlertDialog(
-              title: Text("Choose the ranks you wish to target"),
-              content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: jobPosts
-                          .firstWhereOrNull((e) => e.id == jobId)
-                          ?.jobRankWithWages
-                          ?.map((e) => CheckboxListTile(
-                              controlAffinity: ListTileControlAffinity.trailing,
-                              value: ranksToHighlight.contains(e.rankNumber),
-                              onChanged: (_) {
-                                if (ranksToHighlight.contains(e.rankNumber)) {
-                                  ranksToHighlight.remove(e.rankNumber);
-                                } else if (e.rankNumber != null) {
-                                  ranksToHighlight.add(e.rankNumber!);
-                                }
-                              },
-                              title: Text(ranks
-                                      .firstWhereOrNull(
-                                          (rank) => rank.id == e.rankNumber)
-                                      ?.name ??
-                                  "")))
-                          .toList() ??
-                      []),
-              actions: [
-                FilledButton(
-                    onPressed: ranksToHighlight.isEmpty ? null : Get.back,
-                    child: Text("Highlight"))
-              ],
-            );
-          });
-        });
-    if (ranksToHighlight.isEmpty) {
-      return;
-    }
     highlightingJob.value = jobId;
     final response = await getIt<HighlightProvider>()
-        .jobHighlight(rankIds: ranksToHighlight, jobId: jobId, subscriptionId: 10);
+        .jobHighlight(jobId: jobId, subscriptionId: 10);
     highlightingJob.value = null;
+    if (response.userHighlight != null) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32)),
+              titlePadding: EdgeInsets.zero,
+              title: SizedBox(
+                height: 180,
+                width: 180,
+                child: Lottie.asset('assets/animations/blue_tick.json',
+                    repeat: true),
+              ),
+              contentPadding: const EdgeInsets.only(bottom: 16),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Highlighted Successfully",
+                      style: Get.textTheme.bodyMedium?.copyWith(
+                          color: Get.theme.primaryColor,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700)),
+                  16.verticalSpace,
+                  FilledButton(onPressed: Get.back, child: const Text("Close"))
+                ],
+              ),
+            );
+          });
+    }
   }
 }
