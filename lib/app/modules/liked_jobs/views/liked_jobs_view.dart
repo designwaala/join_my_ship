@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/main.dart';
 
 import '../controllers/liked_jobs_controller.dart';
 
@@ -859,15 +860,12 @@ class LikedJobsView extends GetView<LikedJobsController> {
                                         context: Get.context!,
                                         barrierDismissible: false,
                                         builder: (context) => AlertDialog(
+                                          shape: alertDialogShape,
                                           title: const Text(
                                             "Are You Sure ?",
                                             textAlign: TextAlign.center,
                                             style:
                                                 TextStyle(color: Colors.blue),
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
                                           ),
                                           actionsPadding:
                                               const EdgeInsets.only(bottom: 25),

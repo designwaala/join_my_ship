@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_alert_dialog.dart';
@@ -35,9 +36,10 @@ class ChangePasswordController extends GetxController with RequiresRecentLogin {
     if (formKey.currentState!.validate()) {
       showDialog(
           context: Get.context!,
-          builder: (context) => const AlertDialog(
-                title: Text("Please wait..."),
-                content: Row(
+          builder: (context) => AlertDialog(
+                shape: alertDialogShape,
+                title: const Text("Please wait..."),
+                content: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircularProgressIndicator(),
@@ -58,9 +60,10 @@ class ChangePasswordController extends GetxController with RequiresRecentLogin {
           await reAuthenticate();
           showDialog(
               context: Get.context!,
-              builder: (context) => const AlertDialog(
-                    title: Text("Please wait..."),
-                    content: Row(
+              builder: (context) => AlertDialog(
+                    shape: alertDialogShape,
+                    title: const Text("Please wait..."),
+                    content: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CircularProgressIndicator(),
@@ -92,6 +95,7 @@ mixin RequiresRecentLogin {
         builder: (context) {
           TextEditingController passwordController = TextEditingController();
           return AlertDialog(
+            shape: alertDialogShape,
             title: const Text("Please enter your old password"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -213,26 +217,28 @@ mixin RequiresRecentLogin {
         barrierDismissible: false,
         context: Get.context!,
         builder: (context) => AlertDialog(
-              title: Text("Reauthenticate"),
-              content: Column(
+              shape: alertDialogShape,
+              title: const Text("Reauthenticate"),
+              content: const Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                       "This action requires reauthentication. Would you like us to send you an OTP?"),
                 ],
               ),
-              actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
+              actionsPadding: const EdgeInsets.only(right: 16, bottom: 16),
               actions: isVerifying.value
                   ? [
-                      SizedBox(
+                      const SizedBox(
                           height: 16,
                           width: 16,
                           child: CircularProgressIndicator())
                     ]
                   : [
-                      FilledButton(onPressed: Get.back, child: Text("NO")),
+                      FilledButton(
+                          onPressed: Get.back, child: const Text("NO")),
                       16.horizontalSpace,
-                      FilledButton(onPressed: sendOTP, child: Text("YES"))
+                      FilledButton(onPressed: sendOTP, child: const Text("YES"))
                     ],
             ));
   }
@@ -244,6 +250,7 @@ mixin RequiresRecentLogin {
         builder: (context) {
           return Obx(() {
             return AlertDialog(
+              shape: alertDialogShape,
               title: const Text("Please enter OTP"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -278,7 +285,7 @@ mixin RequiresRecentLogin {
                       duration: const Duration(milliseconds: 300))
                 ],
               ),
-              actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
+              actionsPadding: const EdgeInsets.only(right: 16, bottom: 16),
               actions: [
                 Obx(() {
                   return isVerifying.value

@@ -353,6 +353,7 @@ mixin RedirectionMixin {
         context: Get.context!,
         builder: (context) {
           return AlertDialog(
+            shape: alertDialogShape,
             title: Text("Onboarding Pending"),
             content: Column(
               mainAxisSize: MainAxisSize.min,

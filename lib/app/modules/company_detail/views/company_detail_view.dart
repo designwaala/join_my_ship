@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_cli/get_cli.dart';
 import 'package:join_mp_ship/app/data/models/job_model.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:lottie/lottie.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
@@ -623,15 +624,12 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                                         context: Get.context!,
                                         barrierDismissible: false,
                                         builder: (context) => AlertDialog(
+                                          shape: alertDialogShape,
                                           title: const Text(
                                             "Are You Sure ?",
                                             textAlign: TextAlign.center,
                                             style:
                                                 TextStyle(color: Colors.blue),
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
                                           ),
                                           actionsPadding:
                                               const EdgeInsets.only(bottom: 25),

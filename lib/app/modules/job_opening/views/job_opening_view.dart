@@ -8,6 +8,7 @@ import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
@@ -881,18 +882,21 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            controller.likingJob.value ? CircularProgressIndicator():
-                                            TextButton.icon(
-                                                onPressed: controller.likeJob,
-                                                icon: const Icon(
-                                                  Icons.thumb_up_alt_outlined,
-                                                  size: 18,
-                                                ),
-                                                label: const Text(
-                                                  "Like",
-                                                  style:
-                                                      TextStyle(fontSize: 13),
-                                                )),
+                                            controller.likingJob.value
+                                                ? CircularProgressIndicator()
+                                                : TextButton.icon(
+                                                    onPressed:
+                                                        controller.likeJob,
+                                                    icon: const Icon(
+                                                      Icons
+                                                          .thumb_up_alt_outlined,
+                                                      size: 18,
+                                                    ),
+                                                    label: const Text(
+                                                      "Like",
+                                                      style: TextStyle(
+                                                          fontSize: 13),
+                                                    )),
                                             controller.applyingJob.value ==
                                                     controller
                                                         .jobOpening.value?.id
@@ -961,6 +965,8 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                                                   builder:
                                                                       (context) =>
                                                                           AlertDialog(
+                                                                    shape:
+                                                                        alertDialogShape,
                                                                     title:
                                                                         const Text(
                                                                       "Are You Sure ?",
@@ -970,12 +976,6 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                                                       style: TextStyle(
                                                                           color:
                                                                               Colors.blue),
-                                                                    ),
-                                                                    shape:
-                                                                        RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              20),
                                                                     ),
                                                                     actionsPadding: const EdgeInsets
                                                                             .only(

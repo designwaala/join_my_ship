@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,6 +42,7 @@ import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_type_provider.dart';
 import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
+import 'package:join_mp_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
 import 'package:join_mp_ship/firebase_options.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
@@ -54,6 +56,9 @@ String baseURL = "";
 
 GetIt getIt = GetIt.instance;
 PackageInfo? packageInfo;
+
+final alertDialogShape =
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(24));
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -113,8 +118,6 @@ void main() async {
     ..registerSingleton(CrewUserProvider())
     ..registerSingleton(CountryProvider())
     ..registerSingleton(StateProvider())
-    // ..registerSingleton(ServiceRecordProvider())
-    // ..registerSingleton(PreviousEmployerReferenceProvider())
     ..registerSingleton(UserDetailsProvider())
     ..registerSingleton(VesselTypeProvider())
     ..registerSingleton(SeaServiceProvider())
@@ -124,7 +127,6 @@ void main() async {
     ..registerSingleton(CocProvider())
     ..registerSingleton(CopProvider())
     ..registerSingleton(WatchKeepingProvider())
-    // ..registerSingleton(JobPostProvider())
     ..registerSingleton(JobApplicationProvider())
     ..registerSingleton(JobProvider())
     ..registerSingleton(JobCOCPostProvider())
@@ -142,10 +144,30 @@ void main() async {
     ..registerSingleton(HighlightProvider())
     ..registerSingleton(SubscriptionProvider());
   StreamSubscription<String?>? uriStream;
+  notificationListeners();
 
   uriStream = linkStream.listen((event) {
     Uri uri = Uri.parse(event ?? "");
     _handleLink(uri);
+  });
+}
+
+notificationListeners() {
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
+    if (event.data["post_id"] != null) {
+      Get.toNamed(Routes.JOB_OPENING,
+          arguments: JobOpeningArguments(
+              jobId: int.tryParse(event.data["post_id"] ?? "")),
+          preventDuplicates: false);
+    }
+  });
+
+  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+    if (PreferencesHelper.instance.localFCMToken != newToken) {
+      getIt<FcmTokenProvider>()
+          .postFCMToken(newToken)
+          .then((value) => PreferencesHelper.instance.setFCMToken(newToken));
+    }
   });
 }
 
@@ -157,6 +179,7 @@ _handleLink(Uri uri) async {
           context: Get.context!,
           builder: (context) {
             return AlertDialog(
+              shape: alertDialogShape,
               title: Text("Please wait while we fetch your details"),
               content: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

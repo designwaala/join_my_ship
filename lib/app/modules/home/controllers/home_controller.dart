@@ -100,13 +100,6 @@ class HomeController extends GetxController {
         getIt<FcmTokenProvider>().postFCMToken(fcmToken);
       }
     }
-    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
-      if (PreferencesHelper.instance.localFCMToken != newToken) {
-        getIt<FcmTokenProvider>()
-            .postFCMToken(newToken)
-            .then((value) => PreferencesHelper.instance.setFCMToken(newToken));
-      }
-    });
     isLoading.value = false;
   }
 

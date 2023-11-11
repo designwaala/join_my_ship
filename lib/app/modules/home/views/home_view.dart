@@ -240,7 +240,7 @@ class HomeView extends GetView<HomeController> {
             ClipPath(
               clipper: CustomShape(),
               child: Container(
-                height: 190,
+                height: 210,
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: [
                   Color.fromRGBO(1, 66, 211, 1),
@@ -444,13 +444,13 @@ class HomeView extends GetView<HomeController> {
                     onPressed: () {
                       Get.toNamed(Routes.COMPANIES);
                     },
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     child: Text("More",
                         style: Get.textTheme.bodyMedium
                             ?.copyWith(color: Get.theme.primaryColor))),
-                16.horizontalSpace
+                28.horizontalSpace
               ],
             ),
+            12.verticalSpace,
             ...controller.featuredCompanies.map(
               (company) => InkWell(
                 onTap: () {
@@ -565,7 +565,7 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             Positioned(
-              bottom: 0,
+              bottom: 16,
               left: 28,
               right: 28,
               child: PhysicalModel(
@@ -579,6 +579,7 @@ class HomeView extends GetView<HomeController> {
                             fillColor: Colors.white,
                             filled: true,
                             hintText: "Search job here...",
+                            contentPadding: EdgeInsets.symmetric(vertical: 8),
                             prefixIcon: Icon(Icons.search,
                                 color: Get.theme.primaryColor),
                             border: OutlineInputBorder(
@@ -700,7 +701,7 @@ class HomeView extends GetView<HomeController> {
                 },
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   decoration: BoxDecoration(

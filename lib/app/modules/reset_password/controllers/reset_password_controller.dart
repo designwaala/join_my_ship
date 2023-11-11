@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_alert_dialog.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
@@ -35,9 +36,10 @@ class ResetPasswordController extends GetxController {
     if (formKey.currentState!.validate()) {
       showDialog(
           context: Get.context!,
-          builder: (context) => const AlertDialog(
-                title: Text("Please wait..."),
-                content: Row(
+          builder: (context) => AlertDialog(
+                shape: alertDialogShape,
+                title: const Text("Please wait..."),
+                content: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircularProgressIndicator(),

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 
@@ -65,6 +66,7 @@ class _UnFocusGestureState extends State<UnFocusGesture> {
               context: Get.context!,
               builder: (context) {
                 return AlertDialog(
+                  shape: alertDialogShape,
                   title: Text("Would you like to sign out"),
                   actions: [
                     OutlinedButton(

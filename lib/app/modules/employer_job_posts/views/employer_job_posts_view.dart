@@ -10,6 +10,7 @@ import 'package:join_mp_ship/app/modules/employer_job_applications/controllers/e
 import 'package:join_mp_ship/app/modules/employer_job_posts/controllers/employer_job_posts_controller.dart';
 import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
@@ -33,7 +34,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                     children: [
                       LottieBuilder.asset("assets/animations/no_results.json"),
                       16.verticalSpace,
-                      Text("No Jobs Posted By You.")
+                      const Text("No Jobs Posted By You.")
                     ],
                   )
                 : controller.buildCaptureWidget.value
@@ -364,19 +365,96 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                             ],
                                           ), */
                 5.verticalSpace,
-                if (!shareView)
+                if (!shareView) ...[
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       controller.highlightingJob.value == job.id
-                          ? CircularProgressIndicator()
+                          ? const CircularProgressIndicator()
                           : TextButton.icon(
-                              onPressed: () {
+                              onPressed: () async {
                                 if (job.id == null) {
                                   return;
                                 }
-                                controller.highlightJob(job.id!);
+                                bool? shouldHighlight = await showDialog(
+                                  context: Get.context!,
+                                  barrierDismissible: false,
+                                  builder: (context) => AlertDialog(
+                                    shape: alertDialogShape,
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Spacer(),
+                                        Icon(Icons.send,
+                                            color: Get.theme.primaryColor),
+                                        8.horizontalSpace,
+                                        Text("Highlight",
+                                            style: Get.textTheme.bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Get
+                                                        .theme.primaryColor)),
+                                        const Spacer(),
+                                        const Tooltip(
+                                            message:
+                                                "Highlighting a job post will send one time notification to all the ranks required.",
+                                            child: Icon(Icons.info_outline,
+                                                size: 16))
+                                      ],
+                                    ),
+                                    actionsPadding:
+                                        const EdgeInsets.only(bottom: 25),
+                                    content: const Text(
+                                      "Are you sure you want to use\nyour 1000 credits?",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 14.5,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    actionsAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: Get.back,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          foregroundColor: Colors.black,
+                                          elevation: 3,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 35),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                        ),
+                                        child: const Text("NO"),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          Get.back(result: true);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 3,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 35),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                        ),
+                                        child: const Text("YES"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                if (shouldHighlight == true) {
+                                  controller.highlightJob(job.id!);
+                                }
                               },
                               icon: const Icon(
                                 Icons.send,
@@ -389,45 +467,26 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                 style: TextStyle(fontSize: 13),
                               ),
                             ),
-                      Column(
-                        children: [
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20))),
-                              onPressed: () => Get.toNamed(
-                                  Routes.EMPLOYER_JOB_APPLICATIONS,
-                                  arguments: EmployerJobApplicationsArguments(
-                                      jobId: job.id)),
-                              child: const Text(
-                                "Applications",
-                                style: TextStyle(fontSize: 13),
-                              )),
-                          TextButton.icon(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.thumb_up,
-                                size: 18,
-                                color: Colors.blue,
-                              ),
-                              style: TextButton.styleFrom(
-                                splashFactory: NoSplash.splashFactory,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                /* shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                    side: const BorderSide(
-                                        width: 1.8, color: Colors.blue)), */
-                              ),
-                              label: Text(
-                                " ${job.jobLikeCount} Likes",
-                                style: Get.textTheme.bodyMedium
-                                    ?.copyWith(color: Colors.blue),
-                              )),
-                        ],
-                      ),
+                      TextButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.thumb_up,
+                            size: 18,
+                            color: Colors.blue,
+                          ),
+                          style: TextButton.styleFrom(
+                            splashFactory: NoSplash.splashFactory,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            /* shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                side: const BorderSide(
+                                    width: 1.8, color: Colors.blue)), */
+                          ),
+                          label: Text(
+                            " ${job.jobLikeCount}",
+                            style: Get.textTheme.bodyMedium
+                                ?.copyWith(color: Colors.blue),
+                          )),
                       TextButton.icon(
                         onPressed: () {},
                         icon: const Icon(
@@ -443,6 +502,24 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                       ),
                     ],
                   ),
+                  SizedBox(
+                    width: double.maxFinite,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12))),
+                        onPressed: () => Get.toNamed(
+                            Routes.EMPLOYER_JOB_APPLICATIONS,
+                            arguments: EmployerJobApplicationsArguments(
+                                jobId: job.id)),
+                        child: const Text(
+                          "View Applications",
+                          style: TextStyle(fontSize: 13),
+                        )),
+                  ),
+                  16.verticalSpace
+                ]
               ],
             ),
           ),

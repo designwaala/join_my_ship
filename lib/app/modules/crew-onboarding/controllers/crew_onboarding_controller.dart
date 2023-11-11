@@ -970,6 +970,7 @@ mixin PickImage {
     return showDialog(
         context: Get.context!,
         builder: (context) => AlertDialog(
+              shape: alertDialogShape,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1005,6 +1006,7 @@ mixin PickImage {
         context: Get.context!,
         builder: (context) {
           return AlertDialog(
+            shape: alertDialogShape,
             title: const Text("Are you sure you want to update to this image?"),
             content: Container(
               height: 100,

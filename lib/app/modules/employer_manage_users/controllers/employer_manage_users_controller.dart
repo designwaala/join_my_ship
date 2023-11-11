@@ -63,8 +63,7 @@ class EmployerManageUsersController extends GetxController {
           context: Get.context!,
           builder: (context) {
             return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32)),
+              shape: alertDialogShape,
               titlePadding: EdgeInsets.zero,
               title: SizedBox(
                 height: 180,

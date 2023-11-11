@@ -8,6 +8,7 @@ import 'package:join_mp_ship/app/data/models/job_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
@@ -903,15 +904,12 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                             context: Get.context!,
                                             barrierDismissible: false,
                                             builder: (context) => AlertDialog(
+                                              shape: alertDialogShape,
                                               title: const Text(
                                                 "Are You Sure ?",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Colors.blue),
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
                                               ),
                                               actionsPadding:
                                                   const EdgeInsets.only(

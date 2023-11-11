@@ -77,6 +77,8 @@ import '../modules/sign_up_phone_number/bindings/sign_up_phone_number_binding.da
 import '../modules/sign_up_phone_number/views/sign_up_phone_number_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+import '../modules/subscriptions/bindings/subscriptions_binding.dart';
+import '../modules/subscriptions/views/subscriptions_view.dart';
 import '../modules/success/bindings/success_binding.dart';
 import '../modules/success/views/success_view.dart';
 import '../modules/view_jobs_posted/bindings/view_jobs_posted_binding.dart';
@@ -283,6 +285,11 @@ class AppPages {
       name: _Paths.CREW_LIST,
       page: () => const CrewListView(),
       binding: CrewListBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUBSCRIPTIONS,
+      page: () => const SubscriptionsView(),
+      binding: SubscriptionsBinding(),
     ),
   ];
 }

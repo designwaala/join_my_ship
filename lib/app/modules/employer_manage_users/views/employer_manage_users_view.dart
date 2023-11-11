@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
 import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
@@ -144,10 +145,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                         builder: (context) {
                                           return Obx(() {
                                             return AlertDialog(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          32)),
+                                              shape: alertDialogShape,
                                               title: Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,

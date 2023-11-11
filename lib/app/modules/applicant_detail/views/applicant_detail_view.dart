@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_cli/common/utils/json_serialize/json_ast/utils/grapheme_splitter.dart';
 import 'package:join_mp_ship/app/data/models/application_model.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_mp_ship/main.dart';
 
 import '../controllers/applicant_detail_controller.dart';
 
@@ -14,7 +15,7 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: controller.parentKey,
+        key: controller.parentKey,
         appBar: AppBar(
           title: Text(controller.args?.viewType == ViewType.crewDetail
               ? "Crew"
@@ -41,6 +42,7 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                                 showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
+                                          shape: alertDialogShape,
                                           content: CachedNetworkImage(
                                               imageUrl: controller
                                                       .applicant?.profilePic ??
@@ -393,56 +395,78 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                             if (controller.args?.viewType !=
                                 ViewType.crewDetail)
                               controller.isShortListing.value
-                                  ? SizedBox(
+                                  ? const SizedBox(
                                       height: 20,
                                       width: 20,
-                                      child: const CircularProgressIndicator())
-                                  : InkWell(
-                                      onTap: controller.shortList,
-                                      child: Image.asset(
-                                        controller.application.value
-                                                    ?.shortlistedStatus ==
-                                                true
-                                            ? 'assets/icons/bookmark_filled.png'
-                                            : 'assets/icons/bookmark_outlined.png',
-                                        height: 32,
-                                        width: 32,
-                                        color: Get.theme.primaryColor,
-                                      ),
-                                    ),
-                            const Spacer(),
-                            controller.isGettingResume.value
-                                ? const CircularProgressIndicator()
-                                : FilledButton(
-                                    onPressed: controller.downloadResume,
-                                    child: const Text("Download Resume")),
+                                      child: CircularProgressIndicator())
+                                  : OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                          side: BorderSide(
+                                            color: Get.theme.primaryColor,
+                                          ),
+                                          foregroundColor:
+                                              Get.theme.primaryColor,
+                                          shape: RoundedRectangleBorder(
+                                              side: const BorderSide(
+                                                width: 5.0,
+                                                color: Colors.blue,
+                                                style: BorderStyle.solid,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(64))),
+                                      onPressed: controller.shortList,
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.bookmark_outline),
+                                          4.horizontalSpace,
+                                          const Text("Shortlist")
+                                        ],
+                                      )),
                             const Spacer(),
                             controller.isFollowing.value
-                                ? SizedBox(
+                                ? const SizedBox(
                                     height: 16,
                                     width: 16,
                                     child: CircularProgressIndicator(),
                                   )
-                                : FilledButton(
-                                        onPressed: controller.follow,
-                                        child: Text("Save Profile")) ??
-                                    Padding(
-                                      padding: const EdgeInsets.all(4),
-                                      child: Image.asset(
-                                        controller.application.value
-                                                    ?.shortlistedStatus ==
-                                                true
-                                            ? 'assets/icons/bookmark_filled.png'
-                                            : 'assets/icons/bookmark_outlined.png',
-                                        height: 28,
-                                        width: 28,
-                                        color: Colors.transparent,
-                                      ),
-                                    ),
+                                : OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                        side: BorderSide(
+                                          color: Get.theme.primaryColor,
+                                        ),
+                                        foregroundColor: Get.theme.primaryColor,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(64))),
+                                    onPressed: controller.follow,
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.favorite_outline),
+                                        4.horizontalSpace,
+                                        const Text("Save Profile")
+                                      ],
+                                    ))
                           ],
                         ),
                       ),
-                      32.verticalSpace,
+                      24.verticalSpace,
+                      controller.isGettingResume.value
+                          ? const CircularProgressIndicator()
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
+                              child: FilledButton(
+                                  onPressed: controller.downloadResume,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.download),
+                                      4.horizontalSpace,
+                                      const Text("Download Resume")
+                                    ],
+                                  )),
+                            ),
+                      24.verticalSpace,
                     ],
                   ),
                 );

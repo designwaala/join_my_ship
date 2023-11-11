@@ -11,6 +11,7 @@ import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_mp_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 
@@ -86,20 +87,22 @@ class ProfileController extends GetxController with PickImage {
         context: Get.context!,
         builder: (context) {
           return AlertDialog(
-            title: Text("Are you sure you want to update to this Resume?"),
+            shape: alertDialogShape,
+            title:
+                const Text("Are you sure you want to update to this Resume?"),
             actions: [
               OutlinedButton(
                   onPressed: () async {
                     Get.back(result: true);
                   },
-                  child: Text("Yes")),
+                  child: const Text("Yes")),
               8.horizontalSpace,
               OutlinedButton(
                   onPressed: () {
                     pickedImage.value = null;
                     Get.back(result: false);
                   },
-                  child: Text("No")),
+                  child: const Text("No")),
               8.horizontalSpace,
             ],
           );
@@ -125,15 +128,17 @@ class ProfileController extends GetxController with PickImage {
   }
 
   Future<void> highlightCrew() async {
+    highlight = null;
     getSubscriptions();
     await showDialog(
         context: Get.context!,
         builder: (context) {
           return Obx(() {
             return AlertDialog(
-              title: Text("Choose the Plan"),
+              shape: alertDialogShape,
+              title: const Text("Choose the Plan"),
               content: isLoadingSubscriptions.value
-                  ? Row(
+                  ? const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [CircularProgressIndicator()],
                     )
@@ -151,6 +156,10 @@ class ProfileController extends GetxController with PickImage {
                                         selectedSubscription.value = e;
                                       },
                                       child: Card(
+                                        color: selectedSubscription.value?.id ==
+                                                e.id
+                                            ? Get.theme.primaryColor
+                                            : null,
                                         shape: RoundedRectangleBorder(
                                             side: selectedSubscription
                                                         .value?.id ==
@@ -169,28 +178,46 @@ class ProfileController extends GetxController with PickImage {
                                             children: [
                                               Row(
                                                 children: [
-                                                  Icon(
-                                                      selectedSubscription
-                                                                  .value?.id ==
-                                                              e.id
-                                                          ? Icons.check_box
-                                                          : Icons
-                                                              .check_box_outline_blank,
-                                                      color: Get
-                                                          .theme.primaryColor),
                                                   4.horizontalSpace,
                                                   Text(
                                                       e.planName?.planName ??
                                                           "",
-                                                      style: Get.textTheme
-                                                          .titleSmall),
+                                                      style: Get
+                                                          .textTheme.titleSmall
+                                                          ?.copyWith(
+                                                              color: selectedSubscription
+                                                                          .value
+                                                                          ?.id ==
+                                                                      e.id
+                                                                  ? Colors.white
+                                                                  : null)),
                                                 ],
                                               ),
                                               8.verticalSpace,
                                               Text(
-                                                  "Days Active: ${e.daysActive}"),
+                                                  "Days Active: ${e.daysActive}",
+                                                  style: Get
+                                                      .textTheme.bodyMedium
+                                                      ?.copyWith(
+                                                          color:
+                                                              selectedSubscription
+                                                                          .value
+                                                                          ?.id ==
+                                                                      e.id
+                                                                  ? Colors.white
+                                                                  : null)),
                                               Text(
-                                                  "Points Required: ${e.points}")
+                                                  "Credits Required: ${e.points}",
+                                                  style: Get
+                                                      .textTheme.bodyMedium
+                                                      ?.copyWith(
+                                                          color:
+                                                              selectedSubscription
+                                                                          .value
+                                                                          ?.id ==
+                                                                      e.id
+                                                                  ? Colors.white
+                                                                  : null))
                                             ],
                                           ),
                                         ),
@@ -200,8 +227,9 @@ class ProfileController extends GetxController with PickImage {
                               .toList() ??
                           []),
               actions: [
+                TextButton(onPressed: Get.back, child: Text("Close")),
                 isHighlighting.value
-                    ? CircularProgressIndicator()
+                    ? const CircularProgressIndicator()
                     : FilledButton(
                         onPressed: selectedSubscription.value == null
                             ? null
@@ -217,19 +245,45 @@ class ProfileController extends GetxController with PickImage {
                                 isHighlighting.value = false;
                                 Get.back();
                               },
-                        child: Text("Highlight"))
+                        child: const Text("Highlight"))
               ],
+              actionsPadding: EdgeInsets.only(right: 32, bottom: 16),
             );
           });
         });
-    if (highlight != null) {
+    if (highlight?.daysActive != null) {
       showDialog(
           context: Get.context!,
           builder: (context) {
             return AlertDialog(
-              title: Text("Your Profile was successfully Highlighted"),
+              shape: alertDialogShape,
+              title: const Text("Your Profile was successfully Highlighted"),
               content: Text("Remaining Days ${highlight?.daysActive}."),
-              actions: [FilledButton(onPressed: Get.back, child: Text("OK"))],
+              actions: [
+                FilledButton(onPressed: Get.back, child: const Text("DONE"))
+              ],
+              actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
+            );
+          });
+    } else if (highlight?.success == false && highlight?.message != null) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) {
+            return AlertDialog(
+              shape: alertDialogShape,
+              title: Text(highlight?.message ?? ""),
+              contentPadding: EdgeInsets.zero,
+              actions: [
+                TextButton(
+                    onPressed: Get.back, child: const Text("No, Thanks")),
+                4.horizontalSpace,
+                FilledButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.SUBSCRIPTIONS);
+                    },
+                    child: const Text("Buy Credits"))
+              ],
+              actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
             );
           });
     }

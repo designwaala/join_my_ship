@@ -257,6 +257,7 @@ class EmployerCreateUserController extends GetxController {
     return showDialog(
         context: Get.context!,
         builder: (context) => AlertDialog(
+              shape: alertDialogShape,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
