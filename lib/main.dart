@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:join_mp_ship/app/data/providers/application_provider.dart';
+import 'package:join_mp_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cdc_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
@@ -142,7 +143,9 @@ void main() async {
     ..registerSingleton(LikedPostProvider())
     ..registerSingleton(EmployerCountsProvider())
     ..registerSingleton(HighlightProvider())
-    ..registerSingleton(SubscriptionProvider());
+    ..registerSingleton(SubscriptionProvider())
+    ..registerSingleton(BoostingProvider());
+    
   StreamSubscription<String?>? uriStream;
   notificationListeners();
 

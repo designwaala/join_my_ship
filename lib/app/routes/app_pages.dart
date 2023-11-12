@@ -10,6 +10,8 @@ import '../modules/applicant_detail/bindings/applicant_detail_binding.dart';
 import '../modules/applicant_detail/views/applicant_detail_view.dart';
 import '../modules/application_status/bindings/application_status_binding.dart';
 import '../modules/application_status/views/application_status_view.dart';
+import '../modules/boosting/bindings/boosting_binding.dart';
+import '../modules/boosting/views/boosting_view.dart';
 import '../modules/change_password/bindings/change_password_binding.dart';
 import '../modules/change_password/views/change_password_view.dart';
 import '../modules/choose_employer/bindings/choose_employer_binding.dart';
@@ -92,11 +94,14 @@ class AppPages {
   static const INITIAL = Routes.SPLASH;
 
   static final routes = [
-    GetPage(
-        name: _Paths.HOME,
-        page: () => const HomeView(),
-        bindings: [HomeBinding(), ProfileBinding(), JobOpeningsBinding()],
-        middlewares: [ConnectivityMiddleWare()]),
+    GetPage(name: _Paths.HOME, page: () => const HomeView(), bindings: [
+      HomeBinding(),
+      BoostingBinding(),
+      ProfileBinding(),
+      JobOpeningsBinding(),
+    ], middlewares: [
+      ConnectivityMiddleWare()
+    ]),
     GetPage(
         name: _Paths.SPLASH,
         page: () => const SplashView(),
@@ -290,6 +295,11 @@ class AppPages {
       name: _Paths.SUBSCRIPTIONS,
       page: () => const SubscriptionsView(),
       binding: SubscriptionsBinding(),
+    ),
+    GetPage(
+      name: _Paths.BOOSTING,
+      page: () => const BoostingView(),
+      binding: BoostingBinding(),
     ),
   ];
 }

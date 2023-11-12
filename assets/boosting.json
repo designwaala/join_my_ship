@@ -1,0 +1,89 @@
+{
+    "crew": [
+        {
+            "user_boost": {
+                "id": 164,
+                "email": "admin@designwaala.in.net",
+                "user_link": "",
+                "created_by": "164",
+                "screen_check": 1,
+                "company_name": "Google",
+                "website": "www.google.com",
+                "first_name": "Arslan",
+                "last_name": "Mohd",
+                "profilePic": "/media/profilePic/flower-drawings-2018-45.jpg"
+            },
+            "days_active": 30,
+            "is_active": true
+        },
+        {
+            "user_boost": {
+                "id": 158,
+                "email": "artistarsh845@gmail.com",
+                "user_link": null,
+                "created_by": "158",
+                "screen_check": 3,
+                "company_name": null,
+                "website": null,
+                "first_name": "ARSLAN",
+                "last_name": null,
+                "profilePic": "/media/profilePic/1683432609414_5QL27kg.jpg"
+            },
+            "days_active": 30,
+            "is_active": true
+        }
+    ],
+    "employer": [
+        {
+            "user_boost": {
+                "id": 164,
+                "email": "admin@designwaala.in.net",
+                "user_link": "",
+                "created_by": "164",
+                "screen_check": 1,
+                "company_name": "Google",
+                "website": "www.google.com",
+                "first_name": "Arslan",
+                "last_name": "Mohd",
+                "profilePic": "/media/profilePic/flower-drawings-2018-45.jpg"
+            },
+            "post_boost": {
+                "id": 31,
+                "vessel_id": 5,
+                "tentative_joining": "24-08-2023",
+                "GRT": "1237484",
+                "mail_info": false,
+                "number_info": false,
+                "expiry_in_day": "700",
+                "posted_by": {
+                    "id": 149,
+                    "first_name": "Arjun",
+                    "last_name": "Verma",
+                    "company_name": "Westline Shipping Pvt Ltd",
+                    "profilePic": "/media/profilePic/IMG-20230813-WA0022.jpg",
+                    "email": "natini3041@bagonew.com",
+                    "number": "+91-6394216554",
+                    "rank_id": 1,
+                    "promotion_applied": false,
+                    "userfollow_status": false
+                },
+                "is_active": true,
+                "Job_Rank_wages": [
+                    {
+                        "id": 83,
+                        "job_id": 31,
+                        "rank_number": 8,
+                        "wages": "8000.0"
+                    }
+                ],
+                "job_coc": [],
+                "job_cop": [],
+                "job_Watch_Keeping": [],
+                "joblike_count": 0,
+                "userlikedjob_status": false
+            },
+            "days_active": 30,
+            "is_active": true
+        }
+    ]
+}

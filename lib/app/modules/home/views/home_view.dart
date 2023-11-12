@@ -8,7 +8,9 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:join_mp_ship/app/data/models/boosting_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/modules/boosting/views/boosting_view.dart';
 import 'package:join_mp_ship/app/modules/company_detail/controllers/company_detail_controller.dart';
 import 'package:join_mp_ship/app/modules/crew_list/controllers/crew_list_controller.dart';
 import 'package:join_mp_ship/app/modules/follow/controllers/followings_controller.dart';
@@ -129,7 +131,7 @@ class HomeView extends GetView<HomeController> {
                               ? _buildBody()
                               : _buildEmployerDashboard();
                         case 2:
-                          return const SizedBox();
+                          return const BoostingView();
                         case 3:
                           return const SizedBox();
                         case 4:
