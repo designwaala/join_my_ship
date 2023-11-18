@@ -20,6 +20,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: controller.parentKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -488,7 +489,12 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                 ?.copyWith(color: Colors.blue),
                           )),
                       TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (job.id == null) {
+                            return;
+                          }
+                          controller.boostJob(job.id!);
+                        },
                         icon: const Icon(
                           Icons.diamond_outlined,
                           size: 22,

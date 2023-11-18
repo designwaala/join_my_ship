@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/modules/boosting/views/widgets/crew_profile_view.dart';
+import 'package:join_mp_ship/app/modules/boosting/views/widgets/job_post_view.dart';
 
 import '../controllers/boosting_controller.dart';
 
@@ -39,23 +41,54 @@ class BoostingView extends GetView<BoostingController> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10)),
                         child: Row(
-                          children: [
-                            Expanded(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Job Posts"),
-                              ],
-                            )),
-                            Expanded(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Profiles"),
-                              ],
-                            )),
-                          ],
-                        ),
+                            children: BoostingViewType.values
+                                .map((view) => Expanded(
+                                        child: InkWell(
+                                      onTap: () => controller.view.value = view,
+                                      child: Container(
+                                        height: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                            color: controller.view.value == view
+                                                ? Get.theme.primaryColor
+                                                : null,
+                                            boxShadow: controller.view.value ==
+                                                    view
+                                                ? [
+                                                    const BoxShadow(
+                                                        offset: Offset(0, 4),
+                                                        blurRadius: 6,
+                                                        color: Color.fromRGBO(
+                                                            60, 162, 255, 0.10))
+                                                  ]
+                                                : null,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(view.name,
+                                                style: Get.textTheme.titleSmall
+                                                    ?.copyWith(
+                                                        color: controller.view
+                                                                    .value ==
+                                                                view
+                                                            ? Colors.white
+                                                            : null)),
+                                          ],
+                                        ),
+                                      ),
+                                    )))
+                                .toList()),
+                      ),
+                      16.verticalSpace,
+                      Expanded(
+                        child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            child: controller.view.value ==
+                                    BoostingViewType.jobPost
+                                ? const JobPostBoostingView()
+                                : const CrewProfileBoostingView()),
                       )
                     ],
                   ),

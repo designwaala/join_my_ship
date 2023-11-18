@@ -3,26 +3,32 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:join_mp_ship/app/data/models/boosting_model.dart';
 import 'package:join_mp_ship/app/data/models/coc_model.dart';
 import 'package:join_mp_ship/app/data/models/cop_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/models/job_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/data/models/subscription_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
+import 'package:join_mp_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_mp_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -54,6 +60,15 @@ class EmployerJobPostsController extends GetxController {
   RxBool isSharing = false.obs;
   Job? jobToBuild;
   RxnInt highlightingJob = RxnInt();
+
+  List<Subscription>? subscriptions;
+  RxBool isLoadingSubscriptions = false.obs;
+  Rxn<Subscription> selectedSubscription = Rxn();
+  RxBool isBoosting = false.obs;
+  BoostingResponse? boostingResponse;
+
+  final fToast = FToast();
+  final parentKey = GlobalKey();
 
   @override
   void onInit() {
@@ -180,5 +195,149 @@ http://designwaala.me/job/?job_id=${job.id}
             );
           });
     }
+  }
+
+  Future<void> getSubscriptions() async {
+    isLoadingSubscriptions.value = true;
+    subscriptions = UserStates.instance.subscription ??
+        await getIt<SubscriptionProvider>().getSubscriptions();
+    isLoadingSubscriptions.value = false;
+  }
+
+  Future<void> boostJob(int jobId) async {
+    getSubscriptions();
+    showDialog(
+        context: Get.context!,
+        builder: (context) {
+          return Obx(() {
+            return AlertDialog(
+              shape: alertDialogShape,
+              title: const Text("Choose the Plan"),
+              content: isLoadingSubscriptions.value
+                  ? const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [CircularProgressIndicator()],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: subscriptions
+                              ?.where(
+                                  (e) => e.isTypeKey?.type == PlanType.boosting)
+                              .map((e) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        selectedSubscription.value = e;
+                                      },
+                                      child: Card(
+                                        color: selectedSubscription.value?.id ==
+                                                e.id
+                                            ? Get.theme.primaryColor
+                                            : null,
+                                        shape: RoundedRectangleBorder(
+                                            side: selectedSubscription
+                                                        .value?.id ==
+                                                    e.id
+                                                ? BorderSide(
+                                                    color:
+                                                        Get.theme.primaryColor)
+                                                : BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  4.horizontalSpace,
+                                                  Text(
+                                                      e.planName?.planName ??
+                                                          "",
+                                                      style: Get
+                                                          .textTheme.titleSmall
+                                                          ?.copyWith(
+                                                              color: selectedSubscription
+                                                                          .value
+                                                                          ?.id ==
+                                                                      e.id
+                                                                  ? Colors.white
+                                                                  : null)),
+                                                ],
+                                              ),
+                                              8.verticalSpace,
+                                              Text(
+                                                  "Days Active: ${e.daysActive}",
+                                                  style: Get
+                                                      .textTheme.bodyMedium
+                                                      ?.copyWith(
+                                                          color:
+                                                              selectedSubscription
+                                                                          .value
+                                                                          ?.id ==
+                                                                      e.id
+                                                                  ? Colors.white
+                                                                  : null)),
+                                              Text(
+                                                  "Credits Required: ${e.points}",
+                                                  style: Get
+                                                      .textTheme.bodyMedium
+                                                      ?.copyWith(
+                                                          color:
+                                                              selectedSubscription
+                                                                          .value
+                                                                          ?.id ==
+                                                                      e.id
+                                                                  ? Colors.white
+                                                                  : null))
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ))
+                              .toList() ??
+                          []),
+              actions: [
+                TextButton(onPressed: Get.back, child: Text("Close")),
+                isBoosting.value
+                    ? const CircularProgressIndicator()
+                    : FilledButton(
+                        onPressed: selectedSubscription.value == null
+                            ? null
+                            : () async {
+                                if (selectedSubscription.value?.planName?.id ==
+                                    null) {
+                                  return;
+                                }
+                                isBoosting.value = true;
+                                boostingResponse =
+                                    await getIt<BoostingProvider>().boostJob(
+                                        subscriptionId: selectedSubscription
+                                            .value!.planName!.id!,
+                                        postBoost: jobId);
+                                if (boostingResponse?.postBoost != null) {
+                                  fToast.showToast(
+                                      child: successToast(
+                                          "Job Post Boosted Successfully"));
+                                }
+                                isBoosting.value = false;
+                                Get.back();
+                              },
+                        child: const Text("Boost"))
+              ],
+              actionsPadding: EdgeInsets.only(right: 32, bottom: 16),
+            );
+          });
+        });
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    fToast.init(parentKey.currentContext!);
   }
 }

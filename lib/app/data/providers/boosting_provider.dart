@@ -19,6 +19,18 @@ class BoostingProvider extends WrapperConnect {
     return response.body;
   }
 
+  Future<CrewBoostingList?> getCrewBoosting() async {
+    final response = await get("crew/get_boosted_crew",
+        decoder: (data) => CrewBoostingList.fromJson(data));
+    return response.body;
+  }
+
+  Future<JobBoostingList?> getJobBoosting() async {
+    final response = await get("crew/get_boosted_employer",
+        decoder: (data) => JobBoostingList.fromJson(data));
+    return response.body;
+  }
+
   Future<BoostingResponse?> boostCrewProfile(
       {required int subscriptionId}) async {
     final response = await multipartPost(

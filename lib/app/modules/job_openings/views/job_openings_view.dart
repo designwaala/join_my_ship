@@ -617,25 +617,6 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                         )
                       ],
                     ),
-                    // Flexible(
-                    //   child:
-                    //       RichText(
-                    //     maxLines: 2,
-                    //     text:
-                    //         TextSpan(
-                    //       children: [
-                    //         TextSpan(
-                    //             text:
-                    //                 "Vessel Type: ",
-                    //             style:
-                    //                 Get.textTheme.bodyLarge),
-                    //         TextSpan(
-                    //             text:
-                    //                 controller.vesselList?.vessels?.map((e) => e.subVessels ?? []).expand((e) => e).firstWhereOrNull((e) => e.id == job.vesselId)?.name ?? ""),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                     Row(
                       children: [
                         Flexible(

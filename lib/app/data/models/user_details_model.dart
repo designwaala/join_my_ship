@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+
 class UserDetails {
   int? id;
   int? userId;
+  CrewUser? user;
   String? iNDOSNumber;
   String? cDCNumber;
   String? cDCNumberValidTill;
@@ -22,6 +25,7 @@ class UserDetails {
   UserDetails(
       {this.id,
       this.userId,
+      this.user,
       this.iNDOSNumber,
       this.cDCNumber,
       this.cDCNumberValidTill,
@@ -40,7 +44,10 @@ class UserDetails {
 
   UserDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    userId = json['user_id'];
+    userId = json['user_id'] is int ? json['user_id'] : null;
+    user = json['user_id'] is Map<String, dynamic>
+        ? CrewUser.fromJson(json['user_id'])
+        : null;
     iNDOSNumber = json['INDOS_number'];
     cDCNumber = json['CDC_number'];
     cDCNumberValidTill = json['CDC_number_valid_till'];

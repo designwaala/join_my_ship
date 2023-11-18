@@ -296,6 +296,12 @@ class ProfileView extends GetView<ProfileController> {
                             text: "Highlight",
                             onTap: controller.highlightCrew,
                           ),
+                        if (controller.crewUser.value?.userTypeKey == 2)
+                          CardObject(
+                            iconPath: "assets/images/profile/help.png",
+                            text: "Boost",
+                            onTap: controller.boostCrew,
+                          ),
                       ].map((e) => InkWell(
                             onTap: () {
                               e.onTap();

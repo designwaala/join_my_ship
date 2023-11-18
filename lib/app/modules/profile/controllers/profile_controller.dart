@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/boosting_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/models/highlight_model.dart';
 import 'package:join_mp_ship/app/data/models/subscription_model.dart';
+import 'package:join_mp_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_mp_ship/app/data/providers/subscription_provider.dart';
@@ -32,7 +34,10 @@ class ProfileController extends GetxController with PickImage {
   String? version = packageInfo?.version;
   String? buildNumber = packageInfo?.buildNumber;
   RxBool isHighlighting = false.obs;
+  RxBool isBoosting = false.obs;
   Highlight? highlight;
+  BoostingResponse? boosting;
+
   List<Subscription>? subscriptions;
   RxBool isLoadingSubscriptions = false.obs;
   Rxn<Subscription> selectedSubscription = Rxn();
@@ -125,6 +130,169 @@ class ProfileController extends GetxController with PickImage {
     subscriptions = UserStates.instance.subscription ??
         await getIt<SubscriptionProvider>().getSubscriptions();
     isLoadingSubscriptions.value = false;
+  }
+
+  Future<void> boostCrew() async {
+    boosting = null;
+    getSubscriptions();
+    await showDialog(
+        context: Get.context!,
+        builder: (context) {
+          return Obx(() {
+            return AlertDialog(
+              shape: alertDialogShape,
+              title: const Text("Choose the Plan"),
+              content: isLoadingSubscriptions.value
+                  ? const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [CircularProgressIndicator()],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: subscriptions
+                              ?.where(
+                                  (e) => e.isTypeKey?.type == PlanType.boosting)
+                              .map((e) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        selectedSubscription.value = e;
+                                      },
+                                      child: Card(
+                                        color: selectedSubscription.value?.id ==
+                                                e.id
+                                            ? Get.theme.primaryColor
+                                            : null,
+                                        shape: RoundedRectangleBorder(
+                                            side: selectedSubscription
+                                                        .value?.id ==
+                                                    e.id
+                                                ? BorderSide(
+                                                    color:
+                                                        Get.theme.primaryColor)
+                                                : BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  4.horizontalSpace,
+                                                  Text(
+                                                      e.planName?.planName ??
+                                                          "",
+                                                      style: Get
+                                                          .textTheme.titleSmall
+                                                          ?.copyWith(
+                                                              color: selectedSubscription
+                                                                          .value
+                                                                          ?.id ==
+                                                                      e.id
+                                                                  ? Colors.white
+                                                                  : null)),
+                                                ],
+                                              ),
+                                              8.verticalSpace,
+                                              Text(
+                                                  "Days Active: ${e.daysActive}",
+                                                  style: Get
+                                                      .textTheme.bodyMedium
+                                                      ?.copyWith(
+                                                          color:
+                                                              selectedSubscription
+                                                                          .value
+                                                                          ?.id ==
+                                                                      e.id
+                                                                  ? Colors.white
+                                                                  : null)),
+                                              Text(
+                                                  "Credits Required: ${e.points}",
+                                                  style: Get
+                                                      .textTheme.bodyMedium
+                                                      ?.copyWith(
+                                                          color:
+                                                              selectedSubscription
+                                                                          .value
+                                                                          ?.id ==
+                                                                      e.id
+                                                                  ? Colors.white
+                                                                  : null))
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ))
+                              .toList() ??
+                          []),
+              actions: [
+                TextButton(onPressed: Get.back, child: Text("Close")),
+                isBoosting.value
+                    ? const CircularProgressIndicator()
+                    : FilledButton(
+                        onPressed: selectedSubscription.value == null
+                            ? null
+                            : () async {
+                                if (selectedSubscription.value?.planName?.id ==
+                                    null) {
+                                  return;
+                                }
+                                isBoosting.value = true;
+                                boosting = await getIt<BoostingProvider>()
+                                    .boostCrewProfile(
+                                        subscriptionId: selectedSubscription
+                                            .value!.planName!.id!);
+                                isBoosting.value = false;
+                                Get.back();
+                              },
+                        child: const Text("Boost"))
+              ],
+              actionsPadding: EdgeInsets.only(right: 32, bottom: 16),
+            );
+          });
+        });
+    if (boosting?.daysActive != null) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) {
+            return AlertDialog(
+              shape: alertDialogShape,
+              title: const Text("Your Profile was successfully Boosted"),
+              content: Text("Remaining Days ${boosting?.daysActive}."),
+              actions: [
+                FilledButton(onPressed: Get.back, child: const Text("DONE"))
+              ],
+              actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
+            );
+          });
+    }
+/*     else {
+      showDialog(
+          context: Get.context!,
+          builder: (context) {
+            return AlertDialog(
+              shape: alertDialogShape,
+              title: Text("Some Error Occurred."),
+              contentPadding: EdgeInsets.zero,
+              actions: [
+                TextButton(
+                    onPressed: Get.back, child: const Text("No, Thanks")),
+                4.horizontalSpace,
+                FilledButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.SUBSCRIPTIONS);
+                    },
+                    child: const Text("Buy Credits"))
+              ],
+              actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
+            );
+          });
+    } */
   }
 
   Future<void> highlightCrew() async {

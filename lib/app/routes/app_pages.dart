@@ -10,6 +10,10 @@ import '../modules/applicant_detail/bindings/applicant_detail_binding.dart';
 import '../modules/applicant_detail/views/applicant_detail_view.dart';
 import '../modules/application_status/bindings/application_status_binding.dart';
 import '../modules/application_status/views/application_status_view.dart';
+import '../modules/boosted_crew_profiles/bindings/boosted_crew_profiles_binding.dart';
+import '../modules/boosted_crew_profiles/views/boosted_crew_profiles_view.dart';
+import '../modules/boosted_jobs/bindings/boosted_jobs_binding.dart';
+import '../modules/boosted_jobs/views/boosted_jobs_view.dart';
 import '../modules/boosting/bindings/boosting_binding.dart';
 import '../modules/boosting/views/boosting_view.dart';
 import '../modules/change_password/bindings/change_password_binding.dart';
@@ -300,6 +304,16 @@ class AppPages {
       name: _Paths.BOOSTING,
       page: () => const BoostingView(),
       binding: BoostingBinding(),
+    ),
+    GetPage(
+      name: _Paths.BOOSTED_JOBS,
+      page: () => const BoostedJobsView(),
+      binding: BoostedJobsBinding(),
+    ),
+    GetPage(
+      name: _Paths.BOOSTED_CREW_PROFILES,
+      page: () => const BoostedCrewProfilesView(),
+      binding: BoostedCrewProfilesBinding(),
     ),
   ];
 }
