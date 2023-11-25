@@ -19,15 +19,28 @@ class BoostingProvider extends WrapperConnect {
     return response.body;
   }
 
-  Future<CrewBoostingList?> getCrewBoosting() async {
+  Future<CrewBoostingList?> getCrewBoosting({int? page}) async {
     final response = await get("crew/get_boosted_crew",
-        decoder: (data) => CrewBoostingList.fromJson(data));
+        query: {if (page != null) "page": "$page"}, decoder: (data) {
+      try {
+        return CrewBoostingList.fromJson(data);
+      } catch (e) {}
+      return null;
+    });
     return response.body;
   }
 
-  Future<JobBoostingList?> getJobBoosting() async {
-    final response = await get("crew/get_boosted_employer",
-        decoder: (data) => JobBoostingList.fromJson(data));
+  Future<List<Map<String, List<Employer>>>?> getJobBoosting({int? page}) async {
+    final response = await get<List<Map<String, List<Employer>>>>(
+        "crew/get_boosted_employer", decoder: (data) {
+      return List<Map<String, List<Employer>>>.from(data.map((e) =>
+          Map<String, List<Employer>>.fromEntries((e as Map<String, dynamic>)
+              .keys
+              .map((p0) => MapEntry<String, List<Employer>>(
+                  p0,
+                  List<Employer>.from(
+                      e[p0].map((p1) => Employer.fromJson(p1))))))));
+    }, query: {"limit": "10", if (page != null) "page": "$page"});
     return response.body;
   }
 

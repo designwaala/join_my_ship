@@ -199,7 +199,7 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                                                   ?.firstWhereOrNull((e) =>
                                                       e.id ==
                                                       controller
-                                                          .applicant?.country)
+                                                          .applicant?.countryId)
                                                   ?.countryName ??
                                               "",
                                           textAlign: TextAlign.end,

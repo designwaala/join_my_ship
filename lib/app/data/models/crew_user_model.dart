@@ -1,3 +1,4 @@
+import 'package:join_mp_ship/app/data/models/country_model.dart';
 import 'package:join_mp_ship/main.dart';
 
 class CrewUser {
@@ -36,7 +37,8 @@ class CrewUser {
   String? createdAt;
   String? modifiedAt;
   int? rankId;
-  int? country;
+  int? countryId;
+  Country? countryDetail;
   int? state;
   List<int>? groups;
   String? authKey;
@@ -84,7 +86,8 @@ class CrewUser {
       this.createdAt,
       this.modifiedAt,
       this.rankId,
-      this.country,
+      this.countryId,
+      this.countryDetail,
       this.state,
       this.groups,
       this.authKey,
@@ -138,7 +141,10 @@ class CrewUser {
     createdAt = json['created_at'];
     modifiedAt = json['modified_at'];
     rankId = json['rank_id'];
-    country = json['country'];
+    countryId = json['country'] is int? ? json['country'] : null;
+    countryDetail = json['country'] is Map<String, dynamic>
+        ? Country.fromJson(json['country'])
+        : null;
     state = json['state'];
     groups = json['groups']?.cast<int>();
     authKey = json['auth_key'];
@@ -194,7 +200,7 @@ class CrewUser {
     data['created_at'] = createdAt;
     data['modified_at'] = modifiedAt;
     data['rank_id'] = rankId?.toString();
-    data['country'] = country?.toString();
+    data['country'] = countryId?.toString();
     data['state'] = state?.toString();
     data['auth_key'] = authKey;
     data['screen_check'] = screenCheck?.toString();

@@ -385,7 +385,7 @@ class CrewOnboardingController extends GetxController with PickImage {
     uploadedResumePath.value = "$baseURL/${crewUser?.resume}";
     gender.value = crewUser?.gender;
     country.value =
-        countries.firstWhereOrNull((e) => e.id == crewUser?.country);
+        countries.firstWhereOrNull((e) => e.id == crewUser?.countryId);
     await getStates();
     state.value = states.firstWhereOrNull((e) => e.id == crewUser?.state);
   }
@@ -465,7 +465,7 @@ class CrewOnboardingController extends GetxController with PickImage {
               pincode: zipCode.text,
               dob: dateOfBirth.text,
               maritalStatus: maritalStatus.value,
-              country: country.value?.id,
+              countryId: country.value?.id,
               rankId: selectedRank.value?.id,
               gender: gender.value,
               userTypeKey: 2,
@@ -494,7 +494,7 @@ class CrewOnboardingController extends GetxController with PickImage {
               pincode: zipCode.text,
               dob: dateOfBirth.text,
               maritalStatus: maritalStatus.value,
-              country: country.value?.id,
+              countryId: country.value?.id,
               rankId: selectedRank.value?.id,
               gender: gender.value,
               userTypeKey: 2,

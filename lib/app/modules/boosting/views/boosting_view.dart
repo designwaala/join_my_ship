@@ -85,10 +85,10 @@ class BoostingView extends GetView<BoostingController> {
                       Expanded(
                         child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
-                            child: controller.view.value ==
+                            child: (controller.view.value ==
                                     BoostingViewType.jobPost
                                 ? const JobPostBoostingView()
-                                : const CrewProfileBoostingView()),
+                                : const CrewProfileBoostingView())),
                       )
                     ],
                   ),

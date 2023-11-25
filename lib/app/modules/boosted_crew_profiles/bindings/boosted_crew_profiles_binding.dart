@@ -10,3 +10,16 @@ class BoostedCrewProfilesBinding extends Bindings {
     );
   }
 }
+
+class BoostedTagCrewProfilesBinding extends Bindings {
+    final String tag;
+  BoostedTagCrewProfilesBinding(this.tag);
+
+  @override
+  void dependencies() {
+    Get.lazyPut<BoostedCrewProfilesController>(
+      () => BoostedCrewProfilesController(),
+      tag: tag
+    );
+  }
+}

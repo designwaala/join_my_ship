@@ -46,25 +46,34 @@ class DottedBorder extends CustomPainter {
 
     Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
 
-    //looping for number of stories to draw every story arc
-    for (int i = 0; i < numberOfStories; i++) {
-      //printing the arc
-      canvas.drawArc(
-          rect,
-          inRads(startOfArcInDegree),
-          //be careful here is:  "double sweepAngle", not "end"
-          inRads(arcLength),
-          false,
+    if (numberOfStories == 1) {
+      canvas.drawCircle(
+          Offset(size.width / 2, size.height / 2),
+          size.height / 2,
           Paint()
-            //here you can compare your SEEN story index with the arc index to make it grey
-            ..color = seenStoriesIndicies?.contains(i) == true
-                ? Colors.grey
-                : Get.theme.primaryColor
+            ..color = Get.theme.primaryColor
             ..strokeWidth = 4
             ..style = PaintingStyle.stroke);
+    } else {
+      for (int i = 0; i < numberOfStories; i++) {
+        //printing the arc
+        canvas.drawArc(
+            rect,
+            inRads(startOfArcInDegree),
+            //be careful here is:  "double sweepAngle", not "end"
+            inRads(arcLength),
+            false,
+            Paint()
+              //here you can compare your SEEN story index with the arc index to make it grey
+              ..color = seenStoriesIndicies?.contains(i) == true
+                  ? Colors.grey
+                  : Get.theme.primaryColor
+              ..strokeWidth = 4
+              ..style = PaintingStyle.stroke);
 
-      //the logic of spaces between the arcs is to start the next arc after jumping the length of space
-      startOfArcInDegree += arcLength + spaceLength;
+        //the logic of spaces between the arcs is to start the next arc after jumping the length of space
+        startOfArcInDegree += arcLength + spaceLength;
+      }
     }
   }
 }

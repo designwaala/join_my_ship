@@ -13,9 +13,10 @@ import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:story_view/controller/story_controller.dart';
+import 'package:collection/collection.dart';
 
 class BoostedJobsController extends GetxController {
-  Rxn<EmployerWithJobs> employerWithJobs = Rxn();
+  RxList<Employer> jobs = RxList.empty();
   int currentIndex = 0;
   BoostedJobsArguments? args;
 
@@ -34,8 +35,8 @@ class BoostedJobsController extends GetxController {
       args = Get.arguments;
     }
     currentIndex = args?.currentIndex ?? 0;
-    employerWithJobs.value =
-        args?.employerWithJobsList?[args?.currentIndex ?? 0];
+    jobs.value =
+        args?.jobGrouped?[args?.currentIndex ?? 0].values.firstOrNull ?? [];
     super.onInit();
     initialize();
   }
@@ -89,7 +90,7 @@ class BoostedJobsController extends GetxController {
 }
 
 class BoostedJobsArguments {
-  final List<EmployerWithJobs>? employerWithJobsList;
+  final List<Map<String, List<Employer>>>? jobGrouped;
   final int? currentIndex;
-  const BoostedJobsArguments({this.employerWithJobsList, this.currentIndex});
+  const BoostedJobsArguments({this.jobGrouped, this.currentIndex});
 }

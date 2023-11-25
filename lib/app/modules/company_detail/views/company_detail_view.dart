@@ -113,7 +113,7 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                                                                         .id ==
                                                                     controller
                                                                         .employer
-                                                                        ?.country)
+                                                                        ?.countryId)
                                                             ?.countryCode)
                                                     ?.flagEmoji ??
                                                 ""),
@@ -123,7 +123,7 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                                                         (country) =>
                                                             country.id ==
                                                             controller.employer
-                                                                ?.country)
+                                                                ?.countryId)
                                                     ?.countryName ??
                                                 "")
                                           ],

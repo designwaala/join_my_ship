@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/modules/boosted_crew_profiles/bindings/boosted_crew_profiles_binding.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
@@ -12,7 +13,10 @@ import 'package:story_view/widgets/story_view.dart';
 import '../controllers/boosted_crew_profiles_controller.dart';
 
 class BoostedCrewProfilesView extends GetView<BoostedCrewProfilesController> {
-  const BoostedCrewProfilesView({Key? key}) : super(key: key);
+  @override
+  final String? tag;
+
+  const BoostedCrewProfilesView({Key? key, this.tag}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,13 +78,24 @@ class BoostedCrewProfilesView extends GetView<BoostedCrewProfilesController> {
               ? Center(child: CircularProgressIndicator())
               : StoryView(
                   onComplete: () {
-                    if (((controller.args?.currentIndex ?? 0 )+ 1) <
+                    if (((controller.args?.currentIndex ?? 0) + 1) <
                         (controller.args?.boostedCrewList?.length ?? 0)) {
-                      Get.offNamed(Routes.BOOSTED_CREW_PROFILES,
+                      Get.back();
+                      Get.to(
+                          () => BoostedCrewProfilesView(
+                              tag: controller.args?.currentIndex?.toString()),
                           arguments: BoostedCrewProfilesArguments(
                               boostedCrewList: controller.args?.boostedCrewList,
                               currentIndex:
-                                  (controller.args?.currentIndex ?? 0) + 1));
+                                  (controller.args?.currentIndex ?? 0) + 1),
+                          binding: BoostedTagCrewProfilesBinding(
+                              controller.args?.currentIndex?.toString() ?? ""),
+                          preventDuplicates: true);
+                      /* Get.offNamed(Routes.BOOSTED_CREW_PROFILES,
+                          arguments: BoostedCrewProfilesArguments(
+                              boostedCrewList: controller.args?.boostedCrewList,
+                              currentIndex:
+                                  (controller.args?.currentIndex ?? 0) + 1)); */
                     } else {
                       Get.back();
                     }
@@ -222,7 +237,7 @@ class BoostedCrewProfilesView extends GetView<BoostedCrewProfilesController> {
                                             style: Get.textTheme.bodyMedium)
                                       ]),
                                 if (controller.boostedCrew?.userBoost?.user
-                                        ?.country !=
+                                        ?.countryId !=
                                     null)
                                   Row(
                                       mainAxisAlignment:
@@ -244,7 +259,7 @@ class BoostedCrewProfilesView extends GetView<BoostedCrewProfilesController> {
                                                                 .boostedCrew
                                                                 ?.userBoost
                                                                 ?.user
-                                                                ?.country)
+                                                                ?.countryId)
                                                     ?.countryName ??
                                                 "",
                                             style: Get.textTheme.bodyMedium)
@@ -418,7 +433,7 @@ class BoostedCrewProfilesView extends GetView<BoostedCrewProfilesController> {
                                         children: [
                                           Icon(Icons.visibility_outlined),
                                           4.horizontalSpace,
-                                          Text("View Job")
+                                          Text("View Profile")
                                         ],
                                       ),
                                     )),
@@ -432,7 +447,7 @@ class BoostedCrewProfilesView extends GetView<BoostedCrewProfilesController> {
                                               width: 3,
                                               color: Get.theme.primaryColor)),
                                       child: Container(
-                                          padding: EdgeInsets.all(16),
+                                          padding: EdgeInsets.all(12),
                                           decoration: BoxDecoration(
                                               color: Get.theme.primaryColor,
                                               shape: BoxShape.circle),

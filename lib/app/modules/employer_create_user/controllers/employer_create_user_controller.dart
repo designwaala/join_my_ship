@@ -139,7 +139,7 @@ class EmployerCreateUserController extends GetxController {
 
       uploadedImagePath.value = crewUser?.profilePic;
       country.value =
-          countries.firstWhereOrNull((e) => e.id == crewUser?.country);
+          countries.firstWhereOrNull((e) => e.id == crewUser?.countryId);
       await getStates();
       state.value = states.firstWhereOrNull((e) => e.id == crewUser?.state);
 
@@ -193,7 +193,7 @@ class EmployerCreateUserController extends GetxController {
               lastName: lastNameController.text,
               designation: designationController.text,
               website: websiteController.text.nullIfEmpty(),
-              country: country.value?.id,
+              countryId: country.value?.id,
               state: state.value?.id,
               addressCity: cityController.text,
               addressLine1: addressLine1Controller.text.nullIfEmpty(),
@@ -227,7 +227,7 @@ class EmployerCreateUserController extends GetxController {
               website: websiteController.text.nullIfEmpty(),
               addressLine1: addressLine1Controller.text,
               pincode: zipCodeController.text,
-              country: country.value?.id,
+              countryId: country.value?.id,
               addressLine2: addressLine2Controller.text.nullIfEmpty(),
               addressCity: cityController.text,
               state: state.value?.id,
