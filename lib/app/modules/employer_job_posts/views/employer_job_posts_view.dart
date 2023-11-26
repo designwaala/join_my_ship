@@ -6,14 +6,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_cli/get_cli.dart';
 import 'package:join_mp_ship/app/data/models/job_model.dart';
+import 'package:join_mp_ship/app/data/models/subscription_model.dart';
+import 'package:join_mp_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_mp_ship/app/modules/employer_job_applications/controllers/employer_job_applications_controller.dart';
 import 'package:join_mp_ship/app/modules/employer_job_posts/controllers/employer_job_posts_controller.dart';
 import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
+import 'package:collection/collection.dart';
 
 class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
   const EmployerJobPostsView({Key? key}) : super(key: key);
@@ -378,83 +382,101 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                 if (job.id == null) {
                                   return;
                                 }
+                                RxBool isLoadingSubscription = true.obs;
+                                UserStates.instance.subscription ??=
+                                    await getIt<SubscriptionProvider>()
+                                        .getSubscriptions();
+                                isLoadingSubscription.value = false;
                                 bool? shouldHighlight = await showDialog(
                                   context: Get.context!,
                                   barrierDismissible: false,
-                                  builder: (context) => AlertDialog(
-                                    shape: alertDialogShape,
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Spacer(),
-                                        Icon(Icons.send,
-                                            color: Get.theme.primaryColor),
-                                        8.horizontalSpace,
-                                        Text("Highlight",
-                                            style: Get.textTheme.bodyMedium
-                                                ?.copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Get
-                                                        .theme.primaryColor)),
-                                        const Spacer(),
-                                        const Tooltip(
-                                            message:
-                                                "Highlighting a job post will send one time notification to all the ranks required.",
-                                            child: Icon(Icons.info_outline,
-                                                size: 16))
+                                  builder: (context) => Obx(() {
+                                    return AlertDialog(
+                                      shape: alertDialogShape,
+                                      title: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Spacer(),
+                                          Icon(Icons.send,
+                                              color: Get.theme.primaryColor),
+                                          8.horizontalSpace,
+                                          Text("Highlight",
+                                              style: Get.textTheme.bodyMedium
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Get
+                                                          .theme.primaryColor)),
+                                          const Spacer(),
+                                          Tooltip(
+                                              message:
+                                                  "Highlighting a job post will send one time notification to all the ranks required.",
+                                              child: Icon(Icons.info_outline,
+                                                  color: Get.theme.primaryColor,
+                                                  size: 16))
+                                        ],
+                                      ),
+                                      actionsPadding:
+                                          const EdgeInsets.only(bottom: 25),
+                                      content: isLoadingSubscription.value
+                                          ? const CircularProgressIndicator()
+                                          : Text(
+                                              "Are you sure you want to use\nyour ${UserStates.instance.subscription?.firstWhereOrNull((subs) => subs.isTypeKey?.type == PlanType.highlightPost)?.points ?? ""} credits?",
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 14.5,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                      actionsAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      actions: [
+                                        ElevatedButton(
+                                          onPressed: Get.back,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            foregroundColor: Colors.black,
+                                            elevation: 3,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 35),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          child: const Text("NO"),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            Get.back(result: true);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 3,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 35),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          child: const Text("YES"),
+                                        ),
                                       ],
-                                    ),
-                                    actionsPadding:
-                                        const EdgeInsets.only(bottom: 25),
-                                    content: const Text(
-                                      "Are you sure you want to use\nyour 1000 credits?",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 14.5,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: Get.back,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          foregroundColor: Colors.black,
-                                          elevation: 3,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 35),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                        ),
-                                        child: const Text("NO"),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () async {
-                                          Get.back(result: true);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          elevation: 3,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 35),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                        ),
-                                        child: const Text("YES"),
-                                      ),
-                                    ],
-                                  ),
+                                    );
+                                  }),
                                 );
                                 if (shouldHighlight == true) {
-                                  controller.highlightJob(job.id!);
+                                  controller.highlightJob(
+                                      job.id!,
+                                      UserStates.instance.subscription
+                                              ?.firstWhereOrNull((subs) =>
+                                                  subs.isTypeKey?.type ==
+                                                  PlanType.highlightPost)
+                                              ?.planName?.id ??
+                                          -1);
                                 }
                               },
                               icon: const Icon(

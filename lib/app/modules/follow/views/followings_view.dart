@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/follow_model.dart';
 import 'package:join_mp_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:lottie/lottie.dart';
 
 import '../controllers/followings_controller.dart';
 
@@ -15,25 +18,63 @@ class FollowingsView extends GetView<FollowingsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
+          backgroundColor: Get.theme.primaryColor,
+          foregroundColor: Colors.white,
           title: Text(controller.args?.viewType == FollowViewType.following
               ? 'Followings'
-              : 'Followers'),
+              : controller.args?.viewType == FollowViewType.followers
+                  ? 'Followers'
+                  : 'Saved Profiles'),
           centerTitle: true,
         ),
         body: Obx(() {
           return controller.isLoading.value
               ? const Center(child: CircularProgressIndicator())
-              : ListView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-                  children: controller.follows
-                      .map((e) => e.userDetails == null
-                          ? const SizedBox()
-                          : _userCard(e.userDetails!, e.id))
-                      .toList());
+              : controller.follows.isEmpty
+                  ? Center(
+                      child: Lottie.asset(
+                        'assets/animations/no_results.json',
+                        repeat: false,
+                        height: 200,
+                        width: 200,
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        if ([FollowViewType.followers, FollowViewType.following]
+                            .contains(controller.args?.viewType)) ...[
+                          20.verticalSpace,
+                          Row(
+                            children: [
+                              24.horizontalSpace,
+                              SvgPicture.asset("assets/icons/user_add.svg"),
+                              8.horizontalSpace,
+                              Text(
+                                  "${controller.follows.length} ${controller.args?.viewType == FollowViewType.followers ? "Followers" : "Following"}",
+                                  style: Get.textTheme.bodyMedium
+                                      ?.copyWith(color: Color(0xFFFE9738)))
+                            ],
+                          ),
+                        ],
+                        Expanded(
+                          child: ListView.separated(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 16),
+                            itemBuilder: (BuildContext context, int index) {
+                              Follow? e = controller.follows[index];
+                              return _userCard(e.userDetails!, e.id);
+                            },
+                            itemCount: controller.follows.length,
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return Divider();
+                            },
+                          ),
+                        ),
+                      ],
+                    );
         }));
   }
 
@@ -41,14 +82,16 @@ class FollowingsView extends GetView<FollowingsController> {
     return InkWell(
       onTap: () {
         Get.toNamed(Routes.APPLICANT_DETAIL,
-            arguments: ApplicantDetailArguments(userId: user.id, viewType: ViewType.crewDetail));
+            arguments: ApplicantDetailArguments(
+                userId: user.id, viewType: ViewType.crewDetail));
       },
-      child: Card(
+      child: SizedBox(
+        /*  margin: const EdgeInsets.only(bottom: 12),
         elevation: 3,
         shadowColor: const Color.fromARGB(255, 237, 233, 241),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), */
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -56,9 +99,9 @@ class FollowingsView extends GetView<FollowingsController> {
                 borderRadius: BorderRadius.circular(128),
                 child: CachedNetworkImage(
                     imageUrl: user.profilePic ?? "",
-                    height: 55,
+                    height: 40,
                     fit: BoxFit.cover,
-                    width: 55),
+                    width: 40),
               ),
               8.horizontalSpace,
               Expanded(
@@ -78,18 +121,24 @@ class FollowingsView extends GetView<FollowingsController> {
                                         (rank) => rank.id == user.rankId)
                                     ?.name ??
                                 ""),
-                        style: Get.textTheme.bodySmall)
+                        style: Get.textTheme.bodySmall
+                            ?.copyWith(fontWeight: FontWeight.bold))
                   ],
                 ),
               ),
-              if (controller.args?.viewType == FollowViewType.following)
-                controller.unfollowId.value == user.id
-                    ? const CircularProgressIndicator()
-                    : TextButton(
-                        onPressed: () {
+              if ([FollowViewType.following, FollowViewType.savedProfile]
+                  .contains(controller.args?.viewType))
+                controller.unfollowId.value == followId
+                    ? const SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator())
+                    : InkWell(
+                        onTap: () {
                           controller.unfollow(followId ?? -1);
                         },
-                        child: const Text("Unfollow"))
+                        child: SvgPicture.asset("assets/icons/trash.svg")),
+              16.horizontalSpace
             ],
           ),
         ),

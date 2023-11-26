@@ -47,6 +47,7 @@ abstract class Routes {
   static const BOOSTING = _Paths.BOOSTING;
   static const BOOSTED_JOBS = _Paths.BOOSTED_JOBS;
   static const BOOSTED_CREW_PROFILES = _Paths.BOOSTED_CREW_PROFILES;
+  static const CREW_DETAIL = _Paths.CREW_DETAIL;
 }
 
 abstract class _Paths {
@@ -95,4 +96,5 @@ abstract class _Paths {
   static const BOOSTING = '/boosting';
   static const BOOSTED_JOBS = '/boosted-jobs';
   static const BOOSTED_CREW_PROFILES = '/boosted-crew-profiles';
+  static const CREW_DETAIL = '/crew-detail';
 }

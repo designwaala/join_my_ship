@@ -29,6 +29,8 @@ class BoostedJobsController extends GetxController {
   RxList<Cop> cops = RxList.empty();
   RxList<WatchKeeping> watchKeepings = RxList.empty();
 
+  int? currentJobIndex = 0;
+
   @override
   void onInit() {
     if (Get.arguments is BoostedJobsArguments?) {

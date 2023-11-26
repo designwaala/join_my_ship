@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,8 @@ import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/employer_counts_provider.dart';
 import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_mp_ship/app/modules/employer_create_user/controllers/employer_create_user_controller.dart';
 import 'package:join_mp_ship/app/modules/follow/controllers/followings_controller.dart';
 import 'package:join_mp_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
 import 'package:join_mp_ship/app/modules/job_openings/controllers/job_openings_controller.dart';
@@ -39,6 +43,8 @@ class HomeController extends GetxController {
   HomeArguments? args;
 
   EmployerCounts? employerCounts;
+  GlobalKey<CurvedNavigationBarState> bottomNavigationKey =
+      GlobalKey<CurvedNavigationBarState>();
 
   @override
   void onInit() {
@@ -110,7 +116,10 @@ class HomeController extends GetxController {
         "iconPath": "assets/icons/home.png",
         "iconSize": 18.0,
         "onTap": () {
-          // TODO
+          currentIndex.value = 1;
+          final CurvedNavigationBarState? navBarState =
+              bottomNavigationKey.currentState;
+          navBarState?.setPage(0);
         }
       },
       if (UserStates.instance.crewUser?.userTypeKey == 2)
@@ -157,7 +166,10 @@ class HomeController extends GetxController {
         "iconPath": "assets/icons/search.png",
         "iconSize": 19.0,
         "onTap": () {
-          // TODO
+          currentIndex.value = 4;
+          final CurvedNavigationBarState? navBarState =
+              bottomNavigationKey.currentState;
+          navBarState?.setPage(3);
         }
       },
       {
@@ -172,8 +184,14 @@ class HomeController extends GetxController {
         "title": "My Profile",
         "iconPath": "assets/icons/profile.png",
         "iconSize": 19.0,
-        "onTap": () {
-          // TODO
+        "onTap": () async {
+          if (UserStates.instance.crewUser?.userTypeKey == 2) {
+            await Get.toNamed(Routes.CREW_ONBOARDING,
+                arguments: const CrewOnboardingArguments(editMode: true));
+          } else {
+            await Get.toNamed(Routes.EMPLOYER_CREATE_USER,
+                arguments: const EmployerCreateUserArguments(editMode: true));
+          }
         }
       },
       {
@@ -181,15 +199,18 @@ class HomeController extends GetxController {
         "iconPath": "assets/icons/info.png",
         "iconSize": 18.0,
         "onTap": () {
-          // TODO
+          Get.toNamed(Routes.HELP);
         }
       },
       {
         "title": "Logout",
         "iconPath": "assets/icons/logout.png",
         "iconSize": 18.0,
-        "onTap": () {
-          // TODO
+        "onTap": () async {
+          UserStates.instance.reset();
+          await FirebaseAuth.instance.signOut();
+          await PreferencesHelper.instance.clearAll();
+          Get.offAllNamed(Routes.SPLASH);
         }
       },
     ];

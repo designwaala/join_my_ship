@@ -8,6 +8,7 @@ import 'package:join_mp_ship/app/modules/boosted_crew_profiles/controllers/boost
 import 'package:join_mp_ship/app/modules/boosting/controllers/boosting_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:collection/collection.dart';
+import 'package:lottie/lottie.dart';
 
 class CrewProfileBoostingView extends GetView<BoostingController> {
   const CrewProfileBoostingView({Key? key}) : super(key: key);
@@ -79,6 +80,19 @@ class CrewProfileBoostingView extends GetView<BoostingController> {
                   ],
                 ),
               ),
+            );
+          },
+          noItemsFoundIndicatorBuilder: (context) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset(
+                  'assets/animations/no_results.json',
+                  repeat: false,
+                  height: 200,
+                  width: 200,
+                ),
+              ],
             );
           },
         ),

@@ -30,6 +30,8 @@ import '../modules/connectivity_lost/bindings/connectivity_lost_binding.dart';
 import '../modules/connectivity_lost/views/connectivity_lost_view.dart';
 import '../modules/crew-onboarding/bindings/crew_onboarding_binding.dart';
 import '../modules/crew-onboarding/views/crew_onboarding_view.dart';
+import '../modules/crew_detail/bindings/crew_detail_binding.dart';
+import '../modules/crew_detail/views/crew_detail_view.dart';
 import '../modules/crew_job_applications/bindings/crew_job_applications_binding.dart';
 import '../modules/crew_job_applications/views/crew_job_applications_view.dart';
 import '../modules/crew_list/bindings/crew_list_binding.dart';
@@ -314,6 +316,11 @@ class AppPages {
       name: _Paths.BOOSTED_CREW_PROFILES,
       page: () => const BoostedCrewProfilesView(),
       binding: BoostedCrewProfilesBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREW_DETAIL,
+      page: () => const CrewDetailView(),
+      binding: CrewDetailBinding(),
     ),
   ];
 }

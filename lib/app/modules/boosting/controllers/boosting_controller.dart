@@ -32,7 +32,8 @@ class BoostingController extends GetxController {
     isLoading.value = true;
     await Future.wait([
       if (UserStates.instance.ranks != null)
-        Future.value(UserStates.instance.ranks).then((value) => ranks = value ?? [])
+        Future.value(UserStates.instance.ranks)
+            .then((value) => ranks = value ?? [])
       else
         getIt<RanksProvider>()
             .getRankList()

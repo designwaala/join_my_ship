@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -42,83 +43,99 @@ class HomeView extends GetView<HomeController> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 10),
-                    child: CustomScrollView(slivers: [
-                      SliverList(
-                          delegate: SliverChildListDelegate([
-                        const ListTile(
-                          leading: SizedBox(
-                            height: 45,
-                            width: 45,
-                            child: ImageIcon(
-                              AssetImage("assets/icons/avatar.png"),
-                            ),
-                          ),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 15),
-                          title: Text("Prafull Swarnkar"),
-                          subtitle: Text(
-                            "abc@email.com",
-                            style: TextStyle(fontSize: 13),
-                          ),
-                        ),
-                        ...controller.drawerButtons.map((button) {
-                          final selected = button["title"] ==
-                              controller.selectedDrawerButton.value;
-                          return ListTile(
-                            selected: selected,
-                            contentPadding: const EdgeInsets.all(0),
-                            title: Row(
+                    child: CustomScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        slivers: [
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                ImageIcon(
-                                  AssetImage(button["iconPath"]),
-                                  color:
-                                      selected ? Colors.blue : Colors.black54,
-                                  size: button["iconSize"],
+                                ListTile(
+                                  leading: CachedNetworkImage(
+                                    imageUrl: UserStates
+                                            .instance.crewUser?.profilePic ??
+                                        "",
+                                    height: 40,
+                                    width: 40,
+                                    imageBuilder: (context, imageProvider) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover)),
+                                      );
+                                    },
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 15),
+                                  title: Text(
+                                      "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastLogin ?? ""}"),
+                                  subtitle: Text(
+                                    "${UserStates.instance.crewUser?.email}",
+                                    style: TextStyle(fontSize: 13),
+                                  ),
                                 ),
-                                (15 + 22 - button["iconSize"]).horizontalSpace,
+                                ...controller.drawerButtons.map((button) {
+                                  final selected = button["title"] ==
+                                      controller.selectedDrawerButton.value;
+                                  return ListTile(
+                                    selected: selected,
+                                    contentPadding: const EdgeInsets.all(0),
+                                    title: Row(
+                                      children: [
+                                        ImageIcon(
+                                          AssetImage(button["iconPath"]),
+                                          color: selected
+                                              ? Colors.blue
+                                              : Colors.black54,
+                                          size: button["iconSize"],
+                                        ),
+                                        (15 + 22 - button["iconSize"])
+                                            .horizontalSpace,
+                                        Text(
+                                          button["title"],
+                                          style: Get.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                  fontSize: 15,
+                                                  color: selected
+                                                      ? Colors.blue
+                                                      : Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      controller.selectedDrawerButton.value =
+                                          button["title"];
+                                      controller.scaffoldKey.currentState
+                                          ?.closeDrawer();
+                                      button["onTap"].call();
+                                    },
+                                  );
+                                }).toList(),
+                                const Spacer(),
                                 Text(
-                                  button["title"],
-                                  style: Get.textTheme.bodyMedium?.copyWith(
-                                      fontSize: 15,
-                                      color: selected
-                                          ? Colors.blue
-                                          : Colors.black),
+                                  "Join My Ship",
+                                  style: Get.theme.textTheme.bodyMedium
+                                      ?.copyWith(
+                                          color: Colors.blue,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily:
+                                              GoogleFonts.racingSansOne()
+                                                  .fontFamily),
                                 ),
+                                const Text(
+                                  "www.joinmyship.com",
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                                30.verticalSpace,
                               ],
                             ),
-                            onTap: () {
-                              controller.selectedDrawerButton.value =
-                                  button["title"];
-                              controller.scaffoldKey.currentState
-                                  ?.closeDrawer();
-                              button["onTap"].call();
-                            },
-                          );
-                        }).toList(),
-                      ])),
-                      SliverFillRemaining(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Join My Ship",
-                              style: Get.theme.textTheme.bodyMedium?.copyWith(
-                                  color: Colors.blue,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily:
-                                      GoogleFonts.racingSansOne().fontFamily),
-                            ),
-                            const Text(
-                              "www.joinmyship.com",
-                              style: TextStyle(fontSize: 10),
-                            ),
-                            30.verticalSpace,
-                          ],
-                        ),
-                      ),
-                    ]),
+                          ),
+                        ]),
                   ),
                 ),
               ),
@@ -144,6 +161,7 @@ class HomeView extends GetView<HomeController> {
                     }(),
               // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
               bottomNavigationBar: CurvedNavigationBar(
+                key: controller.bottomNavigationKey,
                 height: 64,
                 backgroundColor: Colors.transparent,
                 buttonBackgroundColor: Colors.white,
@@ -393,7 +411,7 @@ class HomeView extends GetView<HomeController> {
                   onTap: () {
                     Get.toNamed(Routes.FOLLOW,
                         arguments: const FollowArguments(
-                            viewType: FollowViewType.following));
+                            viewType: FollowViewType.savedProfile));
                   },
                   child: Container(
                     height: 93,

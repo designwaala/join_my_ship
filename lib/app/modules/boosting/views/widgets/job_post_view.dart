@@ -9,6 +9,7 @@ import 'package:join_mp_ship/app/modules/boosting/controllers/boosting_controlle
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/widgets/status_border.dart';
 import 'package:collection/collection.dart';
+import 'package:lottie/lottie.dart';
 
 class JobPostBoostingView extends GetView<BoostingController> {
   const JobPostBoostingView({Key? key}) : super(key: key);
@@ -86,6 +87,19 @@ class JobPostBoostingView extends GetView<BoostingController> {
                   ],
                 ),
               ),
+            );
+          },
+          noItemsFoundIndicatorBuilder: (context) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset(
+                  'assets/animations/no_results.json',
+                  repeat: false,
+                  height: 200,
+                  width: 200,
+                ),
+              ],
             );
           },
         ),

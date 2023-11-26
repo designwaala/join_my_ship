@@ -161,10 +161,10 @@ http://designwaala.me/job/?job_id=${job.id}
     print(bytes);
   }
 
-  Future<void> highlightJob(int jobId) async {
+  Future<void> highlightJob(int jobId, int subscriptionId) async {
     highlightingJob.value = jobId;
     final response = await getIt<HighlightProvider>()
-        .jobHighlight(jobId: jobId, subscriptionId: 10);
+        .jobHighlight(jobId: jobId, subscriptionId: subscriptionId);
     highlightingJob.value = null;
     if (response.userHighlight != null) {
       showDialog(

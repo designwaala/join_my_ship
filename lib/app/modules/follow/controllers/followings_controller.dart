@@ -59,7 +59,7 @@ class FollowingsController extends GetxController {
   }
 }
 
-enum FollowViewType { following, followers }
+enum FollowViewType { following, followers, savedProfile }
 
 class FollowArguments {
   final FollowViewType viewType;

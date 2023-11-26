@@ -344,7 +344,7 @@ class LikedJobsView extends GetView<LikedJobsController> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         centerTitle: true,
-        title: const Text( 'Liked Jobs'),
+        title: const Text('Liked Jobs'),
       ),
       body: Obx(
         () => controller.isLoading.value
@@ -354,7 +354,6 @@ class LikedJobsView extends GetView<LikedJobsController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                   
                     controller.jobOpenings.isEmpty
                         ? Center(
                             child: Column(
@@ -804,8 +803,10 @@ class LikedJobsView extends GetView<LikedJobsController> {
                               onPressed: () {
                                 controller.likeJob(job.id);
                               },
-                              icon: const Icon(
-                                Icons.thumb_up_alt_outlined,
+                              icon: Icon(
+                                job.isJobLiked == true
+                                    ? Icons.thumb_up_alt_sharp
+                                    : Icons.thumb_up_alt_outlined,
                                 size: 18,
                               ),
                               label: const Text(
@@ -963,4 +964,3 @@ class LikedJobsView extends GetView<LikedJobsController> {
     );
   }
 }
-

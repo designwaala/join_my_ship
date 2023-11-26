@@ -322,7 +322,7 @@ class JobOpeningView extends GetView<JobOpeningController> {
       body: Obx(
         () => controller.isLoading.value
             ? const CircularProgressIndicatorWidget()
-            : Padding(
+            : SingleChildScrollView(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -841,42 +841,41 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                             ],
                                           ),
                                         4.verticalSpace,
-                                        //TODO: Waiting for Prince
-                                        /* Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              17.horizontalSpace,
-                                              TextButton.icon(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.thumb_up,
-                                                    size: 18,
-                                                    color: Colors.blue,
-                                                  ),
-                                                  style: TextButton.styleFrom(
-                                                    splashFactory:
-                                                        NoSplash.splashFactory,
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10),
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                15),
-                                                        side: const BorderSide(
-                                                            width: 1.8,
-                                                            color: Colors.blue)),
-                                                  ),
-                                                  label: Text(
-                                                    " Likes ${controller.jobOpening.value?.likes}",
-                                                    style: Get
-                                                        .textTheme.bodyMedium
-                                                        ?.copyWith(
-                                                            color: Colors.blue),
-                                                  )),
-                                            ],
-                                          ), */
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            17.horizontalSpace,
+                                            TextButton.icon(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                  Icons.thumb_up,
+                                                  size: 18,
+                                                  color: Colors.blue,
+                                                ),
+                                                style: TextButton.styleFrom(
+                                                  splashFactory:
+                                                      NoSplash.splashFactory,
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 10),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      side: const BorderSide(
+                                                          width: 1.8,
+                                                          color: Colors.blue)),
+                                                ),
+                                                label: Text(
+                                                  " Likes ${controller.jobOpening.value?.jobLikeCount}",
+                                                  style: Get
+                                                      .textTheme.bodyMedium
+                                                      ?.copyWith(
+                                                          color: Colors.blue),
+                                                )),
+                                          ],
+                                        ),
                                         10.verticalSpace,
                                         Row(
                                           mainAxisAlignment:
