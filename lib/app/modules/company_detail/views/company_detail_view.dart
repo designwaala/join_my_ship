@@ -55,9 +55,10 @@ class CompanyDetailView extends GetView<CompanyDetailController> {
                                     height: 64.h,
                                     width: 64.h,
                                     decoration: BoxDecoration(
-                                        color:
-                                            Color(Random().nextInt(0xffffffff))
-                                                .withAlpha(0xff),
+                                        color: Color(int.parse(
+                                                "${controller.employer?.companyName?.split("").firstOrNull?.codeUnitAt(0)}${controller.employer?.id ?? 0}",
+                                                radix: 16))
+                                            .withAlpha(0xff),
                                         borderRadius: BorderRadius.circular(8)),
                                     child: Center(
                                         child: Text(

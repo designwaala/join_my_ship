@@ -90,14 +90,14 @@ class ApplicantDetailController extends GetxController {
           style: TextStyle(color: Colors.blue),
         ),
         actionsPadding: const EdgeInsets.only(bottom: 25),
-        content: const Text(
+        /* content: const Text(
           "Are you sure you want to use your 100 credits?",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14.5,
             fontWeight: FontWeight.w600,
           ),
-        ),
+        ), */
         actionsAlignment: MainAxisAlignment.spaceEvenly,
         actions: [
           ElevatedButton(
@@ -134,11 +134,13 @@ class ApplicantDetailController extends GetxController {
     }
     isGettingResume.value = true;
     String? resume = await getIt<ApplicationProvider>()
-        .downloadResumeForApplication(args?.application?.jobId ?? -1,
-            args?.application?.userData?.id ?? -1);
-    if (resume != null) {
-      application.value?.resumeStatus = true;
+        .downloadResumeForApplication(args?.application?.jobId,
+            args?.application?.userData?.id ?? args?.userId ?? -1);
+    if (resume == null) {
+      isGettingResume.value = false;
+      return;
     }
+    application.value?.resumeStatus = true;
     await _prepareSaveDir();
     final taskId = await FlutterDownloader.enqueue(
       url: "https://designwaala.me$resume",

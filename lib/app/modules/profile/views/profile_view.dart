@@ -302,6 +302,14 @@ class ProfileView extends GetView<ProfileController> {
                             text: "Boost",
                             onTap: controller.boostCrew,
                           ),
+                        /* if (controller.crewUser.value?.userTypeKey == 2)
+                          CardObject(
+                            iconPath: "assets/images/profile/help.png",
+                            text: "Crew Referral",
+                            onTap: () {
+                              Get.toNamed(Routes.CREW_REFERRAL);
+                            },
+                          ), */
                       ].map((e) => InkWell(
                             onTap: () {
                               e.onTap();

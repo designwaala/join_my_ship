@@ -7,7 +7,7 @@ import 'package:join_mp_ship/utils/user_details.dart';
 
 class FollowingsController extends GetxController {
   RxBool isLoading = false.obs;
-  List<Follow> follows = [];
+  RxList<Follow> follows = RxList.empty();
   RxnInt unfollowId = RxnInt();
 
   FollowArguments? args;
@@ -27,14 +27,14 @@ class FollowingsController extends GetxController {
 
   Future<void> _getMyFollowers() async {
     isLoading.value = true;
-    follows = (await getIt<FollowProvider>().getMyFollowers()) ?? [];
+    follows.value = (await getIt<FollowProvider>().getMyFollowers()) ?? [];
     UserStates.instance.ranks ??= await getIt<RanksProvider>().getRankList();
     isLoading.value = false;
   }
 
   Future<void> _getMyFollowings() async {
     isLoading.value = true;
-    follows = (await getIt<FollowProvider>().getMyFollowings()) ?? [];
+    follows.value = (await getIt<FollowProvider>().getMyFollowings()) ?? [];
     UserStates.instance.ranks ??= await getIt<RanksProvider>().getRankList();
     isLoading.value = false;
   }

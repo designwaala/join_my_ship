@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -73,9 +71,11 @@ class HomeView extends GetView<HomeController> {
                                       horizontal: 0, vertical: 15),
                                   title: Text(
                                       "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastLogin ?? ""}"),
-                                  subtitle: Text(
-                                    "${UserStates.instance.crewUser?.email}",
-                                    style: TextStyle(fontSize: 13),
+                                  subtitle: FittedBox(
+                                    child: Text(
+                                      "${UserStates.instance.crewUser?.email}",
+                                      style: TextStyle(fontSize: 13),
+                                    ),
                                   ),
                                 ),
                                 ...controller.drawerButtons.map((button) {
@@ -210,40 +210,70 @@ class HomeView extends GetView<HomeController> {
                 right: 0,
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  child: (UserStates.instance.crewUser?.userTypeKey ?? 0) >=
-                              3 &&
-                          controller.showJobButtons.value
-                      ? IntrinsicWidth(
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
+                  child: controller.showJobButtons.value
+                      ? (UserStates.instance.crewUser?.userTypeKey ?? 0) >= 3
+                          ? IntrinsicWidth(
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child: CustomElevatedButon(
-                                        onPressed: () {
-                                          Get.toNamed(Routes.JOB_POST);
-                                        },
-                                        child: const Text("Post a new job")),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: CustomElevatedButon(
+                                            onPressed: () {
+                                              Get.toNamed(Routes.JOB_POST);
+                                            },
+                                            child:
+                                                const Text("Post a new job")),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: CustomElevatedButon(
+                                            onPressed: () {
+                                              Get.toNamed(
+                                                  Routes.EMPLOYER_JOB_POSTS);
+                                            },
+                                            child:
+                                                const Text("View posted jobs")),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
+                            )
+                          : IntrinsicWidth(
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child: CustomElevatedButon(
-                                        onPressed: () {
-                                          Get.toNamed(
-                                              Routes.EMPLOYER_JOB_POSTS);
-                                        },
-                                        child: const Text("View posted jobs")),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: CustomElevatedButon(
+                                            onPressed: () {
+                                              Get.toNamed(Routes.CREW_REFERRAL);
+                                            },
+                                            child: const Text("Refer a job")),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: CustomElevatedButon(
+                                            onPressed: () {},
+                                            child: const Text(
+                                                "View referred jobs")),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        )
+                            )
                       : const SizedBox(),
                 ))
           ],
@@ -497,7 +527,9 @@ class HomeView extends GetView<HomeController> {
                         height: 50.h,
                         width: 50.h,
                         decoration: BoxDecoration(
-                            color: Color(Random().nextInt(0xffffffff))
+                            color: Color(int.parse(
+                                    "${company.companyName?.split("").firstOrNull?.codeUnitAt(0)}${company.id ?? 0}",
+                                    radix: 16))
                                 .withAlpha(0xff),
                             borderRadius: BorderRadius.circular(8)),
                         child: Center(
@@ -739,7 +771,9 @@ class HomeView extends GetView<HomeController> {
                         height: 50.h,
                         width: 50.h,
                         decoration: BoxDecoration(
-                            color: Color(Random().nextInt(0xffffffff))
+                            color: Color(int.parse(
+                                    "${company.companyName?.split("").firstOrNull?.codeUnitAt(0)}${company.id ?? 0}",
+                                    radix: 16))
                                 .withAlpha(0xff),
                             borderRadius: BorderRadius.circular(8)),
                         child: Center(

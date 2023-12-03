@@ -23,6 +23,7 @@ class BoostedJobsView extends GetView<BoostedJobsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
             foregroundColor: Colors.white,
             backgroundColor: Get.theme.primaryColor,

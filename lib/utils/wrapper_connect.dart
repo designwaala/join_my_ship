@@ -499,69 +499,67 @@ class WrapperConnect extends GetConnect {
         if (response.statusCode == 401) {
           signOut();
         } else if ((response.statusCode ?? 0) >= 300) {
-          APIErrorList errors =
-              APIErrorList.fromJson(jsonDecode(response.body));
-          showTopModalSheet(
-              Get.context!,
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Some error occurred",
-                        style: Get.textTheme.titleMedium),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: errors.apiErrorList
-                                ?.map((error) => [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text("${error.field ?? ""}:",
-                                              style: Get
-                                                  .theme.textTheme.bodyMedium),
-                                          4.horizontalSpace,
-                                          Flexible(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                ...?error.errors?.map((e) =>
-                                                    Text(e,
-                                                        maxLines: 3,
-                                                        style: Get
-                                                            .theme
-                                                            .textTheme
-                                                            .bodyMedium
-                                                            ?.copyWith())),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      4.verticalSpace
-                                    ])
-                                .expand((element) => element)
-                                .toList() ??
-                            []),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: OutlinedButton(
-                          onPressed: Get.back, child: Text("OK")),
-                    )
-                  ],
-                ),
-              ));
+          _showError(response.body);
         }
       }
+    } else if(response.statusCode < 200){
+      _showError(response.body);
     }
     return jsonDecode(response.body);
   }
 
+  _showError(String error) {
+    APIErrorList errors = APIErrorList.fromJson(jsonDecode(error));
+    showTopModalSheet(
+        Get.context!,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Some error occurred", style: Get.textTheme.titleMedium),
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: errors.apiErrorList
+                          ?.map((error) => [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("${error.field ?? ""}:",
+                                        style: Get.theme.textTheme.bodyMedium),
+                                    4.horizontalSpace,
+                                    Flexible(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ...?error.errors?.map((e) => Text(e,
+                                              maxLines: 3,
+                                              style: Get
+                                                  .theme.textTheme.bodyMedium
+                                                  ?.copyWith())),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                4.verticalSpace
+                              ])
+                          .expand((element) => element)
+                          .toList() ??
+                      []),
+              Align(
+                alignment: Alignment.centerRight,
+                child: OutlinedButton(onPressed: Get.back, child: Text("OK")),
+              )
+            ],
+          ),
+        ));
+  }
+
   Future<http.Response> _multipartPostCore(String url, dynamic body,
       {Map<String, String>? headers}) async {
-    var request = http.MultipartRequest('POST', Uri.parse("$baseURL/$url"));
+    var request = http.MultipartRequest('POST', Uri.parse("$baseURL$url"));
     request.fields.addAll(body is Map ? body : body.toJson());
 
     headers ??= {
@@ -598,7 +596,7 @@ class WrapperConnect extends GetConnect {
     }
 
     var response = await http.patch(Uri.parse("$baseURL$url"),
-        body: body,// is Map ? jsonEncode(body) : body,
+        body: body, // is Map ? jsonEncode(body) : body,
         headers: headers ??
             {
               "Content-Type": "multipart/form-data",

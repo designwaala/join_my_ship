@@ -63,6 +63,7 @@ class CrewProfileBoostingView extends GetView<BoostingController> {
                     20.horizontalSpace,
                     Flexible(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(profile.userBoost?.user?.firstName ?? "",
                               maxLines: 2,

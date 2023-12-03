@@ -31,9 +31,14 @@ class ApplicationProvider extends WrapperConnect {
     return response.body;
   }
 
-  Future<Application?> apply(Application application) async {
-    final response =
-        await multipartPost('employer/apply_job', application.toJson());
+  Future<Application?> apply(
+      {int? userId, int? jobId, int? rankId, int? subId}) async {
+    final response = await multipartPost('employer/apply_job', {
+      if (userId != null) "user_id": "$userId",
+      if (jobId != null) "job_id": "$jobId",
+      if (rankId != null) "rank_id": "$rankId",
+      if (subId != null) "sub_id": "$subId"
+    });
     if (response.keys.join().contains("non_field_errors")) {
       Get.showSnackbar(GetSnackBar(
         duration: const Duration(seconds: 2),
@@ -101,9 +106,16 @@ class ApplicationProvider extends WrapperConnect {
     return Application.fromJson(response);
   } */
 
-  Future<String?> downloadResumeForApplication(int jobId, int crewId) async {
+  Future<String?> downloadResumeForApplication(int? jobId, int crewId) async {
+    final response = await multipartPost("crew/resume-downloads/",
+        {if (jobId != null) "job_id": "$jobId", "user_id": "$crewId"});
+    return response["resume_download_url"];
+  }
+
+  //OLD API
+  /* Future<String?> downloadResumeForApplication(int jobId, int crewId) async {
     final response = await get("crew/resume/download/$crewId/$jobId",
         decoder: (map) => map['resume_download_url']);
     return response.body;
-  }
+  } */
 }

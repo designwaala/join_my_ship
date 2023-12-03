@@ -20,6 +20,8 @@ class APIError {
 
   factory APIError.fromJson(String field, dynamic json) {
     return APIError(
-        field: field, errors: List<String>.from(json.map((e) => "$e")));
+        field: field,
+        errors:
+            json is List ? List<String>.from(json.map((e) => "$e")) : [json]);
   }
 }

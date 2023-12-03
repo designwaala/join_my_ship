@@ -840,44 +840,10 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                               ),
                                             ],
                                           ),
-                                        4.verticalSpace,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            17.horizontalSpace,
-                                            TextButton.icon(
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                  Icons.thumb_up,
-                                                  size: 18,
-                                                  color: Colors.blue,
-                                                ),
-                                                style: TextButton.styleFrom(
-                                                  splashFactory:
-                                                      NoSplash.splashFactory,
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 10),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                      side: const BorderSide(
-                                                          width: 1.8,
-                                                          color: Colors.blue)),
-                                                ),
-                                                label: Text(
-                                                  " Likes ${controller.jobOpening.value?.jobLikeCount}",
-                                                  style: Get
-                                                      .textTheme.bodyMedium
-                                                      ?.copyWith(
-                                                          color: Colors.blue),
-                                                )),
-                                          ],
-                                        ),
                                         10.verticalSpace,
                                         Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
@@ -886,9 +852,16 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                                 : TextButton.icon(
                                                     onPressed:
                                                         controller.likeJob,
-                                                    icon: const Icon(
-                                                      Icons
-                                                          .thumb_up_alt_outlined,
+                                                    icon: Icon(
+                                                      controller
+                                                                  .jobOpening
+                                                                  .value
+                                                                  ?.isJobLiked ==
+                                                              true
+                                                          ? Icons
+                                                              .thumb_up_alt_rounded
+                                                          : Icons
+                                                              .thumb_up_alt_outlined,
                                                       size: 18,
                                                     ),
                                                     label: const Text(
@@ -896,180 +869,192 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                                       style: TextStyle(
                                                           fontSize: 13),
                                                     )),
-                                            controller.applyingJob.value ==
-                                                    controller
-                                                        .jobOpening.value?.id
-                                                ? const Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      CircularProgressIndicator()
-                                                    ],
-                                                  )
-                                                : ElevatedButton(
-                                                    style: ElevatedButton.styleFrom(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 20),
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        18))),
-                                                    onPressed:
-                                                        controller.applications.any((application) =>
-                                                                        application.jobId ==
-                                                                            controller
-                                                                                .jobOpening.value?.id ||
-                                                                        application.jobData?.id ==
-                                                                            controller
-                                                                                .jobOpening.value?.id) ==
-                                                                    true ||
-                                                                controller
-                                                                        .jobOpening
-                                                                        .value
-                                                                        ?.jobRankWithWages
-                                                                        ?.none((rankWithWage) =>
-                                                                            rankWithWage.rankNumber == UserStates.instance.crewUser?.rankId ||
-                                                                            (rankWithWage.rankNumber ==
-                                                                                controller.ranks.firstWhereOrNull((rank) => rank.id == UserStates.instance.crewUser?.rankId)?.promotedTo)) ==
-                                                                    true ||
-                                                                UserStates.instance.crewUser?.userTypeKey != 2
-                                                            ? null
-                                                            : () {
-                                                                if (controller
-                                                                        .selectedRank
-                                                                        .value
-                                                                        ?.key !=
+                                            Column(
+                                              children: [
+                                                TextButton.icon(
+                                                    onPressed: () {},
+                                                    icon: const Icon(
+                                                      Icons
+                                                          .thumb_up_alt_outlined,
+                                                      size: 18,
+                                                      color: Colors.blue,
+                                                    ),
+                                                    style: TextButton.styleFrom(
+                                                      splashFactory: NoSplash
+                                                          .splashFactory,
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10),
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(15),
+                                                          side:
+                                                              const BorderSide(
+                                                                  width: 1.8,
+                                                                  color: Colors
+                                                                      .blue)),
+                                                    ),
+                                                    label: Text(
+                                                      " Likes ${controller.jobOpening.value?.jobLikeCount}",
+                                                      style: Get
+                                                          .textTheme.bodyMedium
+                                                          ?.copyWith(
+                                                              color:
+                                                                  Colors.blue),
+                                                    )),
+                                                controller.applyingJob.value ==
+                                                        controller.jobOpening
+                                                            .value?.id
+                                                    ? const Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          CircularProgressIndicator()
+                                                        ],
+                                                      )
+                                                    : ElevatedButton(
+                                                        style: ElevatedButton.styleFrom(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        20),
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            18))),
+                                                        onPressed:
+                                                            controller.applications.any((application) =>
+                                                                            application.jobId == controller.jobOpening.value?.id ||
+                                                                            application.jobData?.id ==
+                                                                                controller
+                                                                                    .jobOpening.value?.id) ==
+                                                                        true ||
                                                                     controller
-                                                                        .jobOpening
-                                                                        .value
-                                                                        ?.id) {
-                                                                  controller
-                                                                          .showErrorForJob
-                                                                          .value =
-                                                                      controller
+                                                                            .jobOpening
+                                                                            .value
+                                                                            ?.jobRankWithWages
+                                                                            ?.none((rankWithWage) =>
+                                                                                rankWithWage.rankNumber == UserStates.instance.crewUser?.rankId ||
+                                                                                (rankWithWage.rankNumber == controller.ranks.firstWhereOrNull((rank) => rank.id == UserStates.instance.crewUser?.rankId)?.promotedTo)) ==
+                                                                        true ||
+                                                                    UserStates.instance.crewUser?.userTypeKey != 2
+                                                                ? null
+                                                                : () {
+                                                                    if (controller
+                                                                            .selectedRank
+                                                                            .value
+                                                                            ?.key !=
+                                                                        controller
+                                                                            .jobOpening
+                                                                            .value
+                                                                            ?.id) {
+                                                                      controller.showErrorForJob.value = controller
                                                                           .jobOpening
                                                                           .value
                                                                           ?.id;
-                                                                  return;
-                                                                }
-                                                                showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  barrierDismissible:
-                                                                      false,
-                                                                  builder:
-                                                                      (context) =>
-                                                                          AlertDialog(
-                                                                    shape:
-                                                                        alertDialogShape,
-                                                                    title:
-                                                                        const Text(
-                                                                      "Are You Sure ?",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                    ),
-                                                                    actionsPadding: const EdgeInsets
-                                                                            .only(
-                                                                        bottom:
-                                                                            25),
-                                                                    content:
-                                                                        const Text(
-                                                                      "Are you sure you want to use your 100 credits?",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            14.5,
-                                                                        fontWeight:
-                                                                            FontWeight.w600,
-                                                                      ),
-                                                                    ),
-                                                                    actionsAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceEvenly,
-                                                                    actions: [
-                                                                      ElevatedButton(
-                                                                        onPressed:
-                                                                            Get.back,
-                                                                        style: ElevatedButton
-                                                                            .styleFrom(
-                                                                          backgroundColor:
-                                                                              Colors.white,
-                                                                          foregroundColor:
-                                                                              Colors.black,
-                                                                          elevation:
-                                                                              3,
-                                                                          padding:
-                                                                              const EdgeInsets.symmetric(horizontal: 35),
-                                                                          shape:
-                                                                              RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(20),
+                                                                      return;
+                                                                    }
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      barrierDismissible:
+                                                                          false,
+                                                                      builder:
+                                                                          (context) =>
+                                                                              AlertDialog(
+                                                                        shape:
+                                                                            alertDialogShape,
+                                                                        title:
+                                                                            const Text(
+                                                                          "Are You Sure ?",
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style:
+                                                                              TextStyle(color: Colors.blue),
+                                                                        ),
+                                                                        actionsPadding:
+                                                                            const EdgeInsets.only(bottom: 25),
+                                                                        content:
+                                                                            const Text(
+                                                                          "Are you sure you want to use your 100 credits?",
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                14.5,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
                                                                           ),
                                                                         ),
-                                                                        child: const Text(
-                                                                            "NO"),
+                                                                        actionsAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        actions: [
+                                                                          ElevatedButton(
+                                                                            onPressed:
+                                                                                Get.back,
+                                                                            style:
+                                                                                ElevatedButton.styleFrom(
+                                                                              backgroundColor: Colors.white,
+                                                                              foregroundColor: Colors.black,
+                                                                              elevation: 3,
+                                                                              padding: const EdgeInsets.symmetric(horizontal: 35),
+                                                                              shape: RoundedRectangleBorder(
+                                                                                borderRadius: BorderRadius.circular(20),
+                                                                              ),
+                                                                            ),
+                                                                            child:
+                                                                                const Text("NO"),
+                                                                          ),
+                                                                          ElevatedButton(
+                                                                            onPressed:
+                                                                                () async {
+                                                                              Get.back();
+                                                                              controller.apply(controller.jobOpening.value?.id);
+                                                                            },
+                                                                            style:
+                                                                                ElevatedButton.styleFrom(
+                                                                              elevation: 3,
+                                                                              padding: const EdgeInsets.symmetric(horizontal: 35),
+                                                                              shape: RoundedRectangleBorder(
+                                                                                borderRadius: BorderRadius.circular(20),
+                                                                              ),
+                                                                            ),
+                                                                            child:
+                                                                                const Text("YES"),
+                                                                          ),
+                                                                        ],
                                                                       ),
-                                                                      ElevatedButton(
-                                                                        onPressed:
-                                                                            () async {
-                                                                          Get.back();
-                                                                          controller.apply(controller
+                                                                    );
+                                                                  },
+                                                        child: Text(
+                                                          controller.applications.any((application) =>
+                                                                      application
+                                                                              .jobId ==
+                                                                          controller
                                                                               .jobOpening
                                                                               .value
-                                                                              ?.id);
-                                                                        },
-                                                                        style: ElevatedButton
-                                                                            .styleFrom(
-                                                                          elevation:
-                                                                              3,
-                                                                          padding:
-                                                                              const EdgeInsets.symmetric(horizontal: 35),
-                                                                          shape:
-                                                                              RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(20),
-                                                                          ),
-                                                                        ),
-                                                                        child: const Text(
-                                                                            "YES"),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                );
-                                                              },
-                                                    child: Text(
-                                                      controller.applications.any((application) =>
-                                                                  application
-                                                                          .jobId ==
-                                                                      controller
-                                                                          .jobOpening
-                                                                          .value
-                                                                          ?.id ||
-                                                                  application
-                                                                          .jobData
-                                                                          ?.id ==
-                                                                      controller
-                                                                          .jobOpening
-                                                                          .value
-                                                                          ?.id) ==
-                                                              true
-                                                          ? "APPLIED"
-                                                          : "APPLY NOW",
-                                                      style: TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                  ),
+                                                                              ?.id ||
+                                                                      application
+                                                                              .jobData
+                                                                              ?.id ==
+                                                                          controller
+                                                                              .jobOpening
+                                                                              .value
+                                                                              ?.id) ==
+                                                                  true
+                                                              ? "APPLIED"
+                                                              : "APPLY NOW",
+                                                          style: TextStyle(
+                                                              fontSize: 14),
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
                                             TextButton.icon(
                                               onPressed: () {},
                                               icon: const Icon(

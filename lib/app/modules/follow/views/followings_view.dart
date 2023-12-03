@@ -64,6 +64,9 @@ class FollowingsView extends GetView<FollowingsController> {
                                 horizontal: 16, vertical: 16),
                             itemBuilder: (BuildContext context, int index) {
                               Follow? e = controller.follows[index];
+                              if (e.userDetails == null) {
+                                return SizedBox();
+                              }
                               return _userCard(e.userDetails!, e.id);
                             },
                             itemCount: controller.follows.length,
@@ -79,70 +82,72 @@ class FollowingsView extends GetView<FollowingsController> {
   }
 
   Widget _userCard(CrewUser user, int? followId) {
-    return InkWell(
-      onTap: () {
-        Get.toNamed(Routes.APPLICANT_DETAIL,
-            arguments: ApplicantDetailArguments(
-                userId: user.id, viewType: ViewType.crewDetail));
-      },
-      child: SizedBox(
-        /*  margin: const EdgeInsets.only(bottom: 12),
-        elevation: 3,
-        shadowColor: const Color.fromARGB(255, 237, 233, 241),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), */
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(128),
-                child: CachedNetworkImage(
-                    imageUrl: user.profilePic ?? "",
-                    height: 40,
-                    fit: BoxFit.cover,
-                    width: 40),
-              ),
-              8.horizontalSpace,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${user.firstName ?? ""} ${user.lastName ?? ""}",
-                      style: Get.textTheme.bodyLarge?.copyWith(fontSize: 16),
-                    ),
-                    2.verticalSpace,
-                    Text(
-                        controller.args?.viewType == FollowViewType.following
-                            ? (user.companyName ?? "")
-                            : (UserStates.instance.ranks
-                                    ?.firstWhereOrNull(
-                                        (rank) => rank.id == user.rankId)
-                                    ?.name ??
-                                ""),
-                        style: Get.textTheme.bodySmall
-                            ?.copyWith(fontWeight: FontWeight.bold))
-                  ],
+    return Obx(() {
+      return InkWell(
+        onTap: () {
+          Get.toNamed(Routes.APPLICANT_DETAIL,
+              arguments: ApplicantDetailArguments(
+                  userId: user.id, viewType: ViewType.crewDetail));
+        },
+        child: SizedBox(
+          /*  margin: const EdgeInsets.only(bottom: 12),
+            elevation: 3,
+            shadowColor: const Color.fromARGB(255, 237, 233, 241),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), */
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(128),
+                  child: CachedNetworkImage(
+                      imageUrl: user.profilePic ?? "",
+                      height: 40,
+                      fit: BoxFit.cover,
+                      width: 40),
                 ),
-              ),
-              if ([FollowViewType.following, FollowViewType.savedProfile]
-                  .contains(controller.args?.viewType))
-                controller.unfollowId.value == followId
-                    ? const SizedBox(
-                        height: 16,
-                        width: 16,
-                        child: CircularProgressIndicator())
-                    : InkWell(
-                        onTap: () {
-                          controller.unfollow(followId ?? -1);
-                        },
-                        child: SvgPicture.asset("assets/icons/trash.svg")),
-              16.horizontalSpace
-            ],
+                8.horizontalSpace,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${user.firstName ?? ""} ${user.lastName ?? ""}",
+                        style: Get.textTheme.bodyLarge?.copyWith(fontSize: 16),
+                      ),
+                      2.verticalSpace,
+                      Text(
+                          controller.args?.viewType == FollowViewType.following
+                              ? (user.companyName ?? "")
+                              : (UserStates.instance.ranks
+                                      ?.firstWhereOrNull(
+                                          (rank) => rank.id == user.rankId)
+                                      ?.name ??
+                                  ""),
+                          style: Get.textTheme.bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold))
+                    ],
+                  ),
+                ),
+                if ([FollowViewType.following, FollowViewType.savedProfile]
+                    .contains(controller.args?.viewType))
+                  controller.unfollowId.value == followId
+                      ? const SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: CircularProgressIndicator())
+                      : InkWell(
+                          onTap: () {
+                            controller.unfollow(followId ?? -1);
+                          },
+                          child: SvgPicture.asset("assets/icons/trash.svg")),
+                16.horizontalSpace
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

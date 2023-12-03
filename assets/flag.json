@@ -1,0 +1,867 @@
+[
+    {
+        "country_name": "ALAND ISLANDS",
+        "flag_code": "ALD",
+        "is_active": false
+    },
+    {
+        "country_name": "ALBANIA",
+        "flag_code": "ALB",
+        "is_active": false
+    },
+    {
+        "country_name": "ALGERIA",
+        "flag_code": "DZA",
+        "is_active": false
+    },
+    {
+        "country_name": "ANGOLA",
+        "flag_code": "AGO",
+        "is_active": false
+    },
+    {
+        "country_name": "ANGUILLA",
+        "flag_code": "AIA",
+        "is_active": false
+    },
+    {
+        "country_name": "ANTIGUA & BARBUDA",
+        "flag_code": "ATG",
+        "is_active": false
+    },
+    {
+        "country_name": "ARGENTINA",
+        "flag_code": "ARG",
+        "is_active": false
+    },
+    {
+        "country_name": "ARUBA",
+        "flag_code": "ABW",
+        "is_active": false
+    },
+    {
+        "country_name": "AUSTRALIA",
+        "flag_code": "AUS",
+        "is_active": false
+    },
+    {
+        "country_name": "AUSTRIA",
+        "flag_code": "AUT",
+        "is_active": false
+    },
+    {
+        "country_name": "AZERBAIJAN",
+        "flag_code": "AZE",
+        "is_active": false
+    },
+    {
+        "country_name": "BAHAMAS",
+        "flag_code": "BHS",
+        "is_active": false
+    },
+    {
+        "country_name": "BAHRAIN",
+        "flag_code": "BHR",
+        "is_active": false
+    },
+    {
+        "country_name": "BANGLADESH",
+        "flag_code": "BGD",
+        "is_active": false
+    },
+    {
+        "country_name": "BARBADOS",
+        "flag_code": "BRB",
+        "is_active": false
+    },
+    {
+        "country_name": "BELGIUM",
+        "flag_code": "BEL",
+        "is_active": false
+    },
+    {
+        "country_name": "BELIZE",
+        "flag_code": "BLZ",
+        "is_active": false
+    },
+    {
+        "country_name": "BENIN",
+        "flag_code": "BEN",
+        "is_active": false
+    },
+    {
+        "country_name": "BERMUDA",
+        "flag_code": "BMU",
+        "is_active": false
+    },
+    {
+        "country_name": "BOLIVIA",
+        "flag_code": "BOL",
+        "is_active": false
+    },
+    {
+        "country_name": "BRAZIL",
+        "flag_code": "BRA",
+        "is_active": false
+    },
+    {
+        "country_name": "BRUNEI",
+        "flag_code": "BRU",
+        "is_active": false
+    },
+    {
+        "country_name": "BULGARIA",
+        "flag_code": "BGR",
+        "is_active": false
+    },
+    {
+        "country_name": "CAMBODIA",
+        "flag_code": "KHM",
+        "is_active": false
+    },
+    {
+        "country_name": "CAMEROON",
+        "flag_code": "CMR",
+        "is_active": false
+    },
+    {
+        "country_name": "CANADA",
+        "flag_code": "CAN",
+        "is_active": false
+    },
+    {
+        "country_name": "CAPE VERDE",
+        "flag_code": "CPV",
+        "is_active": false
+    },
+    {
+        "country_name": "CAYMAN ISLANDS",
+        "flag_code": "CYM",
+        "is_active": false
+    },
+    {
+        "country_name": "CHILE",
+        "flag_code": "CHL",
+        "is_active": false
+    },
+    {
+        "country_name": "COLUMBIA",
+        "flag_code": "COL",
+        "is_active": false
+    },
+    {
+        "country_name": "COMOROS",
+        "flag_code": "COM",
+        "is_active": false
+    },
+    {
+        "country_name": "COOK ISLANDS",
+        "flag_code": "COK",
+        "is_active": false
+    },
+    {
+        "country_name": "COSTA RICA",
+        "flag_code": "CRI",
+        "is_active": false
+    },
+    {
+        "country_name": "CROATIA",
+        "flag_code": "HRV",
+        "is_active": false
+    },
+    {
+        "country_name": "CUBA",
+        "flag_code": "CUB",
+        "is_active": false
+    },
+    {
+        "country_name": "CYPRUS",
+        "flag_code": "CYP",
+        "is_active": false
+    },
+    {
+        "country_name": "CZECH REPUBLIC",
+        "flag_code": "CZE",
+        "is_active": false
+    },
+    {
+        "country_name": "DANISH INTERNATIONAL",
+        "flag_code": "DIS",
+        "is_active": false
+    },
+    {
+        "country_name": "DENMARK",
+        "flag_code": "DNK",
+        "is_active": false
+    },
+    {
+        "country_name": "DJIBOUTI",
+        "flag_code": "DJI",
+        "is_active": false
+    },
+    {
+        "country_name": "DOMINICA",
+        "flag_code": "DMA",
+        "is_active": false
+    },
+    {
+        "country_name": "DOMINICAN REPUBLIC",
+        "flag_code": "DOM",
+        "is_active": false
+    },
+    {
+        "country_name": "ECUADOR",
+        "flag_code": "ECU",
+        "is_active": false
+    },
+    {
+        "country_name": "EGYPT",
+        "flag_code": "EGY",
+        "is_active": false
+    },
+    {
+        "country_name": "EL SALVADOR",
+        "flag_code": "SLV",
+        "is_active": false
+    },
+    {
+        "country_name": "EQUATORIAL GUINEA",
+        "flag_code": "GNQ",
+        "is_active": false
+    },
+    {
+        "country_name": "ERITREA",
+        "flag_code": "ERI",
+        "is_active": false
+    },
+    {
+        "country_name": "ESTONIA",
+        "flag_code": "EST",
+        "is_active": false
+    },
+    {
+        "country_name": "ETHIOPIA",
+        "flag_code": "ETH",
+        "is_active": false
+    },
+    {
+        "country_name": "FAROE ISLANDS",
+        "flag_code": "FRO",
+        "is_active": false
+    },
+    {
+        "country_name": "FIJI",
+        "flag_code": "FIJ",
+        "is_active": false
+    },
+    {
+        "country_name": "FINLAND",
+        "flag_code": "FIN",
+        "is_active": false
+    },
+    {
+        "country_name": "FRANCE",
+        "flag_code": "FRA",
+        "is_active": false
+    },
+    {
+        "country_name": "FRENCH KERGUELEN ISL",
+        "flag_code": "ATF",
+        "is_active": false
+    },
+    {
+        "country_name": "GABON",
+        "flag_code": "GAB",
+        "is_active": false
+    },
+    {
+        "country_name": "GEORGIA",
+        "flag_code": "GEO",
+        "is_active": false
+    },
+    {
+        "country_name": "GERMANY",
+        "flag_code": "DEU",
+        "is_active": false
+    },
+    {
+        "country_name": "GHANA",
+        "flag_code": "GHA",
+        "is_active": false
+    },
+    {
+        "country_name": "GIBRALTER",
+        "flag_code": "GIB",
+        "is_active": false
+    },
+    {
+        "country_name": "GREECE",
+        "flag_code": "GRC",
+        "is_active": false
+    },
+    {
+        "country_name": "GRENADA",
+        "flag_code": "GRD",
+        "is_active": false
+    },
+    {
+        "country_name": "GUADALOUPE",
+        "flag_code": "GLP",
+        "is_active": false
+    },
+    {
+        "country_name": "GUATAMALA",
+        "flag_code": "GTM",
+        "is_active": false
+    },
+    {
+        "country_name": "GUINEA",
+        "flag_code": "GIN",
+        "is_active": false
+    },
+    {
+        "country_name": "GUYANA",
+        "flag_code": "GUY",
+        "is_active": false
+    },
+    {
+        "country_name": "HAITI",
+        "flag_code": "HTI",
+        "is_active": false
+    },
+    {
+        "country_name": "HONDURAS",
+        "flag_code": "HND",
+        "is_active": false
+    },
+    {
+        "country_name": "HONG KONG",
+        "flag_code": "HKG",
+        "is_active": false
+    },
+    {
+        "country_name": "HUNGARY",
+        "flag_code": "HUN",
+        "is_active": false
+    },
+    {
+        "country_name": "ICELAND",
+        "flag_code": "ISL",
+        "is_active": false
+    },
+    {
+        "country_name": "INDIA",
+        "flag_code": "IND",
+        "is_active": false
+    },
+    {
+        "country_name": "INDONESIA",
+        "flag_code": "IDN",
+        "is_active": false
+    },
+    {
+        "country_name": "IRAN",
+        "flag_code": "IRN",
+        "is_active": false
+    },
+    {
+        "country_name": "IRAQ",
+        "flag_code": "IRQ",
+        "is_active": false
+    },
+    {
+        "country_name": "IRISH REPUBLIC",
+        "flag_code": "IRL",
+        "is_active": false
+    },
+    {
+        "country_name": "ISLE OF MAN",
+        "flag_code": "IOM",
+        "is_active": false
+    },
+    {
+        "country_name": "ISRAEL",
+        "flag_code": "ISR",
+        "is_active": false
+    },
+    {
+        "country_name": "ITALY",
+        "flag_code": "ITA",
+        "is_active": false
+    },
+    {
+        "country_name": "IVORY COAST",
+        "flag_code": "CIV",
+        "is_active": false
+    },
+    {
+        "country_name": "JAMAICA",
+        "flag_code": "JAM",
+        "is_active": false
+    },
+    {
+        "country_name": "JAPAN",
+        "flag_code": "JPN",
+        "is_active": false
+    },
+    {
+        "country_name": "JAPAN",
+        "flag_code": "JAP",
+        "is_active": false
+    },
+    {
+        "country_name": "JORDAN",
+        "flag_code": "JOR",
+        "is_active": false
+    },
+    {
+        "country_name": "KENYA",
+        "flag_code": "KEN",
+        "is_active": false
+    },
+    {
+        "country_name": "KIRIBATI",
+        "flag_code": "KIR",
+        "is_active": false
+    },
+    {
+        "country_name": "KUWAIT",
+        "flag_code": "KWT",
+        "is_active": false
+    },
+    {
+        "country_name": "LAOS",
+        "flag_code": "LAO",
+        "is_active": false
+    },
+    {
+        "country_name": "LATVIA",
+        "flag_code": "LVA",
+        "is_active": false
+    },
+    {
+        "country_name": "LEBANON",
+        "flag_code": "LBN",
+        "is_active": false
+    },
+    {
+        "country_name": "LIBERIA",
+        "flag_code": "LBR",
+        "is_active": false
+    },
+    {
+        "country_name": "LIBYA",
+        "flag_code": "LBY",
+        "is_active": false
+    },
+    {
+        "country_name": "LITHUANIA",
+        "flag_code": "LTU",
+        "is_active": false
+    },
+    {
+        "country_name": "LUXEMBOURG",
+        "flag_code": "LUX",
+        "is_active": false
+    },
+    {
+        "country_name": "MADAGASCAR",
+        "flag_code": "MDG",
+        "is_active": false
+    },
+    {
+        "country_name": "MADEIRA",
+        "flag_code": "PMD",
+        "is_active": false
+    },
+    {
+        "country_name": "MALAYSIA",
+        "flag_code": "MYS",
+        "is_active": false
+    },
+    {
+        "country_name": "MALDIVES",
+        "flag_code": "MDV",
+        "is_active": false
+    },
+    {
+        "country_name": "MALTA",
+        "flag_code": "MLT",
+        "is_active": false
+    },
+    {
+        "country_name": "MARSHALL ISLANDS",
+        "flag_code": "MHL",
+        "is_active": false
+    },
+    {
+        "country_name": "MAURITANIA",
+        "flag_code": "MRT",
+        "is_active": false
+    },
+    {
+        "country_name": "MAURITIUS",
+        "flag_code": "MUS",
+        "is_active": false
+    },
+    {
+        "country_name": "MAURITIUS",
+        "flag_code": "MAU",
+        "is_active": false
+    },
+    {
+        "country_name": "MEXICO",
+        "flag_code": "MEX",
+        "is_active": false
+    },
+    {
+        "country_name": "MONACO",
+        "flag_code": "MON",
+        "is_active": false
+    },
+    {
+        "country_name": "MONGOLIA",
+        "flag_code": "MNG",
+        "is_active": false
+    },
+    {
+        "country_name": "MOROCCO",
+        "flag_code": "MOR",
+        "is_active": false
+    },
+    {
+        "country_name": "MOZAMBIQUE",
+        "flag_code": "MOZ",
+        "is_active": false
+    },
+    {
+        "country_name": "Myanmar, (Burma)",
+        "flag_code": "MMR",
+        "is_active": false
+    },
+    {
+        "country_name": "NAMIBIA",
+        "flag_code": "NAM",
+        "is_active": false
+    },
+    {
+        "country_name": "NAURU",
+        "flag_code": "NRU",
+        "is_active": false
+    },
+    {
+        "country_name": "NETHERLANDS",
+        "flag_code": "NLD",
+        "is_active": false
+    },
+    {
+        "country_name": "NETHERLANDS ANTILLES",
+        "flag_code": "ANT",
+        "is_active": false
+    },
+    {
+        "country_name": "NEW ZEALAND",
+        "flag_code": "NZL",
+        "is_active": false
+    },
+    {
+        "country_name": "NICARAGUA",
+        "flag_code": "NIC",
+        "is_active": false
+    },
+    {
+        "country_name": "NIGERIA",
+        "flag_code": "NIG",
+        "is_active": false
+    },
+    {
+        "country_name": "NORTH KOREA",
+        "flag_code": "PRK",
+        "is_active": false
+    },
+    {
+        "country_name": "NORWAY",
+        "flag_code": "NOR",
+        "is_active": false
+    },
+    {
+        "country_name": "NORWAY INTERNATIONAL",
+        "flag_code": "NIS",
+        "is_active": false
+    },
+    {
+        "country_name": "OLD EAST GERMANY",
+        "flag_code": "DDR",
+        "is_active": false
+    },
+    {
+        "country_name": "OLD YUGOSLAVIA",
+        "flag_code": "YUG",
+        "is_active": false
+    },
+    {
+        "country_name": "OMAN",
+        "flag_code": "OMN",
+        "is_active": false
+    },
+    {
+        "country_name": "PAKISTAN",
+        "flag_code": "PAK",
+        "is_active": false
+    },
+    {
+        "country_name": "PANAMA",
+        "flag_code": "PAN",
+        "is_active": false
+    },
+    {
+        "country_name": "PAPUA NEW GUINEA",
+        "flag_code": "PNG",
+        "is_active": false
+    },
+    {
+        "country_name": "PARAGUAY",
+        "flag_code": "PRY",
+        "is_active": false
+    },
+    {
+        "country_name": "PERU",
+        "flag_code": "PER",
+        "is_active": false
+    },
+    {
+        "country_name": "PHILIPPINES",
+        "flag_code": "PHL",
+        "is_active": false
+    },
+    {
+        "country_name": "POLAND",
+        "flag_code": "POL",
+        "is_active": false
+    },
+    {
+        "country_name": "PORTUGAL",
+        "flag_code": "PRT",
+        "is_active": false
+    },
+    {
+        "country_name": "QATAR",
+        "flag_code": "QAT",
+        "is_active": false
+    },
+    {
+        "country_name": "REPUBLIC OF CHINA",
+        "flag_code": "CHN",
+        "is_active": false
+    },
+    {
+        "country_name": "ROMANIA",
+        "flag_code": "ROM",
+        "is_active": false
+    },
+    {
+        "country_name": "RUSSIA",
+        "flag_code": "RUS",
+        "is_active": false
+    },
+    {
+        "country_name": "SAUDI ARABIA",
+        "flag_code": "SAU",
+        "is_active": false
+    },
+    {
+        "country_name": "SENEGAL",
+        "flag_code": "SEN",
+        "is_active": false
+    },
+    {
+        "country_name": "SIERRA LEONE",
+        "flag_code": "SLE",
+        "is_active": false
+    },
+    {
+        "country_name": "SINGAPORE",
+        "flag_code": "SGP",
+        "is_active": false
+    },
+    {
+        "country_name": "SLOVAKIA",
+        "flag_code": "SVK",
+        "is_active": false
+    },
+    {
+        "country_name": "SLOVENIA",
+        "flag_code": "SVN",
+        "is_active": false
+    },
+    {
+        "country_name": "SOLOMON ISLANDS",
+        "flag_code": "SLB",
+        "is_active": false
+    },
+    {
+        "country_name": "SOMALIA",
+        "flag_code": "SOM",
+        "is_active": false
+    },
+    {
+        "country_name": "SOUTH AFRICA",
+        "flag_code": "ZAF",
+        "is_active": false
+    },
+    {
+        "country_name": "SOUTH KOREA",
+        "flag_code": "KOR",
+        "is_active": false
+    },
+    {
+        "country_name": "SPAIN",
+        "flag_code": "ESP",
+        "is_active": false
+    },
+    {
+        "country_name": "SRI LANKA",
+        "flag_code": "LKA",
+        "is_active": false
+    },
+    {
+        "country_name": "ST. LUCIA",
+        "flag_code": "LCA",
+        "is_active": false
+    },
+    {
+        "country_name": "ST.VINCENT & GRNADNE",
+        "flag_code": "VCT",
+        "is_active": false
+    },
+    {
+        "country_name": "SUDAN",
+        "flag_code": "SDN",
+        "is_active": false
+    },
+    {
+        "country_name": "SURINAME",
+        "flag_code": "SUR",
+        "is_active": false
+    },
+    {
+        "country_name": "SWEDEN",
+        "flag_code": "SWE",
+        "is_active": false
+    },
+    {
+        "country_name": "SWITZERLAND",
+        "flag_code": "CHE",
+        "is_active": false
+    },
+    {
+        "country_name": "SYRIA",
+        "flag_code": "SYR",
+        "is_active": false
+    },
+    {
+        "country_name": "TAIWAN",
+        "flag_code": "TWN",
+        "is_active": false
+    },
+    {
+        "country_name": "TANZANIA",
+        "flag_code": "TZA",
+        "is_active": false
+    },
+    {
+        "country_name": "THAILAND",
+        "flag_code": "THA",
+        "is_active": false
+    },
+    {
+        "country_name": "THE CONGO",
+        "flag_code": "COG",
+        "is_active": false
+    },
+    {
+        "country_name": "THE GAMBIA",
+        "flag_code": "GMB",
+        "is_active": false
+    },
+    {
+        "country_name": "TOGO",
+        "flag_code": "TGO",
+        "is_active": false
+    },
+    {
+        "country_name": "TONGA",
+        "flag_code": "TON",
+        "is_active": false
+    },
+    {
+        "country_name": "TRINIDAD & TOBAGO",
+        "flag_code": "TTO",
+        "is_active": false
+    },
+    {
+        "country_name": "TUNISIA",
+        "flag_code": "TUN",
+        "is_active": false
+    },
+    {
+        "country_name": "TURKEY",
+        "flag_code": "TUR",
+        "is_active": false
+    },
+    {
+        "country_name": "TURKMENISTAN",
+        "flag_code": "TKM",
+        "is_active": false
+    },
+    {
+        "country_name": "TUVALU",
+        "flag_code": "TUV",
+        "is_active": false
+    },
+    {
+        "country_name": "UGANDA",
+        "flag_code": "UGA",
+        "is_active": false
+    },
+    {
+        "country_name": "UKRAINE",
+        "flag_code": "UKR",
+        "is_active": false
+    },
+    {
+        "country_name": "UNITED ARAB EMIRATES",
+        "flag_code": "ARE",
+        "is_active": false
+    },
+    {
+        "country_name": "UNITED KINGDOM",
+        "flag_code": "GBR",
+        "is_active": false
+    },
+    {
+        "country_name": "UNITED STATES",
+        "flag_code": "USA",
+        "is_active": false
+    },
+    {
+        "country_name": "VANUATU",
+        "flag_code": "VUT",
+        "is_active": false
+    },
+    {
+        "country_name": "VENEZUELA",
+        "flag_code": "VEN",
+        "is_active": false
+    },
+    {
+        "country_name": "VIETNAM",
+        "flag_code": "VNM",
+        "is_active": false
+    },
+    {
+        "country_name": "ZAIRE",
+        "flag_code": "ZAR",
+        "is_active": false
+    }
+]

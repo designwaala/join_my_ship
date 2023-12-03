@@ -44,7 +44,7 @@ class FollowProvider extends WrapperConnect {
   }
 
   Future<int?> unfollow(int followId) async {
-    final response = await delete("crew/followed_by_destroy/$followId");
+    final response = await delete("crew/followed_by_destroy/$followId/");
     return response.statusCode;
   }
 }

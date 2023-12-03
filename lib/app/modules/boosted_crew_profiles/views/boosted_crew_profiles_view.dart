@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
 import 'package:join_mp_ship/app/modules/boosted_crew_profiles/bindings/boosted_crew_profiles_binding.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/app/modules/crew_detail/controllers/crew_detail_controller.dart';
@@ -21,6 +22,7 @@ class BoostedCrewProfilesView extends GetView<BoostedCrewProfilesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
           bottom: PreferredSize(
@@ -479,10 +481,13 @@ class BoostedCrewProfilesView extends GetView<BoostedCrewProfilesController> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12))),
                               onPressed: () {
-                                Get.toNamed(Routes.CREW_DETAIL,
-                                    arguments: CrewDetailArguments(
-                                        crewDetail:
-                                            controller.boostedCrew?.userBoost));
+                                Get.toNamed(Routes.APPLICANT_DETAIL,
+                                    arguments: ApplicantDetailArguments(
+                                        userId: controller.boostedCrew
+                                                ?.userBoost?.userId ??
+                                            controller.boostedCrew?.userBoost
+                                                ?.user?.id,
+                                        viewType: ViewType.crewDetail));
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(

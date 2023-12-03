@@ -23,6 +23,9 @@ class Job {
   dynamic postedBy;
   int? jobLikeCount;
   bool? isJobLiked;
+  int? vesselIMO;
+  int? flag;
+  String? joiningPort;
 
   Job(
       {this.id,
@@ -45,7 +48,10 @@ class Job {
       this.vesselId,
       this.postedBy,
       this.jobLikeCount,
-      this.isJobLiked});
+      this.isJobLiked,
+      this.vesselIMO,
+      this.flag,
+      this.joiningPort});
 
   Job.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -88,6 +94,9 @@ class Job {
     postedBy = json['posted_by'];
     jobLikeCount = json['joblike_count'];
     isJobLiked = json['userlikedjob_status'];
+    vesselIMO = json['vessel_imo'];
+    flag = json['flag_key'];
+    joiningPort = json['joining_port'];
   }
 
   Map<String, String> jsonToUpdateJob() => {
@@ -121,6 +130,9 @@ class Job {
     data['modified_at'] = modifiedAt;
     data['vessel_id'] = vesselId;
     data['posted_by'] = postedBy;
+    data['vessel_imo'] = vesselIMO;
+    data['flag_key'] = flag;
+    data['joining_port'] = joiningPort;
     data.removeWhere((key, value) => value == null);
     return data;
   }

@@ -36,6 +36,8 @@ import '../modules/crew_job_applications/bindings/crew_job_applications_binding.
 import '../modules/crew_job_applications/views/crew_job_applications_view.dart';
 import '../modules/crew_list/bindings/crew_list_binding.dart';
 import '../modules/crew_list/views/crew_list_view.dart';
+import '../modules/crew_referral/bindings/crew_referral_binding.dart';
+import '../modules/crew_referral/views/crew_referral_view.dart';
 import '../modules/crew_sign_in_email/bindings/crew_sign_in_binding.dart';
 import '../modules/crew_sign_in_email/views/crew_sign_in_view.dart';
 import '../modules/crew_sign_in_mobile/bindings/crew_sign_in_mobile_binding.dart';
@@ -321,6 +323,11 @@ class AppPages {
       name: _Paths.CREW_DETAIL,
       page: () => const CrewDetailView(),
       binding: CrewDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREW_REFERRAL,
+      page: () => const CrewReferralView(),
+      binding: CrewReferralBinding(),
     ),
   ];
 }

@@ -20,6 +20,7 @@ import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_mp_ship/app/data/providers/employer_counts_provider.dart';
 import 'package:join_mp_ship/app/data/providers/fcm_token_provider.dart';
+import 'package:join_mp_ship/app/data/providers/flag_provider.dart';
 import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
 import 'package:join_mp_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
@@ -108,6 +109,7 @@ void main() async {
                         Theme.of(context).textTheme))
                 .copyWith(
                     colorScheme: Get.theme.colorScheme.copyWith(
+                        tertiary: const Color(0xFFFE9738),
                         background: const Color.fromRGBO(251, 246, 255, 1))),
           ));
         }),
@@ -144,8 +146,9 @@ void main() async {
     ..registerSingleton(EmployerCountsProvider())
     ..registerSingleton(HighlightProvider())
     ..registerSingleton(SubscriptionProvider())
-    ..registerSingleton(BoostingProvider());
-    
+    ..registerSingleton(BoostingProvider())
+    ..registerSingleton(FlagProvider());
+
   StreamSubscription<String?>? uriStream;
   notificationListeners();
 
