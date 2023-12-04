@@ -8,11 +8,13 @@ import 'package:get_cli/get_cli.dart';
 import 'package:join_mp_ship/app/data/models/job_model.dart';
 import 'package:join_mp_ship/app/data/models/subscription_model.dart';
 import 'package:join_mp_ship/app/data/providers/subscription_provider.dart';
+import 'package:join_mp_ship/app/modules/crew_referral/controllers/crew_referral_controller.dart';
 import 'package:join_mp_ship/app/modules/employer_job_applications/controllers/employer_job_applications_controller.dart';
 import 'package:join_mp_ship/app/modules/employer_job_posts/controllers/employer_job_posts_controller.dart';
 import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:lottie/lottie.dart';
@@ -143,8 +145,13 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                         onSelected: (value) {
                           switch (value) {
                             case 1:
-                              Get.offNamed(Routes.JOB_POST,
-                                  arguments: JobPostArguments(jobToEdit: job));
+                              PreferencesHelper.instance.isCrew == true
+                                  ? Get.offNamed(Routes.CREW_REFERRAL,
+                                      arguments:
+                                          CrewReferralArguments(jobToEdit: job))
+                                  : Get.offNamed(Routes.JOB_POST,
+                                      arguments:
+                                          JobPostArguments(jobToEdit: job));
                               return;
                             case 2:
                               controller.captureWidget(job);
@@ -475,7 +482,8 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                               ?.firstWhereOrNull((subs) =>
                                                   subs.isTypeKey?.type ==
                                                   PlanType.highlightPost)
-                                              ?.planName?.id ??
+                                              ?.planName
+                                              ?.id ??
                                           -1);
                                 }
                               },

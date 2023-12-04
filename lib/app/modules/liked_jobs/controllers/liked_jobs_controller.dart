@@ -168,10 +168,10 @@ class LikedJobsController extends GetxController {
     }
     applyingJob.value = jobId;
     Application? application = await getIt<ApplicationProvider>().apply(
-        Application(
             userId: PreferencesHelper.instance.userId,
             jobId: jobId,
-            rankId: selectedRank.value?.value));
+            rankId: selectedRank.value?.value,
+            subId: 12);
     if (application?.id == null) {
       applyingJob.value = null;
       return;

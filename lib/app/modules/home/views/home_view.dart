@@ -265,7 +265,10 @@ class HomeView extends GetView<HomeController> {
                                     children: [
                                       Expanded(
                                         child: CustomElevatedButon(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Get.toNamed(
+                                                  Routes.EMPLOYER_JOB_POSTS);
+                                            },
                                             child: const Text(
                                                 "View referred jobs")),
                                       ),

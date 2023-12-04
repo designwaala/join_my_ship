@@ -251,7 +251,7 @@ class JobForm extends GetView<CrewReferralController> {
                               onSuggestionSelected: (Flag suggestion) {
                                 controller.selectedFlag.value = suggestion;
                                 controller.flag.text =
-                                    suggestion.countryName ?? "";
+                                    suggestion.flagCode ?? "";
                               },
                               suggestionsCallback: (String pattern) {
                                 return Future.value(controller.flags.where(

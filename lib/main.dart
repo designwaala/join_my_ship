@@ -35,6 +35,10 @@ import 'package:join_mp_ship/app/data/providers/login_provider.dart';
 import 'package:join_mp_ship/app/data/providers/passport_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_mp_ship/app/data/providers/resume_pack_buy_provider.dart';
+import 'package:join_mp_ship/app/data/providers/resume_pack_provider.dart';
+import 'package:join_mp_ship/app/data/providers/resume_top_up_buy_provider.dart';
+import 'package:join_mp_ship/app/data/providers/resume_top_up_provider.dart';
 import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
 import 'package:join_mp_ship/app/data/providers/secondary_users_provider.dart';
 import 'package:join_mp_ship/app/data/providers/state_provider.dart';
@@ -147,7 +151,11 @@ void main() async {
     ..registerSingleton(HighlightProvider())
     ..registerSingleton(SubscriptionProvider())
     ..registerSingleton(BoostingProvider())
-    ..registerSingleton(FlagProvider());
+    ..registerSingleton(FlagProvider())
+    ..registerSingleton(ResumePackProvider())
+    ..registerSingleton(ResumePackBuyProvider())
+    ..registerSingleton(ResumeTopUpProvider())
+    ..registerSingleton(ResumeTopUpBuyProvider());
 
   StreamSubscription<String?>? uriStream;
   notificationListeners();

@@ -273,11 +273,14 @@ class ProfileView extends GetView<ProfileController> {
                               onTap: () {
                                 Get.toNamed(Routes.EMPLOYER_MANAGE_USERS);
                               }),
+                        if (controller.crewUser.value?.userTypeKey == 3)
                         CardObject(
                             iconPath:
                                 "assets/images/profile/my_subscription.png",
                             text: "My Subscriptions",
-                            onTap: () {}),
+                            onTap: () {
+                              Get.toNamed(Routes.SUBSCRIPTIONS);
+                            }),
                         CardObject(
                             iconPath:
                                 "assets/images/profile/change_password.png",

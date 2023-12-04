@@ -22,10 +22,6 @@ class JobProvider extends WrapperConnect {
 
   Future<List<Job>?> getJobList(
       {int? employerId, List<int>? ranks, List<int>? vesselIds}) async {
-    List<MapEntry<String, String>> queries = [
-      ...?ranks?.map((e) => MapEntry("rank", e.toString())),
-      ...?vesselIds?.map((e) => MapEntry("vessel_id", e.toString()))
-    ];
     final response = await httpGet(
         uri: Uri(
             scheme: "https",

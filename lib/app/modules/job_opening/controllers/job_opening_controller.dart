@@ -102,9 +102,13 @@ class JobOpeningController extends GetxController {
       return;
     }
     likingJob.value = true;
-    final response = await getIt<LikedPostProvider>().likePost(jobOpening.value?.id);
+    final response =
+        await getIt<LikedPostProvider>().likePost(jobOpening.value?.id);
     likingJob.value = false;
     if (response.statusCode == 201) {
+      jobOpening.value?.jobLikeCount =
+          (jobOpening.value?.jobLikeCount ?? 0) + 1;
+      jobOpening.value?.isJobLiked = true;
       fToast.safeShowToast(child: successToast("Job Liked"));
     }
   }
@@ -162,10 +166,10 @@ class JobOpeningController extends GetxController {
     }
     applyingJob.value = jobId;
     Application? application = await getIt<ApplicationProvider>().apply(
-        Application(
-            userId: PreferencesHelper.instance.userId,
-            jobId: jobId,
-            rankId: selectedRank.value?.value));
+        userId: PreferencesHelper.instance.userId,
+        jobId: jobId,
+        rankId: selectedRank.value?.value,
+        subId: 12);
     if (application?.id == null) {
       applyingJob.value = null;
       return;

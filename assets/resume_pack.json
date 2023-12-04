@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "name": "Pack 1 - 30 days - 10 per day - 3000",
+        "price": "3000.00",
+        "duration_days": 30,
+        "daily_limit": 10
+    },
+    {
+        "id": 2,
+        "name": "Pack 2 - 30 days - 15 per day - 4000",
+        "price": "4000.00",
+        "duration_days": 30,
+        "daily_limit": 15
+    },
+    {
+        "id": 3,
+        "name": "Pack 3 - 30 days - 20 per day - 5000",
+        "price": "5000.00",
+        "duration_days": 30,
+        "daily_limit": 20
+    }
+]

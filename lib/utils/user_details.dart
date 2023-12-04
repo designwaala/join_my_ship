@@ -2,6 +2,8 @@ import 'package:join_mp_ship/app/data/models/country_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
 import 'package:join_mp_ship/app/data/models/previous_employer_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
+import 'package:join_mp_ship/app/data/models/resume_pack_model.dart';
+import 'package:join_mp_ship/app/data/models/resume_top_up_model.dart';
 import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
 import 'package:join_mp_ship/app/data/models/subscription_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
@@ -24,6 +26,8 @@ class UserStates {
   CrewUser? prefilledDetails;
   String? userLink;
   List<Subscription>? subscription;
+  List<ResumePack>? resumePacks;
+  List<ResumeTopUp>? resumeTopUps;
 
   set isCrew(bool? value) {
     _isCrew = value;
@@ -62,6 +66,7 @@ class UserStates {
 
   reset() {
     ranks = countries = crewUser = userDetails = serviceRecords =
-        previousEmployerReferences = _isCrew = employerType = null;
+        previousEmployerReferences = _isCrew =
+            employerType = resumePacks = resumeTopUps = subscription = null;
   }
 }

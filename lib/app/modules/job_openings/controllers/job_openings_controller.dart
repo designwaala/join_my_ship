@@ -172,10 +172,9 @@ class JobOpeningsController extends GetxController {
     }
     applyingJob.value = jobId;
     Application? application = await getIt<ApplicationProvider>().apply(
-        Application(
-            userId: PreferencesHelper.instance.userId,
-            jobId: jobId,
-            rankId: selectedRank.value?.value));
+        userId: PreferencesHelper.instance.userId,
+        jobId: jobId,
+        rankId: selectedRank.value?.value);
     if (application?.id == null) {
       applyingJob.value = null;
       return;

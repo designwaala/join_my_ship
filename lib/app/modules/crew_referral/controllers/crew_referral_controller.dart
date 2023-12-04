@@ -110,8 +110,14 @@ class CrewReferralController extends GetxController {
   Rxn<CrewRequirements> selectedCrewRequirement = Rxn();
   List<Flag> flags = [];
 
+  CrewReferralArguments? args;
+
   @override
   void onInit() {
+    if (Get.arguments is CrewReferralArguments) {
+      args = Get.arguments;
+    }
+    jobToEdit = args?.jobToEdit;
     instantiate();
     super.onInit();
   }
@@ -153,6 +159,9 @@ class CrewReferralController extends GetxController {
       joiningPort.text = jobToEdit?.joiningPort ?? "";
       jobExpiry.value = int.tryParse(jobToEdit?.expiryInDay ?? "") ?? 0;
 
+      selectedRank.value = ranks.firstWhereOrNull((rank) =>
+          rank.id == jobToEdit?.jobRankWithWages?.firstOrNull?.rankNumber);
+      selectedCrewRequirement.value = selectedRank.value?.jobType;
       cocRequirementsSelected.value = cocs
           .where(
               (coc) => jobToEdit?.jobCoc?.any((e) => e.cocId == coc.id) == true)
@@ -230,7 +239,8 @@ class CrewReferralController extends GetxController {
           expiryInDay: jobExpiry.value.toString(),
           vesselIMO: int.tryParse(vesselIMONo.text.nullIfEmpty() ?? ""),
           flag: selectedFlag.value?.id,
-          joiningPort: joiningPort.text.nullIfEmpty()));
+          joiningPort: joiningPort.text.nullIfEmpty(),
+          isActive: false));
 
       //Step 2: Post Rank
       await getIt<JobRankWithWagesProvider>().postJobRankWithWages(
@@ -329,4 +339,9 @@ class CrewReferralController extends GetxController {
 
     isPostingJob.value = false;
   }
+}
+
+class CrewReferralArguments {
+  final Job? jobToEdit;
+  const CrewReferralArguments({this.jobToEdit});
 }
