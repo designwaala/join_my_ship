@@ -47,29 +47,34 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                                           padding:
                                               const EdgeInsets.only(bottom: 8),
                                           child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16)),
                                               child: Padding(
-                                            padding: const EdgeInsets.all(12),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                8.verticalSpace,
-                                                Text(
-                                                    UserStates.instance
-                                                            .resumePacks
-                                                            ?.firstWhereOrNull(
-                                                                (pack) =>
-                                                                    pack.id ==
-                                                                    resumePack
-                                                                        .purchasePack)
-                                                            ?.name ??
-                                                        "",
-                                                    style: Get
-                                                        .textTheme.titleMedium),
-                                                4.verticalSpace,
-                                              ],
-                                            ),
-                                          )),
+                                                padding:
+                                                    const EdgeInsets.all(12),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    8.verticalSpace,
+                                                    Text(
+                                                        UserStates.instance
+                                                                .resumePacks
+                                                                ?.firstWhereOrNull(
+                                                                    (pack) =>
+                                                                        pack.id ==
+                                                                        resumePack
+                                                                            .purchasePack)
+                                                                ?.name ??
+                                                            "",
+                                                        style: Get.textTheme
+                                                            .titleMedium),
+                                                    4.verticalSpace,
+                                                  ],
+                                                ),
+                                              )),
                                         ))
                                     .toList() ??
                                 []),
@@ -105,28 +110,32 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                                 .map((resumeTopUp) => Padding(
                                       padding: const EdgeInsets.only(bottom: 8),
                                       child: Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
                                           child: Padding(
-                                        padding: const EdgeInsets.all(12),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            8.verticalSpace,
-                                            Text(
-                                                UserStates.instance.resumeTopUps
-                                                        ?.firstWhereOrNull(
-                                                            (topUp) =>
-                                                                topUp.id ==
-                                                                resumeTopUp
-                                                                    .purchaseTopUp)
-                                                        ?.name ??
-                                                    "",
-                                                style:
-                                                    Get.textTheme.titleMedium),
-                                            4.verticalSpace,
-                                          ],
-                                        ),
-                                      )),
+                                            padding: const EdgeInsets.all(12),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                8.verticalSpace,
+                                                Text(
+                                                    UserStates.instance
+                                                            .resumeTopUps
+                                                            ?.firstWhereOrNull(
+                                                                (topUp) =>
+                                                                    topUp.id ==
+                                                                    resumeTopUp
+                                                                        .purchaseTopUp)
+                                                            ?.name ??
+                                                        "",
+                                                    style: Get
+                                                        .textTheme.titleMedium),
+                                                4.verticalSpace,
+                                              ],
+                                            ),
+                                          )),
                                     ))
                                 .toList()),
                         secondChild: const SizedBox(),

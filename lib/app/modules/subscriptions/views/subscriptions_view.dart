@@ -76,7 +76,7 @@ class SubscriptionsView extends GetView<SubscriptionsController> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(view.name,
-                                              style: Get.textTheme.titleSmall
+                                              style: Get.textTheme.titleMedium
                                                   ?.copyWith(
                                                       color: controller
                                                                   .view.value ==

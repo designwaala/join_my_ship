@@ -208,12 +208,7 @@ class BoostedJobsView extends GetView<BoostedJobsController> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.start,
                                                                         children: [
-                                                                          UserStates.instance.crewUser?.rankId == rankWithWages.rankNumber || (UserStates.instance.crewUser?.promotionApplied == true && controller.ranks.firstWhereOrNull((rank) => UserStates.instance.crewUser?.rankId == rank.id)?.promotedTo == rankWithWages.rankNumber)
-                                                                              ? const SizedBox(
-                                                                                  height: 20,
-                                                                                  width: 20,
-                                                                                )
-                                                                              : SvgPicture.asset("assets/icons/job.svg"),
+                                                                          SvgPicture.asset("assets/icons/job.svg"),
                                                                           10.horizontalSpace,
                                                                           Flexible(
                                                                             child:

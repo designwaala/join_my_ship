@@ -34,7 +34,7 @@ class JobForm extends GetView<CrewReferralController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     24.verticalSpace,
-                    Text("Post a new job", style: Get.textTheme.titleLarge),
+                    Text("Refer a new job", style: Get.textTheme.titleLarge),
                     28.verticalSpace,
                     Row(
                       children: [

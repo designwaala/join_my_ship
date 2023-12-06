@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/subscriptions/controllers/subscriptions_controller.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:collection/collection.dart';
 
 class BuyPlansView extends GetView<SubscriptionsController> {
   const BuyPlansView({Key? key}) : super(key: key);
@@ -42,26 +44,65 @@ class BuyPlansView extends GetView<SubscriptionsController> {
                                         padding:
                                             const EdgeInsets.only(bottom: 8),
                                         child: Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(16)),
                                             child: Padding(
-                                          padding: const EdgeInsets.all(12),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              8.verticalSpace,
-                                              Text(resumePack.name ?? "",
-                                                  style: Get
-                                                      .textTheme.titleMedium),
-                                              4.verticalSpace,
-                                              Text(
-                                                  "Daily Downloads: ${resumePack.dailyLimit ?? ""}"),
-                                              Text(
-                                                  "Validity: ${resumePack.durationDays}"),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child:
-                                                    controller.buyingPlan
+                                              padding: const EdgeInsets.only(
+                                                  left: 18,
+                                                  top: 12,
+                                                  bottom: 12,
+                                                  right: 12),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  8.verticalSpace,
+                                                  Text(
+                                                      resumePack.name
+                                                              ?.split(" - ")
+                                                              .firstOrNull ??
+                                                          "",
+                                                      style: Get
+                                                          .textTheme.titleMedium
+                                                          ?.copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: Get
+                                                                  .theme
+                                                                  .colorScheme
+                                                                  .tertiary)),
+                                                  Divider(
+                                                      color:
+                                                          Colors.grey.shade600),
+                                                  8.verticalSpace,
+                                                  Row(
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        "assets/icons/coins.svg",
+                                                        height: 32,
+                                                        width: 32,
+                                                      ),
+                                                      4.horizontalSpace,
+                                                      Text(
+                                                          resumePack.name
+                                                                  ?.split(" - ")
+                                                                  .lastOrNull ??
+                                                              "",
+                                                          style: Get.textTheme
+                                                              .titleLarge),
+                                                    ],
+                                                  ),
+                                                  8.verticalSpace,
+                                                  Text(
+                                                      "Daily Downloads Limit: ${resumePack.dailyLimit ?? ""}"),
+                                                  Text(
+                                                      "Validity: ${resumePack.durationDays} days"),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: controller.buyingPlan
                                                                 .value ==
                                                             resumePack.id
                                                         ? const SizedBox(
@@ -81,10 +122,10 @@ class BuyPlansView extends GetView<SubscriptionsController> {
                                                                       },
                                                             child: const Text(
                                                                 "Buy Now")),
-                                              )
-                                            ],
-                                          ),
-                                        )),
+                                                  )
+                                                ],
+                                              ),
+                                            )),
                                       ))
                                   .toList() ??
                               []),
@@ -119,49 +160,89 @@ class BuyPlansView extends GetView<SubscriptionsController> {
                                         padding:
                                             const EdgeInsets.only(bottom: 8),
                                         child: Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(16)),
                                             child: Padding(
-                                          padding: const EdgeInsets.all(12),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              8.verticalSpace,
-                                              Text(resumeTopUp.name ?? "",
-                                                  style: Get
-                                                      .textTheme.titleMedium),
-                                              4.verticalSpace,
-                                              Text(
-                                                  "Daily Downloads: ${resumeTopUp.topupLimit ?? ""}"),
-                                              Text(
-                                                  "Validity: ${resumeTopUp.durationDays}"),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: controller.toppingUpPlan
-                                                            .value ==
-                                                        resumeTopUp.id
-                                                    ? const SizedBox(
-                                                        height: 16,
-                                                        width: 16,
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      )
-                                                    : FilledButton(
-                                                        onPressed:
-                                                            resumeTopUp.id ==
-                                                                    null
-                                                                ? null
-                                                                : () {
-                                                                    controller.topUp(
-                                                                        resumeTopUp
-                                                                            .id!);
-                                                                  },
-                                                        child: const Text(
-                                                            "Buy Now")),
-                                              )
-                                            ],
-                                          ),
-                                        )),
+                                              padding: const EdgeInsets.only(
+                                                  left: 18,
+                                                  top: 12,
+                                                  bottom: 12,
+                                                  right: 12),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  8.verticalSpace,
+                                                  Text(
+                                                      resumeTopUp.name
+                                                              ?.split(" - ")
+                                                              .firstOrNull ??
+                                                          "",
+                                                      style: Get
+                                                          .textTheme.titleLarge
+                                                          ?.copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: Get
+                                                                  .theme
+                                                                  .colorScheme
+                                                                  .tertiary)),
+                                                  Divider(
+                                                      color:
+                                                          Colors.grey.shade600),
+                                                  8.verticalSpace,
+                                                  Row(
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        "assets/icons/coins.svg",
+                                                        height: 32,
+                                                        width: 32,
+                                                      ),
+                                                      4.horizontalSpace,
+                                                      Text(
+                                                          resumeTopUp.name
+                                                                  ?.split(" - ")
+                                                                  .lastOrNull ??
+                                                              "",
+                                                          style: Get.textTheme
+                                                              .titleLarge),
+                                                    ],
+                                                  ),
+                                                  8.verticalSpace,
+                                                  Text(
+                                                      "Daily Downloads Limit: ${resumeTopUp.durationDays ?? ""} days"),
+                                                  Text(
+                                                      "Validity: ${resumeTopUp.durationDays} days"),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: controller
+                                                                .toppingUpPlan
+                                                                .value ==
+                                                            resumeTopUp.id
+                                                        ? const SizedBox(
+                                                            height: 16,
+                                                            width: 16,
+                                                            child:
+                                                                CircularProgressIndicator(),
+                                                          )
+                                                        : FilledButton(
+                                                            onPressed:
+                                                                resumeTopUp.id ==
+                                                                        null
+                                                                    ? null
+                                                                    : () {
+                                                                        controller
+                                                                            .topUp(resumeTopUp.id!);
+                                                                      },
+                                                            child: const Text(
+                                                                "Buy Now")),
+                                                  )
+                                                ],
+                                              ),
+                                            )),
                                       ))
                                   .toList() ??
                               []),

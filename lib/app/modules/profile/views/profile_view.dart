@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
@@ -264,7 +265,7 @@ class ProfileView extends GetView<ProfileController> {
                             iconPath: "assets/images/profile/wallet.png",
                             text: "Wallet",
                             onTap: () {}),
-                        if (controller.crewUser.value?.userTypeKey != 5 &&
+                        if (controller.crewUser.value?.userTypeKey == 3 &&
                             controller.crewUser.value?.isPrimaryUser == true)
                           CardObject(
                               iconPath:
@@ -274,13 +275,13 @@ class ProfileView extends GetView<ProfileController> {
                                 Get.toNamed(Routes.EMPLOYER_MANAGE_USERS);
                               }),
                         if (controller.crewUser.value?.userTypeKey == 3)
-                        CardObject(
-                            iconPath:
-                                "assets/images/profile/my_subscription.png",
-                            text: "My Subscriptions",
-                            onTap: () {
-                              Get.toNamed(Routes.SUBSCRIPTIONS);
-                            }),
+                          CardObject(
+                              iconPath:
+                                  "assets/images/profile/my_subscription.png",
+                              text: "My Subscriptions",
+                              onTap: () {
+                                Get.toNamed(Routes.SUBSCRIPTIONS);
+                              }),
                         CardObject(
                             iconPath:
                                 "assets/images/profile/change_password.png",
@@ -295,16 +296,17 @@ class ProfileView extends GetView<ProfileController> {
                         ),
                         if (controller.crewUser.value?.userTypeKey == 2)
                           CardObject(
-                            iconPath: "assets/images/profile/help.png",
-                            text: "Highlight",
+                            svgPath: "assets/icons/send.svg",
+                            text: "Highlight Profile",
                             onTap: controller.highlightCrew,
                           ),
                         if (controller.crewUser.value?.userTypeKey == 2)
                           CardObject(
-                            iconPath: "assets/images/profile/help.png",
-                            text: "Boost",
-                            onTap: controller.boostCrew,
-                          ),
+                              svgPath: "assets/icons/boosting.svg",
+                              text: "Boost Profile",
+                              onTap: controller.boostCrew,
+                              height: 28,
+                              width: 28),
                         /* if (controller.crewUser.value?.userTypeKey == 2)
                           CardObject(
                             iconPath: "assets/images/profile/help.png",
@@ -333,11 +335,18 @@ class ProfileView extends GetView<ProfileController> {
                                   borderRadius: BorderRadius.circular(16.r)),
                               child: Row(
                                 children: [
-                                  Image.asset(
-                                    e.iconPath,
-                                    height: 24.h,
-                                    width: 24.h,
-                                  ),
+                                  e.icon != null
+                                      ? Icon(e.icon!,
+                                          color: Get.theme.primaryColor)
+                                      : e.svgPath != null
+                                          ? SvgPicture.asset(e.svgPath!,
+                                              height: e.height ?? 24.h,
+                                              width: e.width ?? 24.h)
+                                          : Image.asset(
+                                              e.iconPath ?? "",
+                                              height: e.height ?? 24.h,
+                                              width: e.width ?? 24.h,
+                                            ),
                                   18.horizontalSpace,
                                   Text(e.text,
                                       style: Get.textTheme.bodyMedium?.copyWith(
@@ -421,10 +430,20 @@ class ProfileView extends GetView<ProfileController> {
 }
 
 class CardObject {
-  final String iconPath;
+  final String? svgPath;
+  final String? iconPath;
+  final IconData? icon;
   final String text;
   final Function onTap;
+  final double? height;
+  final double? width;
 
   const CardObject(
-      {required this.iconPath, required this.text, required this.onTap});
+      {this.iconPath,
+      this.icon,
+      this.svgPath,
+      this.height,
+      this.width,
+      required this.text,
+      required this.onTap});
 }
