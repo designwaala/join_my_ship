@@ -7,6 +7,7 @@ import 'package:join_mp_ship/app/data/models/resume_top_up_model.dart';
 import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
 import 'package:join_mp_ship/app/data/models/subscription_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
+import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
@@ -28,6 +29,7 @@ class UserStates {
   List<Subscription>? subscription;
   List<ResumePack>? resumePacks;
   List<ResumeTopUp>? resumeTopUps;
+  VesselList? vessels;
 
   set isCrew(bool? value) {
     _isCrew = value;
@@ -67,6 +69,6 @@ class UserStates {
   reset() {
     ranks = countries = crewUser = userDetails = serviceRecords =
         previousEmployerReferences = _isCrew =
-            employerType = resumePacks = resumeTopUps = subscription = null;
+            employerType = resumePacks = resumeTopUps = subscription = vessels = null;
   }
 }

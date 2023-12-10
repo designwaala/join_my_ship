@@ -2,12 +2,15 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
 import '../models/user_details_model.dart';
 
 class UserDetailsProvider extends WrapperConnect {
+  PreferencesHelper prefs = PreferencesHelper.instance;
+
   UserDetailsProvider() {
     httpClient.defaultDecoder = (map) {
       if (map is Map<String, dynamic>) return UserDetails.fromJson(map);
@@ -24,6 +27,7 @@ class UserDetailsProvider extends WrapperConnect {
       print(map);
       return UserDetails.fromJson(map);
     });
+    await prefs.setUserDetailId(response.body?.id);
     return response.body;
   }
 
@@ -45,6 +49,7 @@ class UserDetailsProvider extends WrapperConnect {
       }
     }, contentType: "");
     UserStates.instance.userDetails = response.body;
+    await prefs.setUserDetailId(response.body?.id);
     return response.body;
   }
 }

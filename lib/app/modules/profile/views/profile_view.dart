@@ -14,8 +14,6 @@ import 'package:join_mp_ship/app/modules/employer_create_user/controllers/employ
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -274,7 +272,7 @@ class ProfileView extends GetView<ProfileController> {
                               onTap: () {
                                 Get.toNamed(Routes.EMPLOYER_MANAGE_USERS);
                               }),
-                        if (controller.crewUser.value?.userTypeKey == 3)
+                        // if (controller.crewUser.value?.userTypeKey == 3)
                           CardObject(
                               iconPath:
                                   "assets/images/profile/my_subscription.png",

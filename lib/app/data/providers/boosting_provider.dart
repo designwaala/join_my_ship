@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
 import '../models/boosting_model.dart';
@@ -13,6 +15,8 @@ class BoostingProvider extends WrapperConnect {
     };
     httpClient.baseUrl = baseURL;
   }
+
+  PreferencesHelper prefs = PreferencesHelper.instance;
 
   Future<Boosting?> getBoosting() async {
     final response = await get('crew/get_boosted');
@@ -56,5 +60,23 @@ class BoostingProvider extends WrapperConnect {
     final response = await multipartPost("crew/employer_boosting",
         {"sub_id": "$subscriptionId", "post_boost": "$postBoost"});
     return BoostingResponse.fromJson(response);
+  }
+
+  Future<List<Employer>?> getEmployerBoostings() async {
+    final response = await get(
+        "crew/subscribed_boosted_employer_plan/${prefs.userId}/",
+        decoder: (data) =>
+            List<Employer>.from(data.map((e) => Employer.fromJson(e))));
+    return response.body;
+  }
+
+  Future<Crew?> getCrewBoostings() async {
+    if (prefs.userDetailId == null && prefs.userId != null) {
+      await getIt<UserDetailsProvider>().getUserDetails(prefs.userId!);
+    }
+    final response = await get(
+        "crew/subscribed_boosted_crew_plan/${prefs.userDetailId}/",
+        decoder: (data) => Crew.fromJson(data));
+    return response.body;
   }
 }

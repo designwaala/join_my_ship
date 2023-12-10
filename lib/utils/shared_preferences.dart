@@ -28,9 +28,14 @@ class PreferencesHelper {
       _WEBSITE = "webiste",
       _IS_CREW = "is-crew",
       _USER_ID = "user-id",
+      _USER_DETAIL_ID = "user-detail-id",
       _FCM_TOKEN = "fcm-token",
       _EMPLOYER_TYPE = "employer-type",
       _USER_LINK = "user-link";
+
+  int? get userDetailId => _sharedPreferences?.getInt(_USER_DETAIL_ID);
+  Future<bool>? setUserDetailId(value) =>
+      _sharedPreferences?.setInt(_USER_DETAIL_ID, value); 
 
   Future<void> setAccessToken(String? value) =>
       value == null || _sharedPreferences == null

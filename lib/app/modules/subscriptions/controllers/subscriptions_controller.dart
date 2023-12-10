@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/boosting_model.dart';
 import 'package:join_mp_ship/app/data/models/current_resume_pack.dart';
 import 'package:join_mp_ship/app/data/models/current_resume_top_up.dart';
+import 'package:join_mp_ship/app/data/models/highlight_model.dart';
+import 'package:join_mp_ship/app/data/providers/boosting_provider.dart';
+import 'package:join_mp_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_mp_ship/app/data/providers/resume_pack_provider.dart';
 import 'package:join_mp_ship/app/data/providers/resume_pack_buy_provider.dart';
 import 'package:join_mp_ship/app/data/providers/resume_top_up_buy_provider.dart';
 import 'package:join_mp_ship/app/data/providers/resume_top_up_provider.dart';
+import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
@@ -29,8 +34,16 @@ class SubscriptionsController extends GetxController {
   RxBool showResumePacksPurchases = true.obs;
   RxBool showResumeTopUpPurchases = true.obs;
 
+  RxBool showBoostings = true.obs;
+
+  RxBool showHighlights = true.obs;
+
   RxList<CurrentResumePack> currentPackPurchases = RxList.empty();
   RxList<CurrentResumeTopUpPack> currentTopUpPurchases = RxList.empty();
+  RxList<Employer> currentEmployerBoostings = RxList.empty();
+  Rxn<Crew> currentCrewBoostings = Rxn();
+
+  RxList<Highlight> currentCrewHighlights = RxList.empty();
 
   @override
   void onInit() {
@@ -44,20 +57,36 @@ class SubscriptionsController extends GetxController {
         await getIt<ResumePackProvider>().getResumePacks();
     UserStates.instance.resumeTopUps ??=
         await getIt<ResumeTopUpProvider>().getResumeTopUp();
-    currentPackPurchases.value =
-        (await getIt<ResumePackBuyProvider>().getCurrentBoughtPacks()) ?? [];
-    currentTopUpPurchases.value =
-        (await getIt<ResumeTopUpBuyProvider>().getTopUpPurchases()) ?? [];
+    UserStates.instance.vessels ??=
+        await getIt<VesselListProvider>().getVesselList();
+    UserStates.instance.crewUser?.userTypeKey != 2
+        ? await _employerData()
+        : await _crewData();
     isLoading.value = false;
   }
 
   Future<void> getPurchases() async {
     isLoadingPurchases.value = true;
+    UserStates.instance.crewUser?.userTypeKey != 2
+        ? await _employerData()
+        : await _crewData();
+    isLoadingPurchases.value = false;
+  }
+
+  Future<void> _employerData() async {
     currentPackPurchases.value =
         (await getIt<ResumePackBuyProvider>().getCurrentBoughtPacks()) ?? [];
     currentTopUpPurchases.value =
         (await getIt<ResumeTopUpBuyProvider>().getTopUpPurchases()) ?? [];
-    isLoadingPurchases.value = false;
+    currentEmployerBoostings.value =
+        (await getIt<BoostingProvider>().getEmployerBoostings()) ?? [];
+  }
+
+  Future<void> _crewData() async {
+    currentCrewBoostings.value =
+        await getIt<BoostingProvider>().getCrewBoostings();
+    currentCrewHighlights.value =
+        (await getIt<HighlightProvider>().fetchCrewHighlight()) ?? [];
   }
 
   @override
