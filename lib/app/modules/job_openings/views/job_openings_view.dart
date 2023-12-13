@@ -144,7 +144,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                   controller.toApplyRanks.add(value.id!);
                                 }
                               },
-                              hint: const Text("Select Rank"),
+                              hint: const Text("Rank"),
                               buttonStyleData: ButtonStyleData(
                                   height: 40,
                                   padding:
@@ -254,7 +254,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                   controller.toApplyVesselTypes.add(value);
                                 }
                               },
-                              hint: const Text("Select Vessel"),
+                              hint: const Text("Vessel"),
                               buttonStyleData: ButtonStyleData(
                                   height: 40,
                                   padding:

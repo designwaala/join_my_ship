@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -21,6 +23,7 @@ import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:collection/collection.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 
@@ -43,6 +46,8 @@ class ApplicantDetailController extends GetxController {
   FToast fToast = FToast();
   final parentKey = GlobalKey();
 
+  ReceivePort _port = ReceivePort();
+
   @override
   void onInit() {
     if (Get.arguments is ApplicantDetailArguments?) {
@@ -51,12 +56,33 @@ class ApplicantDetailController extends GetxController {
     }
     instantiate();
     super.onInit();
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      final status = DownloadTaskStatus.fromInt(data[1] as int);
+      fToast.safeShowToast(child: successToast(status.name));
+    });
+
+    FlutterDownloader.registerCallback(downloadCallback);
   }
 
   @override
   onReady() {
     super.onReady();
     fToast.init(parentKey.currentContext!);
+  }
+
+  @pragma('vm:entry-point')
+  static void downloadCallback(String id, int status, int progress) {
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    send?.send([id, status, progress]);
+  }
+
+  @override
+  void onClose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    super.onClose();
   }
 
   instantiate() async {
@@ -79,6 +105,8 @@ class ApplicantDetailController extends GetxController {
   }
 
   downloadResume() async {
+/*     FlutterDownloader.open(taskId: "com.example.joinMpShip.download.task.13247.1702202773.045498");
+    return; */
     bool? shouldDownload = await showDialog(
       context: Get.context!,
       barrierDismissible: false,
@@ -142,11 +170,14 @@ class ApplicantDetailController extends GetxController {
     }
     application.value?.resumeStatus = true;
     await _prepareSaveDir();
+    DateTime now = DateTime.now();
     final taskId = await FlutterDownloader.enqueue(
       url: "https://designwaala.me$resume",
       headers: {}, // optional: header send with url (auth token etc)
       savedDir: _localPath ?? "",
       saveInPublicStorage: true,
+      fileName:
+          "${applicant?.id ?? ""}_${applicant?.firstName ?? ""}_${applicant?.lastName ?? ""}_${now.millisecondsSinceEpoch}.${resume.split(".").lastOrNull ?? ""}",
       showNotification:
           true, // show download progress in status bar (for Android)
       openFileFromNotification:

@@ -1,3 +1,4 @@
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:join_mp_ship/app/data/models/follow_model.dart';
 import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
@@ -12,15 +13,24 @@ class FollowingsController extends GetxController {
 
   FollowArguments? args;
 
+  RxBool showDownloadedResume = false.obs;
+  List<DownloadTask>? tasks;
+
   @override
   void onInit() {
     if (Get.arguments is FollowArguments?) {
       args = Get.arguments;
     }
-    if (args?.viewType == FollowViewType.followers) {
-      _getMyFollowers();
-    } else {
-      _getMyFollowings();
+    switch (args?.viewType) {
+      case FollowViewType.following:
+        _getMyFollowings();
+        break;
+      case FollowViewType.followers:
+        _getMyFollowers();
+        break;
+      case FollowViewType.savedProfile:
+        _getMyFollowings();
+        break;
     }
     super.onInit();
   }
@@ -36,6 +46,7 @@ class FollowingsController extends GetxController {
     isLoading.value = true;
     follows.value = (await getIt<FollowProvider>().getMyFollowings()) ?? [];
     UserStates.instance.ranks ??= await getIt<RanksProvider>().getRankList();
+    tasks = await FlutterDownloader.loadTasks();
     isLoading.value = false;
   }
 

@@ -100,11 +100,13 @@ class HomeController extends GetxController {
     await _getFeaturedCompanies();
     _addDrawerButtons();
     if (PreferencesHelper.instance.localFCMToken == null) {
-      String? fcmToken = await FirebaseMessaging.instance.getToken();
-      if (fcmToken?.nullIfEmpty() != null) {
-        PreferencesHelper.instance.setFCMToken(fcmToken!);
-        getIt<FcmTokenProvider>().postFCMToken(fcmToken);
-      }
+      try {
+        String? fcmToken = await FirebaseMessaging.instance.getToken();
+        if (fcmToken?.nullIfEmpty() != null) {
+          PreferencesHelper.instance.setFCMToken(fcmToken!);
+          getIt<FcmTokenProvider>().postFCMToken(fcmToken);
+        }
+      } catch (e) {}
     }
     isLoading.value = false;
   }

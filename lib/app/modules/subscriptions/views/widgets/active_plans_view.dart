@@ -121,28 +121,31 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(16)),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(12),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  8.verticalSpace,
-                                                  Text(
-                                                      UserStates.instance
-                                                              .resumeTopUps
-                                                              ?.firstWhereOrNull(
-                                                                  (topUp) =>
-                                                                      topUp
-                                                                          .id ==
-                                                                      resumeTopUp
-                                                                          .purchaseTopUp)
-                                                              ?.name ??
-                                                          "",
-                                                      style: Get.textTheme
-                                                          .titleMedium),
-                                                  4.verticalSpace,
-                                                ],
+                                            child: SizedBox(
+                                              width: double.maxFinite,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(12),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    8.verticalSpace,
+                                                    Text(
+                                                        UserStates.instance
+                                                                .resumeTopUps
+                                                                ?.firstWhereOrNull(
+                                                                    (topUp) =>
+                                                                        topUp
+                                                                            .id ==
+                                                                        resumeTopUp
+                                                                            .purchaseTopUp)
+                                                                ?.name ??
+                                                            "",
+                                                        style: Get.textTheme
+                                                            .titleMedium),
+                                                    4.verticalSpace,
+                                                  ],
+                                                ),
                                               ),
                                             )),
                                       ))
@@ -212,9 +215,7 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                                                                   .bodyLarge
                                                                   ?.copyWith(
                                                                       color: Colors
-                                                                          .blue,
-                                                                      fontSize:
-                                                                          18),
+                                                                          .blue),
                                                             ),
                                                             8.horizontalSpace,
                                                             Text(UserStates
@@ -248,9 +249,7 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                                                                   .bodyLarge
                                                                   ?.copyWith(
                                                                       color: Colors
-                                                                          .blue,
-                                                                      fontSize:
-                                                                          18),
+                                                                          .blue),
                                                             ),
                                                             8.horizontalSpace,
                                                             Text(boosting
