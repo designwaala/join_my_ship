@@ -32,6 +32,7 @@ import 'package:join_mp_ship/app/data/providers/job_rank_with_wages_provider.dar
 import 'package:join_mp_ship/app/data/providers/job_watch_keeping_post.dart';
 import 'package:join_mp_ship/app/data/providers/liked_post_provider.dart';
 import 'package:join_mp_ship/app/data/providers/login_provider.dart';
+import 'package:join_mp_ship/app/data/providers/notification_provider.dart';
 import 'package:join_mp_ship/app/data/providers/passport_issuing_authority_provider.dart';
 import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
@@ -155,7 +156,8 @@ void main() async {
     ..registerSingleton(ResumePackProvider())
     ..registerSingleton(ResumePackBuyProvider())
     ..registerSingleton(ResumeTopUpProvider())
-    ..registerSingleton(ResumeTopUpBuyProvider());
+    ..registerSingleton(ResumeTopUpBuyProvider())
+    ..registerSingleton(NotificationProvider());
 
   StreamSubscription<String?>? uriStream;
   notificationListeners();

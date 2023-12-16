@@ -2,7 +2,8 @@ enum PlanType {
   highlightProfile,
   jobPost,
   boosting,
-  highlightPost;
+  highlightPost,
+  applyJob;
 
   String get name {
     switch (this) {
@@ -14,6 +15,8 @@ enum PlanType {
         return "Boosting";
       case PlanType.highlightPost:
         return "Highlight Post";
+      case PlanType.applyJob:
+        return "Apply Job";
     }
   }
 }
@@ -78,6 +81,8 @@ class IsTypeKey {
           return PlanType.boosting;
         case "Highlight Post":
           return PlanType.highlightPost;
+        case "Apply Job":
+          return PlanType.applyJob;
       }
     }();
   }

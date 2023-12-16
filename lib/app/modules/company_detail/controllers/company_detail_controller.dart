@@ -181,7 +181,7 @@ class CompanyDetailController extends GetxController {
             userId: PreferencesHelper.instance.userId,
             jobId: jobId,
             rankId: selectedRank.value?.value,
-            subId: 12);
+            );
     if (application?.id == null) {
       applyingJob.value = null;
       return;

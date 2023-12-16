@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
+import 'package:join_mp_ship/app/data/models/subscription_model.dart';
+import 'package:join_mp_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
 import 'package:collection/collection.dart';
 
@@ -31,13 +34,15 @@ class ApplicationProvider extends WrapperConnect {
     return response.body;
   }
 
-  Future<Application?> apply(
-      {int? userId, int? jobId, int? rankId, int? subId}) async {
-    final response = await multipartPost('employer/apply_job', {
+  Future<Application?> apply({int? userId, int? jobId, int? rankId}) async {
+    UserStates.instance.subscription ??=
+        await getIt<SubscriptionProvider>().getSubscriptions();
+    final response = await multipartPost('employer/apply_job/', {
       if (userId != null) "user_id": "$userId",
       if (jobId != null) "job_id": "$jobId",
       if (rankId != null) "rank_id": "$rankId",
-      if (subId != null) "sub_id": "$subId"
+      "sub_id":
+          "${UserStates.instance.subscription?.firstWhereOrNull((subscription) => subscription.isTypeKey?.type == PlanType.applyJob)?.planName?.id}"
     });
     if (response.keys.join().contains("non_field_errors")) {
       Get.showSnackbar(GetSnackBar(

@@ -12,6 +12,7 @@ import 'package:join_mp_ship/main.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
+import 'package:join_mp_ship/widgets/job_cards/crew_referral_job_card.dart';
 import 'package:lottie/lottie.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:collection/collection.dart';
@@ -506,8 +507,16 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         vertical: 3),
-                                                child: _buildCard(controller
-                                                    .jobOpenings[index]));
+                                                child: controller
+                                                            .jobOpenings[index]
+                                                            .employerDetails
+                                                            ?.userTypeKey ==
+                                                        2
+                                                    ? _buildCrewReferralCard(
+                                                        controller
+                                                            .jobOpenings[index])
+                                                    : _buildCard(controller
+                                                        .jobOpenings[index]));
                                       },
                                     ),
                                   ),
@@ -881,6 +890,208 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                                 job.id;
                                             return;
                                           }
+                                          showDialog(
+                                            context: Get.context!,
+                                            barrierDismissible: false,
+                                            builder: (context) => AlertDialog(
+                                              shape: alertDialogShape,
+                                              title: const Text(
+                                                "Are You Sure ?",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.blue),
+                                              ),
+                                              actionsPadding:
+                                                  const EdgeInsets.only(
+                                                      bottom: 25),
+                                              content: const Text(
+                                                "Are you sure you want to use your 100 credits?",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 14.5,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              actionsAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              actions: [
+                                                ElevatedButton(
+                                                  onPressed: Get.back,
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    foregroundColor:
+                                                        Colors.black,
+                                                    elevation: 3,
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 35),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                  child: const Text("NO"),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    Get.back();
+                                                    controller.apply(job.id);
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    elevation: 3,
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 35),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                  child: const Text("YES"),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                  child: Text(
+                                    controller.applications.any((application) =>
+                                                application.jobId == job.id ||
+                                                application.jobData?.id ==
+                                                    job.id) ==
+                                            true
+                                        ? "APPLIED"
+                                        : "APPLY NOW",
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                        ],
+                      ),
+                      TextButton.icon(
+                        onPressed: () {
+                          controller.captureWidget(job);
+                        },
+                        icon: const Icon(
+                          Icons.share_sharp,
+                          size: 18,
+                          color: Colors.black,
+                        ),
+                        label: const Text(
+                          "Share",
+                          style: TextStyle(fontSize: 13, color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                5.verticalSpace,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Send an application for 100 credits",
+                      style: Get.textTheme.bodySmall?.copyWith(fontSize: 10),
+                    ),
+                  ],
+                ),
+                18.verticalSpace,
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildCrewReferralCard(Job job, {bool shareView = false}) {
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        children: [
+          CrewReferralJobCard(job: job),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                if (!shareView)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      controller.likingJob.value == job.id
+                          ? const CircularProgressIndicator()
+                          : TextButton.icon(
+                              onPressed: () {
+                                if (job.isJobLiked == true) {
+                                  return;
+                                }
+                                controller.likeJob(job.id);
+                              },
+                              icon: Icon(
+                                job.isJobLiked == true
+                                    ? Icons.thumb_up_alt_rounded
+                                    : Icons.thumb_up_alt_outlined,
+                                size: 18,
+                              ),
+                              label: Text(
+                                job.isJobLiked == true ? "Liked!" : "Like",
+                                style: TextStyle(fontSize: 13),
+                              )),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          controller.applyingJob.value == job.id
+                              ? const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [CircularProgressIndicator()],
+                                )
+                              : ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18))),
+                                  onPressed: controller.applications.any((application) =>
+                                                  application.jobId == job.id ||
+                                                  application.jobData?.id ==
+                                                      job.id) ==
+                                              true ||
+                                          job.jobRankWithWages?.none((rankWithWage) =>
+                                                  rankWithWage.rankNumber ==
+                                                      UserStates.instance
+                                                          .crewUser?.rankId ||
+                                                  (rankWithWage.rankNumber ==
+                                                      controller.ranks
+                                                          .firstWhereOrNull(
+                                                              (rank) =>
+                                                                  rank.id ==
+                                                                  UserStates
+                                                                      .instance
+                                                                      .crewUser
+                                                                      ?.rankId)
+                                                          ?.promotedTo)) ==
+                                              true ||
+                                          UserStates.instance.crewUser?.userTypeKey != 2
+                                      ? null
+                                      : () {
+                                          controller.selectedRank.value =
+                                              MapEntry(
+                                                  job.id ?? -1,
+                                                  job
+                                                          .jobRankWithWages
+                                                          ?.firstOrNull
+                                                          ?.rankNumber ??
+                                                      -1);
+
                                           showDialog(
                                             context: Get.context!,
                                             barrierDismissible: false,

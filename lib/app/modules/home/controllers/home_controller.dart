@@ -179,7 +179,7 @@ class HomeController extends GetxController {
         "iconPath": "assets/icons/notification.png",
         "iconSize": 20.0,
         "onTap": () {
-          // TODO
+          Get.toNamed(Routes.NOTIFICATION);
         }
       },
       {

@@ -49,6 +49,7 @@ abstract class Routes {
   static const BOOSTED_CREW_PROFILES = _Paths.BOOSTED_CREW_PROFILES;
   static const CREW_DETAIL = _Paths.CREW_DETAIL;
   static const CREW_REFERRAL = _Paths.CREW_REFERRAL;
+  static const NOTIFICATION = _Paths.NOTIFICATION;
 }
 
 abstract class _Paths {
@@ -99,4 +100,5 @@ abstract class _Paths {
   static const BOOSTED_CREW_PROFILES = '/boosted-crew-profiles';
   static const CREW_DETAIL = '/crew-detail';
   static const CREW_REFERRAL = '/crew-referral';
+  static const NOTIFICATION = '/notification';
 }

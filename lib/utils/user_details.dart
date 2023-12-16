@@ -1,5 +1,8 @@
+import 'package:join_mp_ship/app/data/models/coc_model.dart';
+import 'package:join_mp_ship/app/data/models/cop_model.dart';
 import 'package:join_mp_ship/app/data/models/country_model.dart';
 import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
+import 'package:join_mp_ship/app/data/models/flag_model.dart';
 import 'package:join_mp_ship/app/data/models/previous_employer_model.dart';
 import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/data/models/resume_pack_model.dart';
@@ -8,6 +11,7 @@ import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
 import 'package:join_mp_ship/app/data/models/subscription_model.dart';
 import 'package:join_mp_ship/app/data/models/user_details_model.dart';
 import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
+import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
 import 'package:join_mp_ship/app/data/providers/country_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
@@ -30,6 +34,10 @@ class UserStates {
   List<ResumePack>? resumePacks;
   List<ResumeTopUp>? resumeTopUps;
   VesselList? vessels;
+  List<Flag>? flags;
+  List<WatchKeeping>? watchKeepings;
+  List<Coc>? cocs;
+  List<Cop>? cops;
 
   set isCrew(bool? value) {
     _isCrew = value;
@@ -68,7 +76,8 @@ class UserStates {
 
   reset() {
     ranks = countries = crewUser = userDetails = serviceRecords =
-        previousEmployerReferences = _isCrew =
-            employerType = resumePacks = resumeTopUps = subscription = vessels = null;
+        previousEmployerReferences = _isCrew = employerType = resumePacks =
+            resumeTopUps = subscription =
+                vessels = flags = watchKeepings = cocs = cops = null;
   }
 }

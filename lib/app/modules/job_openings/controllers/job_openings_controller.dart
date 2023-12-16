@@ -16,6 +16,7 @@ import 'package:join_mp_ship/app/data/providers/application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/flag_provider.dart';
 import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_provider.dart';
 import 'package:join_mp_ship/app/data/providers/liked_post_provider.dart';
@@ -105,11 +106,16 @@ class JobOpeningsController extends GetxController {
       loadCOC(),
       loadCOP(),
       loadWatchKeeping(),
+      _getFlags(),
       UserStates.instance.crewUser?.userTypeKey == 2
           ? getJobApplications()
           : Future.value(null)
     ]);
     isLoading.value = false;
+  }
+
+  Future<void> _getFlags() async {
+    UserStates.instance.flags ??= await getIt<FlagProvider>().getFlags();
   }
 
   Future<void> getJobApplications() async {
@@ -172,9 +178,10 @@ class JobOpeningsController extends GetxController {
     }
     applyingJob.value = jobId;
     Application? application = await getIt<ApplicationProvider>().apply(
-        userId: PreferencesHelper.instance.userId,
-        jobId: jobId,
-        rankId: selectedRank.value?.value);
+      userId: PreferencesHelper.instance.userId,
+      jobId: jobId,
+      rankId: selectedRank.value?.value,
+    );
     if (application?.id == null) {
       applyingJob.value = null;
       return;

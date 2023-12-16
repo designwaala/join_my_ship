@@ -33,8 +33,10 @@ class ApplicationList {
         count: json['count'],
         next: json['next'],
         previous: json['previous'],
-        results: List<Application>.from(
-            json['results'].map((e) => Application.fromJson(e))));
+        results: json['results'] == null
+            ? null
+            : List<Application>.from(
+                json['results']?.map((e) => Application.fromJson(e))));
   }
 }
 

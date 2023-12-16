@@ -76,6 +76,8 @@ import '../modules/job_posted_successfully/bindings/job_posted_successfully_bind
 import '../modules/job_posted_successfully/views/job_posted_successfully_view.dart';
 import '../modules/liked_jobs/bindings/liked_jobs_binding.dart';
 import '../modules/liked_jobs/views/liked_jobs_view.dart';
+import '../modules/notification/bindings/notification_binding.dart';
+import '../modules/notification/views/notification_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/reset_password/bindings/reset_password_binding.dart';
@@ -328,6 +330,11 @@ class AppPages {
       name: _Paths.CREW_REFERRAL,
       page: () => const CrewReferralView(),
       binding: CrewReferralBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATION,
+      page: () => const NotificationView(),
+      binding: NotificationBinding(),
     ),
   ];
 }

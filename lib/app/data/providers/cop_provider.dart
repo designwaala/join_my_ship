@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/user_details.dart';
 import 'package:join_mp_ship/utils/wrapper_connect.dart';
 
 import '../models/cop_model.dart';
@@ -15,6 +16,7 @@ class CopProvider extends WrapperConnect {
 
   Future<List<Cop>?> getCOPList({required int userType}) async {
     final response = await get('employer/cop_list/$userType', headers: {});
+    UserStates.instance.cops = response.body;
     return response.body;
   }
 }

@@ -332,7 +332,12 @@ class HomeView extends GetView<HomeController> {
                           ],
                         ),
                         const Spacer(),
-                        const Icon(Icons.notifications, color: Colors.white),
+                        InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.NOTIFICATION);
+                            },
+                            child: const Icon(Icons.notifications,
+                                color: Colors.white)),
                         16.horizontalSpace
                       ],
                     ),
@@ -611,7 +616,12 @@ class HomeView extends GetView<HomeController> {
                           ],
                         ),
                         const Spacer(),
-                        const Icon(Icons.notifications, color: Colors.white),
+                        InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.NOTIFICATION);
+                            },
+                            child: const Icon(Icons.notifications,
+                                color: Colors.white)),
                         16.horizontalSpace
                       ],
                     ),
