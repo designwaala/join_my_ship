@@ -106,7 +106,10 @@ class Job {
         if (numberInfo != null) "number_info": "$numberInfo",
         if (vesselId != null) "vessel_id": "$vesselId",
         if (mailInfo != null) "mail_info": "$mailInfo",
-        if (numberInfo != null) "number_info": "$numberInfo"
+        if (numberInfo != null) "number_info": "$numberInfo",
+        if (vesselIMO != null) "vessel_imo": "$vesselIMO",
+        if (flag != null) "flag_key": "$flag",
+        if (joiningPort != null) "joining_port": "$joiningPort",
       };
 
   Map<String, dynamic> toJson() {

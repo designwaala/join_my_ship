@@ -349,7 +349,8 @@ class JobForm extends GetView<CrewReferralController> {
                               ?.copyWith(color: Get.theme.colorScheme.error)),
                     24.verticalSpace,
                     Text("Add COC requirements",
-                        style: Get.textTheme.formFieldHeading),
+                        style: Get.textTheme.titleSmall
+                            ?.copyWith(color: Get.theme.primaryColor)),
                     16.verticalSpace,
                     Row(
                       children: [
@@ -482,7 +483,8 @@ class JobForm extends GetView<CrewReferralController> {
                             .toList()),
                     12.verticalSpace,
                     Text("Add COP requirements",
-                        style: Get.textTheme.formFieldHeading),
+                        style: Get.textTheme.titleSmall
+                            ?.copyWith(color: Get.theme.primaryColor)),
                     16.verticalSpace,
                     Row(
                       children: [
@@ -612,7 +614,8 @@ class JobForm extends GetView<CrewReferralController> {
                             .toList()),
                     12.verticalSpace,
                     Text("Add Watch Keepings requirements",
-                        style: Get.textTheme.formFieldHeading),
+                        style: Get.textTheme.titleSmall
+                            ?.copyWith(color: Get.theme.primaryColor)),
                     16.verticalSpace,
                     Row(
                       children: [
@@ -747,7 +750,8 @@ class JobForm extends GetView<CrewReferralController> {
                       children: [
                         Expanded(
                           child: Text("Job post expiry",
-                              style: Get.textTheme.formFieldHeading),
+                              style: Get.textTheme.titleSmall
+                                  ?.copyWith(color: Get.theme.primaryColor)),
                         ),
                         12.horizontalSpace,
                         Expanded(
@@ -763,7 +767,7 @@ class JobForm extends GetView<CrewReferralController> {
                                         controller.jobExpiry.value = e;
                                       },
                                       child: Text("$e days",
-                                          style: Get.textTheme.titleMedium)))
+                                          style: Get.textTheme.bodySmall)))
                                   .toList(),
                               onChanged: (value) {},
                               hint: const Text("Select"),

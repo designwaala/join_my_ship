@@ -201,8 +201,7 @@ class JobOpeningsController extends GetxController {
     final follow = await getIt<FollowProvider>().follow(theirUserId);
     followingJob.value = null;
     if (follow?.id != null) {
-      int? index = jobOpenings
-          .indexWhere((job) => job.employerDetails?.id == theirUserId);
+      int? index = jobOpenings.indexWhere((job) => job.id == jobId);
       Job job = jobOpenings.removeAt(index);
       job.employerDetails?.followStatus = true;
       jobOpenings.insert(index, job);

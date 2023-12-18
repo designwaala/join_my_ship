@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_cli/get_cli.dart';
 import 'package:join_mp_ship/app/data/models/job_model.dart';
@@ -481,8 +482,17 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                                             controller.widgetsToImageController,
                                         child: Column(
                                           children: [
-                                            _buildCard(controller.jobToBuild!,
-                                                shareView: true),
+                                            controller
+                                                        .jobToBuild
+                                                        ?.employerDetails
+                                                        ?.userTypeKey ==
+                                                    2
+                                                ? _buildCrewReferralCard(
+                                                    controller.jobToBuild!,
+                                                    shareView: true)
+                                                : _buildCard(
+                                                    controller.jobToBuild!,
+                                                    shareView: true),
                                           ],
                                         )),
                                   ],
@@ -539,6 +549,7 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
             padding: const EdgeInsets.only(left: 15, top: 15),
             child: Row(
               mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(128),
@@ -569,6 +580,35 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
                           // "Westline Ship Management Pvt. Ltd.",
                           style: Get.textTheme.bodySmall?.copyWith(
                               fontSize: 11, fontWeight: FontWeight.bold)),
+                      8.verticalSpace,
+                      UserStates.instance.crewUser?.userTypeKey == 2
+                          ? controller.followingJob.value == job.id
+                              ? const CircularProgressIndicator()
+                              : InkWell(
+                                  onTap: () {
+                                    if (job.employerDetails?.followStatus ==
+                                        true) {
+                                      return;
+                                    }
+                                    controller.followJob(
+                                        job.employerDetails?.id, job.id);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/icons/add.svg",
+                                        color:
+                                            job.employerDetails?.followStatus ==
+                                                    true
+                                                ? Colors.grey
+                                                : null,
+                                      ),
+                                      4.horizontalSpace,
+                                      const Text("Follow")
+                                    ],
+                                  ),
+                                )
+                          : const SizedBox()
                     ],
                   ),
                 ),
@@ -580,38 +620,6 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    UserStates.instance.crewUser?.userTypeKey == 2
-                        ? controller.followingJob.value == job.id
-                            ? const CircularProgressIndicator()
-                            : FilledButton.icon(
-                                onPressed: job.employerDetails?.followStatus ==
-                                        true
-                                    ? null
-                                    : () {
-                                        controller.followJob(
-                                            job.employerDetails?.id, job.id);
-                                      },
-                                icon: const Icon(
-                                  Icons.add,
-                                  size: 20,
-                                ),
-                                label: const Text("Follow"),
-                                style: FilledButton.styleFrom(
-                                    minimumSize: Size.zero,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(4, 4, 8, 4),
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Get.theme.primaryColor,
-                                    shape: const StadiumBorder()),
-                              )
-                        : const SizedBox()
-                  ],
-                ),
                 8.verticalSpace,
                 Column(
                   children: [
@@ -1020,7 +1028,6 @@ class JobOpeningsView extends GetView<JobOpeningsController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 if (!shareView)
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,

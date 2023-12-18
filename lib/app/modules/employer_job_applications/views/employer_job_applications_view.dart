@@ -560,6 +560,8 @@ class EmployerJobApplicationsView
                                                 ),
                                                 SizedBox(width: 6),
                                                 RichText(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   text: TextSpan(
                                                     children: [
                                                       if (controller

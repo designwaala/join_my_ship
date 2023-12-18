@@ -267,75 +267,93 @@ class CrewReferralController extends GetxController {
       //Step1: check whether Job needs to be edited
       if (jobToEdit?.tentativeJoining == tentativeJoining.text &&
           jobToEdit?.vesselId == recordVesselType.value &&
-          jobToEdit?.expiryInDay == jobExpiry.value.toString()) {
+          jobToEdit?.expiryInDay == jobExpiry.value.toString() &&
+          jobToEdit?.vesselIMO == int.tryParse(vesselIMONo.text) &&
+          jobToEdit?.flag == selectedFlag.value?.id &&
+          jobToEdit?.joiningPort == joiningPort.text) {
         //Job is not required to be updated
       } else {
         await getIt<JobProvider>().updateJob(Job(
-            id: jobToEdit?.id,
-            tentativeJoining: tentativeJoining.text,
-            vesselId: recordVesselType.value,
-            expiryInDay: jobExpiry.value.toString()));
+          id: jobToEdit?.id,
+          tentativeJoining: tentativeJoining.text,
+          vesselId: recordVesselType.value,
+          expiryInDay: jobExpiry.value.toString(),
+          vesselIMO: int.tryParse(vesselIMONo.text.nullIfEmpty() ?? ""),
+          flag: selectedFlag.value?.id,
+          joiningPort: joiningPort.text.nullIfEmpty(),
+        ));
       }
 
-      //Step2: add new ranks if any
-
-      //Step3: delete old ranks if any
+      if (jobToEdit?.jobRankWithWages?.firstOrNull?.rankNumber !=
+          selectedRank.value?.id) {
+        //Step2: add new ranks if any
+        await getIt<JobRankWithWagesProvider>().postJobRankWithWages(
+            JobRankWithWages(
+                jobId: jobToEdit?.id, rankNumber: selectedRank.value?.id));
+        //Step3: delete old ranks if any
+        await getIt<JobRankWithWagesProvider>().deleteJobRankWithWages(
+            JobRankWithWages(
+                id: jobToEdit?.jobRankWithWages?.firstOrNull?.id,
+                jobId: jobToEdit?.id,
+                rankNumber:
+                    jobToEdit?.jobRankWithWages?.firstOrNull?.rankNumber));
+      }
 
       //Step4: Update Rank with Wages if required
+
+      //Step 5: Delete COCs if any
+      await Future.wait(jobToEdit?.jobCoc
+              ?.where((coc) =>
+                  cocRequirementsSelected.none((p0) => p0.id == coc.cocId))
+              .map((coc) => coc.id == null
+                  ? Future.value(null)
+                  : getIt<JobCOCPostProvider>()
+                      .deleteJobCOC(JobCoc(id: coc.id))) ??
+          [Future.value(null)]);
+
+      //Step 6: Add COCs if any
+      await Future.wait(cocRequirementsSelected
+          .where((coc) =>
+              jobToEdit?.jobCoc?.none((p0) => p0.cocId == coc.id) == true)
+          .map((e) => getIt<JobCOCPostProvider>()
+              .postJobCOC(JobCoc(cocId: e.id, jobId: jobToEdit?.id))));
+
+      //Step 7: Delete COPs if any
+      await Future.wait(jobToEdit?.jobCop
+              ?.where((cop) =>
+                  copRequirementsSelected.none((p0) => p0.id == cop.copId))
+              .map((cop) => cop.id == null
+                  ? Future.value(null)
+                  : getIt<JobCOPPostProvider>().deleteJobCOP(
+                      JobCop(jobId: jobToEdit?.id, id: cop.id))) ??
+          [Future.value(null)]);
+
+      //Step 8: Add COPs if any
+      await Future.wait(copRequirementsSelected
+          .where((cop) =>
+              jobToEdit?.jobCop?.none((p0) => p0.copId == cop.id) == true)
+          .map((e) => getIt<JobCOPPostProvider>()
+              .postJobCOP(JobCop(jobId: jobToEdit?.id, copId: e.id))));
+
+      //Step 9: Delete Watch Keepings if any
+      await Future.wait(jobToEdit?.jobWatchKeeping
+              ?.where((watchKeeping) => watchKeepingRequirementsSelected
+                  .none((p0) => p0.id == watchKeeping.watchKeepingId))
+              .map((watchKeeping) => watchKeeping.id == null
+                  ? Future.value(null)
+                  : getIt<JobWatchKeepingPostProvider>().deleteJobWatchKeeping(
+                      JobWatchKeeping(id: watchKeeping.id))) ??
+          [Future.value(null)]);
+
+      //Step 10: Add Watch Keepings if any
+      await Future.wait(watchKeepingRequirementsSelected
+          .where((watchKeeping) =>
+              jobToEdit?.jobWatchKeeping
+                  ?.none((p0) => p0.watchKeepingId == watchKeeping.id) ==
+              true)
+          .map((e) => getIt<JobWatchKeepingPostProvider>().postJobWatchKeeping(
+              JobWatchKeeping(jobId: jobToEdit?.id, watchKeepingId: e.id))));
     }
-
-    //Step 5: Delete COCs if any
-    await Future.wait(jobToEdit?.jobCoc
-            ?.where((coc) =>
-                cocRequirementsSelected.none((p0) => p0.id == coc.cocId))
-            .map((coc) => coc.id == null
-                ? Future.value(null)
-                : getIt<JobCOCPostProvider>()
-                    .deleteJobCOC(JobCoc(id: coc.id))) ??
-        [Future.value(null)]);
-
-    //Step 6: Add COCs if any
-    await Future.wait(cocRequirementsSelected
-        .where((coc) =>
-            jobToEdit?.jobCoc?.none((p0) => p0.cocId == coc.id) == true)
-        .map((e) => getIt<JobCOCPostProvider>()
-            .postJobCOC(JobCoc(cocId: e.id, jobId: jobToEdit?.id))));
-
-    //Step 7: Delete COPs if any
-    await Future.wait(jobToEdit?.jobCop
-            ?.where((cop) =>
-                copRequirementsSelected.none((p0) => p0.id == cop.copId))
-            .map((cop) => cop.id == null
-                ? Future.value(null)
-                : getIt<JobCOPPostProvider>()
-                    .deleteJobCOP(JobCop(jobId: jobToEdit?.id, id: cop.id))) ??
-        [Future.value(null)]);
-
-    //Step 8: Add COPs if any
-    await Future.wait(copRequirementsSelected
-        .where((cop) =>
-            jobToEdit?.jobCop?.none((p0) => p0.copId == cop.id) == true)
-        .map((e) => getIt<JobCOPPostProvider>()
-            .postJobCOP(JobCop(jobId: jobToEdit?.id, copId: e.id))));
-
-    //Step 9: Delete Watch Keepings if any
-    await Future.wait(jobToEdit?.jobWatchKeeping
-            ?.where((watchKeeping) => watchKeepingRequirementsSelected
-                .none((p0) => p0.id == watchKeeping.watchKeepingId))
-            .map((watchKeeping) => watchKeeping.id == null
-                ? Future.value(null)
-                : getIt<JobWatchKeepingPostProvider>().deleteJobWatchKeeping(
-                    JobWatchKeeping(id: watchKeeping.id))) ??
-        [Future.value(null)]);
-
-    //Step 10: Add Watch Keepings if any
-    await Future.wait(watchKeepingRequirementsSelected
-        .where((watchKeeping) =>
-            jobToEdit?.jobWatchKeeping
-                ?.none((p0) => p0.watchKeepingId == watchKeeping.id) ==
-            true)
-        .map((e) => getIt<JobWatchKeepingPostProvider>().postJobWatchKeeping(
-            JobWatchKeeping(jobId: jobToEdit?.id, watchKeepingId: e.id))));
 
     isPostingJob.value = false;
   }

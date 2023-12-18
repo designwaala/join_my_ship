@@ -502,7 +502,19 @@ class WrapperConnect extends GetConnect {
           _showError(response.body);
         }
       }
-    } else if(response.statusCode < 200){
+    } else if (response.statusCode == 402) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24)),
+              title: Text(
+                  jsonDecode(response.body)['message'] ?? "Payment Required"),
+              actions: [FilledButton(onPressed: Get.back, child: Text("OK"))],
+            );
+          });
+    } else if (response.statusCode >= 300) {
       _showError(response.body);
     }
     return jsonDecode(response.body);

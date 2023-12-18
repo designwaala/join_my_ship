@@ -86,12 +86,476 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                 : Padding(
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 3),
-                                    child:
-                                        _buildCard(controller.jobPosts[index]),
+                                    child: controller.jobPosts[index]
+                                                .employerDetails?.userTypeKey ==
+                                            2
+                                        ? _buildCrewReferralCard(
+                                            controller.jobPosts[index])
+                                        : _buildCard(
+                                            controller.jobPosts[index]),
                                   );
                           }),
                         ),
                       ),
+      ),
+    );
+  }
+
+  _buildCrewReferralCard(Job job, {bool shareView = false}) {
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15, top: 15),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(128),
+                      child: CachedNetworkImage(
+                        height: 50,
+                        width: 50,
+                        imageUrl: job.employerDetails?.profilePic ?? "",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    10.horizontalSpace,
+                    Expanded(
+                      flex: 15,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${job.employerDetails?.firstName ?? ""} ${job.employerDetails?.lastName ?? ""}",
+                            overflow: TextOverflow.ellipsis,
+                            style: Get.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          Text("Referred Job",
+                              style: Get.textTheme.bodySmall
+                                  ?.copyWith(color: Colors.grey.shade700))
+                        ],
+                      ),
+                    ),
+                    controller.jobIdBeingDeleted.value == job.id
+                        ? const SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator())
+                        : PopupMenuButton<int>(
+                            onSelected: (value) {
+                              switch (value) {
+                                case 1:
+                                  PreferencesHelper.instance.isCrew == true
+                                      ? Get.offNamed(Routes.CREW_REFERRAL,
+                                          arguments: CrewReferralArguments(
+                                              jobToEdit: job))
+                                      : Get.offNamed(Routes.JOB_POST,
+                                          arguments:
+                                              JobPostArguments(jobToEdit: job));
+                                  return;
+                                case 2:
+                                  controller.captureWidget(job);
+                                  return;
+                                case 3:
+                                  controller.deleteJobPost(job.id ?? -1);
+                                  return;
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 1,
+                                child: Text("Edit"),
+                              ),
+                              const PopupMenuItem(
+                                value: 2,
+                                child: Text("Share"),
+                              ),
+                              const PopupMenuItem(
+                                value: 3,
+                                child: Text(
+                                  "Delete",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                            onOpened: () {},
+                          ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    8.verticalSpace,
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text("Rank: ", style: Get.textTheme.bodyLarge),
+                            Text(
+                              UserStates.instance.ranks
+                                      ?.firstWhereOrNull((rank) =>
+                                          job.jobRankWithWages?.firstOrNull
+                                              ?.rankNumber ==
+                                          rank.id)
+                                      ?.name ??
+                                  "",
+                              style: Get.textTheme.bodyMedium
+                                  ?.copyWith(fontSize: 14),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("Vessel IMO No: ",
+                                style: Get.textTheme.bodyLarge),
+                            Text(
+                              job.vesselIMO?.toString() ?? "",
+                              style: Get.textTheme.bodyMedium
+                                  ?.copyWith(fontSize: 14),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text("Vessel Type: ",
+                                  maxLines: 2, style: Get.textTheme.bodyLarge),
+                            ),
+                            Text(UserStates.instance.vessels?.vessels
+                                    ?.map((e) => e.subVessels ?? [])
+                                    .expand((e) => e)
+                                    .firstWhereOrNull(
+                                        (e) => e.id == job.vesselId)
+                                    ?.name ??
+                                ""),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text("Flag: ",
+                                  maxLines: 2, style: Get.textTheme.bodyLarge),
+                            ),
+                            Text(UserStates.instance.flags
+                                    ?.firstWhereOrNull(
+                                        (flag) => job.flag == flag.id)
+                                    ?.flagCode ??
+                                ""),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text("Joining Port: ",
+                                  maxLines: 2, style: Get.textTheme.bodyLarge),
+                            ),
+                            Text(job.joiningPort ?? ""),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("Tentative Joining Date: ",
+                                style: Get.textTheme.bodyLarge),
+                            Text(
+                              job.tentativeJoining!,
+                              style: Get.textTheme.bodyMedium
+                                  ?.copyWith(fontSize: 14),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    if (job.jobCoc != null && job.jobCoc?.isNotEmpty == true)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "COC Requirements: ",
+                            style: Get.textTheme.bodyLarge,
+                          ),
+                          Text(job.jobCoc
+                                  ?.map(
+                                    (e) =>
+                                        "${UserStates.instance.cocs?.firstWhereOrNull((coc) => coc.id == e.cocId)?.name ?? ""} |",
+                                  )
+                                  .toString()
+                                  .removeAll("(")
+                                  .removeAll(",")
+                                  .removeAll(" |)") ??
+                              ""),
+                        ],
+                      ),
+                    if (job.jobCop != null && job.jobCop?.isNotEmpty == true)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "COP Requirements: ",
+                            style: Get.textTheme.bodyLarge,
+                          ),
+                          Text(job.jobCop
+                                  ?.map(
+                                    (e) =>
+                                        "${UserStates.instance.cops?.firstWhereOrNull((cop) => cop.id == e.copId)?.name ?? ""} |",
+                                  )
+                                  .toString()
+                                  .removeAll("(")
+                                  .removeAll(",")
+                                  .removeAll(" |)") ??
+                              ""),
+                        ],
+                      ),
+                    if (job.jobWatchKeeping != null &&
+                        job.jobWatchKeeping?.isNotEmpty == true)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Watch-Keeping Requirements: ",
+                            style: Get.textTheme.bodyLarge,
+                          ),
+                          Text(job.jobWatchKeeping
+                                  ?.map(
+                                    (e) =>
+                                        "${UserStates.instance.watchKeepings?.firstWhereOrNull((watchKeeping) => watchKeeping.id == e.watchKeepingId)?.name ?? ""} |",
+                                  )
+                                  .toString()
+                                  .removeAll("(")
+                                  .removeAll(",")
+                                  .removeAll(" |)") ??
+                              ""),
+                        ],
+                      ),
+                    if (job.mailInfo == true)
+                      Row(
+                        children: [
+                          Text(
+                            "Email: ",
+                            style: Get.textTheme.bodyLarge,
+                          ),
+                          Text(
+                            job.employerDetails?.email ?? "",
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    if (job.numberInfo == true)
+                      Row(
+                        children: [
+                          Text(
+                            "Mobile: ",
+                            style: Get.textTheme.bodyLarge,
+                          ),
+                          Text(
+                            job.employerDetails?.number ?? "",
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    4.verticalSpace,
+                    10.verticalSpace,
+                  ],
+                ),
+              )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!shareView) ...[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      controller.highlightingJob.value == job.id
+                          ? const CircularProgressIndicator()
+                          : TextButton.icon(
+                              onPressed: () async {
+                                if (job.id == null) {
+                                  return;
+                                }
+                                RxBool isLoadingSubscription = true.obs;
+                                UserStates.instance.subscription ??=
+                                    await getIt<SubscriptionProvider>()
+                                        .getSubscriptions();
+                                isLoadingSubscription.value = false;
+                                bool? shouldHighlight = await showDialog(
+                                  context: Get.context!,
+                                  barrierDismissible: false,
+                                  builder: (context) => Obx(() {
+                                    return AlertDialog(
+                                      shape: alertDialogShape,
+                                      title: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Spacer(),
+                                          Icon(Icons.send,
+                                              color: Get.theme.primaryColor),
+                                          8.horizontalSpace,
+                                          Text("Highlight",
+                                              style: Get.textTheme.bodyMedium
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Get
+                                                          .theme.primaryColor)),
+                                          const Spacer(),
+                                          Tooltip(
+                                              message:
+                                                  "Highlighting a job post will send one time notification to all the ranks required.",
+                                              child: Icon(Icons.info_outline,
+                                                  color: Get.theme.primaryColor,
+                                                  size: 16))
+                                        ],
+                                      ),
+                                      actionsPadding:
+                                          const EdgeInsets.only(bottom: 25),
+                                      content: isLoadingSubscription.value
+                                          ? const CircularProgressIndicator()
+                                          : Text(
+                                              "Are you sure you want to use\nyour ${UserStates.instance.subscription?.firstWhereOrNull((subs) => subs.isTypeKey?.type == PlanType.highlightPost)?.points ?? ""} credits?",
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 14.5,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                      actionsAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      actions: [
+                                        ElevatedButton(
+                                          onPressed: Get.back,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            foregroundColor: Colors.black,
+                                            elevation: 3,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 35),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          child: const Text("NO"),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            Get.back(result: true);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 3,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 35),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          child: const Text("YES"),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                );
+                                if (shouldHighlight == true) {
+                                  controller.highlightJob(
+                                      job.id!,
+                                      UserStates.instance.subscription
+                                              ?.firstWhereOrNull((subs) =>
+                                                  subs.isTypeKey?.type ==
+                                                  PlanType.highlightPost)
+                                              ?.planName
+                                              ?.id ??
+                                          -1);
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.send,
+                                size: 18,
+                              ),
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero),
+                              label: const Text(
+                                "Highlight",
+                                style: TextStyle(fontSize: 13),
+                              ),
+                            ),
+                      TextButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.thumb_up,
+                            size: 18,
+                            color: Colors.blue,
+                          ),
+                          style: TextButton.styleFrom(
+                            splashFactory: NoSplash.splashFactory,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            /* shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                side: const BorderSide(
+                                    width: 1.8, color: Colors.blue)), */
+                          ),
+                          label: Text(
+                            " ${job.jobLikeCount}",
+                            style: Get.textTheme.bodyMedium
+                                ?.copyWith(color: Colors.blue),
+                          )),
+                      TextButton.icon(
+                        onPressed: () {
+                          if (job.id == null) {
+                            return;
+                          }
+                          controller.boostJob(job.id!);
+                        },
+                        icon: const Icon(
+                          Icons.diamond_outlined,
+                          size: 22,
+                          color: Colors.yellow,
+                        ),
+                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                        label: const Text(
+                          "Boost",
+                          style: TextStyle(fontSize: 14, color: Colors.yellow),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: double.maxFinite,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12))),
+                        onPressed: () => Get.toNamed(
+                            Routes.EMPLOYER_JOB_APPLICATIONS,
+                            arguments: EmployerJobApplicationsArguments(
+                                jobId: job.id)),
+                        child: const Text(
+                          "View Applications",
+                          style: TextStyle(fontSize: 13),
+                        )),
+                  ),
+                  16.verticalSpace
+                ]
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -202,7 +666,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                 Row(
                   children: [
                     Text("Vessel Type: ", style: Get.textTheme.bodyLarge),
-                    Text(controller.vesselList?.vessels
+                    Text(UserStates.instance.vessels?.vessels
                             ?.map((e) => e.subVessels ?? [])
                             .expand((e) => e)
                             .firstWhereOrNull((e) => e.id == job.vesselId)

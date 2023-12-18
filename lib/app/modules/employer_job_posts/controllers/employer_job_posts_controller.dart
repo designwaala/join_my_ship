@@ -19,6 +19,7 @@ import 'package:join_mp_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
 import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
 import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_mp_ship/app/data/providers/flag_provider.dart';
 import 'package:join_mp_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
@@ -43,7 +44,7 @@ class EmployerJobPostsController extends GetxController {
   RxMap<int, String> cocTypes = RxMap();
   RxMap<int, String> copTypes = RxMap();
   RxMap<int, String> watchKeepingTypes = RxMap(); */
-  VesselList? vesselList;
+  // VesselList? vesselList;
   RxList<Rank> ranks = RxList.empty();
   RxList<Coc> cocs = RxList.empty();
   RxList<Cop> cops = RxList.empty();
@@ -87,8 +88,13 @@ class EmployerJobPostsController extends GetxController {
       loadCOC(),
       loadCOP(),
       loadWatchKeeping(),
+      _loadFlags()
     ]);
     isLoading.value = false;
+  }
+
+  Future<void> _loadFlags() async {
+    UserStates.instance.flags ??= await getIt<FlagProvider>().getFlags();
   }
 
   Future<void> loadJobPosts() async {
@@ -98,7 +104,8 @@ class EmployerJobPostsController extends GetxController {
   }
 
   Future<void> loadVesselTypes() async {
-    vesselList = await getIt<VesselListProvider>().getVesselList();
+    UserStates.instance.vessels ??=
+        await getIt<VesselListProvider>().getVesselList();
   }
 
   Future<void> loadRanks() async {

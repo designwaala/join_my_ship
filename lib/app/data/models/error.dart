@@ -22,6 +22,6 @@ class APIError {
     return APIError(
         field: field,
         errors:
-            json is List ? List<String>.from(json.map((e) => "$e")) : [json]);
+            json is List ? List<String>.from(json.map((e) => "$e")) : ["$json"]);
   }
 }

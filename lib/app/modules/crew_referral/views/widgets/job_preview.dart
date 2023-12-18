@@ -20,7 +20,6 @@ class JobPreview extends GetView<CrewReferralController> {
             SliverFillRemaining(
                 hasScrollBody: false,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     16.verticalSpace,
                     Text("Job Preview", style: Get.textTheme.formFieldHeading),
@@ -56,7 +55,9 @@ class JobPreview extends GetView<CrewReferralController> {
                                             .toUpperCase(),
                                         style: Get.textTheme.s14w600),
                                     Text("Referred Job",
-                                        style: Get.textTheme.s14w600)
+                                        style: Get.textTheme.bodySmall
+                                            ?.copyWith(
+                                                color: Colors.grey.shade700))
                                   ],
                                 )
                               ],

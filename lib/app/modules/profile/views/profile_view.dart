@@ -273,13 +273,13 @@ class ProfileView extends GetView<ProfileController> {
                                 Get.toNamed(Routes.EMPLOYER_MANAGE_USERS);
                               }),
                         // if (controller.crewUser.value?.userTypeKey == 3)
-                          CardObject(
-                              iconPath:
-                                  "assets/images/profile/my_subscription.png",
-                              text: "My Subscriptions",
-                              onTap: () {
-                                Get.toNamed(Routes.SUBSCRIPTIONS);
-                              }),
+                        CardObject(
+                            iconPath:
+                                "assets/images/profile/my_subscription.png",
+                            text: "My Subscriptions",
+                            onTap: () {
+                              Get.toNamed(Routes.SUBSCRIPTIONS);
+                            }),
                         CardObject(
                             iconPath:
                                 "assets/images/profile/change_password.png",
@@ -300,11 +300,10 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                         if (controller.crewUser.value?.userTypeKey == 2)
                           CardObject(
-                              svgPath: "assets/icons/boosting.svg",
+                              iconPath:
+                                  "assets/images/profile/my_subscription.png",
                               text: "Boost Profile",
-                              onTap: controller.boostCrew,
-                              height: 28,
-                              width: 28),
+                              onTap: controller.boostCrew),
                         /* if (controller.crewUser.value?.userTypeKey == 2)
                           CardObject(
                             iconPath: "assets/images/profile/help.png",

@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:get/get.dart';
@@ -38,47 +39,64 @@ class HomeView extends GetView<HomeController> {
               drawer: SafeArea(
                 child: Drawer(
                   width: 256,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 10),
-                    child: CustomScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        slivers: [
-                          SliverFillRemaining(
-                            hasScrollBody: false,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ListTile(
-                                  leading: CachedNetworkImage(
-                                    imageUrl: UserStates
-                                            .instance.crewUser?.profilePic ??
-                                        "",
-                                    height: 40,
-                                    width: 40,
-                                    imageBuilder: (context, imageProvider) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover)),
-                                      );
-                                    },
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 15),
-                                  title: Text(
-                                      "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastLogin ?? ""}"),
-                                  subtitle: FittedBox(
-                                    child: Text(
-                                      "${UserStates.instance.crewUser?.email}",
-                                      style: TextStyle(fontSize: 13),
+                  child: CustomScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      slivers: [
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 26, bottom: 16),
+                                color: Get.theme.primaryColor.withOpacity(0.8),
+                                child: Row(
+                                  children: [
+                                    24.horizontalSpace,
+                                    CachedNetworkImage(
+                                      imageUrl: UserStates
+                                              .instance.crewUser?.profilePic ??
+                                          "",
+                                      height: 40,
+                                      width: 40,
+                                      imageBuilder: (context, imageProvider) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover)),
+                                        );
+                                      },
                                     ),
-                                  ),
+                                    16.horizontalSpace,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastLogin ?? ""}"),
+                                          Text(
+                                            "${UserStates.instance.crewUser?.email}",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 13),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    24.horizontalSpace
+                                  ],
                                 ),
-                                ...controller.drawerButtons.map((button) {
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 24),
+                                child: Column(
+                                    children:
+                                        controller.drawerButtons.map((button) {
                                   final selected = button["title"] ==
                                       controller.selectedDrawerButton.value;
                                   return ListTile(
@@ -86,13 +104,21 @@ class HomeView extends GetView<HomeController> {
                                     contentPadding: const EdgeInsets.all(0),
                                     title: Row(
                                       children: [
-                                        ImageIcon(
-                                          AssetImage(button["iconPath"]),
-                                          color: selected
-                                              ? Colors.blue
-                                              : Colors.black54,
-                                          size: button["iconSize"],
-                                        ),
+                                        button["iconPath"].contains(".png")
+                                            ? ImageIcon(
+                                                AssetImage(button["iconPath"]),
+                                                color: selected
+                                                    ? Colors.blue
+                                                    : Colors.black54,
+                                                size: button["iconSize"],
+                                              )
+                                            : SvgPicture.asset(
+                                                button["iconPath"],
+                                                color: selected
+                                                    ? Colors.blue
+                                                    : Colors.black54,
+                                                height: button["iconSize"],
+                                              ),
                                         (15 + 22 - button["iconSize"])
                                             .horizontalSpace,
                                         Text(
@@ -114,29 +140,27 @@ class HomeView extends GetView<HomeController> {
                                       button["onTap"].call();
                                     },
                                   );
-                                }).toList(),
-                                const Spacer(),
-                                Text(
-                                  "Join My Ship",
-                                  style: Get.theme.textTheme.bodyMedium
-                                      ?.copyWith(
-                                          color: Colors.blue,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily:
-                                              GoogleFonts.racingSansOne()
-                                                  .fontFamily),
-                                ),
-                                const Text(
-                                  "www.joinmyship.com",
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                                30.verticalSpace,
-                              ],
-                            ),
+                                }).toList()),
+                              ),
+                              const Spacer(),
+                              Text(
+                                "Join My Ship",
+                                style: Get.theme.textTheme.bodyMedium?.copyWith(
+                                    color: Colors.blue,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily:
+                                        GoogleFonts.racingSansOne().fontFamily),
+                              ),
+                              const Text(
+                                "www.joinmyship.com",
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              30.verticalSpace,
+                            ],
                           ),
-                        ]),
-                  ),
+                        ),
+                      ]),
                 ),
               ),
               body: controller.isLoading.value
@@ -399,7 +423,7 @@ class HomeView extends GetView<HomeController> {
             child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            16.verticalSpace,
+            8.verticalSpace,
             Row(children: [
               28.horizontalSpace,
               Expanded(
@@ -508,7 +532,7 @@ class HomeView extends GetView<HomeController> {
                 28.horizontalSpace
               ],
             ),
-            12.verticalSpace,
+            4.verticalSpace,
             ...controller.featuredCompanies.map(
               (company) => InkWell(
                 onTap: () {
@@ -678,7 +702,7 @@ class HomeView extends GetView<HomeController> {
             child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            16.verticalSpace,
+            8.verticalSpace,
             InkWell(
               onTap: () {
                 Get.toNamed(Routes.JOB_OPENINGS,
@@ -739,7 +763,6 @@ class HomeView extends GetView<HomeController> {
                 ],
               ),
             ),
-            8.verticalSpace,
             Row(
               children: [
                 28.horizontalSpace,
@@ -757,7 +780,7 @@ class HomeView extends GetView<HomeController> {
                 28.horizontalSpace
               ],
             ),
-            12.verticalSpace,
+            4.verticalSpace,
             ...controller.featuredCompanies.map(
               (company) => InkWell(
                 onTap: () {

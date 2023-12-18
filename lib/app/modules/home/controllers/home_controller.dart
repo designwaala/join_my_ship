@@ -144,8 +144,8 @@ class HomeController extends GetxController {
       if (PreferencesHelper.instance.isCrew == true)
         {
           "title": "Followings",
-          "iconPath": "assets/icons/like.png",
-          "iconSize": 20.0,
+          "iconPath": "assets/icons/follow.svg",
+          "iconSize": 28.0,
           "onTap": () {
             Get.toNamed(Routes.FOLLOW,
                 arguments:
@@ -155,8 +155,8 @@ class HomeController extends GetxController {
       if (PreferencesHelper.instance.isCrew != true)
         {
           "title": "Followers",
-          "iconPath": "assets/icons/like.png",
-          "iconSize": 20.0,
+          "iconPath": "assets/icons/follow.svg",
+          "iconSize": 28.0,
           "onTap": () {
             Get.toNamed(Routes.FOLLOW,
                 arguments:

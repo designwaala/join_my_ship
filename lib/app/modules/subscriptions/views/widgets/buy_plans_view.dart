@@ -180,7 +180,7 @@ class BuyPlansView extends GetView<SubscriptionsController> {
                                                               .firstOrNull ??
                                                           "",
                                                       style: Get
-                                                          .textTheme.titleLarge
+                                                          .textTheme.titleMedium
                                                           ?.copyWith(
                                                               fontWeight:
                                                                   FontWeight
