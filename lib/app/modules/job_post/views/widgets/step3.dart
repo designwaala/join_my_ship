@@ -282,6 +282,7 @@ class JobPostStep3 extends GetView<JobPostController> {
                                 onPressed: controller.hasAgreed.value
                                     ? () async {
                                         await controller.postJob();
+                                        
                                         Get.offAllNamed(
                                             Routes.JOB_POSTED_SUCCESSFULLY,
                                             arguments:

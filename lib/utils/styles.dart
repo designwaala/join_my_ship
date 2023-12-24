@@ -12,6 +12,8 @@ extension CustomTextStyle on TextTheme {
       GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600);
   TextStyle get s14w500 =>
       GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500);
+  TextStyle get s18w500 =>
+      GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500);
   TextStyle get s12w500 =>
       GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500);
   TextStyle get s12w400 =>

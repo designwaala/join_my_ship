@@ -220,6 +220,7 @@ class EmployerCreateUserController extends GetxController {
       statusCode = await getIt<CrewUserProvider>().updateCrewUser(
           crewId: crewUser!.id!,
           crewUser: CrewUser(
+            userTypeKey: PreferencesHelper.instance.employerType?.backendIndex,
               firstName: FirebaseAuth.instance.currentUser?.displayName,
               lastName: lastNameController.text,
               email: FirebaseAuth.instance.currentUser?.email,

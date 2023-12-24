@@ -7,6 +7,7 @@ import 'package:join_mp_ship/app/data/providers/application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/continous_stream.dart';
 import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
@@ -46,6 +47,17 @@ class EmployerJobApplicationsController extends GetxController {
   onReady() {
     super.onReady();
     fToast.init(parentKey.currentContext!);
+    ContinuousStream()
+      ..on(Streams.profileShortlisted, _profileShortlisted)
+      ..on(Streams.profileUnShortlisted, _profileUnShortlisted);
+  }
+
+  @override
+  onClose() {
+    ContinuousStream()
+      ..cancel(Streams.profileShortlisted, _profileShortlisted)
+      ..cancel(Streams.profileUnShortlisted, _profileUnShortlisted);
+    super.onClose();
   }
 
   instantiate() async {
@@ -138,6 +150,26 @@ class EmployerJobApplicationsController extends GetxController {
     }
 
     applicationShortListing.value = null;
+  }
+
+  _profileShortlisted(Object applicationId) {
+    if (applicationId is int) {
+      final index = jobApplications
+          .indexWhere((application) => application.id == applicationId);
+      Application application = jobApplications.removeAt(index);
+      application.shortlistedStatus = true;
+      jobApplications.insert(index, application);
+    }
+  }
+
+  _profileUnShortlisted(Object applicationId) {
+    if (applicationId is int) {
+      final index = jobApplications
+          .indexWhere((application) => application.id == applicationId);
+      Application application = jobApplications.removeAt(index);
+      application.shortlistedStatus = false;
+      jobApplications.insert(index, application);
+    }
   }
 }
 

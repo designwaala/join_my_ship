@@ -68,25 +68,31 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                                                 ""))),
                                               ),
                                             16.horizontalSpace,
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                if (subUser.firstName != null &&
-                                                    subUser.lastName != null)
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  if (subUser.firstName !=
+                                                          null &&
+                                                      subUser.lastName != null)
+                                                    Text(
+                                                        "${subUser.firstName ?? ""} ${subUser.lastName ?? ""}",
+                                                        style: Get.textTheme
+                                                            .titleSmall),
                                                   Text(
-                                                      "${subUser.firstName ?? ""} ${subUser.lastName ?? ""}",
-                                                      style: Get.textTheme
-                                                          .titleSmall),
-                                                Text(subUser.email ?? ""),
-                                                if (subUser.addressLine1 ==
-                                                    null)
-                                                  Text("Onboarding Pending",
-                                                      style: Get
-                                                          .textTheme.bodySmall)
-                                              ],
+                                                    subUser.email ?? "",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  if (subUser.addressLine1 ==
+                                                      null)
+                                                    Text("Onboarding Pending",
+                                                        style: Get.textTheme
+                                                            .bodySmall)
+                                                ],
+                                              ),
                                             ),
-                                            const Spacer(),
                                             /*  DropdownButtonHideUnderline(
                                   child: DropdownButton2(
                                     buttonStyleData: ButtonStyleData(
@@ -106,7 +112,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                                     subUser.id
                                                 ? const CircularProgressIndicator()
                                                 : PopupMenuButton(
-                                                  padding: EdgeInsets.zero,
+                                                    padding: EdgeInsets.zero,
                                                     onSelected: (item) {},
                                                     itemBuilder: (BuildContext
                                                             context) =>
@@ -166,10 +172,10 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                                                   ),
                                                   IconButton(
                                                       padding: EdgeInsets.zero,
-                                                      constraints:
+                                                      /* constraints:
                                                           BoxConstraints(
                                                               maxHeight: 4,
-                                                              minHeight: 4),
+                                                              minHeight: 4), */
                                                       onPressed: Get.back,
                                                       icon: const Icon(
                                                           Icons.close)),
@@ -271,7 +277,7 @@ class EmployerManageUsersView extends GetView<EmployerManageUsersController> {
                             8.verticalSpace,
                             FilledButton(
                                 style: ElevatedButton.styleFrom(
-                                  elevation: 1,
+                                    elevation: 1,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(64),
                                     ),

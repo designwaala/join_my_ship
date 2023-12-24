@@ -1,5 +1,5 @@
 name: join_mp_ship
-version: 1.0.44+44
+version: 1.0.45+45
 publish_to: none
 description: A new Flutter project.
 environment:
@@ -63,5 +63,6 @@ flutter:
     - assets/images/dashboard/
     - assets/images/profile/
     - assets/images/employer_invite/
+    - assets/images/job_post_under_verification/
     - assets/icons/
     - assets/animations/

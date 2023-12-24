@@ -158,8 +158,8 @@ class CrewListView extends GetView<CrewListController> {
                                             ],
                                           ),
                                         ),
-                                        if(controller.crewList?[index].isHighlighted == true)
-                                        Icon(Icons.star, color: Get.theme.primaryColor)
+                                        /* if(controller.crewList?[index].isHighlighted == true)
+                                        Icon(Icons.star, color: Get.theme.primaryColor) */
                                       ],
                                     ),
                                   ),

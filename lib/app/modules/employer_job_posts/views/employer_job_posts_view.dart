@@ -81,14 +81,15 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                         child: ListView.builder(
                           itemCount: controller.jobPosts.length,
                           itemBuilder: (context, index) => Obx(() {
+                            print(controller
+                                .jobPosts[index].employerDetails?.userTypeKey);
                             return controller.jobPosts.isEmpty
                                 ? const Center(child: Text("No jobs posted"))
                                 : Padding(
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 3),
-                                    child: controller.jobPosts[index]
-                                                .employerDetails?.userTypeKey ==
-                                            2
+                                    child: PreferencesHelper.instance.isCrew ==
+                                            true
                                         ? _buildCrewReferralCard(
                                             controller.jobPosts[index])
                                         : _buildCard(
@@ -375,125 +376,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
               children: [
                 if (!shareView) ...[
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      controller.highlightingJob.value == job.id
-                          ? const CircularProgressIndicator()
-                          : TextButton.icon(
-                              onPressed: () async {
-                                if (job.id == null) {
-                                  return;
-                                }
-                                RxBool isLoadingSubscription = true.obs;
-                                UserStates.instance.subscription ??=
-                                    await getIt<SubscriptionProvider>()
-                                        .getSubscriptions();
-                                isLoadingSubscription.value = false;
-                                bool? shouldHighlight = await showDialog(
-                                  context: Get.context!,
-                                  barrierDismissible: false,
-                                  builder: (context) => Obx(() {
-                                    return AlertDialog(
-                                      shape: alertDialogShape,
-                                      title: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Spacer(),
-                                          Icon(Icons.send,
-                                              color: Get.theme.primaryColor),
-                                          8.horizontalSpace,
-                                          Text("Highlight",
-                                              style: Get.textTheme.bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Get
-                                                          .theme.primaryColor)),
-                                          const Spacer(),
-                                          Tooltip(
-                                              message:
-                                                  "Highlighting a job post will send one time notification to all the ranks required.",
-                                              child: Icon(Icons.info_outline,
-                                                  color: Get.theme.primaryColor,
-                                                  size: 16))
-                                        ],
-                                      ),
-                                      actionsPadding:
-                                          const EdgeInsets.only(bottom: 25),
-                                      content: isLoadingSubscription.value
-                                          ? const CircularProgressIndicator()
-                                          : Text(
-                                              "Are you sure you want to use\nyour ${UserStates.instance.subscription?.firstWhereOrNull((subs) => subs.isTypeKey?.type == PlanType.highlightPost)?.points ?? ""} credits?",
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                fontSize: 14.5,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                      actionsAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      actions: [
-                                        ElevatedButton(
-                                          onPressed: Get.back,
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.white,
-                                            foregroundColor: Colors.black,
-                                            elevation: 3,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 35),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                          ),
-                                          child: const Text("NO"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () async {
-                                            Get.back(result: true);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            elevation: 3,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 35),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                          ),
-                                          child: const Text("YES"),
-                                        ),
-                                      ],
-                                    );
-                                  }),
-                                );
-                                if (shouldHighlight == true) {
-                                  controller.highlightJob(
-                                      job.id!,
-                                      UserStates.instance.subscription
-                                              ?.firstWhereOrNull((subs) =>
-                                                  subs.isTypeKey?.type ==
-                                                  PlanType.highlightPost)
-                                              ?.planName
-                                              ?.id ??
-                                          -1);
-                                }
-                              },
-                              icon: const Icon(
-                                Icons.send,
-                                size: 18,
-                              ),
-                              style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero),
-                              label: const Text(
-                                "Highlight",
-                                style: TextStyle(fontSize: 13),
-                              ),
-                            ),
                       TextButton.icon(
                           onPressed: () {},
                           icon: const Icon(
@@ -504,51 +387,30 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                           style: TextButton.styleFrom(
                             splashFactory: NoSplash.splashFactory,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            /* shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                side: const BorderSide(
-                                    width: 1.8, color: Colors.blue)), */
                           ),
                           label: Text(
                             " ${job.jobLikeCount}",
                             style: Get.textTheme.bodyMedium
                                 ?.copyWith(color: Colors.blue),
                           )),
-                      TextButton.icon(
-                        onPressed: () {
-                          if (job.id == null) {
-                            return;
-                          }
-                          controller.boostJob(job.id!);
-                        },
-                        icon: const Icon(
-                          Icons.diamond_outlined,
-                          size: 22,
-                          color: Colors.yellow,
-                        ),
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        label: const Text(
-                          "Boost",
-                          style: TextStyle(fontSize: 14, color: Colors.yellow),
-                        ),
+                      4.horizontalSpace,
+                      Expanded(
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12))),
+                            onPressed: () => Get.toNamed(
+                                Routes.EMPLOYER_JOB_APPLICATIONS,
+                                arguments: EmployerJobApplicationsArguments(
+                                    jobId: job.id)),
+                            child: const Text(
+                              "View Applications",
+                              style: TextStyle(fontSize: 13),
+                            )),
                       ),
                     ],
-                  ),
-                  SizedBox(
-                    width: double.maxFinite,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12))),
-                        onPressed: () => Get.toNamed(
-                            Routes.EMPLOYER_JOB_APPLICATIONS,
-                            arguments: EmployerJobApplicationsArguments(
-                                jobId: job.id)),
-                        child: const Text(
-                          "View Applications",
-                          style: TextStyle(fontSize: 13),
-                        )),
                   ),
                   16.verticalSpace
                 ]

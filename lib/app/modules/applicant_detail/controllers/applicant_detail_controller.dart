@@ -20,6 +20,7 @@ import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
 import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_mp_ship/main.dart';
+import 'package:join_mp_ship/utils/continous_stream.dart';
 import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
 import 'package:join_mp_ship/widgets/toasts/toast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -236,13 +237,18 @@ class ApplicantDetailController extends GetxController {
       int? statusCode = await getIt<ApplicationProvider>()
           .shortListApplication(application.value!);
       if (statusCode == 200) {
+        ContinuousStream()
+            .emit(Streams.profileShortlisted, application.value?.id);
         application.value?.shortlistedStatus = true;
+        fToast.safeShowToast(child: successToast("Profile Shortlisted"));
       }
     } else {
       Application? updatedApplication = await getIt<ApplicationProvider>()
           .unshortListApplication(application.value!.id!);
       if (updatedApplication != null) {
         application.value = updatedApplication;
+        ContinuousStream()
+            .emit(Streams.profileUnShortlisted, application.value?.id);
       }
     }
 

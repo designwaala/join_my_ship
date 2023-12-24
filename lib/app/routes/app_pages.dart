@@ -72,6 +72,8 @@ import '../modules/job_openings/bindings/job_openings_binding.dart';
 import '../modules/job_openings/views/job_openings_view.dart';
 import '../modules/job_post/bindings/job_post_binding.dart';
 import '../modules/job_post/views/job_post_view.dart';
+import '../modules/job_post_under_verification/bindings/job_post_under_verification_binding.dart';
+import '../modules/job_post_under_verification/views/job_post_under_verification_view.dart';
 import '../modules/job_posted_successfully/bindings/job_posted_successfully_binding.dart';
 import '../modules/job_posted_successfully/views/job_posted_successfully_view.dart';
 import '../modules/liked_jobs/bindings/liked_jobs_binding.dart';
@@ -335,6 +337,11 @@ class AppPages {
       name: _Paths.NOTIFICATION,
       page: () => const NotificationView(),
       binding: NotificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.JOB_POST_UNDER_VERIFICATION,
+      page: () => const JobPostUnderVerificationView(),
+      binding: JobPostUnderVerificationBinding(),
     ),
   ];
 }

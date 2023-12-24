@@ -407,8 +407,20 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                                             side: BorderSide(
                                               color: Get.theme.primaryColor,
                                             ),
-                                            foregroundColor:
-                                                Get.theme.primaryColor,
+                                            backgroundColor: controller
+                                                        .application
+                                                        .value
+                                                        ?.shortlistedStatus ==
+                                                    true
+                                                ? Get.theme.primaryColor
+                                                : null,
+                                            foregroundColor: controller
+                                                        .application
+                                                        .value
+                                                        ?.shortlistedStatus ==
+                                                    true
+                                                ? Colors.white
+                                                : Get.theme.primaryColor,
                                             shape: RoundedRectangleBorder(
                                                 side: const BorderSide(
                                                   width: 5.0,

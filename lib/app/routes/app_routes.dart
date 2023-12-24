@@ -50,6 +50,7 @@ abstract class Routes {
   static const CREW_DETAIL = _Paths.CREW_DETAIL;
   static const CREW_REFERRAL = _Paths.CREW_REFERRAL;
   static const NOTIFICATION = _Paths.NOTIFICATION;
+  static const JOB_POST_UNDER_VERIFICATION = _Paths.JOB_POST_UNDER_VERIFICATION;
 }
 
 abstract class _Paths {
@@ -101,4 +102,5 @@ abstract class _Paths {
   static const CREW_DETAIL = '/crew-detail';
   static const CREW_REFERRAL = '/crew-referral';
   static const NOTIFICATION = '/notification';
+  static const JOB_POST_UNDER_VERIFICATION = '/job-post-under-verification';
 }

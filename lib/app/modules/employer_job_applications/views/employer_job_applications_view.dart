@@ -8,6 +8,7 @@ import 'package:join_mp_ship/app/data/models/ranks_model.dart';
 import 'package:join_mp_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
 import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
@@ -634,61 +635,67 @@ class EmployerJobApplicationsView
                                           ],
                                         ),
                                       ),
-                                      IconButton(
-                                        onPressed: controller
-                                                    .applicationShortListing
-                                                    .value ==
-                                                controller
-                                                    .jobApplications[index].id
-                                            ? null
-                                            : () {
-                                                controller.shortListApplication(
-                                                    controller
-                                                        .jobApplications[index]
-                                                        .id);
-                                              },
-                                        icon: Obx(() {
-                                          return controller
+                                      if (PreferencesHelper.instance.isCrew !=
+                                          true)
+                                        IconButton(
+                                          onPressed: controller
                                                       .applicationShortListing
                                                       .value ==
                                                   controller
                                                       .jobApplications[index].id
-                                              ? const Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    SizedBox(
-                                                        height: 16,
-                                                        width: 16,
-                                                        child:
-                                                            CircularProgressIndicator())
-                                                  ],
-                                                )
-                                              : ImageIcon(
-                                                  AssetImage(controller
+                                              ? null
+                                              : () {
+                                                  controller
+                                                      .shortListApplication(
+                                                          controller
                                                               .jobApplications[
                                                                   index]
-                                                              .shortlistedStatus ==
-                                                          true
-                                                      ? 'assets/icons/bookmark_filled.png'
-                                                      : 'assets/icons/bookmark_outlined.png'),
-                                                  color: controller
-                                                              .jobApplications[
-                                                                  index]
-                                                              .shortlistedStatus ==
-                                                          true
-                                                      ? Colors.blue
-                                                      : Colors.black,
-                                                  size: controller
-                                                              .jobApplications[
-                                                                  index]
-                                                              .shortlistedStatus ==
-                                                          true
-                                                      ? 30
-                                                      : 29,
-                                                );
-                                        }),
-                                      )
+                                                              .id);
+                                                },
+                                          icon: Obx(() {
+                                            return controller
+                                                        .applicationShortListing
+                                                        .value ==
+                                                    controller
+                                                        .jobApplications[index]
+                                                        .id
+                                                ? const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                          height: 16,
+                                                          width: 16,
+                                                          child:
+                                                              CircularProgressIndicator())
+                                                    ],
+                                                  )
+                                                : ImageIcon(
+                                                    AssetImage(controller
+                                                                .jobApplications[
+                                                                    index]
+                                                                .shortlistedStatus ==
+                                                            true
+                                                        ? 'assets/icons/bookmark_filled.png'
+                                                        : 'assets/icons/bookmark_outlined.png'),
+                                                    color: controller
+                                                                .jobApplications[
+                                                                    index]
+                                                                .shortlistedStatus ==
+                                                            true
+                                                        ? Colors.blue
+                                                        : Colors.black,
+                                                    size: controller
+                                                                .jobApplications[
+                                                                    index]
+                                                                .shortlistedStatus ==
+                                                            true
+                                                        ? 30
+                                                        : 29,
+                                                  );
+                                          }),
+                                        )
                                     ],
                                   ),
                                 ),

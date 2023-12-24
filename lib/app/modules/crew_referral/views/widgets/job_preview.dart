@@ -271,15 +271,18 @@ class JobPreview extends GetView<CrewReferralController> {
                                 onPressed: controller.hasAgreed.value
                                     ? () async {
                                         await controller.postJob();
-                                        Get.offAllNamed(
-                                            Routes.JOB_POSTED_SUCCESSFULLY,
-                                            arguments:
-                                                JobPostedSuccessfullyArguments(
-                                                    message: controller
-                                                                .jobToEdit ==
-                                                            null
-                                                        ? null
-                                                        : "JOB EDITED\nSUCCESSFULLY"));
+                                        controller.jobToEdit?.isActive == true
+                                            ? Get.offAllNamed(Routes.HOME)
+                                            : Get.offAllNamed(
+                                                Routes
+                                                    .JOB_POST_UNDER_VERIFICATION,
+                                                arguments:
+                                                    JobPostedSuccessfullyArguments(
+                                                        message: controller
+                                                                    .jobToEdit ==
+                                                                null
+                                                            ? null
+                                                            : "JOB EDITED\nSUCCESSFULLY"));
                                       }
                                     : null,
                                 child: Text("PUBLISH"))),

@@ -49,9 +49,14 @@ class HomeView extends GetView<HomeController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    Color.fromRGBO(64, 123, 255, 1),
+                                    Color.fromRGBO(1, 66, 211, 1),
+                                  ]),
+                                ),
                                 padding:
                                     const EdgeInsets.only(top: 26, bottom: 16),
-                                color: Get.theme.primaryColor.withOpacity(0.8),
                                 child: Row(
                                   children: [
                                     24.horizontalSpace,
@@ -78,12 +83,17 @@ class HomeView extends GetView<HomeController> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastLogin ?? ""}"),
+                                              "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastLogin ?? ""}",
+                                              style: Get.textTheme.bodyMedium
+                                                  ?.copyWith(
+                                                      color: Colors.white)),
                                           Text(
-                                            "${UserStates.instance.crewUser?.email}",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: 13),
-                                          )
+                                              "${UserStates.instance.crewUser?.email}",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Get.textTheme.bodyMedium
+                                                  ?.copyWith(
+                                                      fontSize: 12,
+                                                      color: Colors.white))
                                         ],
                                       ),
                                     ),
@@ -91,6 +101,7 @@ class HomeView extends GetView<HomeController> {
                                   ],
                                 ),
                               ),
+                              24.verticalSpace,
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 24),
