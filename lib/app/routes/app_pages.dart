@@ -97,6 +97,8 @@ import '../modules/success/bindings/success_binding.dart';
 import '../modules/success/views/success_view.dart';
 import '../modules/view_jobs_posted/bindings/view_jobs_posted_binding.dart';
 import '../modules/view_jobs_posted/views/view_jobs_posted_view.dart';
+import '../modules/wallet/bindings/wallet_binding.dart';
+import '../modules/wallet/views/wallet_view.dart';
 
 part 'app_routes.dart';
 
@@ -342,6 +344,11 @@ class AppPages {
       name: _Paths.JOB_POST_UNDER_VERIFICATION,
       page: () => const JobPostUnderVerificationView(),
       binding: JobPostUnderVerificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.WALLET,
+      page: () => const WalletView(),
+      binding: WalletBinding(),
     ),
   ];
 }
