@@ -25,7 +25,7 @@ class JobProvider extends WrapperConnect {
     final response = await httpGet(
         uri: Uri(
             scheme: "https",
-            host: "designwaala.me",
+            host: "joinmyship.com",
             path: "employer/post_job_list",
             queryParameters: {
           if (employerId != null) "emp_id": "$employerId",

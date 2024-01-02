@@ -178,10 +178,10 @@ class CompanyDetailController extends GetxController {
     }
     applyingJob.value = jobId;
     Application? application = await getIt<ApplicationProvider>().apply(
-            userId: PreferencesHelper.instance.userId,
-            jobId: jobId,
-            rankId: selectedRank.value?.value,
-            );
+      userId: PreferencesHelper.instance.userId,
+      jobId: jobId,
+      rankId: selectedRank.value?.value,
+    );
     if (application?.id == null) {
       applyingJob.value = null;
       return;
@@ -215,7 +215,7 @@ class CompanyDetailController extends GetxController {
         Share.share(
             '''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${job.id}
+http://joinmyship.com/job/?job_id=${job.id}
 ''');
         buildCaptureWidget.value = false;
         return;
@@ -228,13 +228,13 @@ http://designwaala.me/job/?job_id=${job.id}
           text:
               '''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${job.id}
+http://joinmyship.com/job/?job_id=${job.id}
 ''');
     } catch (e) {
       Share.share(
           '''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${job.id}
+http://joinmyship.com/job/?job_id=${job.id}
 ''');
     }
     buildCaptureWidget.value = false;

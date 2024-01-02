@@ -195,10 +195,10 @@ class JobOpeningController extends GetxController {
     }
     applyingJob.value = jobId;
     Application? application = await getIt<ApplicationProvider>().apply(
-        userId: PreferencesHelper.instance.userId,
-        jobId: jobId,
-        rankId: selectedRank.value?.value,
-        );
+      userId: PreferencesHelper.instance.userId,
+      jobId: jobId,
+      rankId: selectedRank.value?.value,
+    );
     if (application?.id == null) {
       applyingJob.value = null;
       return;
@@ -241,9 +241,10 @@ class JobOpeningController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 200));
       bytes = await widgetsToImageController.capture();
       if (bytes == null) {
-        Share.share('''
+        Share.share(
+            '''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${jobOpening.value?.id}
+http://joinmyship.com/job/?job_id=${jobOpening.value?.id}
 ''');
         buildCaptureWidget.value = false;
         return;
@@ -253,14 +254,16 @@ http://designwaala.me/job/?job_id=${jobOpening.value?.id}
           .writeAsBytes(bytes!);
       Share.shareXFiles([XFile(newImage.path)],
           subject: "Hey wanna apply to this Job?",
-          text: '''
+          text:
+              '''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${jobOpening.value?.id}
+http://joinmyship.com/job/?job_id=${jobOpening.value?.id}
 ''');
     } catch (e) {
-      Share.share('''
+      Share.share(
+          '''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${jobOpening.value?.id}
+http://joinmyship.com/job/?job_id=${jobOpening.value?.id}
 ''');
     }
     buildCaptureWidget.value = false;

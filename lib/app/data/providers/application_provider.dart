@@ -65,7 +65,7 @@ class ApplicationProvider extends WrapperConnect {
     final response = await httpGet(
         uri: Uri(
             scheme: "https",
-            host: "designwaala.me",
+            host: "joinmyship.com",
             path: "employer/applicants_list/$jobId",
             queryParameters: {
           if (ranks != null) "rank": ranks.map((e) => e.toString()).toList(),

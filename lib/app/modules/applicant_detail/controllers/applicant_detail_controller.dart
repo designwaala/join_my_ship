@@ -173,7 +173,7 @@ class ApplicantDetailController extends GetxController {
     await _prepareSaveDir();
     DateTime now = DateTime.now();
     final taskId = await FlutterDownloader.enqueue(
-      url: "https://designwaala.me$resume",
+      url: "https://joinmyship.com$resume",
       headers: {}, // optional: header send with url (auth token etc)
       savedDir: _localPath ?? "",
       saveInPublicStorage: true,
@@ -184,8 +184,8 @@ class ApplicantDetailController extends GetxController {
       openFileFromNotification:
           true, // click on notification to open downloaded file (for Android)
     );
-    // await loadPdfFromNetwork("https://designwaala.me$resume");
-    /* launchUrl(Uri.parse("https://designwaala.me$resume"),
+    // await loadPdfFromNetwork("https://joinmyship.com$resume");
+    /* launchUrl(Uri.parse("https://joinmyship.com$resume"),
         mode: LaunchMode.externalApplication); */
     isGettingResume.value = false;
   }

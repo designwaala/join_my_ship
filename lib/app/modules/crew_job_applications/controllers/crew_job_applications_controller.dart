@@ -51,7 +51,7 @@ class CrewJobApplicationsController extends GetxController {
       if (bytes == null) {
         Share.share('''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${application.jobData?.id}
+http://joinmyship.com/job/?job_id=${application.jobData?.id}
 ''');
         buildCaptureWidget.value = false;
         return;
@@ -63,12 +63,12 @@ http://designwaala.me/job/?job_id=${application.jobData?.id}
           subject: "Hey wanna apply to this Job?",
           text: '''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${application.jobData?.id}
+http://joinmyship.com/job/?job_id=${application.jobData?.id}
 ''');
     } catch (e) {
       Share.share('''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${application.jobData?.id}
+http://joinmyship.com/job/?job_id=${application.jobData?.id}
 ''');
     }
     buildCaptureWidget.value = false;

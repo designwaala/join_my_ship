@@ -144,7 +144,7 @@ class EmployerJobPostsController extends GetxController {
       if (bytes == null) {
         Share.share('''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${job.id}
+http://joinmyship.com/job/?job_id=${job.id}
 ''');
         buildCaptureWidget.value = false;
         return;
@@ -156,12 +156,12 @@ http://designwaala.me/job/?job_id=${job.id}
           subject: "Hey wanna apply to this Job?",
           text: '''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${job.id}
+http://joinmyship.com/job/?job_id=${job.id}
 ''');
     } catch (e) {
       Share.share('''
 Click on this link to view this Job
-http://designwaala.me/job/?job_id=${job.id}
+http://joinmyship.com/job/?job_id=${job.id}
 ''');
     }
     buildCaptureWidget.value = false;

@@ -97,7 +97,7 @@ void main() async {
     await FirebaseAuth.instance.signOut();
     PreferencesHelper.instance.clearAll();
   } */
-  baseURL = "https://designwaala.me/";
+  baseURL = "https://joinmyship.com/";
   runApp(
     ScreenUtilInit(
         designSize: const Size(375, 812),

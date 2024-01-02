@@ -49,7 +49,7 @@ class CrewUserProvider extends WrapperConnect {
       String? profilePicPath,
       String? resumePath}) async {
     var request = http.MultipartRequest(
-        'POST', Uri.parse('https://designwaala.me/crew/user_create'));
+        'POST', Uri.parse('https://joinmyship.com/crew/user_create'));
     request.fields.addAll(crewUser.toJson());
     if (resumePath != null) {
       request.files
@@ -234,7 +234,7 @@ class CrewUserProvider extends WrapperConnect {
       String? profilePicPath,
       String? resumePath}) async {
     var request = http.MultipartRequest(
-        'PATCH', Uri.parse('https://designwaala.me/crew/user_update/$crewId'));
+        'PATCH', Uri.parse('https://joinmyship.com/crew/user_update/$crewId'));
     if (crewUser != null) {
       request.fields.addAll(crewUser.toJson());
     }
