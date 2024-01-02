@@ -44,6 +44,7 @@ dependencies:
   flutter_downloader: ^1.11.1
   story_view: ^0.15.0
   infinite_scroll_pagination: ^4.0.0
+  payu_checkoutpro_flutter: ^1.0.4
 
 dev_dependencies:
   flutter_lints: ^2.0.0
