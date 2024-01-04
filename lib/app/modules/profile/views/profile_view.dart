@@ -14,6 +14,7 @@ import 'package:join_mp_ship/app/modules/employer_create_user/controllers/employ
 import 'package:join_mp_ship/app/routes/app_pages.dart';
 import 'package:join_mp_ship/utils/shared_preferences.dart';
 import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -398,10 +399,31 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                       36.verticalSpace,
                       Center(
-                        child: Text("Terms and conditions",
-                            style: Get.textTheme.bodyMedium?.copyWith(
-                                fontSize: 12.sp,
-                                color: Get.theme.primaryColor)),
+                        child: InkWell(
+                            onTap: () {
+                              launchUrl(
+                                  Uri.parse(
+                                      "https://joinmyship.com/privacypolicy/"),
+                                  mode: LaunchMode.externalApplication);
+                            },
+                            child: Text("Privacy Policy",
+                                style: Get.textTheme.bodyMedium
+                                    ?.copyWith(color: Get.theme.primaryColor))),
+                      ),
+                      8.verticalSpace,
+                      Center(
+                        child: InkWell(
+                          onTap: () {
+                            launchUrl(
+                                Uri.parse(
+                                    "https://joinmyship.com/termsandconditions/"),
+                                mode: LaunchMode.externalApplication);
+                          },
+                          child: Text("Terms and conditions",
+                              style: Get.textTheme.bodyMedium?.copyWith(
+                                  fontSize: 12.sp,
+                                  color: Get.theme.primaryColor)),
+                        ),
                       ),
                       6.verticalSpace,
                       Center(
