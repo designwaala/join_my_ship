@@ -95,6 +95,8 @@ import '../modules/subscriptions/bindings/subscriptions_binding.dart';
 import '../modules/subscriptions/views/subscriptions_view.dart';
 import '../modules/success/bindings/success_binding.dart';
 import '../modules/success/views/success_view.dart';
+import '../modules/update_email/bindings/update_email_binding.dart';
+import '../modules/update_email/views/update_email_view.dart';
 import '../modules/view_jobs_posted/bindings/view_jobs_posted_binding.dart';
 import '../modules/view_jobs_posted/views/view_jobs_posted_view.dart';
 
@@ -342,6 +344,11 @@ class AppPages {
       name: _Paths.JOB_POST_UNDER_VERIFICATION,
       page: () => const JobPostUnderVerificationView(),
       binding: JobPostUnderVerificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.UPDATE_EMAIL,
+      page: () => const UpdateEmailView(),
+      binding: UpdateEmailBinding(),
     ),
   ];
 }

@@ -369,7 +369,7 @@ class CrewOnboardingController extends GetxController with PickImage {
   }
 
   Future<void> setStep1Fields() async {
-    phoneNumber.text = crewUser?.number?.split("-")[1] ?? "";
+    phoneNumber.text = crewUser?.number?.split("-").elementAtOrNull(1) ?? "";
     selectedCountryCode.value = crewUser?.number?.split("-").firstOrNull ?? "";
     selectedRank.value =
         ranks?.firstWhereOrNull((e) => e.id == crewUser?.rankId);

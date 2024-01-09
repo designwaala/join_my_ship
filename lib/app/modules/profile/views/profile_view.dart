@@ -289,6 +289,12 @@ class ProfileView extends GetView<ProfileController> {
                               Get.toNamed(Routes.CHANGE_PASSWORD);
                             }),
                         CardObject(
+                            icon: Icons.email_outlined,
+                            text: "Change Email",
+                            onTap: () {
+                              Get.toNamed(Routes.UPDATE_EMAIL);
+                            }),
+                        CardObject(
                           iconPath: "assets/images/profile/help.png",
                           text: "Help & Feedback",
                           onTap: () => Get.toNamed(Routes.HELP),
@@ -335,7 +341,8 @@ class ProfileView extends GetView<ProfileController> {
                                 children: [
                                   e.icon != null
                                       ? Icon(e.icon!,
-                                          color: Get.theme.primaryColor)
+                                          color: Get.theme.primaryColor,
+                                          size: 20)
                                       : e.svgPath != null
                                           ? SvgPicture.asset(e.svgPath!,
                                               height: e.height ?? 24.h,

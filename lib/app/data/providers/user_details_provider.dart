@@ -49,7 +49,9 @@ class UserDetailsProvider extends WrapperConnect {
       }
     }, contentType: "");
     UserStates.instance.userDetails = response.body;
-    await prefs.setUserDetailId(response.body?.id);
+    if (response.body?.id != null) {
+      await prefs.setUserDetailId(response.body?.id);
+    }
     return response.body;
   }
 }
