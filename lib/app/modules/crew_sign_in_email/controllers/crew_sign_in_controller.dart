@@ -1,20 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/data/models/login_model.dart';
-import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
-import 'package:join_mp_ship/app/data/providers/login_provider.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/app/modules/splash/controllers/splash_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/secure_storage.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/models/login_model.dart';
+import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/login_provider.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/app/modules/splash/controllers/splash_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/secure_storage.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
 
 class CrewSignInController extends GetxController with RedirectionMixin {
   TextEditingController emailController = TextEditingController();
@@ -47,6 +48,11 @@ class CrewSignInController extends GetxController with RedirectionMixin {
         await PreferencesHelper.instance.setUserCreated(false);
         print("$e");
       } */
+      AndroidOptions _getAndroidOptions() => const AndroidOptions(
+            encryptedSharedPreferences: true,
+          );
+      final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+      await storage.write(key: "password", value: passwordController.text);
       print(await FirebaseAuth.instance.currentUser?.getIdToken());
       await redirection();
     } on FirebaseAuthException catch (e) {

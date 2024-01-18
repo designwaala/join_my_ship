@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/user_details_model.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
-import 'package:join_mp_ship/utils/extensions/date_time.dart';
+import 'package:join_my_ship/app/data/models/user_details_model.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/utils/extensions/date_time.dart';
 
 class PassportDetails extends GetView<CrewOnboardingController> {
   const PassportDetails({Key? key}) : super(key: key);
@@ -49,7 +49,8 @@ class PassportDetails extends GetView<CrewOnboardingController> {
                                             IssuingAuthority(
                                                 issuingAuthority: e);
                                       }),
-                                  Text(e ?? "", style: Get.textTheme.titleMedium),
+                                  Text(e ?? "",
+                                      style: Get.textTheme.titleMedium),
                                 ],
                               );
                             })))

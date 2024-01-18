@@ -1,4 +1,4 @@
-import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
+import 'package:join_my_ship/app/modules/job_post/controllers/job_post_controller.dart';
 
 class Rank {
   int? id;

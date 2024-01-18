@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 
 class ResetPasswordEmailVerificationView extends GetView {

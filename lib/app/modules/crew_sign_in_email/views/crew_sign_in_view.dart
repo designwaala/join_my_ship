@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
 
 import '../controllers/crew_sign_in_controller.dart';
 

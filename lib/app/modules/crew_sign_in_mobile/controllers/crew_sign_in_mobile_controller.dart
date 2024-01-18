@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
-import 'package:join_mp_ship/app/modules/splash/controllers/splash_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/modules/splash/controllers/splash_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
 
 enum Miss {
   countryCode,
@@ -51,14 +51,15 @@ class CrewSignInMobileController extends GetxController with RedirectionMixin {
   CrewUser? crewUser;
 
   Function(String phoneNumber, String dialCode)? customRedirection;
+  CrewSignInMobileArguments? args;
 
   @override
   void onInit() {
     if (Get.arguments is CrewSignInMobileArguments) {
-      CrewSignInMobileArguments args = Get.arguments;
-      customRedirection = args.redirection;
-      phoneController.text = args.phoneNumber ?? "";
-      selectedCountryCode.value = args.countryCode ?? selectedCountryCode.value;
+      args = Get.arguments;
+      customRedirection = args?.redirection;
+      phoneController.text = args?.phoneNumber ?? "";
+      selectedCountryCode.value = args?.countryCode ?? selectedCountryCode.value;
     }
     super.onInit();
   }
@@ -181,7 +182,11 @@ class CrewSignInMobileArguments {
   final Function(String phoneNumber, String dialCode)? redirection;
   final String? phoneNumber;
   final String? countryCode;
+  final bool? isUpdateView;
 
   const CrewSignInMobileArguments(
-      {this.redirection, this.countryCode, this.phoneNumber});
+      {this.redirection,
+      this.countryCode,
+      this.phoneNumber,
+      this.isUpdateView});
 }

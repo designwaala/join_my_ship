@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/main.dart';
+import 'package:join_my_ship/main.dart';
 
 import '../models/job_application_model.dart';
 

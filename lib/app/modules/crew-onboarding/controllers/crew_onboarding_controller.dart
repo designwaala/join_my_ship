@@ -5,44 +5,47 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide State;
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:join_mp_ship/app/data/models/cdc_issuing_authority_model.dart';
-import 'package:join_mp_ship/app/data/models/coc_model.dart';
-import 'package:join_mp_ship/app/data/models/cop_model.dart';
-import 'package:join_mp_ship/app/data/models/country_model.dart';
-import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/data/models/passport_issuing_authority_model.dart';
-import 'package:join_mp_ship/app/data/models/previous_employer_model.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/data/models/sea_service_model.dart';
-import 'package:join_mp_ship/app/data/models/stcw_issuing_authority_model.dart';
-import 'package:join_mp_ship/app/data/models/user_details_model.dart';
-import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
-import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
-import 'package:join_mp_ship/app/data/providers/cdc_issuing_authority_provider.dart';
-import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
-import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
-import 'package:join_mp_ship/app/data/providers/country_provider.dart';
-import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
-import 'package:join_mp_ship/app/data/providers/passport_issuing_authority_provider.dart';
-import 'package:join_mp_ship/app/data/providers/previous_employer_provider.dart';
-import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
-import 'package:join_mp_ship/app/data/providers/sea_service_provider.dart';
-import 'package:join_mp_ship/app/data/providers/state_provider.dart';
-import 'package:join_mp_ship/app/data/providers/stcw_issuing_authority_provider.dart';
-import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
-import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
-import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
-import 'package:join_mp_ship/app/data/models/state_model.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/app/data/models/cdc_issuing_authority_model.dart';
+import 'package:join_my_ship/app/data/models/coc_model.dart';
+import 'package:join_my_ship/app/data/models/cop_model.dart';
+import 'package:join_my_ship/app/data/models/country_model.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/models/flag_model.dart';
+import 'package:join_my_ship/app/data/models/passport_issuing_authority_model.dart';
+import 'package:join_my_ship/app/data/models/previous_employer_model.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/data/models/sea_service_model.dart';
+import 'package:join_my_ship/app/data/models/stcw_issuing_authority_model.dart';
+import 'package:join_my_ship/app/data/models/user_details_model.dart';
+import 'package:join_my_ship/app/data/models/vessel_list_model.dart';
+import 'package:join_my_ship/app/data/models/watch_keeping_model.dart';
+import 'package:join_my_ship/app/data/providers/cdc_issuing_authority_provider.dart';
+import 'package:join_my_ship/app/data/providers/coc_provider.dart';
+import 'package:join_my_ship/app/data/providers/cop_provider.dart';
+import 'package:join_my_ship/app/data/providers/country_provider.dart';
+import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/flag_provider.dart';
+import 'package:join_my_ship/app/data/providers/passport_issuing_authority_provider.dart';
+import 'package:join_my_ship/app/data/providers/previous_employer_provider.dart';
+import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_my_ship/app/data/providers/sea_service_provider.dart';
+import 'package:join_my_ship/app/data/providers/state_provider.dart';
+import 'package:join_my_ship/app/data/providers/stcw_issuing_authority_provider.dart';
+import 'package:join_my_ship/app/data/providers/user_details_provider.dart';
+import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
+import 'package:join_my_ship/app/data/providers/watch_keeping_provider.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/extensions/string_extensions.dart';
+import 'package:join_my_ship/app/data/models/state_model.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 import 'package:time_machine/time_machine.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
 
 Map<int, String> maritalStatuses = {1: "Single", 2: "Married", 3: "Divorced"};
 Map<String, int> reverseMaritalStatuses = {
@@ -236,6 +239,9 @@ class CrewOnboardingController extends GetxController with PickImage {
   List<WatchKeeping> watchKeepings = [];
   List<StcwIssuingAuthority> stcws = [];
 
+  List<Flag>? flags;
+  Rxn<Flag> selectedFlag = Rxn();
+
   @override
   void onInit() {
     CrewOnboardingArguments? args =
@@ -405,11 +411,12 @@ class CrewOnboardingController extends GetxController with PickImage {
   }
 
   prepareRecordBottomSheet() async {
-    if (vesselList != null) {
+    /* if (vesselList != null) {
       return;
-    }
+    } */
     isPreparingRecordBottomSheet.value = true;
-    vesselList = await getIt<VesselListProvider>().getVesselList();
+    flags ??= await getIt<FlagProvider>().getFlags();
+    vesselList ??= await getIt<VesselListProvider>().getVesselList();
     isPreparingRecordBottomSheet.value = false;
   }
 
@@ -420,6 +427,11 @@ class CrewOnboardingController extends GetxController with PickImage {
   }
 
   Future<bool> postStep1() async {
+    AndroidOptions _getAndroidOptions() => const AndroidOptions(
+          encryptedSharedPreferences: true,
+        );
+    final password = await FlutterSecureStorage(aOptions: _getAndroidOptions())
+        .read(key: "password");
     step1FormMisses.clear();
     if (pickedImage.value?.path == null && crewUser?.profilePic == null) {
       step1FormMisses.add(Step1FormMiss.didNotSelectProfilePic);
@@ -459,7 +471,7 @@ class CrewOnboardingController extends GetxController with PickImage {
           crewUser: CrewUser(
               firstName: FirebaseAuth.instance.currentUser?.displayName,
               // lastName: "_",
-              password: "Demo@123",
+              password: password,
               email: FirebaseAuth.instance.currentUser?.email,
               addressLine1: addressLine1.text,
               pincode: zipCode.text,
@@ -678,8 +690,10 @@ class CrewOnboardingController extends GetxController with PickImage {
       recordContractDuration.value = null;
       return;
     }
-    LocalDate a = LocalDate.dateTime(DateTime.parse(recordSignOnDate.text));
-    LocalDate b = LocalDate.dateTime(DateTime.parse(recordSignOffDate.text));
+    LocalDate a = LocalDate.dateTime(
+        DateTime.parse(recordSignOnDate.text.split("-").reversed.join("-")));
+    LocalDate b = LocalDate.dateTime(
+        DateTime.parse(recordSignOffDate.text.split("-").reversed.join("-")));
     Period diff = b.periodSince(a);
     String sentence = "";
     /* if (diff.years != 0) {
@@ -728,7 +742,7 @@ class CrewOnboardingController extends GetxController with PickImage {
                 shipName: recordShipName.text,
                 iMONumber: recordIMONumber.text,
                 rankId: recordRank.value?.id,
-                flag: recordFlagName.text,
+                flag: selectedFlag.value?.countryName,
                 gRT: recordGrt.text,
                 vesselType: recordVesselType.value,
                 signonDate: recordSignOnDate.text,

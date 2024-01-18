@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/utils/styles.dart';
+import 'package:join_my_ship/utils/styles.dart';
 
 class CustomElevatedButon extends ElevatedButton {
   CustomElevatedButon(

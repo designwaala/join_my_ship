@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:join_mp_ship/app/data/models/boosting_model.dart';
-import 'package:join_mp_ship/app/modules/boosted_crew_profiles/controllers/boosted_crew_profiles_controller.dart';
-import 'package:join_mp_ship/app/modules/boosting/controllers/boosting_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/app/data/models/boosting_model.dart';
+import 'package:join_my_ship/app/modules/boosted_crew_profiles/controllers/boosted_crew_profiles_controller.dart';
+import 'package:join_my_ship/app/modules/boosting/controllers/boosting_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:collection/collection.dart';
 import 'package:lottie/lottie.dart';
 

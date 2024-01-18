@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/application_model.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
+import 'package:join_my_ship/app/data/models/application_model.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/widgets/circular_progress_indicator_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
+import 'package:join_my_ship/widgets/dropdown_decoration.dart';
 import 'package:lottie/lottie.dart';
 import '../controllers/employer_job_applications_controller.dart';
 

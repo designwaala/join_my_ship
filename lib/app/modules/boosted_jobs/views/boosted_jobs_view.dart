@@ -6,10 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:get_cli/get_cli.dart';
-import 'package:join_mp_ship/app/modules/boosted_jobs/bindings/boosted_jobs_binding.dart';
-import 'package:join_mp_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/modules/boosted_jobs/bindings/boosted_jobs_binding.dart';
+import 'package:join_my_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 import 'package:story_view/story_view.dart';
 import 'package:collection/collection.dart';
 
@@ -208,7 +208,8 @@ class BoostedJobsView extends GetView<BoostedJobsController> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.start,
                                                                         children: [
-                                                                          SvgPicture.asset("assets/icons/job.svg"),
+                                                                          SvgPicture.asset(
+                                                                              "assets/icons/job.svg"),
                                                                           10.horizontalSpace,
                                                                           Flexible(
                                                                             child:

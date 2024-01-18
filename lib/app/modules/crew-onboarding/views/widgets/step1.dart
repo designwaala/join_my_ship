@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/country_model.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/contact_details.dart';
-import 'package:join_mp_ship/utils/extensions/date_time.dart';
-import 'package:join_mp_ship/widgets/astrix_text.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
-import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
+import 'package:join_my_ship/app/data/models/country_model.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/views/widgets/contact_details.dart';
+import 'package:join_my_ship/utils/extensions/date_time.dart';
+import 'package:join_my_ship/widgets/astrix_text.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/widgets/dropdown_decoration.dart';
 import 'package:flutter/services.dart';
-import 'package:join_mp_ship/widgets/top_modal_sheet.dart';
+import 'package:join_my_ship/widgets/top_modal_sheet.dart';
 
 class CrewonboardingStep1 extends GetView<CrewOnboardingController> {
   const CrewonboardingStep1({Key? key}) : super(key: key);

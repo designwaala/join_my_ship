@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/error.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/utils/wrapper_connect.dart';
-import 'package:join_mp_ship/widgets/top_modal_sheet.dart';
+import 'package:join_my_ship/app/data/models/error.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/utils/wrapper_connect.dart';
+import 'package:join_my_ship/widgets/top_modal_sheet.dart';
 
 import '../../../main.dart';
 import '../models/crew_user_model.dart';

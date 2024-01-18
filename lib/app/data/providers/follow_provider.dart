@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/utils/wrapper_connect.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/utils/wrapper_connect.dart';
 
 import '../models/follow_model.dart';
 

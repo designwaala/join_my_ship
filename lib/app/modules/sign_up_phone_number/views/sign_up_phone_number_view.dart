@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:pinput/pinput.dart';
 
 import '../controllers/sign_up_phone_number_controller.dart';

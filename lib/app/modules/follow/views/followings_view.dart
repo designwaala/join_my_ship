@@ -5,11 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/data/models/follow_model.dart';
-import 'package:join_mp_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/models/follow_model.dart';
+import 'package:join_my_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 import 'package:lottie/lottie.dart';
 import 'package:collection/collection.dart';
 

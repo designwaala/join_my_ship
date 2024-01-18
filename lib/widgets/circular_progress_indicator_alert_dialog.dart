@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/main.dart';
+import 'package:join_my_ship/main.dart';
 
 class CircularProgressIndicatorAlertDialog extends GetWidget {
   const CircularProgressIndicatorAlertDialog({super.key});

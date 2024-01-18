@@ -2,8 +2,8 @@
 
 // import 'package:flutter/services.dart';
 // import 'package:get/get.dart';
-// import 'package:join_mp_ship/main.dart';
-// import 'package:join_mp_ship/utils/wrapper_connect.dart';
+// import 'package:join_my_ship/main.dart';
+// import 'package:join_my_ship/utils/wrapper_connect.dart';
 
 // import '../models/job_post_model.dart';
 

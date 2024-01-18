@@ -8,18 +8,18 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:join_mp_ship/app/data/models/boosting_model.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/modules/boosting/views/boosting_view.dart';
-import 'package:join_mp_ship/app/modules/company_detail/controllers/company_detail_controller.dart';
-import 'package:join_mp_ship/app/modules/crew_list/controllers/crew_list_controller.dart';
-import 'package:join_mp_ship/app/modules/follow/controllers/followings_controller.dart';
-import 'package:join_mp_ship/app/modules/job_openings/controllers/job_openings_controller.dart';
-import 'package:join_mp_ship/app/modules/job_openings/views/job_openings_view.dart';
-import 'package:join_mp_ship/app/modules/profile/views/profile_view.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
+import 'package:join_my_ship/app/data/models/boosting_model.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/modules/boosting/views/boosting_view.dart';
+import 'package:join_my_ship/app/modules/company_detail/controllers/company_detail_controller.dart';
+import 'package:join_my_ship/app/modules/crew_list/controllers/crew_list_controller.dart';
+import 'package:join_my_ship/app/modules/follow/controllers/followings_controller.dart';
+import 'package:join_my_ship/app/modules/job_openings/controllers/job_openings_controller.dart';
+import 'package:join_my_ship/app/modules/job_openings/views/job_openings_view.dart';
+import 'package:join_my_ship/app/modules/profile/views/profile_view.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/custom_elevated_button.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -239,6 +239,7 @@ class HomeView extends GetView<HomeController> {
                 },
               ),
             ),
+            if(UserStates.instance.crewUser?.isVerified == 1)
             Positioned(
                 bottom: 72,
                 left: 0,

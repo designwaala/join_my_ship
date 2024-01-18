@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/cdc_details.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/coc_details.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/cop_details.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/passport_details.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/stcw_details.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/watch_keeping_details.dart';
-import 'package:join_mp_ship/widgets/astrix_text.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
-import 'package:join_mp_ship/utils/extensions/date_time.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/views/widgets/cdc_details.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/views/widgets/coc_details.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/views/widgets/cop_details.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/views/widgets/passport_details.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/views/widgets/stcw_details.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/views/widgets/watch_keeping_details.dart';
+import 'package:join_my_ship/widgets/astrix_text.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/utils/extensions/date_time.dart';
 
 class CrewOnboardingStep2 extends GetView<CrewOnboardingController> {
   const CrewOnboardingStep2({Key? key}) : super(key: key);

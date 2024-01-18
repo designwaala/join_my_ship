@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/data/providers/country_provider.dart';
-import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
-import 'package:join_mp_ship/app/data/providers/state_provider.dart';
-import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/providers/country_provider.dart';
+import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/state_provider.dart';
+import 'package:join_my_ship/app/data/providers/user_details_provider.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/extensions/string_extensions.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 
 import '../../../data/models/country_model.dart';
 import '../../../data/models/state_model.dart';
@@ -220,7 +220,8 @@ class EmployerCreateUserController extends GetxController {
       statusCode = await getIt<CrewUserProvider>().updateCrewUser(
           crewId: crewUser!.id!,
           crewUser: CrewUser(
-            userTypeKey: PreferencesHelper.instance.employerType?.backendIndex,
+              userTypeKey:
+                  PreferencesHelper.instance.employerType?.backendIndex,
               firstName: FirebaseAuth.instance.currentUser?.displayName,
               lastName: lastNameController.text,
               email: FirebaseAuth.instance.currentUser?.email,

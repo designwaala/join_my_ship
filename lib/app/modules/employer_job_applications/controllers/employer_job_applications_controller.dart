@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/application_model.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/data/providers/application_provider.dart';
-import 'package:join_mp_ship/app/data/providers/job_application_provider.dart';
-import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/continous_stream.dart';
-import 'package:join_mp_ship/utils/extensions/string_extensions.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/app/data/models/application_model.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/data/providers/application_provider.dart';
+import 'package:join_my_ship/app/data/providers/job_application_provider.dart';
+import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/continous_stream.dart';
+import 'package:join_my_ship/utils/extensions/string_extensions.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 
 class EmployerJobApplicationsController extends GetxController {
   RxList<Application> jobApplications = RxList();

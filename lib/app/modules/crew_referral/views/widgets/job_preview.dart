@@ -3,10 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/crew_referral/controllers/crew_referral_controller.dart';
-import 'package:join_mp_ship/app/modules/job_posted_successfully/controllers/job_posted_successfully_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/styles.dart';
+import 'package:join_my_ship/app/modules/crew_referral/controllers/crew_referral_controller.dart';
+import 'package:join_my_ship/app/modules/job_posted_successfully/controllers/job_posted_successfully_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/styles.dart';
 
 class JobPreview extends GetView<CrewReferralController> {
   const JobPreview({Key? key}) : super(key: key);

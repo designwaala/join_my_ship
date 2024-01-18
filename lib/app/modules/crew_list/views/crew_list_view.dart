@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/modules/applicant_detail/controllers/applicant_detail_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 import 'package:lottie/lottie.dart';
 
 import '../controllers/crew_list_controller.dart';
@@ -91,8 +91,12 @@ class CrewListView extends GetView<CrewListController> {
                                 shadowColor:
                                     const Color.fromARGB(255, 237, 233, 241),
                                 shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: controller.crewList?[index].isHighlighted == true ?
-                                  Get.theme.primaryColor : Colors.transparent),
+                                    side: BorderSide(
+                                        color: controller.crewList?[index]
+                                                    .isHighlighted ==
+                                                true
+                                            ? Get.theme.primaryColor
+                                            : Colors.transparent),
                                     borderRadius: BorderRadius.circular(20)),
                                 child: InkWell(
                                   onTap: () {

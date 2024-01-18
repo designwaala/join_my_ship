@@ -1,9 +1,9 @@
-import 'package:join_mp_ship/app/data/models/job_model.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/wrapper_connect.dart';
+import 'package:join_my_ship/app/data/models/job_model.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/wrapper_connect.dart';
 
 class JobCOPPostProvider extends WrapperConnect {
-    JobCOPPostProvider() {
+  JobCOPPostProvider() {
     httpClient.defaultDecoder = (map) {
       if (map is Map<String, dynamic>) return JobCop.fromJson(map);
       if (map is List) return map.map((item) => JobCop.fromJson(item)).toList();

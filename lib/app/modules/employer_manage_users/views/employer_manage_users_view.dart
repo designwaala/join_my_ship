@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
-import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/widgets/custom_elevated_button.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/widgets/dropdown_decoration.dart';
 import 'package:lottie/lottie.dart';
 
 import '../controllers/employer_manage_users_controller.dart';

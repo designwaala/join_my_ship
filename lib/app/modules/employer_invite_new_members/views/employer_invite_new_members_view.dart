@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/widgets/custom_elevated_button.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
 
 import '../controllers/employer_invite_new_members_controller.dart';
 

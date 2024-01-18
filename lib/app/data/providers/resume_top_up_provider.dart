@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/wrapper_connect.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/wrapper_connect.dart';
 
 import '../models/resume_top_up_model.dart';
 
@@ -18,5 +18,4 @@ class ResumeTopUpProvider extends WrapperConnect {
     final response = await get('crew/topup-plan/');
     return response.body;
   }
-
 }

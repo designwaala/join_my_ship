@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/styles.dart';
-import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/styles.dart';
+import 'package:join_my_ship/widgets/custom_elevated_button.dart';
 import 'package:lottie/lottie.dart';
 
 import '../controllers/job_posted_successfully_controller.dart';

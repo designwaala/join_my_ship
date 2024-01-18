@@ -5,10 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:get_cli/extensions/string.dart';
-import 'package:join_mp_ship/app/data/models/application_model.dart';
-import 'package:join_mp_ship/app/modules/application_status/controllers/application_status_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/widgets/job_cards/crew_referral_job_card.dart';
+import 'package:join_my_ship/app/data/models/application_model.dart';
+import 'package:join_my_ship/app/modules/application_status/controllers/application_status_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/widgets/job_cards/crew_referral_job_card.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 

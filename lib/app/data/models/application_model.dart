@@ -1,6 +1,6 @@
-import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/data/models/job_model.dart';
-import 'package:join_mp_ship/app/data/models/user_details_model.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/models/job_model.dart';
+import 'package:join_my_ship/app/data/models/user_details_model.dart';
 import 'package:collection/collection.dart';
 
 /* enum ApplicationStatus {

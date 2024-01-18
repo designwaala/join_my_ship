@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
 
 class EmailVerificationWaitingController extends GetxController {
   RxBool isResendingEmail = false.obs;
@@ -11,7 +11,7 @@ class EmailVerificationWaitingController extends GetxController {
   RxBool isRefreshing = false.obs;
   bool isCrew = true;
   // Timer? _timer;
- EmailVerificationArguments? args;
+  EmailVerificationArguments? args;
   @override
   void onInit() {
     if (Get.arguments is EmailVerificationArguments) {
@@ -62,4 +62,5 @@ class EmailVerificationWaitingController extends GetxController {
 class EmailVerificationArguments {
   final bool? isCrew;
   final Function? redirection;
-  const EmailVerificationArguments({this.isCrew, this.redirection});}
+  const EmailVerificationArguments({this.isCrew, this.redirection});
+}

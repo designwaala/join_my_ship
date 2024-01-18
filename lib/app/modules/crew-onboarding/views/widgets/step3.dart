@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/add_a_record_bottom_sheet.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/views/widgets/add_a_reference_bottom_sheet.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/widgets/astrix_text.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/views/widgets/add_a_record_bottom_sheet.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/views/widgets/add_a_reference_bottom_sheet.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/widgets/astrix_text.dart';
 
 class CrewOnboardingStep3 extends GetView<CrewOnboardingController> {
   const CrewOnboardingStep3({Key? key}) : super(key: key);

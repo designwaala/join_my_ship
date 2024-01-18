@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:pinput/pinput.dart';
 
 import '../controllers/crew_sign_in_mobile_controller.dart';
@@ -36,9 +36,10 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         14.verticalSpace,
-                        Text("Sign In",
+                        Text(controller.args?.isUpdateView == true ? "Update Mobile Number" : "Sign In",
                             style: Get.theme.textTheme.headlineSmall
                                 ?.copyWith(fontWeight: FontWeight.bold)),
+                        if(controller.args?.isUpdateView != true)        
                         const Text(
                             "Please sign in to your registered mobile number"),
                         20.verticalSpace,

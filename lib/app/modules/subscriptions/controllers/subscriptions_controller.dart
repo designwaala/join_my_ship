@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/boosting_model.dart';
-import 'package:join_mp_ship/app/data/models/current_resume_pack.dart';
-import 'package:join_mp_ship/app/data/models/current_resume_top_up.dart';
-import 'package:join_mp_ship/app/data/models/highlight_model.dart';
-import 'package:join_mp_ship/app/data/providers/boosting_provider.dart';
-import 'package:join_mp_ship/app/data/providers/highlight_provider.dart';
-import 'package:join_mp_ship/app/data/providers/resume_pack_provider.dart';
-import 'package:join_mp_ship/app/data/providers/resume_pack_buy_provider.dart';
-import 'package:join_mp_ship/app/data/providers/resume_top_up_buy_provider.dart';
-import 'package:join_mp_ship/app/data/providers/resume_top_up_provider.dart';
-import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/app/data/models/boosting_model.dart';
+import 'package:join_my_ship/app/data/models/current_resume_pack.dart';
+import 'package:join_my_ship/app/data/models/current_resume_top_up.dart';
+import 'package:join_my_ship/app/data/models/highlight_model.dart';
+import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
+import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
+import 'package:join_my_ship/app/data/providers/resume_pack_provider.dart';
+import 'package:join_my_ship/app/data/providers/resume_pack_buy_provider.dart';
+import 'package:join_my_ship/app/data/providers/resume_top_up_buy_provider.dart';
+import 'package:join_my_ship/app/data/providers/resume_top_up_provider.dart';
+import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 
 class SubscriptionsController extends GetxController {
   RxBool isLoading = false.obs;

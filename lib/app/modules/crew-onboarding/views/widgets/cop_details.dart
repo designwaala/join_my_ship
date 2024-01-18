@@ -2,13 +2,13 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/user_details_model.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/widgets/astrix_text.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
-import 'package:join_mp_ship/utils/extensions/date_time.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/app/data/models/user_details_model.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/widgets/astrix_text.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/utils/extensions/date_time.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
 
 class COPDetails extends GetView<CrewOnboardingController> {
   const COPDetails({Key? key}) : super(key: key);
@@ -57,20 +57,23 @@ class COPDetails extends GetView<CrewOnboardingController> {
                       value: null,
                       isExpanded: true,
                       style: Get.textTheme.bodySmall,
-                      items: controller.cops.map((e) => e.name)
+                      items: controller.cops
+                          .map((e) => e.name)
                           .map((e) => DropdownMenuItem(
                               value: e,
                               onTap: () {
                                 if (controller.copIssuingAuthorities.any(
                                     (issuingAuthority) =>
-                                        issuingAuthority.issuingAuthority == e)) {
+                                        issuingAuthority.issuingAuthority ==
+                                        e)) {
                                   controller.copIssuingAuthorities.removeWhere(
-                                      (element) => element.issuingAuthority == e);
+                                      (element) =>
+                                          element.issuingAuthority == e);
                                 } else if (controller
                                         .copIssuingAuthorities.length <
                                     2) {
-                                  controller.copIssuingAuthorities
-                                      .add(IssuingAuthority(issuingAuthority: e));
+                                  controller.copIssuingAuthorities.add(
+                                      IssuingAuthority(issuingAuthority: e));
                                 } else {
                                   controller.fToast.safeShowToast(
                                       child: errorToast(
@@ -95,10 +98,11 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                                     element.issuingAuthority ==
                                                     e);
                                           } else if (controller
-                                                  .copIssuingAuthorities.length <
+                                                  .copIssuingAuthorities
+                                                  .length <
                                               2) {
-                                            controller.copIssuingAuthorities.add(
-                                                IssuingAuthority(
+                                            controller.copIssuingAuthorities
+                                                .add(IssuingAuthority(
                                                     issuingAuthority: e));
                                           } else {
                                             controller.fToast.safeShowToast(
@@ -106,7 +110,8 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                                     "You can select only 2 issuing authorities."));
                                           }
                                         }),
-                                    Text(e ?? "", style: Get.textTheme.titleMedium),
+                                    Text(e ?? "",
+                                        style: Get.textTheme.titleMedium),
                                   ],
                                 );
                               })))
@@ -269,10 +274,8 @@ class COPDetails extends GetView<CrewOnboardingController> {
                                       DateTime? selectedDateTime =
                                           await showDatePicker(
                                               context: Get.context!,
-                                              initialDate:
-                                                  DateTime.now(),
-                                              firstDate:
-                                                  DateTime.now(),
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime.now(),
                                               lastDate:
                                                   DateTime.parse("2050-01-01"));
                                       controller.copIssuingAuthorities

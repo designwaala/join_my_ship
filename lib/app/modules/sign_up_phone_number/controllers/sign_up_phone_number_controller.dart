@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
-import 'package:join_mp_ship/app/modules/splash/controllers/splash_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
+import 'package:join_my_ship/app/modules/splash/controllers/splash_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
 
 class SignUpPhoneNumberController extends GetxController with RedirectionMixin {
   TextEditingController phoneController = TextEditingController();

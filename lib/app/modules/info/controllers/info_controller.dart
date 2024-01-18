@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
 
 class InfoController extends GetxController {
   CarouselController carouselController = CarouselController();

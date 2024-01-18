@@ -4,33 +4,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/application_model.dart';
-import 'package:join_mp_ship/app/data/models/coc_model.dart';
-import 'package:join_mp_ship/app/data/models/cop_model.dart';
-import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/data/models/job_model.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
-import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
-import 'package:join_mp_ship/app/data/providers/application_provider.dart';
-import 'package:join_mp_ship/app/data/providers/coc_provider.dart';
-import 'package:join_mp_ship/app/data/providers/cop_provider.dart';
-import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
-import 'package:join_mp_ship/app/data/providers/follow_provider.dart';
-import 'package:join_mp_ship/app/data/providers/job_provider.dart';
-import 'package:join_mp_ship/app/data/providers/liked_post_provider.dart';
-import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
-import 'package:join_mp_ship/app/data/providers/vessel_list_provider.dart';
-import 'package:join_mp_ship/app/data/providers/watch_keeping_provider.dart';
-import 'package:join_mp_ship/app/modules/crew_job_applications/controllers/crew_job_applications_controller.dart';
-import 'package:join_mp_ship/app/modules/success/controllers/success_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/data/models/application_model.dart';
+import 'package:join_my_ship/app/data/models/coc_model.dart';
+import 'package:join_my_ship/app/data/models/cop_model.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/models/job_model.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/data/models/vessel_list_model.dart';
+import 'package:join_my_ship/app/data/models/watch_keeping_model.dart';
+import 'package:join_my_ship/app/data/providers/application_provider.dart';
+import 'package:join_my_ship/app/data/providers/coc_provider.dart';
+import 'package:join_my_ship/app/data/providers/cop_provider.dart';
+import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/follow_provider.dart';
+import 'package:join_my_ship/app/data/providers/job_provider.dart';
+import 'package:join_my_ship/app/data/providers/liked_post_provider.dart';
+import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
+import 'package:join_my_ship/app/data/providers/watch_keeping_provider.dart';
+import 'package:join_my_ship/app/modules/crew_job_applications/controllers/crew_job_applications_controller.dart';
+import 'package:join_my_ship/app/modules/success/controllers/success_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 import 'package:collection/collection.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
@@ -217,8 +217,7 @@ class LikedJobsController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 200));
       bytes = await widgetsToImageController.capture();
       if (bytes == null) {
-        Share.share(
-            '''
+        Share.share('''
 Click on this link to view this Job
 http://joinmyship.com/job/?job_id=${job.id}
 ''');
@@ -230,14 +229,12 @@ http://joinmyship.com/job/?job_id=${job.id}
           await File('$path/job_${job.id}.png').writeAsBytes(bytes!);
       Share.shareXFiles([XFile(newImage.path)],
           subject: "Hey wanna apply to this Job?",
-          text:
-              '''
+          text: '''
 Click on this link to view this Job
 http://joinmyship.com/job/?job_id=${job.id}
 ''');
     } catch (e) {
-      Share.share(
-          '''
+      Share.share('''
 Click on this link to view this Job
 http://joinmyship.com/job/?job_id=${job.id}
 ''');

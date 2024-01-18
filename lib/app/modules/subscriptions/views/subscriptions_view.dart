@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/subscriptions/views/widgets/active_plans_view.dart';
-import 'package:join_mp_ship/app/modules/subscriptions/views/widgets/buy_plans_view.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/modules/subscriptions/views/widgets/active_plans_view.dart';
+import 'package:join_my_ship/app/modules/subscriptions/views/widgets/buy_plans_view.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 
 import '../controllers/subscriptions_controller.dart';
 

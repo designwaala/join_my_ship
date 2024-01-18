@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/company_detail/controllers/company_detail_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/app/modules/company_detail/controllers/company_detail_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
 
 import '../controllers/companies_controller.dart';
 import 'package:collection/collection.dart';

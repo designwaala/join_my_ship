@@ -2,11 +2,13 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/utils/extensions/date_time.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/app/data/models/flag_model.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/utils/extensions/date_time.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
 
 class AddARecord extends GetView<CrewOnboardingController> {
   final ScrollController scrollController;
@@ -107,9 +109,53 @@ class AddARecord extends GetView<CrewOnboardingController> {
                       ]),
                       TableRow(children: [
                         Text("Flag Name", style: headingStyle),
-                        CustomTextFormField(
-                            controller: controller.recordFlagName,
-                            hintText: "Flag Name"),
+                        TypeAheadFormField<Flag>(
+                            textFieldConfiguration: TextFieldConfiguration(
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                hintText: "Flag Name",
+                                hintStyle: Get.textTheme.bodySmall,
+                                isDense: true,
+                                constraints: const BoxConstraints(
+                                    maxHeight: 32, maxWidth: 32),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Get.theme.primaryColor),
+                                    borderRadius: BorderRadius.circular(64)),
+                              ),
+                              controller: controller.recordFlagName,
+                            ),
+                            itemBuilder:
+                                  (BuildContext context, Flag itemData) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(itemData.flagCode ?? ""),
+                                      Text(itemData.countryName ?? "",
+                                          style: Get.textTheme.bodySmall
+                                              ?.copyWith(color: Colors.grey)),
+                                    ],
+                                  ),
+                                );
+                              },
+                              onSuggestionSelected: (Flag suggestion) {
+                               controller.selectedFlag.value = suggestion;
+                                controller.recordFlagName.text =
+                                    suggestion.flagCode ?? "";
+                              },
+                              suggestionsCallback: (String pattern) {
+                                return Future.value(controller.flags?.where(
+                                    (flag) =>
+                                        flag.flagCode?.toLowerCase().startsWith(
+                                            pattern.toLowerCase()) ==
+                                        true));
+                              },),
                       ]),
                       TableRow(children: [
                         Text("GRT", style: headingStyle),

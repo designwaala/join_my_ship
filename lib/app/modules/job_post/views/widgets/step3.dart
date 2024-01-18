@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_cli/extensions/string.dart';
-import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
-import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
-import 'package:join_mp_ship/app/modules/job_posted_successfully/controllers/job_posted_successfully_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/styles.dart';
+import 'package:join_my_ship/app/data/models/vessel_list_model.dart';
+import 'package:join_my_ship/app/modules/job_post/controllers/job_post_controller.dart';
+import 'package:join_my_ship/app/modules/job_posted_successfully/controllers/job_posted_successfully_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/styles.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
-import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
+import 'package:join_my_ship/widgets/custom_elevated_button.dart';
 
 class JobPostStep3 extends GetView<JobPostController> {
   const JobPostStep3({Key? key}) : super(key: key);
@@ -282,7 +282,7 @@ class JobPostStep3 extends GetView<JobPostController> {
                                 onPressed: controller.hasAgreed.value
                                     ? () async {
                                         await controller.postJob();
-                                        
+
                                         Get.offAllNamed(
                                             Routes.JOB_POSTED_SUCCESSFULLY,
                                             arguments:

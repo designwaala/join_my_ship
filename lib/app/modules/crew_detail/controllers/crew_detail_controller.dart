@@ -1,15 +1,15 @@
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/boosting_model.dart';
-import 'package:join_mp_ship/app/data/models/country_model.dart';
-import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/data/models/user_details_model.dart';
-import 'package:join_mp_ship/app/data/providers/country_provider.dart';
-import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
-import 'package:join_mp_ship/app/data/providers/ranks_provider.dart';
-import 'package:join_mp_ship/app/data/providers/user_details_provider.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/data/models/boosting_model.dart';
+import 'package:join_my_ship/app/data/models/country_model.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/data/models/user_details_model.dart';
+import 'package:join_my_ship/app/data/providers/country_provider.dart';
+import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_my_ship/app/data/providers/user_details_provider.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 
 class CrewDetailController extends GetxController {
   CrewDetailArguments? args;
@@ -40,7 +40,6 @@ class CrewDetailController extends GetxController {
     crew = args?.crewDetail?.user;
     isLoading.value = false;
   }
-  
 
   @override
   void onReady() {

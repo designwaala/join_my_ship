@@ -2,11 +2,11 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
-import 'package:join_mp_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
-import 'package:join_mp_ship/app/modules/subscriptions/controllers/subscriptions_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/data/models/vessel_list_model.dart';
+import 'package:join_my_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
+import 'package:join_my_ship/app/modules/subscriptions/controllers/subscriptions_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 
 class ActivePlansView extends GetView<SubscriptionsController> {
   const ActivePlansView({Key? key}) : super(key: key);
@@ -124,7 +124,8 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                                             child: SizedBox(
                                               width: double.maxFinite,
                                               child: Padding(
-                                                padding: const EdgeInsets.all(12),
+                                                padding:
+                                                    const EdgeInsets.all(12),
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,

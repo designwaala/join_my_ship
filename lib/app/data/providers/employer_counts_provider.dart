@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/wrapper_connect.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/wrapper_connect.dart';
 
 import '../models/employer_counts_model.dart';
 
 class EmployerCountsProvider extends WrapperConnect {
- EmployerCountsProvider() {
+  EmployerCountsProvider() {
     httpClient.defaultDecoder = (map) {
       if (map is Map<String, dynamic>) return EmployerCounts.fromJson(map);
       if (map is List)
@@ -18,5 +18,4 @@ class EmployerCountsProvider extends WrapperConnect {
     final response = await get('employer/get_count_jobs_follow');
     return response.body;
   }
-
 }

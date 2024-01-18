@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/job_post/views/widgets/step1.dart';
-import 'package:join_mp_ship/app/modules/job_post/views/widgets/step2.dart';
-import 'package:join_mp_ship/app/modules/job_post/views/widgets/step3.dart';
+import 'package:join_my_ship/app/modules/job_post/views/widgets/step1.dart';
+import 'package:join_my_ship/app/modules/job_post/views/widgets/step2.dart';
+import 'package:join_my_ship/app/modules/job_post/views/widgets/step3.dart';
 
 import '../controllers/job_post_controller.dart';
 

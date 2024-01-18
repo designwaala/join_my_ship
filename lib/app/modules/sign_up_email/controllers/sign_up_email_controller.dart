@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/change_password/controllers/change_password_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/app/modules/change_password/controllers/change_password_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
 
 class SignUpEmailController extends GetxController with RequiresRecentLogin {
   // SignUpEmailArguments? args;
@@ -124,7 +125,11 @@ class SignUpEmailController extends GetxController with RequiresRecentLogin {
       }
 
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
-
+      AndroidOptions _getAndroidOptions() => const AndroidOptions(
+            encryptedSharedPreferences: true,
+          );
+      final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+      await storage.write(key: "password", value: passwordController.text);
       Get.toNamed(Routes.EMAIL_VERIFICATION_WAITING);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

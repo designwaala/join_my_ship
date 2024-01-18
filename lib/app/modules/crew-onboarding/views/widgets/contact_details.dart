@@ -4,13 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/crew_user_model.dart';
-import 'package:join_mp_ship/app/data/providers/crew_user_provider.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/app/modules/crew_sign_in_mobile/controllers/crew_sign_in_mobile_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/app/modules/crew_sign_in_mobile/controllers/crew_sign_in_mobile_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
 
 class ContactDetails extends GetView<CrewOnboardingController> {
   ContactDetails({Key? key}) : super(key: key);
@@ -107,6 +107,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                           Routes.CREW_SIGN_IN_MOBILE,
                           arguments: CrewSignInMobileArguments(
                               phoneNumber: controller.phoneNumber.text,
+                              isUpdateView: true,
                               // countryCode: controller.selectedCountryCode.value,
                               redirection: (phoneNumber, dialCode) {
                                 Get.back(result: {
@@ -148,9 +149,29 @@ class ContactDetails extends GetView<CrewOnboardingController> {
           16.verticalSpace,
           const Text("Email Address"),
           8.verticalSpace,
-          CustomTextFormField(
-            initialValue: FirebaseAuth.instance.currentUser?.email,
-            readOnly: true,
+          Column(
+            children: [
+              CustomTextFormField(
+                initialValue: FirebaseAuth.instance.currentUser?.email,
+                readOnly: true,
+              ),
+              if (controller.crewUser?.userTypeKey == 2)
+                InkWell(
+                  onTap: () {
+                    Get.toNamed(Routes.UPDATE_EMAIL);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text("Edit",
+                          style: Get.textTheme.bodySmall
+                              ?.copyWith(color: Get.theme.primaryColor)),
+                      Icon(Icons.keyboard_arrow_right,
+                          color: Get.theme.primaryColor)
+                    ],
+                  ),
+                )
+            ],
           )
         ],
       );

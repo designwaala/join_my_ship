@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
-import 'package:join_mp_ship/utils/styles.dart';
-import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
-import 'package:join_mp_ship/utils/extensions/date_time.dart';
-import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/modules/job_post/controllers/job_post_controller.dart';
+import 'package:join_my_ship/utils/styles.dart';
+import 'package:join_my_ship/widgets/custom_elevated_button.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/utils/extensions/date_time.dart';
+import 'package:join_my_ship/widgets/dropdown_decoration.dart';
 import 'package:time_machine/time_machine.dart';
 
 class JobPostStep1 extends GetView<JobPostController> {

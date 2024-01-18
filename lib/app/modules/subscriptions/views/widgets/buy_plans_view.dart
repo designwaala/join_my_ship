@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/subscriptions/controllers/subscriptions_controller.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/modules/subscriptions/controllers/subscriptions_controller.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 import 'package:collection/collection.dart';
 
 class BuyPlansView extends GetView<SubscriptionsController> {

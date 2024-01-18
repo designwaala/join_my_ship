@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/main.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 
 import '../controllers/liked_jobs_controller.dart';
 
@@ -11,13 +13,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_cli/get_cli.dart';
-import 'package:join_mp_ship/app/data/models/job_model.dart';
-import 'package:join_mp_ship/app/data/models/ranks_model.dart';
-import 'package:join_mp_ship/app/data/models/vessel_list_model.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
-import 'package:join_mp_ship/widgets/circular_progress_indicator_widget.dart';
-import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
+import 'package:join_my_ship/app/data/models/job_model.dart';
+import 'package:join_my_ship/app/data/models/ranks_model.dart';
+import 'package:join_my_ship/app/data/models/vessel_list_model.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/circular_progress_indicator_widget.dart';
+import 'package:join_my_ship/widgets/dropdown_decoration.dart';
 import 'package:lottie/lottie.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:collection/collection.dart';
@@ -851,6 +853,14 @@ class LikedJobsView extends GetView<LikedJobsController> {
                                           2
                                   ? null
                                   : () {
+                                      if (UserStates
+                                              .instance.crewUser?.isVerified !=
+                                          1) {
+                                        controller.fToast.safeShowToast(
+                                            child: errorToast(
+                                                "Your account is under verification"));
+                                        return;
+                                      }
                                       if (controller.selectedRank.value?.key !=
                                           job.id) {
                                         controller.showErrorForJob.value =

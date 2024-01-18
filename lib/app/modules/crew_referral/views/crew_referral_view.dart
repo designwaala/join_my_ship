@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/crew_referral/views/widgets/job_form.dart';
-import 'package:join_mp_ship/app/modules/crew_referral/views/widgets/job_preview.dart';
+import 'package:join_my_ship/app/modules/crew_referral/views/widgets/job_form.dart';
+import 'package:join_my_ship/app/modules/crew_referral/views/widgets/job_preview.dart';
 
 import '../controllers/crew_referral_controller.dart';
 

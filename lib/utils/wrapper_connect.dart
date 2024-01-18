@@ -5,13 +5,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/error.dart';
-import 'package:join_mp_ship/app/data/models/login_model.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/app/data/models/error.dart';
+import 'package:join_my_ship/app/data/models/login_model.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:join_mp_ship/widgets/top_modal_sheet.dart';
+import 'package:join_my_ship/widgets/top_modal_sheet.dart';
 
 class WrapperConnect extends GetConnect {
   signOut() async {

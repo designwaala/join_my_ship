@@ -2,14 +2,14 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/coc_model.dart';
-import 'package:join_mp_ship/app/data/models/cop_model.dart';
-import 'package:join_mp_ship/app/data/models/watch_keeping_model.dart';
-import 'package:join_mp_ship/app/modules/job_post/controllers/job_post_controller.dart';
-import 'package:join_mp_ship/utils/styles.dart';
-import 'package:join_mp_ship/widgets/custom_elevated_button.dart';
-import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/app/data/models/coc_model.dart';
+import 'package:join_my_ship/app/data/models/cop_model.dart';
+import 'package:join_my_ship/app/data/models/watch_keeping_model.dart';
+import 'package:join_my_ship/app/modules/job_post/controllers/job_post_controller.dart';
+import 'package:join_my_ship/utils/styles.dart';
+import 'package:join_my_ship/widgets/custom_elevated_button.dart';
+import 'package:join_my_ship/widgets/dropdown_decoration.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 
 class JobPostStep2 extends GetView<JobPostController> {
   const JobPostStep2({Key? key}) : super(key: key);

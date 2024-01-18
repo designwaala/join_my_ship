@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
 
 class SignUpEmailView extends GetView<SignUpEmailController> {
   const SignUpEmailView({Key? key}) : super(key: key);

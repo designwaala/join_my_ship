@@ -4,10 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:get_cli/common/utils/json_serialize/json_ast/utils/grapheme_splitter.dart';
-import 'package:join_mp_ship/app/data/models/application_model.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/main.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/data/models/application_model.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 
 import '../controllers/applicant_detail_controller.dart';
 

@@ -1,5 +1,5 @@
-import 'package:join_mp_ship/app/data/models/country_model.dart';
-import 'package:join_mp_ship/main.dart';
+import 'package:join_my_ship/app/data/models/country_model.dart';
+import 'package:join_my_ship/main.dart';
 
 class CrewUser {
   int? id;

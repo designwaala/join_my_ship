@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_cli/extensions/string.dart';
-import 'package:join_mp_ship/app/data/models/job_model.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/data/models/job_model.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 
 class CrewReferralJobCard extends StatelessWidget {
   final Job job;

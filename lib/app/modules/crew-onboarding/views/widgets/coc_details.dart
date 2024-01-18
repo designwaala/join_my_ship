@@ -2,14 +2,14 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/data/models/user_details_model.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/utils/extensions/date_time.dart';
-import 'package:join_mp_ship/widgets/astrix_text.dart';
-import 'package:join_mp_ship/widgets/custom_text_form_field.dart';
-import 'package:join_mp_ship/widgets/dropdown_decoration.dart';
-import 'package:join_mp_ship/widgets/toasts/toast.dart';
-import 'package:join_mp_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/app/data/models/user_details_model.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/utils/extensions/date_time.dart';
+import 'package:join_my_ship/widgets/astrix_text.dart';
+import 'package:join_my_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/widgets/dropdown_decoration.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
 
 class COCDetails extends GetView<CrewOnboardingController> {
   const COCDetails({Key? key}) : super(key: key);
@@ -269,10 +269,8 @@ class COCDetails extends GetView<CrewOnboardingController> {
                                     DateTime? selectedDateTime =
                                         await showDatePicker(
                                             context: Get.context!,
-                                            initialDate:
-                                                DateTime.now(),
-                                            firstDate:
-                                                DateTime.now(),
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime.now(),
                                             lastDate:
                                                 DateTime.parse("2050-01-01"));
                                     controller.cocIssuingAuthorities

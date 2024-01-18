@@ -9,11 +9,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
-import 'package:join_mp_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
-import 'package:join_mp_ship/app/modules/employer_create_user/controllers/employer_create_user_controller.dart';
-import 'package:join_mp_ship/app/routes/app_pages.dart';
-import 'package:join_mp_ship/utils/shared_preferences.dart';
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
+import 'package:join_my_ship/app/modules/employer_create_user/controllers/employer_create_user_controller.dart';
+import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/profile_controller.dart';
@@ -43,7 +45,7 @@ class ProfileView extends GetView<ProfileController> {
                         child: Stack(
                           children: [
                             InkWell(
-                              onTap: controller.updateImage,
+                              onTap: controller.crewUser.value?.isVerified == 1 ? controller.updateImage : null,
                               child: controller.pickedImage.value == null
                                   ? CachedNetworkImage(
                                       imageUrl: controller
@@ -147,10 +149,12 @@ class ProfileView extends GetView<ProfileController> {
                                   .instance.currentUser?.phoneNumber?.isEmpty ==
                               true) ...[
                         InkWell(
-                          onTap: () async {
+                          onTap: 
+                          controller.crewUser.value?.isVerified == 1 ? 
+                          () async {
                             await Get.toNamed(Routes.CREW_SIGN_IN_MOBILE);
                             controller.refresh();
-                          },
+                          } : null,
                           child: Container(
                             margin: EdgeInsets.symmetric(horizontal: 16.w),
                             padding: EdgeInsets.symmetric(horizontal: 4.w),
@@ -185,7 +189,9 @@ class ProfileView extends GetView<ProfileController> {
                       ],
                       if (controller.crewUser.value?.userTypeKey == 2) ...[
                         InkWell(
-                          onTap: () async {
+                          onTap: 
+                          controller.crewUser.value?.isVerified == 1 ?
+                          () async {
                             final path =
                                 await FlutterDocumentPicker.openDocument(
                                     params: FlutterDocumentPickerParams(
@@ -196,7 +202,7 @@ class ProfileView extends GetView<ProfileController> {
                             }
                             controller.pickedResume.value = File(path);
                             controller.updateResume();
-                          },
+                          } : null,
                           child: Container(
                             height: 62.h,
                             margin: EdgeInsets.symmetric(horizontal: 22.w),
@@ -243,27 +249,31 @@ class ProfileView extends GetView<ProfileController> {
                           style: Get.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold, fontSize: 18.sp)),
                       ...[
-                        CardObject(
-                            iconPath: "assets/images/profile/edit_profile.png",
-                            text: "Edit Profile",
-                            onTap: () async {
-                              if (controller.crewUser.value?.userTypeKey == 2) {
-                                await Get.toNamed(Routes.CREW_ONBOARDING,
-                                    arguments: const CrewOnboardingArguments(
-                                        editMode: true));
-                              } else {
-                                await Get.toNamed(Routes.EMPLOYER_CREATE_USER,
-                                    arguments:
-                                        const EmployerCreateUserArguments(
-                                            editMode: true));
-                              }
-                              controller.crewUser.value =
-                                  UserStates.instance.crewUser;
-                            }),
-                        CardObject(
-                            iconPath: "assets/images/profile/wallet.png",
-                            text: "Wallet",
-                            onTap: () {}),
+                        if (controller.crewUser.value?.isVerified == 1)
+                          CardObject(
+                              iconPath:
+                                  "assets/images/profile/edit_profile.png",
+                              text: "Edit Profile",
+                              onTap: () async {
+                                if (controller.crewUser.value?.userTypeKey ==
+                                    2) {
+                                  await Get.toNamed(Routes.CREW_ONBOARDING,
+                                      arguments: const CrewOnboardingArguments(
+                                          editMode: true));
+                                } else {
+                                  await Get.toNamed(Routes.EMPLOYER_CREATE_USER,
+                                      arguments:
+                                          const EmployerCreateUserArguments(
+                                              editMode: true));
+                                }
+                                controller.crewUser.value =
+                                    UserStates.instance.crewUser;
+                              }),
+                        if (controller.crewUser.value?.isVerified == 1)
+                          CardObject(
+                              iconPath: "assets/images/profile/wallet.png",
+                              text: "Wallet",
+                              onTap: () {}),
                         if (controller.crewUser.value?.userTypeKey == 3 &&
                             controller.crewUser.value?.isPrimaryUser == true)
                           CardObject(
@@ -274,13 +284,14 @@ class ProfileView extends GetView<ProfileController> {
                                 Get.toNamed(Routes.EMPLOYER_MANAGE_USERS);
                               }),
                         // if (controller.crewUser.value?.userTypeKey == 3)
-                        CardObject(
-                            iconPath:
-                                "assets/images/profile/my_subscription.png",
-                            text: "My Subscriptions",
-                            onTap: () {
-                              Get.toNamed(Routes.SUBSCRIPTIONS);
-                            }),
+                        if (controller.crewUser.value?.isVerified == 1)
+                          CardObject(
+                              iconPath:
+                                  "assets/images/profile/my_subscription.png",
+                              text: "My Subscriptions",
+                              onTap: () {
+                                Get.toNamed(Routes.SUBSCRIPTIONS);
+                              }),
                         CardObject(
                             iconPath:
                                 "assets/images/profile/change_password.png",
@@ -288,24 +299,26 @@ class ProfileView extends GetView<ProfileController> {
                             onTap: () {
                               Get.toNamed(Routes.CHANGE_PASSWORD);
                             }),
-                        CardObject(
+                        /* CardObject(
                             icon: Icons.email_outlined,
                             text: "Change Email",
                             onTap: () {
                               Get.toNamed(Routes.UPDATE_EMAIL);
-                            }),
+                            }), */
                         CardObject(
                           iconPath: "assets/images/profile/help.png",
                           text: "Help & Feedback",
                           onTap: () => Get.toNamed(Routes.HELP),
                         ),
-                        if (controller.crewUser.value?.userTypeKey == 2)
+                        if (controller.crewUser.value?.userTypeKey == 2 &&
+                            controller.crewUser.value?.isVerified == 1)
                           CardObject(
                             svgPath: "assets/icons/send.svg",
                             text: "Highlight Profile",
                             onTap: controller.highlightCrew,
                           ),
-                        if (controller.crewUser.value?.userTypeKey == 2)
+                        if (controller.crewUser.value?.userTypeKey == 2 &&
+                            controller.crewUser.value?.isVerified == 1)
                           CardObject(
                               iconPath:
                                   "assets/images/profile/my_subscription.png",

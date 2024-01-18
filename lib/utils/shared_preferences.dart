@@ -1,6 +1,6 @@
-import 'package:join_mp_ship/utils/user_details.dart';
+import 'package:join_my_ship/utils/user_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:join_mp_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
+import 'package:join_my_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
 
 class PreferencesHelper {
   PreferencesHelper._();
@@ -35,7 +35,7 @@ class PreferencesHelper {
 
   int? get userDetailId => _sharedPreferences?.getInt(_USER_DETAIL_ID);
   Future<bool>? setUserDetailId(value) =>
-      _sharedPreferences?.setInt(_USER_DETAIL_ID, value); 
+      _sharedPreferences?.setInt(_USER_DETAIL_ID, value);
 
   Future<void> setAccessToken(String? value) =>
       value == null || _sharedPreferences == null
