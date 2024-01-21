@@ -98,6 +98,7 @@ void main() async {
     PreferencesHelper.instance.clearAll();
   } */
   baseURL = "https://joinmyship.com/";
+  FirebaseMessaging.instance.requestPermission();
   runApp(
     ScreenUtilInit(
         designSize: const Size(375, 812),
