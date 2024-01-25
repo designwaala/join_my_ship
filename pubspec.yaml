@@ -1,5 +1,5 @@
 name: join_my_ship
-version: 1.0.51+51
+version: 1.0.53+53
 publish_to: none
 description: A new Flutter project.
 environment:
@@ -45,6 +45,7 @@ dependencies:
   story_view: ^0.15.0
   infinite_scroll_pagination: ^4.0.0
   flutter_secure_storage: ^9.0.0
+  firebase_remote_config: ^4.3.8
 
 dev_dependencies:
   flutter_lints: ^2.0.0

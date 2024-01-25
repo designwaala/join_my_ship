@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:join_my_ship/utils/shared_preferences.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 
@@ -61,29 +62,32 @@ class _UnFocusGestureState extends State<UnFocusGesture> {
         onTap: () {
           if (!node.hasFocus) FocusScope.of(context).requestFocus(node);
         },
-        onLongPress: () async {
-          showDialog(
-              context: Get.context!,
-              builder: (context) {
-                return AlertDialog(
-                  shape: alertDialogShape,
-                  title: Text("Would you like to sign out"),
-                  actions: [
-                    OutlinedButton(
-                        onPressed: () async {
-                          UserStates.instance.reset();
-                          await FirebaseAuth.instance.signOut();
-                          await PreferencesHelper.instance.clearAll();
-                          Get.offAllNamed(Routes.SPLASH);
-                        },
-                        child: Text("Yes")),
-                    8.horizontalSpace,
-                    OutlinedButton(onPressed: Get.back, child: Text("No")),
-                    8.horizontalSpace,
-                  ],
-                );
-              });
-        },
+        onLongPress: RemoteConfigUtils.instance.longPressToLogOut == true
+            ? () async {
+                showDialog(
+                    context: Get.context!,
+                    builder: (context) {
+                      return AlertDialog(
+                        shape: alertDialogShape,
+                        title: Text("Would you like to sign out"),
+                        actions: [
+                          OutlinedButton(
+                              onPressed: () async {
+                                UserStates.instance.reset();
+                                await FirebaseAuth.instance.signOut();
+                                await PreferencesHelper.instance.clearAll();
+                                Get.offAllNamed(Routes.SPLASH);
+                              },
+                              child: Text("Yes")),
+                          8.horizontalSpace,
+                          OutlinedButton(
+                              onPressed: Get.back, child: Text("No")),
+                          8.horizontalSpace,
+                        ],
+                      );
+                    });
+              }
+            : null,
         child: widget.child,
       );
 }

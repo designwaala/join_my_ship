@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide State;
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +29,7 @@ import 'package:join_my_ship/app/data/providers/coc_provider.dart';
 import 'package:join_my_ship/app/data/providers/cop_provider.dart';
 import 'package:join_my_ship/app/data/providers/country_provider.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_my_ship/app/data/providers/flag_provider.dart';
 import 'package:join_my_ship/app/data/providers/passport_issuing_authority_provider.dart';
 import 'package:join_my_ship/app/data/providers/previous_employer_provider.dart';
@@ -42,6 +44,7 @@ import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/extensions/string_extensions.dart';
 import 'package:join_my_ship/app/data/models/state_model.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 import 'package:join_my_ship/widgets/toasts/toast.dart';
 import 'package:time_machine/time_machine.dart';
@@ -493,6 +496,14 @@ class CrewOnboardingController extends GetxController with PickImage {
       if (statusCode < 300) {
         fToast.safeShowToast(
             child: successToast("Your account was successfully created."));
+        try {
+          String? fcmToken = await FirebaseMessaging.instance.getToken();
+          if (fcmToken?.nullIfEmpty() != null) {
+            await getIt<CrewUserProvider>().getCrewUser();
+            PreferencesHelper.instance.setFCMToken(fcmToken!);
+            await getIt<FcmTokenProvider>().postFCMToken(fcmToken);
+          }
+        } catch (e) {}
       } else {
         fToast.safeShowToast(child: errorToast("Error creating your account"));
       }

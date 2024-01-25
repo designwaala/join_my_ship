@@ -297,34 +297,37 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                       ),
                       16.verticalSpace,
                       AnimatedCrossFade(
-                          firstChild: Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            8.verticalSpace,
-                                            Text(
-                                                "Days Active: ${controller.currentCrewBoostings.value?.daysActive}",
-                                                style:
-                                                    Get.textTheme.titleMedium),
-                                            4.verticalSpace,
-                                          ],
-                                        ),
-                                      )),
+                          firstChild: controller.currentCrewBoostings.value ==
+                                  null
+                              ? const SizedBox()
+                              : Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(16)),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(12),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  8.verticalSpace,
+                                                  Text(
+                                                      "Days Active: ${controller.currentCrewBoostings.value?.daysActive}",
+                                                      style: Get.textTheme
+                                                          .titleMedium),
+                                                  4.verticalSpace,
+                                                ],
+                                              ),
+                                            )),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
                           secondChild: const SizedBox(),
                           crossFadeState: controller.showBoostings.value
                               ? CrossFadeState.showFirst

@@ -104,7 +104,6 @@ class SignUpEmailView extends GetView<SignUpEmailController> {
                             controller: controller.emailController,
                             enabled: controller.emailController.text.isEmpty,
                             validator: (value) {
-                              return null;
                               if (value == null || value.isEmpty) {
                                 return "Please enter your email";
                               }

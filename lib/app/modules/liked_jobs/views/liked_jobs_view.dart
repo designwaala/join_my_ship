@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:join_my_ship/widgets/toasts/toast.dart';
 
 import '../controllers/liked_jobs_controller.dart';
@@ -857,8 +858,9 @@ class LikedJobsView extends GetView<LikedJobsController> {
                                               .instance.crewUser?.isVerified !=
                                           1) {
                                         controller.fToast.safeShowToast(
-                                            child: errorToast(
-                                                "Your account is under verification"));
+                                            child: errorToast(RemoteConfigUtils
+                                                .instance
+                                                .accountUnderVerificationCopy));
                                         return;
                                       }
                                       if (controller.selectedRank.value?.key !=

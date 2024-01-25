@@ -9,6 +9,7 @@ import 'package:join_my_ship/app/data/models/application_model.dart';
 import 'package:join_my_ship/app/modules/application_status/controllers/application_status_controller.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/widgets/job_cards/crew_referral_job_card.dart';
+import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 
@@ -30,49 +31,77 @@ class CrewJobApplicationsView extends GetView<CrewJobApplicationsController> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : controller.buildCaptureWidget.value
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
+              : controller.applications.isEmpty
+                  ? Center(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Please Wait"),
-                                SizedBox(
-                                    height: 16,
-                                    width: 16,
-                                    child: CircularProgressIndicator())
-                              ],
+                          16.verticalSpace,
+                          const Spacer(),
+                          SizedBox(
+                            height: 300,
+                            width: 300,
+                            child: Lottie.asset(
+                              'assets/animations/no_results.json',
+                              repeat: false,
                             ),
                           ),
-                          8.verticalSpace,
-                          WidgetsToImage(
-                              controller: controller.widgetsToImageController,
-                              child: Column(
-                                children: [
-                                  _buildCard(controller.applicationToBuild!,
-                                      shareView: true),
-                                ],
-                              )),
+                          10.verticalSpace,
+                          const Text(
+                            "No Results Found!",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          const Spacer(),
                         ],
                       ),
                     )
-                  : SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      child: Column(
-                        children: controller.applications
-                            .map((application) => application.jobData
-                                        ?.employerDetails?.userTypeKey ==
-                                    2
-                                ? _buildCrewReferralCard(application)
-                                : _buildCard(application))
-                            .toList(),
-                      ));
+                  : controller.buildCaptureWidget.value
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Please Wait"),
+                                    SizedBox(
+                                        height: 16,
+                                        width: 16,
+                                        child: CircularProgressIndicator())
+                                  ],
+                                ),
+                              ),
+                              8.verticalSpace,
+                              WidgetsToImage(
+                                  controller:
+                                      controller.widgetsToImageController,
+                                  child: Column(
+                                    children: [
+                                      _buildCard(controller.applicationToBuild!,
+                                          shareView: true),
+                                    ],
+                                  )),
+                            ],
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          child: Column(
+                            children: controller.applications
+                                .map((application) => application.jobData
+                                            ?.employerDetails?.userTypeKey ==
+                                        2
+                                    ? _buildCrewReferralCard(application)
+                                    : _buildCard(application))
+                                .toList(),
+                          ));
         }));
   }
 

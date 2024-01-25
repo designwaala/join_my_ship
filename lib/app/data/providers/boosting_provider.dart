@@ -77,6 +77,6 @@ class BoostingProvider extends WrapperConnect {
     final response = await get(
         "crew/subscribed_boosted_crew_plan/${prefs.userDetailId}/",
         decoder: (data) => Crew.fromJson(data));
-    return response.body;
+    return response.statusCode == 404 ? null : response.body;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:join_my_ship/app/data/models/crew_user_model.dart';
 import 'package:join_my_ship/app/data/providers/country_provider.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_my_ship/app/data/providers/state_provider.dart';
 import 'package:join_my_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
@@ -212,6 +214,14 @@ class EmployerCreateUserController extends GetxController {
       if (statusCode < 300) {
         fToast.safeShowToast(
             child: successToast("Your account was successfully created."));
+        try {
+          String? fcmToken = await FirebaseMessaging.instance.getToken();
+          if (fcmToken?.nullIfEmpty() != null) {
+            await getIt<CrewUserProvider>().getCrewUser();
+            PreferencesHelper.instance.setFCMToken(fcmToken!);
+            await getIt<FcmTokenProvider>().postFCMToken(fcmToken);
+          }
+        } catch (e) {}
         Get.toNamed(Routes.ACCOUNT_UNDER_VERIFICATION);
       } else {
         fToast.safeShowToast(child: errorToast("Error creating your account"));

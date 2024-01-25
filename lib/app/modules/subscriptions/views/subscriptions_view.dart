@@ -15,7 +15,7 @@ class SubscriptionsView extends GetView<SubscriptionsController> {
     return Scaffold(
         key: controller.parentKey,
         appBar: AppBar(
-          title: const Text('Subscriptions'),
+          title: const Text('My Subscriptions'),
           centerTitle: true,
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,

@@ -51,6 +51,7 @@ import 'package:join_my_ship/app/data/providers/vessel_type_provider.dart';
 import 'package:join_my_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_my_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
 import 'package:join_my_ship/firebase_options.dart';
+import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:join_my_ship/utils/shared_preferences.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 import 'package:join_my_ship/widgets/toasts/unfocus_gesture.dart';
@@ -89,6 +90,7 @@ void main() async {
     androidProvider: AndroidProvider.playIntegrity,
     appleProvider: AppleProvider.appAttest
   ); */
+  await RemoteConfigUtils.getRemoteConfig();
   packageInfo = await PackageInfo.fromPlatform();
   await PreferencesHelper.instance.init();
   /* try {

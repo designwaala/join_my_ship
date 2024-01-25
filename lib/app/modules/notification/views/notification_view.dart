@@ -17,7 +17,7 @@ class NotificationView extends GetView<NotificationController> {
         ),
         body: Obx(() {
           return controller.isLoading.value
-              ? const CircularProgressIndicator()
+              ? const Center(child: CircularProgressIndicator())
               : ListView(
                   padding: const EdgeInsets.all(24),
                   children: controller.notifications
