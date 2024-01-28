@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,6 +63,8 @@ import 'package:uni_links/uni_links.dart';
 import 'app/routes/app_pages.dart';
 
 String baseURL = "";
+String razorpayKey =
+    kDebugMode ? "rzp_test_wwDObsaedPI1ni" : "rzp_live_BbEn6GJzJKOWvT";
 
 GetIt getIt = GetIt.instance;
 PackageInfo? packageInfo;
@@ -76,33 +80,33 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 void main() async {
-  HttpOverrides.global = MyHttpOverrides();
-  WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(
-      debug:
-          true, // optional: set to false to disable printing logs to console (default: true)
-      ignoreSsl:
-          true // option: set to false to disable working with http links (default: false)
-      );
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-/*   await FirebaseAppCheck.instance.activate(
-    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
-    androidProvider: AndroidProvider.playIntegrity,
-    appleProvider: AppleProvider.appAttest
-  ); */
-  await RemoteConfigUtils.getRemoteConfig();
-  packageInfo = await PackageInfo.fromPlatform();
-  await PreferencesHelper.instance.init();
-  /* try {
-    print(await FirebaseAuth.instance.currentUser?.getIdToken());
-  } catch (e) {
-    await FirebaseAuth.instance.signOut();
-    PreferencesHelper.instance.clearAll();
-  } */
   baseURL = "https://joinmyship.com/";
-  FirebaseMessaging.instance.requestPermission();
-  runApp(
-    ScreenUtilInit(
+  runZonedGuarded<Future<void>>(() async {
+    HttpOverrides.global = MyHttpOverrides();
+    WidgetsFlutterBinding.ensureInitialized();
+    await FlutterDownloader.initialize(
+        debug:
+            true, // optional: set to false to disable printing logs to console (default: true)
+        ignoreSsl:
+            true // option: set to false to disable working with http links (default: false)
+        );
+    //    
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    FirebaseMessaging.instance.requestPermission();
+    StreamSubscription<String?>? uriStream;
+    notificationListeners();
+    uriStream = linkStream.listen((event) {
+      Uri uri = Uri.parse(event ?? "");
+      _handleLink(uri);
+    });
+    //
+    await RemoteConfigUtils.getRemoteConfig();
+    packageInfo = await PackageInfo.fromPlatform();
+    await PreferencesHelper.instance.init();
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+    runApp(ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, _) {
           return UnFocusGesture(
@@ -120,8 +124,8 @@ void main() async {
                         tertiary: const Color(0xFFFE9738),
                         background: const Color.fromRGBO(251, 246, 255, 1))),
           ));
-        }),
-  );
+        }));
+  }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 
   getIt
     ..registerSingleton(LoginProvider())
@@ -161,14 +165,6 @@ void main() async {
     ..registerSingleton(ResumeTopUpProvider())
     ..registerSingleton(ResumeTopUpBuyProvider())
     ..registerSingleton(NotificationProvider());
-
-  StreamSubscription<String?>? uriStream;
-  notificationListeners();
-
-  uriStream = linkStream.listen((event) {
-    Uri uri = Uri.parse(event ?? "");
-    _handleLink(uri);
-  });
 }
 
 notificationListeners() {

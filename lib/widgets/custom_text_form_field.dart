@@ -7,6 +7,8 @@ import 'package:collection/collection.dart';
 class CustomTextFormField extends TextFormField {
   CustomTextFormField({
     Key? key,
+    double? borderRadius,
+    Color? labelColor,
     bool isDate = false,
     TextEditingController? controller,
     Widget? icon,
@@ -86,9 +88,12 @@ class CustomTextFormField extends TextFormField {
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Get.theme.primaryColor),
-                      borderRadius: BorderRadius.circular(64)),
+                      borderRadius: BorderRadius.circular(borderRadius ?? 64)),
                   labelText: labelText,
-                  labelStyle: Theme.of(Get.context!).textTheme.bodyLarge),
+                  labelStyle: Theme.of(Get.context!)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: labelColor)),
           keyboardType: isDate ? TextInputType.number : keyboardType,
           textCapitalization: textCapitalization,
           textInputAction: textInputAction,

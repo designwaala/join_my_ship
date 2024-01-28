@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -35,6 +36,8 @@ class CrewUserProvider extends WrapperConnect {
         softRefresh: softRefresh, decoder: (map) => CrewUser.fromJson(map));
     UserStates.instance.crewUser = response.body;
     if (response.body?.id != null) {
+      FirebaseCrashlytics.instance
+          .setUserIdentifier(response.body!.id!.toString());
       await PreferencesHelper.instance.setUserId(response.body!.id!);
     }
     if (response.body?.userTypeKey != null) {

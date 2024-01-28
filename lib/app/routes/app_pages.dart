@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import '../../widgets/toasts/unfocus_gesture.dart';
 import '../modules/account_under_verification/bindings/account_under_verification_binding.dart';
 import '../modules/account_under_verification/views/account_under_verification_view.dart';
+import '../modules/add_credits/bindings/add_credits_binding.dart';
+import '../modules/add_credits/views/add_credits_view.dart';
 import '../modules/applicant_detail/bindings/applicant_detail_binding.dart';
 import '../modules/applicant_detail/views/applicant_detail_view.dart';
 import '../modules/application_status/bindings/application_status_binding.dart';
@@ -99,6 +101,8 @@ import '../modules/update_email/bindings/update_email_binding.dart';
 import '../modules/update_email/views/update_email_view.dart';
 import '../modules/view_jobs_posted/bindings/view_jobs_posted_binding.dart';
 import '../modules/view_jobs_posted/views/view_jobs_posted_view.dart';
+import '../modules/wallet/bindings/wallet_binding.dart';
+import '../modules/wallet/views/wallet_view.dart';
 
 part 'app_routes.dart';
 
@@ -349,6 +353,16 @@ class AppPages {
       name: _Paths.UPDATE_EMAIL,
       page: () => const UpdateEmailView(),
       binding: UpdateEmailBinding(),
+    ),
+    GetPage(
+      name: _Paths.WALLET,
+      page: () => const WalletView(),
+      binding: WalletBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_CREDITS,
+      page: () => const AddCreditsView(),
+      binding: AddCreditsBinding(),
     ),
   ];
 }

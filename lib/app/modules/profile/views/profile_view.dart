@@ -318,7 +318,9 @@ class ProfileView extends GetView<ProfileController> {
                             verificationRequired: true,
                             iconPath: "assets/images/profile/wallet.png",
                             text: "Wallet",
-                            onTap: () {}),
+                            onTap: () {
+                              Get.toNamed(Routes.WALLET);
+                            }),
                         if (controller.crewUser.value?.userTypeKey == 3 &&
                             controller.crewUser.value?.isPrimaryUser == true)
                           CardObject(

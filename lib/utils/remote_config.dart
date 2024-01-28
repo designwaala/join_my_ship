@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:join_my_ship/app/data/models/credits_model.dart';
 
 class RemoteConfigUtils {
   RemoteConfigUtils._();
@@ -11,7 +14,7 @@ class RemoteConfigUtils {
       _remoteConfig = FirebaseRemoteConfig.instance;
       await _remoteConfig?.setConfigSettings(RemoteConfigSettings(
         fetchTimeout: const Duration(seconds: 10),
-        minimumFetchInterval: const Duration(hours: 6),
+        minimumFetchInterval: const Duration(seconds: 1),
       ));
       await _remoteConfig?.fetchAndActivate();
     }
@@ -19,8 +22,14 @@ class RemoteConfigUtils {
   }
 
   String get accountUnderVerificationCopy =>
-      _remoteConfig?.getString("account_under_verification_copy") ?? "Account Under Verification";
+      _remoteConfig?.getString("account_under_verification_copy") ??
+      "Account Under Verification";
 
   bool? get longPressToLogOut =>
       _remoteConfig?.getBool("long_press_to_log_out");
+
+  CreditsModel? get creditsModel =>
+      _remoteConfig?.getString("credits_model") == null
+          ? null
+          : CreditsModel.fromJson(jsonDecode(_remoteConfig!.getString("credits_model")));
 }

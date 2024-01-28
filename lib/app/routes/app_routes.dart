@@ -52,6 +52,8 @@ abstract class Routes {
   static const NOTIFICATION = _Paths.NOTIFICATION;
   static const JOB_POST_UNDER_VERIFICATION = _Paths.JOB_POST_UNDER_VERIFICATION;
   static const UPDATE_EMAIL = _Paths.UPDATE_EMAIL;
+  static const WALLET = _Paths.WALLET;
+  static const ADD_CREDITS = _Paths.ADD_CREDITS;
 }
 
 abstract class _Paths {
@@ -105,4 +107,6 @@ abstract class _Paths {
   static const NOTIFICATION = '/notification';
   static const JOB_POST_UNDER_VERIFICATION = '/job-post-under-verification';
   static const UPDATE_EMAIL = '/update-email';
+  static const WALLET = '/wallet';
+  static const ADD_CREDITS = '/add-credits';
 }
