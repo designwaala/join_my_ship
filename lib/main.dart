@@ -90,7 +90,7 @@ void main() async {
         ignoreSsl:
             true // option: set to false to disable working with http links (default: false)
         );
-    //    
+    //
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
     FirebaseMessaging.instance.requestPermission();
@@ -104,7 +104,9 @@ void main() async {
     await RemoteConfigUtils.getRemoteConfig();
     packageInfo = await PackageInfo.fromPlatform();
     await PreferencesHelper.instance.init();
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    if (!kDebugMode) {
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    }
 
     runApp(ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -125,7 +127,11 @@ void main() async {
                         background: const Color.fromRGBO(251, 246, 255, 1))),
           ));
         }));
-  }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
+  }, (error, stack) {
+    if (!kDebugMode) {
+      FirebaseCrashlytics.instance.recordError(error, stack);
+    }
+  });
 
   getIt
     ..registerSingleton(LoginProvider())
