@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,55 +19,34 @@ class InfoView extends GetView<InfoController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Spacer(),
+              const Spacer(),
               CarouselSlider(
                 carouselController: controller.carouselController,
-                items: [
-                  Column(
-                    children: [
-                      Image.asset(
-                        'assets/images/info/info_1.png',
-                        width: 263.w,
-                        height: 245.h,
-                      ),
-                      Spacer(),
-                      Text('Find your dream\n job with us',
-                          textAlign: TextAlign.center,
-                          style: Get.theme.textTheme.headlineMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28.sp,
-                              color: Colors.black)),
-                      20.verticalSpace,
-                      Text(
-                        "Discover and apply to your dream jobs and\n start to get in touch with your dream\n company",
-                        textAlign: TextAlign.center,
-                      ),
-                      36.verticalSpace,
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Image.asset(
-                        'assets/images/info/info_2.png',
-                        width: 263.w,
-                        height: 245.h,
-                      ),
-                      Spacer(),
-                      Text("It's easy to find\nready - to - join\nSeafarer's with us",
-                          textAlign: TextAlign.center,
-                          style: Get.theme.textTheme.headlineMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28.sp,
-                              color: Colors.black)),
-                      20.verticalSpace,
-                      Text(
-                        "Find Your Next Voyage with us.",
-                        textAlign: TextAlign.center,
-                      ),
-                      36.verticalSpace,
-                    ],
-                  )
-                ],
+                items: controller.infoModel
+                    ?.map((e) => Column(
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: e.imagePath ?? "",
+                              width: e.width?.w,
+                              height: e.height?.h,
+                            ),
+                            const Spacer(),
+                            Text(e.heading ?? "",
+                                textAlign: TextAlign.center,
+                                style: Get.theme.textTheme.headlineMedium
+                                    ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 28.sp,
+                                        color: Colors.black)),
+                            20.verticalSpace,
+                            Text(
+                              e.body ?? "",
+                              textAlign: TextAlign.center,
+                            ),
+                            36.verticalSpace,
+                          ],
+                        ))
+                    .toList(),
                 options: CarouselOptions(
                     autoPlay: true,
                     height: 500.h,
@@ -78,7 +58,7 @@ class InfoView extends GetView<InfoController> {
               36.verticalSpace,
               Row(
                 children: [
-                  Spacer(),
+                  const Spacer(),
                   Container(
                     child: Padding(
                       padding: const EdgeInsets.all(8),
@@ -87,7 +67,7 @@ class InfoView extends GetView<InfoController> {
                     ),
                   ),
                   ...Iterable.generate(
-                      2,
+                      controller.infoModel?.length ?? 0,
                       (index) => Container(
                             margin: EdgeInsets.symmetric(horizontal: 8.w),
                             height: 6.h,
@@ -98,7 +78,7 @@ class InfoView extends GetView<InfoController> {
                                     : Colors.grey,
                                 borderRadius: BorderRadius.circular(64)),
                           )),
-                  Spacer(),
+                  const Spacer(),
                   InkWell(
                     onTap: controller.onNextPressed,
                     child: Container(

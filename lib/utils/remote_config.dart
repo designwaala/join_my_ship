@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:join_my_ship/app/data/models/credits_model.dart';
+import 'package:join_my_ship/app/data/models/info_model.dart';
 
 class RemoteConfigUtils {
   RemoteConfigUtils._();
@@ -31,5 +32,13 @@ class RemoteConfigUtils {
   CreditsModel? get creditsModel =>
       _remoteConfig?.getString("credits_model") == null
           ? null
-          : CreditsModel.fromJson(jsonDecode(_remoteConfig!.getString("credits_model")));
+          : CreditsModel.fromJson(
+              jsonDecode(_remoteConfig!.getString("credits_model")));
+
+  String? get razorpaykey => _remoteConfig?.getString("razorpay_key");
+
+  List<InfoModel>? get info => _remoteConfig?.getString("info_screen") == null
+      ? null
+      : List<InfoModel>.from(jsonDecode(_remoteConfig!.getString("info_screen"))
+          .map((e) => InfoModel.fromJson(e)));
 }

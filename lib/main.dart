@@ -65,8 +65,7 @@ import 'package:uni_links/uni_links.dart';
 import 'app/routes/app_pages.dart';
 
 String baseURL = "";
-String razorpayKey =
-    kDebugMode ? "rzp_test_wwDObsaedPI1ni" : "rzp_live_BbEn6GJzJKOWvT";
+String razorpayKey = "";
 
 GetIt getIt = GetIt.instance;
 PackageInfo? packageInfo;
@@ -106,6 +105,7 @@ void main() async {
     await RemoteConfigUtils.getRemoteConfig();
     packageInfo = await PackageInfo.fromPlatform();
     await PreferencesHelper.instance.init();
+    razorpayKey = RemoteConfigUtils.instance.razorpaykey ?? "rzp_live_BbEn6GJzJKOWvT";
     if (!kDebugMode) {
       FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     }
