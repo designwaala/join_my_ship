@@ -19,6 +19,7 @@ import 'package:join_my_ship/app/data/providers/cdc_issuing_authority_provider.d
 import 'package:join_my_ship/app/data/providers/coc_provider.dart';
 import 'package:join_my_ship/app/data/providers/cop_provider.dart';
 import 'package:join_my_ship/app/data/providers/country_provider.dart';
+import 'package:join_my_ship/app/data/providers/credit_provider.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_my_ship/app/data/providers/employer_counts_provider.dart';
 import 'package:join_my_ship/app/data/providers/fcm_token_provider.dart';
@@ -35,6 +36,7 @@ import 'package:join_my_ship/app/data/providers/job_watch_keeping_post.dart';
 import 'package:join_my_ship/app/data/providers/liked_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/login_provider.dart';
 import 'package:join_my_ship/app/data/providers/notification_provider.dart';
+import 'package:join_my_ship/app/data/providers/order_provider.dart';
 import 'package:join_my_ship/app/data/providers/passport_issuing_authority_provider.dart';
 import 'package:join_my_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
@@ -170,7 +172,9 @@ void main() async {
     ..registerSingleton(ResumePackBuyProvider())
     ..registerSingleton(ResumeTopUpProvider())
     ..registerSingleton(ResumeTopUpBuyProvider())
-    ..registerSingleton(NotificationProvider());
+    ..registerSingleton(NotificationProvider())
+    ..registerSingleton(OrderProvider())
+    ..registerSingleton(CreditProvider());
 }
 
 notificationListeners() {

@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:join_my_ship/app/data/models/credit_model.dart';
 import 'package:join_my_ship/app/data/models/credits_model.dart';
+import 'package:join_my_ship/app/data/models/order_model.dart';
+import 'package:join_my_ship/app/data/providers/credit_provider.dart';
+import 'package:join_my_ship/app/data/providers/order_provider.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -25,6 +29,12 @@ class AddCreditsController extends GetxController {
 
   final formKey = GlobalKey<FormState>();
 
+  final orderProvider = getIt<OrderProvider>();
+
+  Order? newOrder;
+  Rxn<Credit> credit = Rxn();
+  RxBool isLoading = false.obs;
+
   @override
   void onInit() {
     selectedCurrency.value = creditsModel?.creditCurrencies?.firstOrNull;
@@ -32,6 +42,17 @@ class AddCreditsController extends GetxController {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.onInit();
+    getCredits();
+  }
+
+  Future<void> getCredits({bool isSilent = false}) async {
+    if (!isSilent) {
+      isLoading.value = true;
+    }
+    credit.value = await getIt<CreditProvider>().getCredit();
+    if (!isSilent) {
+      isLoading.value = false;
+    }
   }
 
   @override
@@ -50,8 +71,23 @@ class AddCreditsController extends GetxController {
     super.onClose();
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Get.snackbar("Payment Successfull", "Congratulations");
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    if (response.orderId == null ||
+        response.paymentId == null ||
+        newOrder?.id == null) {
+      initiatingPayment.value = false;
+      return;
+    }
+    final order = await orderProvider.captureOrder(
+        razorpayOrderId: response.orderId!,
+        djangoOrderId: newOrder!.id!,
+        paymentId: response.paymentId!);
+    if (order?.paymentSuccessful == true) {
+      getCredits(isSilent: true);
+      Get.snackbar("Payment Successfull", "Congratulations");
+    }
+
+    initiatingPayment.value = false;
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -62,22 +98,30 @@ class AddCreditsController extends GetxController {
                 .map((e) => "$e:${response.error?[e]}")
                 .join("\n") ??
             "");
+    initiatingPayment.value = false;
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     // Do something when an external wallet was selected
+    initiatingPayment.value = false;
   }
 
   Future<void> initiatePayment() async {
-    if (formKey.currentState?.validate() != true) {
+    if (formKey.currentState?.validate() != true ||
+        selectedCurrency.value?.code == null ||
+        selectedAmount.value == null) {
       return;
     }
     initiatingPayment.value = true;
-    String orderId = await createOrder();
-
+    newOrder = await orderProvider.createOrder(
+        currency: selectedCurrency.value!.code!, amount: selectedAmount.value!);
+    if (newOrder?.razorpayOrderId == null) {
+      initiatingPayment.value = false;
+      return;
+    }
     var options = {
       'key': razorpayKey,
-      'order_id': orderId,
+      'order_id': newOrder?.razorpayOrderId,
       'name': "Join My Ship",
       'amount': 100,
       'description': "",
@@ -98,7 +142,6 @@ class AddCreditsController extends GetxController {
     };
 
     _razorpay.open(options);
-    initiatingPayment.value = false;
   }
 
   createOrder() async {
