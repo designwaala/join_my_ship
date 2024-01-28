@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -22,10 +23,12 @@ class WrapperConnect extends GetConnect {
 
   Future<http.Response> _rawGetCore(String url,
       {Map<String, String>? headers}) async {
+    FirebaseCrashlytics.instance.log("Making GET request $url ${headers?.keys.map((e) => "$e:${headers[e]}").join(", ")}");
     var request = http.Request('GET', Uri.parse("$baseURL/$url"));
     request.headers.addAll(headers ?? {});
     http.StreamedResponse streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
+    FirebaseCrashlytics.instance.log("GET Response $url ${response.body} ${response.statusCode}");
     return response;
   }
 
@@ -63,6 +66,7 @@ class WrapperConnect extends GetConnect {
       String? url,
       Map<String, String>? headers,
       bool softRefresh = false}) async {
+    FirebaseCrashlytics.instance.log("Making GET request $url ${headers?.keys.map((e) => "$e:${headers[e]}").join(", ")}");
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -102,7 +106,7 @@ class WrapperConnect extends GetConnect {
         } else if ((response.statusCode ?? 0) >= 300) {}
       }
     }
-
+    FirebaseCrashlytics.instance.log("GET Response $url ${response.body} ${response.statusCode}");
     return jsonDecode(response.body);
   }
 
@@ -113,6 +117,7 @@ class WrapperConnect extends GetConnect {
       Map<String, dynamic>? query,
       Decoder<T>? decoder,
       bool softRefresh = false}) async {
+    FirebaseCrashlytics.instance.log("Making GET request $url ${headers?.keys.map((e) => "$e:${headers[e]}").join(", ")}");
     print(PreferencesHelper.instance.accessToken);
     if (headers == null && PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -218,7 +223,7 @@ class WrapperConnect extends GetConnect {
         }
       }
     }
-
+    FirebaseCrashlytics.instance.log("GET Response $url ${response.bodyString} ${response.statusCode}");
     return response;
   }
 
@@ -268,6 +273,7 @@ class WrapperConnect extends GetConnect {
     Decoder<T>? decoder,
     Progress? uploadProgress,
   }) async {
+    FirebaseCrashlytics.instance.log("Making POST request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -375,6 +381,7 @@ class WrapperConnect extends GetConnect {
         }
       }
     }
+    FirebaseCrashlytics.instance.log("POST Response $url ${response.bodyString} ${response.statusCode}");
     return response;
   }
 
@@ -459,6 +466,7 @@ class WrapperConnect extends GetConnect {
 
   Future<http.Response> _multipartPatchCore(String url, dynamic body,
       {Map<String, String>? headers}) async {
+    FirebaseCrashlytics.instance.log("Making PATCH request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
     var request = http.MultipartRequest('PATCH', Uri.parse("$baseURL/$url"));
     request.fields.addAll(body is Map ? body : body.toJson());
 
@@ -477,6 +485,7 @@ class WrapperConnect extends GetConnect {
     } else {
       print(streamedResponse.reasonPhrase);
     }
+    FirebaseCrashlytics.instance.log("PATCH Response $url ${response.body} ${response.statusCode}");
     return response;
   }
 
@@ -571,6 +580,7 @@ class WrapperConnect extends GetConnect {
 
   Future<http.Response> _multipartPostCore(String url, dynamic body,
       {Map<String, String>? headers}) async {
+    FirebaseCrashlytics.instance.log("Making POST request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
     var request = http.MultipartRequest('POST', Uri.parse("$baseURL$url"));
     request.fields.addAll(body is Map ? body : body.toJson());
 
@@ -589,6 +599,7 @@ class WrapperConnect extends GetConnect {
     } else {
       print(streamedResponse.reasonPhrase);
     }
+    FirebaseCrashlytics.instance.log("POST Response $url ${response.body} ${response.statusCode}");
     return response;
   }
 
@@ -601,6 +612,7 @@ class WrapperConnect extends GetConnect {
     Decoder<T>? decoder,
     Progress? uploadProgress,
   }) async {
+    FirebaseCrashlytics.instance.log("Making PATCH request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -699,6 +711,7 @@ class WrapperConnect extends GetConnect {
         }
       }
     }
+    FirebaseCrashlytics.instance.log("PATCH Response $url ${response.body} ${response.statusCode}");
     return jsonDecode(response.body);
   }
 
@@ -710,6 +723,7 @@ class WrapperConnect extends GetConnect {
     Map<String, dynamic>? query,
     Decoder<T>? decoder,
   }) async {
+    FirebaseCrashlytics.instance.log("Making DELETE request $url");
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -812,6 +826,7 @@ class WrapperConnect extends GetConnect {
         }
       }
     }
+    FirebaseCrashlytics.instance.log("DELETE Response $url ${response.body} ${response.statusCode}");
     return response;
   }
 }

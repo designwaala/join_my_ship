@@ -38,6 +38,7 @@ import 'package:join_my_ship/app/data/providers/login_provider.dart';
 import 'package:join_my_ship/app/data/providers/notification_provider.dart';
 import 'package:join_my_ship/app/data/providers/order_provider.dart';
 import 'package:join_my_ship/app/data/providers/passport_issuing_authority_provider.dart';
+import 'package:join_my_ship/app/data/providers/point_history_provider.dart';
 import 'package:join_my_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_pack_buy_provider.dart';
@@ -174,7 +175,8 @@ void main() async {
     ..registerSingleton(ResumeTopUpBuyProvider())
     ..registerSingleton(NotificationProvider())
     ..registerSingleton(OrderProvider())
-    ..registerSingleton(CreditProvider());
+    ..registerSingleton(CreditProvider())
+    ..registerSingleton(PointHistoryProvider());
 }
 
 notificationListeners() {
