@@ -35,7 +35,7 @@ class RemoteConfigUtils {
           : CreditsModel.fromJson(
               jsonDecode(_remoteConfig!.getString("credits_model")));
 
-  String? get razorpaykey => _remoteConfig?.getString("razorpay_key");
+  bool? get razorpayKeyTest => _remoteConfig?.getBool("razorpay_key_test");
 
   List<InfoModel>? get info => _remoteConfig?.getString("info_screen") == null
       ? null

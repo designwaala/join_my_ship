@@ -15,7 +15,7 @@ class PointHistoryProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
-  Future<PointHistory?> getPointHistory() async {
+  Future<List<PointHistory>?> getPointHistory() async {
     final response = await get(
         "myadmin_api/get_wallet_history/${PreferencesHelper.instance.userId}/");
     return response.body;

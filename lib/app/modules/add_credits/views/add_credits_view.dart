@@ -363,6 +363,6 @@ class AddCreditsView extends GetView<AddCreditsController> {
   }
 }
 
-extension removeUnnecessary0 on double {
+extension removeUnnecessary on double {
   num get removeZeros => this - toInt() == 0.0 ? toInt() : this;
 }

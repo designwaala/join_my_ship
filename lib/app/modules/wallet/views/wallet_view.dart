@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 
 import '../controllers/wallet_controller.dart';
+import '../../add_credits/views/add_credits_view.dart';
 import 'dart:math' as math;
 
 class WalletView extends GetView<WalletController> {
@@ -25,7 +26,7 @@ class WalletView extends GetView<WalletController> {
                   Color(0xFF3CA2FF),
                   Color(0xFF2771E5),
                   Color(0xFF0F63EA),
-                  Color(0xFF9440FF),
+                  // Color(0xFF9440FF),
                 ])),
               ),
               SvgPicture.asset("assets/icons/lightening.svg"),
@@ -64,7 +65,7 @@ class WalletView extends GetView<WalletController> {
                         8.horizontalSpace,
                         InkWell(
                           onTap: Get.back,
-                          child: Icon(
+                          child: const Icon(
                             Icons.keyboard_arrow_left,
                             color: Colors.white,
                           ),
@@ -75,7 +76,7 @@ class WalletView extends GetView<WalletController> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white)),
                         const Spacer(),
-                        Icon(Icons.more_vert, color: Colors.white),
+                        const Icon(Icons.more_vert, color: Colors.white),
                         8.horizontalSpace
                       ],
                     ),
@@ -100,7 +101,7 @@ class WalletView extends GetView<WalletController> {
                           ),
                           20.horizontalSpace,
                           controller.isLoadingCredits.value
-                              ? SizedBox(
+                              ? const SizedBox(
                                   height: 16,
                                   width: 16,
                                   child: CircularProgressIndicator(
@@ -125,16 +126,175 @@ class WalletView extends GetView<WalletController> {
                                   foregroundColor: Colors.white,
                                   backgroundColor:
                                       Get.theme.colorScheme.tertiary),
-                              onPressed: () {},
-                              child: Text("Add Credits"))
+                              onPressed: () {
+                                Get.toNamed(Routes.ADD_CREDITS);
+                              },
+                              child: const Text("Add Credits")),
+                          const SizedBox(width: 20),
+                          TextButton.icon(
+                              style: TextButton.styleFrom(
+                                  foregroundColor: Colors.white),
+                              onPressed: () {
+                                controller.getCredits();
+                              },
+                              icon: const Icon(Icons.refresh),
+                              label: const Text("Refresh"))
                         ],
                       ),
                     )
                   ],
                 ),
-              )
+              ),
+              Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 48,
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    alignment: Alignment.bottomLeft,
+                    decoration: BoxDecoration(
+                        color: Get.theme.scaffoldBackgroundColor,
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(40))),
+                    child: Text("Recent Transactions",
+                        style: Get.textTheme.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.normal)),
+                  ))
             ],
-          )
+          ),
+          8.verticalSpace,
+          Theme(
+            data: ThemeData(useMaterial3: true),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: WalletViewType.values
+                      .map((view) => Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: FilterChip(
+                              label: Text(view.name),
+                              selected: controller.view.value == view,
+                              onSelected: (value) {
+                                controller.view.value = view;
+                              },
+                            ),
+                          ))
+                      .toList()),
+            ),
+          ),
+          if (controller.isLoading.value)
+            const Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                ],
+              ),
+            )
+          else
+            Expanded(
+              child: ListView.separated(
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (context, index) {
+                    switch (controller.view.value) {
+                      case WalletViewType.credit:
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/coins.svg",
+                                height: 24,
+                                width: 24,
+                              ),
+                              8.horizontalSpace,
+                              Text(
+                                  double.tryParse(controller
+                                                  .creditHistory?[index]
+                                                  .amount ??
+                                              "")
+                                          ?.removeZeros
+                                          .toString() ??
+                                      "",
+                                  style: Get.textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold)),
+                              const Spacer(),
+                              controller.creditHistory?[index]
+                                          .paymentSuccessful ==
+                                      true
+                                  ? Text("SUCCESSFULL",
+                                      style: Get.textTheme.titleMedium
+                                          ?.copyWith(
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.bold))
+                                  : Text("PENDING",
+                                      style: Get.textTheme.titleMedium
+                                          ?.copyWith(
+                                              color: Colors.yellow.shade700,
+                                              fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        );
+                      case WalletViewType.debit:
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/coins.svg",
+                                height: 24,
+                                width: 24,
+                              ),
+                              8.horizontalSpace,
+                              Text(
+                                  controller.debitHistory?[index].pointUsed
+                                          .toString() ??
+                                      "",
+                                  style: Get.textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold)),
+                              const Spacer(),
+                              Column(
+                                children: [
+                                  controller.debitHistory?[index]
+                                              .processSuccessful ==
+                                          true
+                                      ? Text("SUCCESSFULL",
+                                          style: Get.textTheme.titleMedium
+                                              ?.copyWith(
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.bold))
+                                      : Text("PENDING",
+                                          style: Get.textTheme.titleMedium
+                                              ?.copyWith(
+                                                  color: Colors.yellow.shade700,
+                                                  fontWeight: FontWeight.bold)),
+                                  4.verticalSpace,
+                                  Text(
+                                      controller.debitHistory?[index]
+                                              .subscriptionName ??
+                                          "",
+                                      style: Get.textTheme.bodySmall),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                    }
+                  },
+                  separatorBuilder: (context, index) => Divider(),
+                  itemCount: () {
+                    switch (controller.view.value) {
+                      case WalletViewType.credit:
+                        return controller.creditHistory?.length ?? 0;
+                      case WalletViewType.debit:
+                        return controller.debitHistory?.length ?? 0;
+                    }
+                  }()),
+            )
         ],
       ));
     });

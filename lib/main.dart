@@ -106,7 +106,9 @@ void main() async {
     await RemoteConfigUtils.getRemoteConfig();
     packageInfo = await PackageInfo.fromPlatform();
     await PreferencesHelper.instance.init();
-    razorpayKey = RemoteConfigUtils.instance.razorpaykey ?? "rzp_live_BbEn6GJzJKOWvT";
+    razorpayKey = RemoteConfigUtils.instance.razorpayKeyTest == true
+        ? "rzp_test_wwDObsaedPI1ni"
+        : "rzp_live_BbEn6GJzJKOWvT";
     if (!kDebugMode) {
       FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     }
