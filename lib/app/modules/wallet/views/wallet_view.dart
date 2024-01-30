@@ -1,9 +1,11 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/extensions/date_time.dart';
 
 import '../controllers/wallet_controller.dart';
 import '../../add_credits/views/add_credits_view.dart';
@@ -59,8 +61,9 @@ class WalletView extends GetView<WalletController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Get.mediaQuery.viewPadding.top.verticalSpace,
-                    24.verticalSpace,
+                    12.verticalSpace,
                     Row(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         8.horizontalSpace,
                         InkWell(
@@ -76,11 +79,25 @@ class WalletView extends GetView<WalletController> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white)),
                         const Spacer(),
-                        const Icon(Icons.more_vert, color: Colors.white),
+                        PopupMenuButton(
+                            padding: EdgeInsets.zero,
+                            color: Colors.white,
+                            onSelected: (item) {},
+                            itemBuilder: (BuildContext context) =>
+                                <PopupMenuEntry>[
+                                  PopupMenuItem(
+                                    onTap: () {
+                                      Future.delayed(Duration(seconds: 1), () {
+                                        Get.toNamed(Routes.HELP);
+                                      });
+                                    },
+                                    child: const Text('Help'),
+                                  )
+                                ]),
                         8.horizontalSpace
                       ],
                     ),
-                    32.verticalSpace,
+                    24.verticalSpace,
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Text("Available Credits",
@@ -222,19 +239,32 @@ class WalletView extends GetView<WalletController> {
                                   style: Get.textTheme.titleMedium
                                       ?.copyWith(fontWeight: FontWeight.bold)),
                               const Spacer(),
-                              controller.creditHistory?[index]
-                                          .paymentSuccessful ==
-                                      true
-                                  ? Text("SUCCESSFULL",
-                                      style: Get.textTheme.titleMedium
-                                          ?.copyWith(
-                                              color: Colors.green,
-                                              fontWeight: FontWeight.bold))
-                                  : Text("PENDING",
-                                      style: Get.textTheme.titleMedium
-                                          ?.copyWith(
-                                              color: Colors.yellow.shade700,
-                                              fontWeight: FontWeight.bold))
+                              Column(
+                                children: [
+                                  controller.creditHistory?[index]
+                                              .paymentSuccessful ==
+                                          true
+                                      ? Text("SUCCESSFULL",
+                                          style: Get.textTheme.titleMedium
+                                              ?.copyWith(
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.bold))
+                                      : Text("PENDING",
+                                          style: Get.textTheme.titleMedium
+                                              ?.copyWith(
+                                                  color: Colors.yellow.shade700,
+                                                  fontWeight: FontWeight.bold)),
+                                  4.verticalSpace,
+                                  Text(
+                                      DateTime.tryParse(controller
+                                                      .creditHistory?[index]
+                                                      .createdAt ??
+                                                  "")
+                                              ?.getCompactDisplayDate() ??
+                                          "",
+                                      style: Get.textTheme.bodySmall)
+                                ],
+                              )
                             ],
                           ),
                         );
@@ -244,18 +274,35 @@ class WalletView extends GetView<WalletController> {
                               horizontal: 24, vertical: 16),
                           child: Row(
                             children: [
-                              SvgPicture.asset(
-                                "assets/icons/coins.svg",
-                                height: 24,
-                                width: 24,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/icons/coins.svg",
+                                        height: 24,
+                                        width: 24,
+                                      ),
+                                      8.horizontalSpace,
+                                      Text(
+                                          controller.debitHistory?[index]
+                                                  .pointUsed
+                                                  .toString() ??
+                                              "",
+                                          style: Get.textTheme.titleMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                  4.verticalSpace,
+                                  Text(
+                                      controller.debitHistory?[index]
+                                              .subscriptionName ??
+                                          "",
+                                      style: Get.textTheme.bodySmall),
+                                ],
                               ),
-                              8.horizontalSpace,
-                              Text(
-                                  controller.debitHistory?[index].pointUsed
-                                          .toString() ??
-                                      "",
-                                  style: Get.textTheme.titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold)),
                               const Spacer(),
                               Column(
                                 children: [
@@ -274,8 +321,11 @@ class WalletView extends GetView<WalletController> {
                                                   fontWeight: FontWeight.bold)),
                                   4.verticalSpace,
                                   Text(
-                                      controller.debitHistory?[index]
-                                              .subscriptionName ??
+                                      DateTime.tryParse(controller
+                                                      .creditHistory?[index]
+                                                      .createdAt ??
+                                                  "")
+                                              ?.getCompactDisplayDate() ??
                                           "",
                                       style: Get.textTheme.bodySmall),
                                 ],

@@ -4,13 +4,15 @@ class PointHistory {
   String? subscriptionName;
   int? pointUsed;
   bool? processSuccessful;
+  String? createdAt;
 
   PointHistory(
       {this.id,
       this.walletOfUser,
       this.subscriptionName,
       this.pointUsed,
-      this.processSuccessful});
+      this.processSuccessful,
+      this.createdAt});
 
   PointHistory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -18,6 +20,7 @@ class PointHistory {
     subscriptionName = json['subscription_name'];
     pointUsed = json['point_used'];
     processSuccessful = json['process_successful'];
+    createdAt = json['created_at'];
   }
 
   Map<String, dynamic> toJson() {

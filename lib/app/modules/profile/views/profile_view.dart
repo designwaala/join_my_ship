@@ -511,11 +511,14 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                       if (controller.version != null &&
                           controller.buildNumber != null)
-                        Center(
-                            child: Text(
-                                "${controller.version} (${controller.buildNumber ?? ""})",
-                                style: Get.textTheme.bodySmall
-                                    ?.copyWith(color: Colors.grey))),
+                        GestureDetector(
+                          onTap: controller.crash,
+                          child: Center(
+                              child: Text(
+                                  "${controller.version} (${controller.buildNumber ?? ""})",
+                                  style: Get.textTheme.bodySmall
+                                      ?.copyWith(color: Colors.grey))),
+                        ),
                       28.verticalSpace
                     ],
                   ),

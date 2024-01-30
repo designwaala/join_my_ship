@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,7 +16,9 @@ import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 
 class ProfileController extends GetxController with PickImage {
   RxBool isLoading = false.obs;
@@ -454,6 +457,18 @@ class ProfileController extends GetxController with PickImage {
               actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
             );
           });
+    }
+  }
+
+  int taps = 0;
+  crash() {
+    if (RemoteConfigUtils.instance.intentionalCrash != true) {
+      return;
+    }
+    taps++;
+    if (taps == 5) {
+      fToast.showToast(child: successToast("Going to crash"));
+      FirebaseCrashlytics.instance.crash();
     }
   }
 }

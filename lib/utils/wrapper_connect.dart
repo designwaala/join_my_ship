@@ -23,7 +23,7 @@ class WrapperConnect extends GetConnect {
 
   Future<http.Response> _rawGetCore(String url,
       {Map<String, String>? headers}) async {
-    FirebaseCrashlytics.instance.log("Making GET request $url ${headers?.keys.map((e) => "$e:${headers[e]}").join(", ")}");
+    FirebaseCrashlytics.instance.log("Making GET request $url}");
     var request = http.Request('GET', Uri.parse("$baseURL/$url"));
     request.headers.addAll(headers ?? {});
     http.StreamedResponse streamedResponse = await request.send();
@@ -66,7 +66,7 @@ class WrapperConnect extends GetConnect {
       String? url,
       Map<String, String>? headers,
       bool softRefresh = false}) async {
-    FirebaseCrashlytics.instance.log("Making GET request $url ${headers?.keys.map((e) => "$e:${headers[e]}").join(", ")}");
+    FirebaseCrashlytics.instance.log("Making GET request $url ${uri?.queryParameters.keys.map((e) => "$e:${uri.queryParameters[e]}").join(", ")}");
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -117,7 +117,7 @@ class WrapperConnect extends GetConnect {
       Map<String, dynamic>? query,
       Decoder<T>? decoder,
       bool softRefresh = false}) async {
-    FirebaseCrashlytics.instance.log("Making GET request $url ${headers?.keys.map((e) => "$e:${headers[e]}").join(", ")}");
+    FirebaseCrashlytics.instance.log("Making GET request $url ${query?.keys.map((e) => "$e:${query[e]}").join(", ")}");
     print(PreferencesHelper.instance.accessToken);
     if (headers == null && PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");

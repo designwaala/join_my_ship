@@ -41,4 +41,6 @@ class RemoteConfigUtils {
       ? null
       : List<InfoModel>.from(jsonDecode(_remoteConfig!.getString("info_screen"))
           .map((e) => InfoModel.fromJson(e)));
+
+  bool? get intentionalCrash => _remoteConfig?.getBool("intentional_crash");
 }

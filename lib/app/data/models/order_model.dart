@@ -5,6 +5,7 @@ class Order {
   String? razorpayOrderId;
   bool? paymentSuccessful;
   String? currency;
+  String? createdAt;
 
   Order(
       {this.id,
@@ -12,7 +13,8 @@ class Order {
       this.amount,
       this.razorpayOrderId,
       this.paymentSuccessful,
-      this.currency});
+      this.currency,
+      this.createdAt});
 
   Order.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,6 +23,7 @@ class Order {
     razorpayOrderId = json['razorpay_order_id'];
     paymentSuccessful = json['payment_successful'];
     currency = json['currency'];
+    createdAt = json['created_at'];
   }
 
   Map<String, dynamic> toJson() {
