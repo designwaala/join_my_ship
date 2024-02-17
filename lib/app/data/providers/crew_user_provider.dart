@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -359,6 +360,16 @@ class CrewUserProvider extends WrapperConnect {
     final response =
         await get("crew/manage_user_list/${PreferencesHelper.instance.userId}");
     return response.body;
+  }
+
+  Future<int?> deleteUser(int id) async {
+    final idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+    final statusCode = await multipartDelete(
+        "crew/user_retrieve_destroy/$id", {"auth_key": idToken ?? ""});
+    if (statusCode == 204) {
+      // ContinuousStream().emit(Streams.userDeleted, id);
+    }
+    return statusCode;
   }
 
   Future<int?> deleteSubUser(int userId) async =>

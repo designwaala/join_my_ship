@@ -28,7 +28,8 @@ class WrapperConnect extends GetConnect {
     request.headers.addAll(headers ?? {});
     http.StreamedResponse streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
-    FirebaseCrashlytics.instance.log("GET Response $url ${response.body} ${response.statusCode}");
+    FirebaseCrashlytics.instance
+        .log("GET Response $url ${response.body} ${response.statusCode}");
     return response;
   }
 
@@ -66,7 +67,8 @@ class WrapperConnect extends GetConnect {
       String? url,
       Map<String, String>? headers,
       bool softRefresh = false}) async {
-    FirebaseCrashlytics.instance.log("Making GET request $url ${uri?.queryParameters.keys.map((e) => "$e:${uri.queryParameters[e]}").join(", ")}");
+    FirebaseCrashlytics.instance.log(
+        "Making GET request $url ${uri?.queryParameters.keys.map((e) => "$e:${uri.queryParameters[e]}").join(", ")}");
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -106,7 +108,8 @@ class WrapperConnect extends GetConnect {
         } else if ((response.statusCode ?? 0) >= 300) {}
       }
     }
-    FirebaseCrashlytics.instance.log("GET Response $url ${response.body} ${response.statusCode}");
+    FirebaseCrashlytics.instance
+        .log("GET Response $url ${response.body} ${response.statusCode}");
     return jsonDecode(response.body);
   }
 
@@ -117,7 +120,8 @@ class WrapperConnect extends GetConnect {
       Map<String, dynamic>? query,
       Decoder<T>? decoder,
       bool softRefresh = false}) async {
-    FirebaseCrashlytics.instance.log("Making GET request $url ${query?.keys.map((e) => "$e:${query[e]}").join(", ")}");
+    FirebaseCrashlytics.instance.log(
+        "Making GET request $url ${query?.keys.map((e) => "$e:${query[e]}").join(", ")}");
     print(PreferencesHelper.instance.accessToken);
     if (headers == null && PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -223,7 +227,8 @@ class WrapperConnect extends GetConnect {
         }
       }
     }
-    FirebaseCrashlytics.instance.log("GET Response $url ${response.bodyString} ${response.statusCode}");
+    FirebaseCrashlytics.instance
+        .log("GET Response $url ${response.bodyString} ${response.statusCode}");
     return response;
   }
 
@@ -273,7 +278,8 @@ class WrapperConnect extends GetConnect {
     Decoder<T>? decoder,
     Progress? uploadProgress,
   }) async {
-    FirebaseCrashlytics.instance.log("Making POST request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
+    FirebaseCrashlytics.instance.log(
+        "Making POST request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -381,7 +387,8 @@ class WrapperConnect extends GetConnect {
         }
       }
     }
-    FirebaseCrashlytics.instance.log("POST Response $url ${response.bodyString} ${response.statusCode}");
+    FirebaseCrashlytics.instance.log(
+        "POST Response $url ${response.bodyString} ${response.statusCode}");
     return response;
   }
 
@@ -466,7 +473,8 @@ class WrapperConnect extends GetConnect {
 
   Future<http.Response> _multipartPatchCore(String url, dynamic body,
       {Map<String, String>? headers}) async {
-    FirebaseCrashlytics.instance.log("Making PATCH request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
+    FirebaseCrashlytics.instance.log(
+        "Making PATCH request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
     var request = http.MultipartRequest('PATCH', Uri.parse("$baseURL/$url"));
     request.fields.addAll(body is Map ? body : body.toJson());
 
@@ -485,7 +493,8 @@ class WrapperConnect extends GetConnect {
     } else {
       print(streamedResponse.reasonPhrase);
     }
-    FirebaseCrashlytics.instance.log("PATCH Response $url ${response.body} ${response.statusCode}");
+    FirebaseCrashlytics.instance
+        .log("PATCH Response $url ${response.body} ${response.statusCode}");
     return response;
   }
 
@@ -580,7 +589,8 @@ class WrapperConnect extends GetConnect {
 
   Future<http.Response> _multipartPostCore(String url, dynamic body,
       {Map<String, String>? headers}) async {
-    FirebaseCrashlytics.instance.log("Making POST request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
+    FirebaseCrashlytics.instance.log(
+        "Making POST request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
     var request = http.MultipartRequest('POST', Uri.parse("$baseURL$url"));
     request.fields.addAll(body is Map ? body : body.toJson());
 
@@ -599,7 +609,8 @@ class WrapperConnect extends GetConnect {
     } else {
       print(streamedResponse.reasonPhrase);
     }
-    FirebaseCrashlytics.instance.log("POST Response $url ${response.body} ${response.statusCode}");
+    FirebaseCrashlytics.instance
+        .log("POST Response $url ${response.body} ${response.statusCode}");
     return response;
   }
 
@@ -612,7 +623,8 @@ class WrapperConnect extends GetConnect {
     Decoder<T>? decoder,
     Progress? uploadProgress,
   }) async {
-    FirebaseCrashlytics.instance.log("Making PATCH request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
+    FirebaseCrashlytics.instance.log(
+        "Making PATCH request $url ${body is Map ? body.keys.map((e) => "$e:${body[e]}").join(", ") : body}");
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
@@ -711,7 +723,8 @@ class WrapperConnect extends GetConnect {
         }
       }
     }
-    FirebaseCrashlytics.instance.log("PATCH Response $url ${response.body} ${response.statusCode}");
+    FirebaseCrashlytics.instance
+        .log("PATCH Response $url ${response.body} ${response.statusCode}");
     return jsonDecode(response.body);
   }
 
@@ -826,7 +839,71 @@ class WrapperConnect extends GetConnect {
         }
       }
     }
-    FirebaseCrashlytics.instance.log("DELETE Response $url ${response.body} ${response.statusCode}");
+    FirebaseCrashlytics.instance
+        .log("DELETE Response $url ${response.body} ${response.statusCode}");
+    return response;
+  }
+
+  Future<int?> multipartDelete(String url, dynamic body,
+      {Map<String, dynamic>? headers}) async {
+    print(PreferencesHelper.instance.accessToken);
+    if (PreferencesHelper.instance.accessToken.isEmpty) {
+      print("Access Token not found, getting them");
+      await getAccessTokens();
+    }
+    var response = await _multipartDeleteCore(url, body);
+    if (response.statusCode == 401) {
+      print("Refreshing Access Token");
+      await refreshAccessToken();
+      response = await _multipartDeleteCore(url, body);
+      if (response.statusCode == 401) {
+        print("Refreshing Access Token didnt work, getting new Tokens");
+        await getAccessTokens();
+        response = await _multipartDeleteCore(url, body);
+        if (response.statusCode == 401) {
+          signOut();
+        } else if ((response.statusCode ?? 0) >= 300) {
+          _showError(response.body);
+        }
+      }
+    } else if (response.statusCode == 402) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24)),
+              title: Text(
+                  jsonDecode(response.body)['message'] ?? "Payment Required"),
+              actions: [FilledButton(onPressed: Get.back, child: Text("OK"))],
+            );
+          });
+    } else if (response.statusCode >= 300) {
+      _showError(response.body);
+    }
+    return response.statusCode;
+  }
+
+  Future<http.Response> _multipartDeleteCore(String url, dynamic body,
+      {Map<String, String>? headers}) async {
+    var request = http.MultipartRequest('DELETE', Uri.parse("$baseURL$url"));
+    request.fields.addAll(body is Map ? body : body.toJson());
+
+    headers ??= {
+      "Content-Type": "multipart/form-data",
+      "Authorization": "Bearer ${PreferencesHelper.instance.accessToken}"
+    };
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+    if (streamedResponse.statusCode == 200) {
+      // print(await streamedResponse.stream.bytesToString());
+    } else {
+      print(streamedResponse.reasonPhrase);
+    }
     return response;
   }
 }

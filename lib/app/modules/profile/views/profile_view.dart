@@ -505,6 +505,65 @@ class ProfileView extends GetView<ProfileController> {
                             ),
                           )),
                       InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Obx(() {
+                                  return AlertDialog(
+                                    title: Text("Delete Account"),
+                                    content: Text(
+                                        "Are you sure you want to delete your account?"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: Get.back,
+                                          child: Text("NO")),
+                                      4.horizontalSpace,
+                                      controller.isDeletingAccount.value
+                                          ? SizedBox(
+                                              height: 16,
+                                              width: 16,
+                                              child:
+                                                  CircularProgressIndicator())
+                                          : FilledButton(
+                                              onPressed:
+                                                  controller.deleteAccount,
+                                              child: Text("YES"))
+                                    ],
+                                  );
+                                });
+                              });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16.h, horizontal: 14.h),
+                          margin: EdgeInsets.symmetric(vertical: 8.h),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey.shade200,
+                                    blurRadius: 1,
+                                    spreadRadius: 1,
+                                    offset: const Offset(1, 1))
+                              ],
+                              borderRadius: BorderRadius.circular(16.r)),
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete_outline, color: Colors.red),
+                              18.horizontalSpace,
+                              Text("Delete Account",
+                                  style: Get.textTheme.bodyMedium?.copyWith(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.red)),
+                              const Spacer(),
+                              const Icon(Icons.keyboard_arrow_right)
+                            ],
+                          ),
+                        ),
+                      ),
+                      InkWell(
                         onTap: () async {
                           UserStates.instance.reset();
                           await FirebaseAuth.instance.signOut();

@@ -48,6 +48,7 @@ class ProfileController extends GetxController
   Rxn<Subscription> selectedSubscription = Rxn();
 
   RxBool isStartingJobPostPlan = false.obs;
+  RxBool isDeletingAccount = false.obs;
 
   final gradientColors = [
     Color(0xFF371C57),
@@ -512,5 +513,24 @@ class ProfileController extends GetxController
       fToast.showToast(child: successToast("Going to crash"));
       FirebaseCrashlytics.instance.crash();
     }
+  }
+
+  Future<void> deleteAccount() async {
+    if (crewUser.value?.id == null) {
+      return;
+    }
+    isDeletingAccount.value = true;
+    final response =
+        await getIt<CrewUserProvider>().deleteUser(crewUser.value!.id!);
+    if (response == 204) {
+      Get.offAllNamed(Routes.SPLASH);
+    }
+    isDeletingAccount.value = false;
+  }
+
+  @override
+  void onClose() {
+    animationController.dispose();
+    super.onClose();
   }
 }
