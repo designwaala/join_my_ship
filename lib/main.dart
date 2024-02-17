@@ -21,6 +21,7 @@ import 'package:join_my_ship/app/data/providers/cop_provider.dart';
 import 'package:join_my_ship/app/data/providers/country_provider.dart';
 import 'package:join_my_ship/app/data/providers/credit_provider.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/current_job_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/employer_counts_provider.dart';
 import 'package:join_my_ship/app/data/providers/fcm_token_provider.dart';
 import 'package:join_my_ship/app/data/providers/flag_provider.dart';
@@ -178,7 +179,8 @@ void main() async {
     ..registerSingleton(NotificationProvider())
     ..registerSingleton(OrderProvider())
     ..registerSingleton(CreditProvider())
-    ..registerSingleton(PointHistoryProvider());
+    ..registerSingleton(PointHistoryProvider())
+    ..registerSingleton(CurrentJobPostProvider());
 }
 
 notificationListeners() {

@@ -6,6 +6,7 @@ import 'package:join_my_ship/app/data/models/current_resume_pack.dart';
 import 'package:join_my_ship/app/data/models/current_resume_top_up.dart';
 import 'package:join_my_ship/app/data/models/highlight_model.dart';
 import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
+import 'package:join_my_ship/app/data/providers/current_job_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_pack_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_pack_buy_provider.dart';
@@ -44,6 +45,9 @@ class SubscriptionsController extends GetxController {
   Rxn<Crew> currentCrewBoostings = Rxn();
 
   RxList<Highlight> currentCrewHighlights = RxList.empty();
+
+  RxBool showJobPostPacks = true.obs;
+  RxBool isBuyingJobPostPlan = false.obs;
 
   @override
   void onInit() {
@@ -116,6 +120,15 @@ class SubscriptionsController extends GetxController {
       fToast.showToast(child: successToast("Top Up Activated"));
     }
     toppingUpPlan.value = null;
+  }
+
+  Future<void> buyJobPostPlan() async {
+    isBuyingJobPostPlan.value = true;
+    final response = await getIt<CurrentJobPostProvider>().buyJobPost();
+    if (response?.id != null) {
+      fToast.showToast(child: successToast("Job Post Plan Activated"));
+    }
+    isBuyingJobPostPlan.value = false;
   }
 }
 

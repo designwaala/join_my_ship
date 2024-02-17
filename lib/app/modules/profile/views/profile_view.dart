@@ -294,6 +294,77 @@ class ProfileView extends GetView<ProfileController> {
                       Text("Options",
                           style: Get.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold, fontSize: 18.sp)),
+                      if (controller.crewUser.value?.userTypeKey == 5)
+                        InkWell(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Obx(() {
+                                    return AlertDialog(
+                                      title: const Text("Job Post Plan"),
+                                      content: const Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Post 1 Job Everyday"),
+                                          SizedBox(height: 4),
+                                          Text("Validity: 7 Days")
+                                        ],
+                                      ),
+                                      actions: [
+                                        controller.isStartingJobPostPlan.value
+                                            ? const SizedBox(
+                                                height: 16,
+                                                width: 16,
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : FilledButton.tonal(
+                                                onPressed:
+                                                    controller.startJobPostPlan,
+                                                child: const Text("Start Plan"))
+                                      ],
+                                    );
+                                  });
+                                });
+                          },
+                          child: AnimatedBuilder(
+                              animation: controller.animationController,
+                              builder: (context, _) {
+                                return Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 16.h, horizontal: 14.h),
+                                  margin: EdgeInsets.symmetric(vertical: 8.h),
+                                  decoration: BoxDecoration(
+                                      /* gradient: LinearGradient(
+                                          transform: GradientRotation(3.14 / 4),
+                                          colors: controller.gradientColors), */
+                                      color: controller.colorTween.value,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.grey.shade200,
+                                            blurRadius: 1,
+                                            spreadRadius: 1,
+                                            offset: const Offset(1, 1))
+                                      ],
+                                      borderRadius:
+                                          BorderRadius.circular(16.r)),
+                                  child: Row(
+                                    children: [
+                                      Text("Avail 7 Days Free trial",
+                                          style: Get.textTheme.titleMedium
+                                              ?.copyWith(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold)),
+                                      const Spacer(),
+                                      const Icon(Icons.keyboard_arrow_right,
+                                          color: Colors.white)
+                                    ],
+                                  ),
+                                );
+                              }),
+                        ),
                       ...[
                         CardObject(
                             verificationRequired: true,

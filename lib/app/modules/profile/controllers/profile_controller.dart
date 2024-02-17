@@ -11,6 +11,7 @@ import 'package:join_my_ship/app/data/models/highlight_model.dart';
 import 'package:join_my_ship/app/data/models/subscription_model.dart';
 import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/current_job_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
@@ -20,7 +21,8 @@ import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 import 'package:join_my_ship/widgets/toasts/toast.dart';
 
-class ProfileController extends GetxController with PickImage {
+class ProfileController extends GetxController
+    with PickImage, GetSingleTickerProviderStateMixin {
   RxBool isLoading = false.obs;
   Rxn<CrewUser> crewUser = Rxn();
 
@@ -45,6 +47,19 @@ class ProfileController extends GetxController with PickImage {
   RxBool isLoadingSubscriptions = false.obs;
   Rxn<Subscription> selectedSubscription = Rxn();
 
+  RxBool isStartingJobPostPlan = false.obs;
+
+  final gradientColors = [
+    Color(0xFF371C57),
+    Color(0xFFB92BD8),
+    Color(0xFF5F25E1),
+    Color(0xFF2D22DD)
+  ];
+
+  late AnimationController animationController;
+  late Animation<Color?> colorTween;
+  final double lastValue = 0;
+
   @override
   void onInit() {
     instantiate();
@@ -62,6 +77,33 @@ class ProfileController extends GetxController with PickImage {
     crewUser.value = UserStates.instance.crewUser ??
         (await getIt<CrewUserProvider>().getCrewUser());
     isLoading.value = false;
+
+    if (crewUser.value?.userTypeKey == 5) {
+      animationController = AnimationController(
+          vsync: this, duration: const Duration(seconds: 5));
+
+      colorTween = ColorTween(begin: Color(0xFF2D22DD), end: Color(0xFFB92BD8))
+          .animate(CurvedAnimation(
+              parent: animationController, curve: Curves.easeOutSine))
+        ..addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            animationController.reverse();
+          }
+          if (status == AnimationStatus.dismissed) {
+            animationController.forward();
+          }
+        });
+      animationController.forward();
+    }
+  }
+
+  Future<void> startJobPostPlan() async {
+    isStartingJobPostPlan.value = true;
+    final response = await getIt<CurrentJobPostProvider>().startFreeTrial();
+    if (response?.id != null) {
+      fToast.showToast(child: successToast("Trial Started Successfully"));
+    }
+    isStartingJobPostPlan.value = false;
   }
 
   updateImage() async {
