@@ -42,12 +42,15 @@ class SubscriptionsController extends GetxController {
   RxList<CurrentResumePack> currentPackPurchases = RxList.empty();
   RxList<CurrentResumeTopUpPack> currentTopUpPurchases = RxList.empty();
   RxList<Employer> currentEmployerBoostings = RxList.empty();
+  
   Rxn<Crew> currentCrewBoostings = Rxn();
 
   RxList<Highlight> currentCrewHighlights = RxList.empty();
 
   RxBool showJobPostPacks = true.obs;
   RxBool isBuyingJobPostPlan = false.obs;
+
+  RxBool showJobPostPurchases = true.obs;
 
   @override
   void onInit() {
