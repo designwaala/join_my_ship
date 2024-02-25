@@ -15,7 +15,11 @@ class AppliedReferCodeProvider extends WrapperConnect {
   }
 
   Future<AppliedReferCode?> applyCode(String code) async {
-    final response = await multipartPost('crew/use_referred_code/$code/', {});
-    return AppliedReferCode.fromJson(response);
+    final response = await post(
+      'crew/use_referred_code/$code/',
+      {},
+      decoder: (data) => AppliedReferCode.fromJson(data),
+    );
+    return response.body;
   }
 }

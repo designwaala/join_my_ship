@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:join_my_ship/app/data/providers/applied_refer_code_provider.dart';
 import 'package:join_my_ship/app/data/providers/user_code_provider.dart';
 import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 
 class ReferAndEarnController extends GetxController {
   String? referralCode;
@@ -47,7 +49,9 @@ class ReferAndEarnController extends GetxController {
     isApplyingCode.value = true;
     final response =
         await getIt<AppliedReferCodeProvider>().applyCode(codeController.text);
-    if (response?.id != null) {}
+    if (response?.id != null) {
+      fToast.safeShowToast(child: successToast("Referral Code Applied!"));
+    }
     isApplyingCode.value = false;
   }
 }
