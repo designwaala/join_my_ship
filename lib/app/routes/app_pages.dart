@@ -84,6 +84,8 @@ import '../modules/notification/bindings/notification_binding.dart';
 import '../modules/notification/views/notification_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/refer_and_earn/bindings/refer_and_earn_binding.dart';
+import '../modules/refer_and_earn/views/refer_and_earn_view.dart';
 import '../modules/reset_password/bindings/reset_password_binding.dart';
 import '../modules/reset_password/views/reset_password_email_verification_view.dart';
 import '../modules/reset_password/views/reset_password_view.dart';
@@ -363,6 +365,11 @@ class AppPages {
       name: _Paths.ADD_CREDITS,
       page: () => const AddCreditsView(),
       binding: AddCreditsBinding(),
+    ),
+    GetPage(
+      name: _Paths.REFER_AND_EARN,
+      page: () => const ReferAndEarnView(),
+      binding: ReferAndEarnBinding(),
     ),
   ];
 }

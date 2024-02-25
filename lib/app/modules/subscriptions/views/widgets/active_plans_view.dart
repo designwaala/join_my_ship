@@ -7,6 +7,7 @@ import 'package:join_my_ship/app/modules/job_opening/controllers/job_opening_con
 import 'package:join_my_ship/app/modules/subscriptions/controllers/subscriptions_controller.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/utils/extensions/date_time.dart';
 
 class ActivePlansView extends GetView<SubscriptionsController> {
   const ActivePlansView({Key? key}) : super(key: key);
@@ -27,23 +28,23 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                     if (UserStates.instance.crewUser?.userTypeKey != 2)
                       //EMPLOYER
                       ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Packs Purchases",
-                              style: Get.textTheme.titleLarge),
-                          InkWell(
-                            onTap: () {
-                              controller.showResumePacksPurchases.value =
-                                  !controller.showResumePacksPurchases.value;
-                            },
-                            child: Icon(
+                      InkWell(
+                        onTap: () {
+                          controller.showResumePacksPurchases.value =
+                              !controller.showResumePacksPurchases.value;
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Packs Purchases",
+                                style: Get.textTheme.titleLarge),
+                            Icon(
                                 controller.showResumePacksPurchases.value
                                     ? Icons.keyboard_arrow_up
                                     : Icons.keyboard_arrow_down,
-                                size: 32),
-                          )
-                        ],
+                                size: 32)
+                          ],
+                        ),
                       ),
                       16.verticalSpace,
                       AnimatedCrossFade(
@@ -92,23 +93,23 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                                   : CrossFadeState.showSecond,
                           duration: const Duration(milliseconds: 300)),
                       16.verticalSpace,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Top Up Purchases",
-                              style: Get.textTheme.titleLarge),
-                          InkWell(
-                            onTap: () {
-                              controller.showResumeTopUpPurchases.value =
-                                  !controller.showResumeTopUpPurchases.value;
-                            },
-                            child: Icon(
+                      InkWell(
+                        onTap: () {
+                          controller.showResumeTopUpPurchases.value =
+                              !controller.showResumeTopUpPurchases.value;
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Top Up Purchases",
+                                style: Get.textTheme.titleLarge),
+                            Icon(
                                 controller.showResumeTopUpPurchases.value
                                     ? Icons.keyboard_arrow_up
                                     : Icons.keyboard_arrow_down,
-                                size: 32),
-                          )
-                        ],
+                                size: 32)
+                          ],
+                        ),
                       ),
                       16.verticalSpace,
                       AnimatedCrossFade(
@@ -158,22 +159,22 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                                   : CrossFadeState.showSecond,
                           duration: const Duration(milliseconds: 300)),
                       16.verticalSpace,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Boostings", style: Get.textTheme.titleLarge),
-                          InkWell(
-                            onTap: () {
-                              controller.showBoostings.value =
-                                  !controller.showBoostings.value;
-                            },
-                            child: Icon(
+                      InkWell(
+                        onTap: () {
+                          controller.showBoostings.value =
+                              !controller.showBoostings.value;
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Boostings", style: Get.textTheme.titleLarge),
+                            Icon(
                                 controller.showBoostings.value
                                     ? Icons.keyboard_arrow_up
                                     : Icons.keyboard_arrow_down,
-                                size: 32),
-                          )
-                        ],
+                                size: 32)
+                          ],
+                        ),
                       ),
                       16.verticalSpace,
                       AnimatedCrossFade(
@@ -277,123 +278,162 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                           duration: const Duration(milliseconds: 300)),
                       if (UserStates.instance.crewUser?.userTypeKey == 5) ...[
                         16.verticalSpace,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Job Post Plan",
-                                style: Get.textTheme.titleLarge),
-                            InkWell(
-                              onTap: () {
-                                controller.showJobPostPurchases.value =
-                                    !controller.showJobPostPurchases.value;
-                              },
-                              child: Icon(
+                        InkWell(
+                          onTap: () {
+                            controller.showJobPostPurchases.value =
+                                !controller.showJobPostPurchases.value;
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Job Post Plan",
+                                  style: Get.textTheme.titleLarge),
+                              Icon(
                                   controller.showJobPostPurchases.value
                                       ? Icons.keyboard_arrow_up
                                       : Icons.keyboard_arrow_down,
-                                  size: 32),
-                            )
-                          ],
+                                  size: 32)
+                            ],
+                          ),
                         ),
                         16.verticalSpace,
                         AnimatedCrossFade(
                             firstChild: Column(
-                                children: controller.currentEmployerBoostings
-                                    .map((boosting) => InkWell(
-                                          onTap: () {
-                                            Get.toNamed(Routes.JOB_OPENING,
-                                                arguments: JobOpeningArguments(
-                                                    jobId: boosting
-                                                        .postBoost?.id));
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8),
-                                            child: SizedBox(
-                                              width: double.maxFinite,
-                                              child: Card(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16)),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            12),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                "Vessel Type: ",
-                                                                style: Get
-                                                                    .textTheme
-                                                                    .bodyLarge
-                                                                    ?.copyWith(
-                                                                        color: Colors
-                                                                            .blue),
-                                                              ),
-                                                              8.horizontalSpace,
-                                                              Text(UserStates
-                                                                      .instance
-                                                                      .vessels
-                                                                      ?.vessels
-                                                                      ?.expand<
-                                                                              SubVessel>(
-                                                                          (e) =>
-                                                                              e.subVessels ??
-                                                                              [])
-                                                                      .firstWhereOrNull((vessel) =>
-                                                                          vessel
-                                                                              .id ==
-                                                                          boosting
-                                                                              .postBoost
-                                                                              ?.vesselId)
-                                                                      ?.name ??
-                                                                  "")
-                                                            ]),
-                                                        4.verticalSpace,
-                                                        Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                "GRT: ",
-                                                                style: Get
-                                                                    .textTheme
-                                                                    .bodyLarge
-                                                                    ?.copyWith(
-                                                                        color: Colors
-                                                                            .blue),
-                                                              ),
-                                                              8.horizontalSpace,
-                                                              Text(boosting
-                                                                      .postBoost
-                                                                      ?.gRT ??
-                                                                  "")
-                                                            ]),
-                                                        Text(
-                                                            "Days Active: ${boosting.daysActive}",
-                                                            style: Get.textTheme
-                                                                .titleMedium),
-                                                        4.verticalSpace,
-                                                      ],
-                                                    ),
-                                                  )),
-                                            ),
-                                          ),
-                                        ))
-                                    .toList()),
+                                children: controller.currentJobPostPacks
+                                        ?.map((boosting) => Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 8),
+                                              child: SizedBox(
+                                                width: double.maxFinite,
+                                                child: Card(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        16)),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              12),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  "Purchased On: ",
+                                                                  style: Get
+                                                                      .textTheme
+                                                                      .bodyLarge
+                                                                      ?.copyWith(
+                                                                          color:
+                                                                              Colors.blue),
+                                                                ),
+                                                                8.horizontalSpace,
+                                                                /* Text(UserStates
+                                                                .instance
+                                                                .vessels
+                                                                ?.vessels
+                                                                ?.expand<
+                                                                        SubVessel>(
+                                                                    (e) =>
+                                                                        e.subVessels ??
+                                                                        [])
+                                                                .firstWhereOrNull((vessel) =>
+                                                                    vessel
+                                                                        .id ==
+                                                                    boosting
+                                                                        .postBoost
+                                                                        ?.vesselId)
+                                                                ?.name ??
+                                                            "") */
+                                                              ]),
+                                                          4.verticalSpace,
+                                                          Text(
+                                                              "${DateTime.tryParse(boosting.createdAt ?? "")?.getCompactDisplayDate()}",
+                                                              style: Get
+                                                                  .textTheme
+                                                                  .titleMedium),
+                                                          4.verticalSpace,
+                                                        ],
+                                                      ),
+                                                    )),
+                                              ),
+                                            ))
+                                        .toList() ??
+                                    []),
                             secondChild: const SizedBox(),
                             crossFadeState:
                                 controller.showJobPostPurchases.value
+                                    ? CrossFadeState.showFirst
+                                    : CrossFadeState.showSecond,
+                            duration: const Duration(milliseconds: 300)),
+                        16.verticalSpace,
+                        InkWell(
+                          onTap: () {
+                            controller.showJobPostTopUpPurchases.value =
+                                !controller.showJobPostTopUpPurchases.value;
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Job Post Top Up",
+                                  style: Get.textTheme.titleLarge),
+                              Icon(
+                                  controller.showJobPostTopUpPurchases.value
+                                      ? Icons.keyboard_arrow_up
+                                      : Icons.keyboard_arrow_down,
+                                  size: 32)
+                            ],
+                          ),
+                        ),
+                        16.verticalSpace,
+                        AnimatedCrossFade(
+                            firstChild: Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: SizedBox(
+                                width: double.maxFinite,
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Posts Left: ",
+                                                  style: Get.textTheme.bodyLarge
+                                                      ?.copyWith(
+                                                          color: Colors.blue),
+                                                ),
+                                                8.horizontalSpace,
+                                              ]),
+                                          4.verticalSpace,
+                                          Text(
+                                              "${controller.currentJobPostTopUps?.postsLeft}",
+                                              style: Get.textTheme.titleMedium),
+                                          4.verticalSpace,
+                                        ],
+                                      ),
+                                    )),
+                              ),
+                            ),
+                            secondChild: const SizedBox(),
+                            crossFadeState:
+                                controller.showJobPostTopUpPurchases.value
                                     ? CrossFadeState.showFirst
                                     : CrossFadeState.showSecond,
                             duration: const Duration(milliseconds: 300)),

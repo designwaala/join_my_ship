@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:join_my_ship/app/data/models/credits_model.dart';
 import 'package:join_my_ship/app/data/models/info_model.dart';
+import 'package:join_my_ship/app/data/models/job_post_top_up_packs.dart';
+import 'package:join_my_ship/utils/extensions/string_extensions.dart';
 
 class RemoteConfigUtils {
   RemoteConfigUtils._();
@@ -43,4 +45,11 @@ class RemoteConfigUtils {
           .map((e) => InfoModel.fromJson(e)));
 
   bool? get intentionalCrash => _remoteConfig?.getBool("intentional_crash");
+
+  List<JobPostTopUpPack>? get jobPostTopUpPacks =>
+      _remoteConfig?.getString("job_post_top_up_packs").nullIfEmpty() == null
+          ? null
+          : List<JobPostTopUpPack>.from(
+              jsonDecode(_remoteConfig!.getString("job_post_top_up_packs"))
+                  .map((e) => JobPostTopUpPack.fromJson(e)));
 }

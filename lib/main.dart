@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:join_my_ship/app/data/providers/application_provider.dart';
+import 'package:join_my_ship/app/data/providers/applied_refer_code_provider.dart';
 import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_my_ship/app/data/providers/cdc_issuing_authority_provider.dart';
 import 'package:join_my_ship/app/data/providers/coc_provider.dart';
@@ -28,6 +29,7 @@ import 'package:join_my_ship/app/data/providers/flag_provider.dart';
 import 'package:join_my_ship/app/data/providers/follow_provider.dart';
 import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_application_provider.dart';
+import 'package:join_my_ship/app/data/providers/job_post_plan_top_up_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_coc_post.dart';
 import 'package:join_my_ship/app/data/providers/job_cop_post.dart';
@@ -51,6 +53,7 @@ import 'package:join_my_ship/app/data/providers/secondary_users_provider.dart';
 import 'package:join_my_ship/app/data/providers/state_provider.dart';
 import 'package:join_my_ship/app/data/providers/stcw_issuing_authority_provider.dart';
 import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
+import 'package:join_my_ship/app/data/providers/user_code_provider.dart';
 import 'package:join_my_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_my_ship/app/data/providers/vessel_type_provider.dart';
@@ -180,7 +183,10 @@ void main() async {
     ..registerSingleton(OrderProvider())
     ..registerSingleton(CreditProvider())
     ..registerSingleton(PointHistoryProvider())
-    ..registerSingleton(CurrentJobPostProvider());
+    ..registerSingleton(CurrentJobPostProvider())
+    ..registerSingleton(JobPostPlanTopUpProvider())
+    ..registerSingleton(UserCodeProvider())
+    ..registerSingleton(AppliedReferCodeProvider());
 }
 
 notificationListeners() {

@@ -54,6 +54,7 @@ abstract class Routes {
   static const UPDATE_EMAIL = _Paths.UPDATE_EMAIL;
   static const WALLET = _Paths.WALLET;
   static const ADD_CREDITS = _Paths.ADD_CREDITS;
+  static const REFER_AND_EARN = _Paths.REFER_AND_EARN;
 }
 
 abstract class _Paths {
@@ -109,4 +110,5 @@ abstract class _Paths {
   static const UPDATE_EMAIL = '/update-email';
   static const WALLET = '/wallet';
   static const ADD_CREDITS = '/add-credits';
+  static const REFER_AND_EARN = '/refer-and-earn';
 }

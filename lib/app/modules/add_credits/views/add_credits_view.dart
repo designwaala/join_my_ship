@@ -283,10 +283,15 @@ class AddCreditsView extends GetView<AddCreditsController> {
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
-                                        controller.selectedAmount.value
-                                                ?.removeZeros
-                                                .toString() ??
-                                            "",
+                                        ((controller.selectedAmount.value ??
+                                                    0) *
+                                                (controller
+                                                        .selectedCurrency
+                                                        .value
+                                                        ?.conversionToPoints ??
+                                                    1))
+                                            .removeZeros
+                                            .toString(),
                                         style: Get.textTheme.titleMedium
                                             ?.copyWith(
                                                 fontWeight: FontWeight.bold),

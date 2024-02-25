@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_my_ship/app/data/models/boosting_model.dart';
+import 'package:join_my_ship/app/data/models/current_job_post_pack.dart';
 import 'package:join_my_ship/app/data/models/current_resume_pack.dart';
 import 'package:join_my_ship/app/data/models/current_resume_top_up.dart';
 import 'package:join_my_ship/app/data/models/highlight_model.dart';
+import 'package:join_my_ship/app/data/models/job_post_plan_top_up_model.dart';
+import 'package:join_my_ship/app/data/models/job_post_top_up_packs.dart';
 import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_my_ship/app/data/providers/current_job_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
+import 'package:join_my_ship/app/data/providers/job_post_plan_top_up_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_pack_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_pack_buy_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_top_up_buy_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_top_up_provider.dart';
 import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/extensions/toast_extension.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 import 'package:join_my_ship/widgets/toasts/toast.dart';
 
@@ -42,15 +47,22 @@ class SubscriptionsController extends GetxController {
   RxList<CurrentResumePack> currentPackPurchases = RxList.empty();
   RxList<CurrentResumeTopUpPack> currentTopUpPurchases = RxList.empty();
   RxList<Employer> currentEmployerBoostings = RxList.empty();
-  
+
   Rxn<Crew> currentCrewBoostings = Rxn();
 
   RxList<Highlight> currentCrewHighlights = RxList.empty();
 
   RxBool showJobPostPacks = true.obs;
+  RxBool showJobPostTopUpPacks = true.obs;
+
   RxBool isBuyingJobPostPlan = false.obs;
+  RxnInt jobPostTopUpPlan = RxnInt();
 
   RxBool showJobPostPurchases = true.obs;
+  RxBool showJobPostTopUpPurchases = true.obs;
+
+  JobPostPlanTopUp? currentJobPostTopUps;
+  List<CurrentJobPostPack>? currentJobPostPacks;
 
   @override
   void onInit() {
@@ -69,7 +81,17 @@ class SubscriptionsController extends GetxController {
     UserStates.instance.crewUser?.userTypeKey != 2
         ? await _employerData()
         : await _crewData();
+    if (UserStates.instance.crewUser?.userTypeKey == 5) {
+      getJobPostData();
+    }
     isLoading.value = false;
+  }
+
+  Future<void> getJobPostData() async {
+    currentJobPostTopUps =
+        await getIt<JobPostPlanTopUpProvider>().getJobPostPlanTopUp();
+    currentJobPostPacks =
+        (await getIt<CurrentJobPostProvider>().getCurrentJobPostPacks()) ?? [];
   }
 
   Future<void> getPurchases() async {
@@ -133,7 +155,19 @@ class SubscriptionsController extends GetxController {
     }
     isBuyingJobPostPlan.value = false;
   }
+
+  Future<void> topUpJobPostPlan({required JobPostTopUpPack topUpPack}) async {
+    jobPostTopUpPlan.value = topUpPack.pointsUsed;
+    final response = await getIt<JobPostPlanTopUpProvider>()
+        .jobPostPlanTopUp(topUpPack: topUpPack);
+    if (response?.id != null) {
+      fToast.safeShowToast(child: successToast("Job Post Plan Topped Up"));
+    }
+    jobPostTopUpPlan.value = null;
+  }
 }
+
+int jobPostTopUp = 500;
 
 enum SubscriptionViewTypes {
   buyPlans,

@@ -425,6 +425,13 @@ class ProfileView extends GetView<ProfileController> {
                               Get.toNamed(Routes.UPDATE_EMAIL);
                             }), */
                         CardObject(
+                            svgPath:
+                                "assets/icons/refer_and_earn.svg",
+                            text: "Refer and Earn",
+                            onTap: () {
+                              Get.toNamed(Routes.REFER_AND_EARN);
+                            }),    
+                        CardObject(
                           iconPath: "assets/images/profile/help.png",
                           text: "Help & Feedback",
                           onTap: () => Get.toNamed(Routes.HELP),
