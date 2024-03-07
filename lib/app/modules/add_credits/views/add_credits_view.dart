@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -23,48 +25,52 @@ class AddCreditsView extends GetView<AddCreditsController> {
               ? const Center(child: CircularProgressIndicator())
               : Column(
                   children: [
-                    Container(
-                      decoration:
-                          BoxDecoration(color: Colors.white, boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.shade300,
-                            offset: const Offset(0, 2),
-                            spreadRadius: 4,
-                            blurRadius: 8)
-                      ]),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Change Currency",
-                              style: Get.textTheme.titleMedium),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton<CreditCurrency>(
-                                hint: controller.selectedCurrency.value == null
-                                    ? null
-                                    : Text(
-                                        "${controller.selectedCurrency.value?.code} (${controller.selectedCurrency.value?.symbol})",
-                                        style: Get.textTheme.titleMedium
-                                            ?.copyWith(
-                                                color: Get.theme.colorScheme
-                                                    .primary)),
-                                icon: Icon(Icons.keyboard_arrow_down,
-                                    color: Get.theme.colorScheme.primary),
-                                items: controller.creditsModel?.creditCurrencies
-                                    ?.map((e) => DropdownMenuItem<
-                                            CreditCurrency>(
-                                        value: e,
-                                        child: Text("${e.code} (${e.symbol})")))
-                                    .toList(),
-                                onChanged: (value) {
-                                  controller.amountController.clear();
-                                  controller.selectedCurrency.value = value;
-                                }),
-                          )
-                        ],
+                    if (Platform.isAndroid)
+                      Container(
+                        decoration:
+                            BoxDecoration(color: Colors.white, boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.shade300,
+                              offset: const Offset(0, 2),
+                              spreadRadius: 4,
+                              blurRadius: 8)
+                        ]),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 24),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Change Currency",
+                                style: Get.textTheme.titleMedium),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton<CreditCurrency>(
+                                  hint: controller.selectedCurrency.value ==
+                                          null
+                                      ? null
+                                      : Text(
+                                          "${controller.selectedCurrency.value?.code} (${controller.selectedCurrency.value?.symbol})",
+                                          style: Get.textTheme.titleMedium
+                                              ?.copyWith(
+                                                  color: Get.theme.colorScheme
+                                                      .primary)),
+                                  icon: Icon(Icons.keyboard_arrow_down,
+                                      color: Get.theme.colorScheme.primary),
+                                  items: controller
+                                      .creditsModel?.creditCurrencies
+                                      ?.map((e) =>
+                                          DropdownMenuItem<CreditCurrency>(
+                                              value: e,
+                                              child: Text(
+                                                  "${e.code} (${e.symbol})")))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    controller.amountController.clear();
+                                    controller.selectedCurrency.value = value;
+                                  }),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
                     const SizedBox(height: 8),
                     Expanded(
                       child: ListView(
@@ -108,128 +114,183 @@ class AddCreditsView extends GetView<AddCreditsController> {
                                             ],
                                           ),
                                           const SizedBox(height: 18),
-                                          Form(
-                                            key: controller.formKey,
-                                            child: CustomTextFormField(
-                                              borderRadius: 10,
-                                              validator: (value) {
-                                                if (value?.nullIfEmpty() ==
-                                                    null) {
-                                                  return "Please enter the amount";
-                                                } else if ((double.tryParse(
-                                                            value!) ??
-                                                        0) <
-                                                    (controller
-                                                            .selectedCurrency
-                                                            .value
-                                                            ?.minimumAmount ??
-                                                        0)) {
-                                                  return "Minimum Amount is ${controller.selectedCurrency.value?.symbol ?? ""} ${controller.selectedCurrency.value?.minimumAmount?.removeZeros ?? ""}";
-                                                }
-                                                return null;
-                                              },
-                                              controller:
-                                                  controller.amountController,
-                                              decoration: InputDecoration(
-                                                  fillColor: Colors.white,
-                                                  filled: true,
-                                                  isDense: true,
-                                                  prefix: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 8),
-                                                    child: Text(controller
+                                          Platform.isIOS
+                                              ? Column(
+                                                  children:
+                                                      controller.iosProducts
+                                                          .map((product) => Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        controller
+                                                                            .selectedIOSProduct
+                                                                            .value = product.id;
+                                                                        controller.selectedCurrency.value = controller
+                                                                            .creditsModel
+                                                                            ?.creditCurrencies
+                                                                            ?.firstWhereOrNull((creditCurrency) =>
+                                                                                creditCurrency.code ==
+                                                                                product.currency);
+                                                                      },
+                                                                      child: Card(
+                                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4), side: controller.selectedIOSProduct.value != product.id ? BorderSide(color: Get.theme.colorScheme.tertiary.withOpacity(0.2)) : BorderSide.none),
+                                                                          color: controller.selectedIOSProduct.value == product.id ? Get.theme.colorScheme.tertiary.withOpacity(0.2) : null,
+                                                                          elevation: 0,
+                                                                          child: Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(16),
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                Text(product.displayName ?? ""),
+                                                                                Text(product.displayPrice ?? "")
+                                                                              ],
+                                                                            ),
+                                                                          )),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ))
+                                                          .toList())
+                                              : Form(
+                                                  key: controller.formKey,
+                                                  child: CustomTextFormField(
+                                                    borderRadius: 10,
+                                                    validator: (value) {
+                                                      if (value
+                                                              ?.nullIfEmpty() ==
+                                                          null) {
+                                                        return "Please enter the amount";
+                                                      } else if ((double
+                                                                  .tryParse(
+                                                                      value!) ??
+                                                              0) <
+                                                          (controller
+                                                                  .selectedCurrency
+                                                                  .value
+                                                                  ?.minimumAmount ??
+                                                              0)) {
+                                                        return "Minimum Amount is ${controller.selectedCurrency.value?.symbol ?? ""} ${controller.selectedCurrency.value?.minimumAmount?.removeZeros ?? ""}";
+                                                      }
+                                                      return null;
+                                                    },
+                                                    controller: controller
+                                                        .amountController,
+                                                    decoration: InputDecoration(
+                                                        fillColor: Colors.white,
+                                                        filled: true,
+                                                        isDense: true,
+                                                        prefix: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 8),
+                                                          child: Text(controller
+                                                                  .selectedCurrency
+                                                                  .value
+                                                                  ?.symbol ??
+                                                              ""),
+                                                        ),
+                                                        suffixIconConstraints:
+                                                            const BoxConstraints(
+                                                                maxHeight: 32,
+                                                                maxWidth: 32),
+                                                        contentPadding:
+                                                            const EdgeInsets.symmetric(
+                                                                horizontal: 16,
+                                                                vertical: 16),
+                                                        border: OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: Get.theme
+                                                                    .primaryColor),
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    10)),
+                                                        labelText:
+                                                            "Enter Amount",
+                                                        labelStyle: Theme.of(
+                                                                Get.context!)
+                                                            .textTheme
+                                                            .bodyLarge
+                                                            ?.copyWith(
+                                                                color: Get
+                                                                    .theme
+                                                                    .colorScheme
+                                                                    .tertiary)),
+                                                    labelText: "Enter Amount",
+                                                    labelColor: Get.theme
+                                                        .colorScheme.tertiary,
+                                                    icon: Text(controller
                                                             .selectedCurrency
                                                             .value
                                                             ?.symbol ??
                                                         ""),
                                                   ),
-                                                  suffixIconConstraints:
-                                                      const BoxConstraints(
-                                                          maxHeight: 32,
-                                                          maxWidth: 32),
-                                                  contentPadding:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 16),
-                                                  border: OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Get.theme
-                                                              .primaryColor),
-                                                      borderRadius: BorderRadius
-                                                          .circular(10)),
-                                                  labelText: "Enter Amount",
-                                                  labelStyle:
-                                                      Theme.of(Get.context!)
-                                                          .textTheme
-                                                          .bodyLarge
-                                                          ?.copyWith(
-                                                              color: Get
-                                                                  .theme
-                                                                  .colorScheme
-                                                                  .tertiary)),
-                                              labelText: "Enter Amount",
-                                              labelColor: Get
-                                                  .theme.colorScheme.tertiary,
-                                              icon: Text(controller
-                                                      .selectedCurrency
-                                                      .value
-                                                      ?.symbol ??
-                                                  ""),
-                                            ),
-                                          ),
+                                                ),
                                           const SizedBox(height: 18),
-                                          Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children:
-                                                  controller.selectedCurrency
-                                                          .value?.topUps
-                                                          ?.mapIndexed(
-                                                              (index, topUp) =>
-                                                                  Expanded(
-                                                                    child:
-                                                                        Column(
-                                                                      children: [
-                                                                        InkWell(
-                                                                          onTap:
-                                                                              () {
-                                                                            controller.amountController.text =
-                                                                                topUp.amount?.removeZeros.toString() ?? "";
-                                                                          },
+                                          if (Platform.isAndroid)
+                                            Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children:
+                                                    controller.selectedCurrency
+                                                            .value?.topUps
+                                                            ?.mapIndexed((index,
+                                                                    topUp) =>
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    children: [
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          controller
+                                                                              .amountController
+                                                                              .text = topUp.amount?.removeZeros
+                                                                                  .toString() ??
+                                                                              "";
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                              vertical: 8),
+                                                                          margin: index + 1 == controller.selectedCurrency.value?.topUps?.length
+                                                                              ? EdgeInsets.zero
+                                                                              : const EdgeInsets.only(right: 16),
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          decoration: BoxDecoration(
+                                                                              color: controller.selectedAmount.value == topUp.amount ? Get.theme.colorScheme.tertiary.withOpacity(0.05) : null,
+                                                                              borderRadius: BorderRadius.circular(10),
+                                                                              border: Border.all(width: 1, color: controller.selectedAmount.value == topUp.amount ? Get.theme.colorScheme.tertiary : Colors.black)),
                                                                           child:
-                                                                              Container(
-                                                                            padding:
-                                                                                const EdgeInsets.symmetric(vertical: 8),
-                                                                            margin: index + 1 == controller.selectedCurrency.value?.topUps?.length
-                                                                                ? EdgeInsets.zero
-                                                                                : const EdgeInsets.only(right: 16),
-                                                                            alignment:
-                                                                                Alignment.center,
-                                                                            decoration: BoxDecoration(
-                                                                                color: controller.selectedAmount.value == topUp.amount ? Get.theme.colorScheme.tertiary.withOpacity(0.05) : null,
-                                                                                borderRadius: BorderRadius.circular(10),
-                                                                                border: Border.all(width: 1, color: controller.selectedAmount.value == topUp.amount ? Get.theme.colorScheme.tertiary : Colors.black)),
-                                                                            child:
-                                                                                Text(
-                                                                              "${controller.selectedCurrency.value?.symbol ?? ""} ${topUp.amount?.removeZeros}",
-                                                                              style: Get.textTheme.titleMedium?.copyWith(color: controller.selectedAmount.value == topUp.amount ? Get.theme.colorScheme.tertiary : null),
-                                                                            ),
+                                                                              Text(
+                                                                            "${controller.selectedCurrency.value?.symbol ?? ""} ${topUp.amount?.removeZeros}",
+                                                                            style:
+                                                                                Get.textTheme.titleMedium?.copyWith(color: controller.selectedAmount.value == topUp.amount ? Get.theme.colorScheme.tertiary : null),
                                                                           ),
                                                                         ),
-                                                                        if (topUp.mostPopular ==
-                                                                            true) ...[
-                                                                          const SizedBox(
-                                                                              height: 4),
-                                                                          Text(
-                                                                              "Most Popular",
-                                                                              style: Get.textTheme.bodySmall?.copyWith(color: Get.theme.colorScheme.tertiary))
-                                                                        ]
-                                                                      ],
-                                                                    ),
-                                                                  ))
-                                                          .toList() ??
-                                                      []),
+                                                                      ),
+                                                                      if (topUp
+                                                                              .mostPopular ==
+                                                                          true) ...[
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                4),
+                                                                        Text(
+                                                                            "Most Popular",
+                                                                            style:
+                                                                                Get.textTheme.bodySmall?.copyWith(color: Get.theme.colorScheme.tertiary))
+                                                                      ]
+                                                                    ],
+                                                                  ),
+                                                                ))
+                                                            .toList() ??
+                                                        []),
                                           const SizedBox(height: 18),
                                           Row(
                                             crossAxisAlignment:
@@ -266,47 +327,74 @@ class AddCreditsView extends GetView<AddCreditsController> {
                             ],
                           ),
                           const SizedBox(height: 28),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Credits to add",
-                                  style: Get.textTheme.titleMedium),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        "assets/icons/coins.svg",
-                                        height: 32,
-                                        width: 32,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        ((controller.selectedAmount.value ??
-                                                    0) *
-                                                (controller
-                                                        .selectedCurrency
-                                                        .value
-                                                        ?.conversionToPoints ??
-                                                    1))
-                                            .removeZeros
-                                            .toString(),
-                                        style: Get.textTheme.titleMedium
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                      "${controller.selectedCurrency.value?.symbol ?? ""}1 = ${controller.selectedCurrency.value?.conversionToPoints?.removeZeros ?? ""} Point",
-                                      style: Get.textTheme.bodyMedium
-                                          ?.copyWith(color: Colors.grey))
-                                ],
-                              )
-                            ],
-                          ),
+                          if (Platform.isAndroid ||
+                              ["INR", "USD"].contains(controller.iosProducts
+                                  .firstWhereOrNull((product) =>
+                                      product.id ==
+                                      controller.selectedIOSProduct.value)
+                                  ?.currency))
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Credits to add",
+                                    style: Get.textTheme.titleMedium),
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          "assets/icons/coins.svg",
+                                          height: 32,
+                                          width: 32,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          Platform.isAndroid
+                                              ? ((controller.selectedAmount
+                                                              .value ??
+                                                          0) *
+                                                      (controller
+                                                              .selectedCurrency
+                                                              .value
+                                                              ?.conversionToPoints ??
+                                                          1))
+                                                  .removeZeros
+                                                  .toString()
+                                              : (((double.tryParse(controller
+                                                                  .iosProducts
+                                                                  .firstWhereOrNull((product) =>
+                                                                      product
+                                                                          .id ==
+                                                                      controller
+                                                                          .selectedIOSProduct
+                                                                          .value)
+                                                                  ?.price ??
+                                                              "") ??
+                                                          0)) *
+                                                      (controller
+                                                              .selectedCurrency
+                                                              .value
+                                                              ?.conversionToPoints ??
+                                                          1))
+                                                  .removeZeros
+                                                  .ceil()
+                                                  .toString(),
+                                          style: Get.textTheme.titleMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                        "${controller.selectedCurrency.value?.symbol ?? ""}1 = ${controller.selectedCurrency.value?.conversionToPoints?.removeZeros ?? ""} Point",
+                                        style: Get.textTheme.bodyMedium
+                                            ?.copyWith(color: Colors.grey))
+                                  ],
+                                )
+                              ],
+                            ),
                           const SizedBox(height: 18),
                           Text("Note :",
                               style: Get.textTheme.titleMedium?.copyWith(
@@ -357,9 +445,12 @@ class AddCreditsView extends GetView<AddCreditsController> {
                               style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 12, horizontal: 20)),
-                              onPressed: controller.selectedAmount.value == null
-                                  ? null
-                                  : controller.initiatePayment,
+                              onPressed:
+                                  controller.selectedAmount.value == null &&
+                                          controller.selectedIOSProduct.value ==
+                                              null
+                                      ? null
+                                      : controller.initiatePayment,
                               child: const Text("Proceed to Add Credits")),
                     )
                   ],

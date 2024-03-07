@@ -19,4 +19,12 @@ class CreditProvider extends WrapperConnect {
         'myadmin_api/get_credits/${PreferencesHelper.instance.userId}/');
     return response.body;
   }
+
+  Future<Credit?> addCredits(
+      {required String currency, required String amount}) async {
+    final response = await multipartPatch(
+        "myadmin_api/credit-system/update/${PreferencesHelper.instance.userId}/",
+        {"amount": double.tryParse(amount)?.ceil().toString() ?? "", "currency": currency});
+    return Credit.fromJson(response);
+  }
 }
