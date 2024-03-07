@@ -15,6 +15,7 @@ import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_my_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/get_job_share_link.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
@@ -51,7 +52,7 @@ class CrewJobApplicationsController extends GetxController {
       if (bytes == null) {
         Share.share('''
 Click on this link to view this Job
-http://joinmyship.com/job/?job_id=${application.jobData?.id}
+${getJobShareLink(application.jobData?.id)}
 ''');
         buildCaptureWidget.value = false;
         return;
@@ -63,12 +64,12 @@ http://joinmyship.com/job/?job_id=${application.jobData?.id}
           subject: "Hey wanna apply to this Job?",
           text: '''
 Click on this link to view this Job
-http://joinmyship.com/job/?job_id=${application.jobData?.id}
+${getJobShareLink(application.jobData?.id)}
 ''');
     } catch (e) {
       Share.share('''
 Click on this link to view this Job
-http://joinmyship.com/job/?job_id=${application.jobData?.id}
+${getJobShareLink(application.jobData?.id)}
 ''');
     }
     buildCaptureWidget.value = false;

@@ -11,6 +11,7 @@ import 'package:join_my_ship/app/data/models/ranks_model.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_my_ship/app/data/providers/employer_counts_provider.dart';
 import 'package:join_my_ship/app/data/providers/fcm_token_provider.dart';
+import 'package:join_my_ship/app/data/providers/job_share_provider.dart';
 import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_my_ship/app/modules/employer_create_user/controllers/employer_create_user_controller.dart';
@@ -65,9 +66,18 @@ class HomeController extends GetxController {
     featuredCompanies = await getIt<CrewUserProvider>().getFeaturedCompanies();
   }
 
-  _handleLink(Uri uri) {
+  _handleLink(Uri uri) async {
     switch (uri.path) {
       case "/job/":
+        String? userCode = uri.queryParameters["user_code"];
+        int? jobId = int.tryParse(uri.queryParameters['job_id'] ?? "");
+        if (userCode != null && jobId != null) {
+          final response = await getIt<JobShareProvider>()
+              .applyJobShare(userCode: userCode, jobId: jobId);
+          if (response?.id != null) {
+            Get.snackbar("Job Apply Referral Applied", "");
+          }
+        }
         Get.toNamed(Routes.JOB_OPENING,
             arguments: JobOpeningArguments(
                 jobId: int.tryParse(uri.queryParameters['job_id'] ?? "")),

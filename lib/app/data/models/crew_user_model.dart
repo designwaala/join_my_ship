@@ -49,6 +49,7 @@ class CrewUser {
   String? userLink;
   int? userStatus;
   bool? isHighlighted;
+  String? userCode;
 
   CrewUser(
       {this.id,
@@ -97,7 +98,8 @@ class CrewUser {
       this.followStatus,
       this.userLink,
       this.userStatus,
-      this.isHighlighted});
+      this.isHighlighted,
+      this.userCode});
 
   bool get isPrimaryUser => userStatus == 1;
 
@@ -161,6 +163,7 @@ class CrewUser {
     //     userPermissions?.add(Null.fromJson(v));
     //   });
     // }
+    userCode = json['user_code'];
   }
 
   Map<String, String> toJson() {

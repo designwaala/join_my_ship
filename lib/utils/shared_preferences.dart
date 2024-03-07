@@ -31,7 +31,11 @@ class PreferencesHelper {
       _USER_DETAIL_ID = "user-detail-id",
       _FCM_TOKEN = "fcm-token",
       _EMPLOYER_TYPE = "employer-type",
-      _USER_LINK = "user-link";
+      _USER_LINK = "user-link",
+      _USER_CODE = "user-code";
+
+  String? get userCode => _sharedPreferences?.getString(_USER_CODE);
+  Future<void>? setUserCode(String? value) => value == null ? null : _sharedPreferences?.setString(_USER_CODE, value);
 
   int? get userDetailId => _sharedPreferences?.getInt(_USER_DETAIL_ID);
   Future<bool>? setUserDetailId(value) =>

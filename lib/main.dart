@@ -35,6 +35,7 @@ import 'package:join_my_ship/app/data/providers/job_coc_post.dart';
 import 'package:join_my_ship/app/data/providers/job_cop_post.dart';
 import 'package:join_my_ship/app/data/providers/job_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_rank_with_wages_provider.dart';
+import 'package:join_my_ship/app/data/providers/job_share_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_watch_keeping_post.dart';
 import 'package:join_my_ship/app/data/providers/liked_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/login_provider.dart';
@@ -186,7 +187,8 @@ void main() async {
     ..registerSingleton(CurrentJobPostProvider())
     ..registerSingleton(JobPostPlanTopUpProvider())
     ..registerSingleton(UserCodeProvider())
-    ..registerSingleton(AppliedReferCodeProvider());
+    ..registerSingleton(AppliedReferCodeProvider())
+    ..registerSingleton(JobShareProvider());
 }
 
 notificationListeners() {

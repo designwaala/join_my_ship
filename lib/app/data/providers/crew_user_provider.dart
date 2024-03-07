@@ -40,6 +40,7 @@ class CrewUserProvider extends WrapperConnect {
       FirebaseCrashlytics.instance
           .setUserIdentifier(response.body!.id!.toString());
       await PreferencesHelper.instance.setUserId(response.body!.id!);
+      await PreferencesHelper.instance.setUserCode(response.body?.userCode);
     }
     if (response.body?.userTypeKey != null) {
       await PreferencesHelper.instance

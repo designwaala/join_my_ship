@@ -22,6 +22,7 @@ import 'package:join_my_ship/app/modules/success/controllers/success_controller.
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/utils/get_job_share_link.dart';
 import 'package:join_my_ship/utils/shared_preferences.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 import 'package:join_my_ship/widgets/toasts/toast.dart';
@@ -214,7 +215,7 @@ class CompanyDetailController extends GetxController {
       if (bytes == null) {
         Share.share('''
 Click on this link to view this Job
-http://joinmyship.com/job/?job_id=${job.id}
+${getJobShareLink(job.id)}
 ''');
         buildCaptureWidget.value = false;
         return;
@@ -226,12 +227,12 @@ http://joinmyship.com/job/?job_id=${job.id}
           subject: "Hey wanna apply to this Job?",
           text: '''
 Click on this link to view this Job
-http://joinmyship.com/job/?job_id=${job.id}
+${getJobShareLink(job.id)}
 ''');
     } catch (e) {
       Share.share('''
 Click on this link to view this Job
-http://joinmyship.com/job/?job_id=${job.id}
+${getJobShareLink(job.id)}
 ''');
     }
     buildCaptureWidget.value = false;
