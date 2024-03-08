@@ -66,17 +66,19 @@ class HomeController extends GetxController {
     featuredCompanies = await getIt<CrewUserProvider>().getFeaturedCompanies();
   }
 
-  _handleLink(Uri uri) async {
+  _handleLink(Uri uri) {
     switch (uri.path) {
       case "/job/":
         String? userCode = uri.queryParameters["user_code"];
         int? jobId = int.tryParse(uri.queryParameters['job_id'] ?? "");
         if (userCode != null && jobId != null) {
-          final response = await getIt<JobShareProvider>()
-              .applyJobShare(userCode: userCode, jobId: jobId);
-          if (response?.id != null) {
-            Get.snackbar("Job Apply Referral Applied", "");
-          }
+          getIt<JobShareProvider>()
+              .applyJobShare(userCode: userCode, jobId: jobId)
+              .then((response) => {
+                    if (response?.id != null)
+                      {Get.snackbar("Job Apply Referral Applied", "")}
+                  })
+              .onError((error, stackTrace) => {});
         }
         Get.toNamed(Routes.JOB_OPENING,
             arguments: JobOpeningArguments(
