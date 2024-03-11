@@ -1,10 +1,12 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:join_my_ship/widgets/custom_text_form_field.dart';
+import 'package:join_my_ship/widgets/toasts/toast.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../controllers/refer_and_earn_controller.dart';
@@ -212,14 +214,24 @@ Let's level up together! 🌈✨
                                         color: Colors.black,
                                       ),
                                       8.horizontalSpace,
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text("Copy\nCode",
-                                              style: Get.textTheme.bodyMedium
-                                                  ?.copyWith(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold))),
+                                      InkWell(
+                                        onTap: () async {
+                                          await Clipboard.setData(
+                                              const ClipboardData(
+                                                  text: "your text"));
+                                          controller.fToast.showToast(
+                                              child:
+                                                  successToast("Code Copied!"));
+                                        },
+                                        child: Expanded(
+                                            flex: 1,
+                                            child: Text("Copy\nCode",
+                                                style: Get.textTheme.bodyMedium
+                                                    ?.copyWith(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold))),
+                                      ),
                                     ],
                                   ),
                                 ),

@@ -11,6 +11,7 @@ import 'package:join_my_ship/app/data/models/ranks_model.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_my_ship/app/data/providers/employer_counts_provider.dart';
 import 'package:join_my_ship/app/data/providers/fcm_token_provider.dart';
+import 'package:join_my_ship/app/data/providers/follow_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_share_provider.dart';
 import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
@@ -46,6 +47,8 @@ class HomeController extends GetxController {
   EmployerCounts? employerCounts;
   GlobalKey<CurvedNavigationBarState> bottomNavigationKey =
       GlobalKey<CurvedNavigationBarState>();
+
+  RxnInt savedProfiles = RxnInt();
 
   @override
   void onInit() {
@@ -104,6 +107,8 @@ class HomeController extends GetxController {
     if (UserStates.instance.crewUser?.userTypeKey != 2) {
       employerCounts =
           await getIt<EmployerCountsProvider>().getEmployerCounts();
+      savedProfiles.value =
+          (await getIt<FollowProvider>().getMyFollowings())?.length;
     }
     if (UserStates.instance.ranks == null ||
         UserStates.instance.ranks?.isEmpty == true) {

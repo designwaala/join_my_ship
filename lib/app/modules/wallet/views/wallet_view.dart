@@ -87,7 +87,8 @@ class WalletView extends GetView<WalletController> {
                                 <PopupMenuEntry>[
                                   PopupMenuItem(
                                     onTap: () {
-                                      Future.delayed(Duration(seconds: 1), () {
+                                      Future.delayed(const Duration(seconds: 1),
+                                          () {
                                         Get.toNamed(Routes.HELP);
                                       });
                                     },
@@ -211,140 +212,159 @@ class WalletView extends GetView<WalletController> {
               ),
             )
           else
-            Expanded(
-              child: ListView.separated(
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
-                    switch (controller.view.value) {
-                      case WalletViewType.credit:
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 16),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                "assets/icons/coins.svg",
-                                height: 24,
-                                width: 24,
-                              ),
-                              8.horizontalSpace,
-                              Text(
-                                  double.tryParse(controller
-                                                  .creditHistory?[index]
-                                                  .amount ??
-                                              "")
-                                          ?.removeZeros
-                                          .toString() ??
-                                      "",
-                                  style: Get.textTheme.titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold)),
-                              const Spacer(),
-                              Column(
-                                children: [
-                                  controller.creditHistory?[index]
-                                              .paymentSuccessful ==
-                                          true
-                                      ? Text("SUCCESSFULL",
-                                          style: Get.textTheme.titleMedium
-                                              ?.copyWith(
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.bold))
-                                      : Text("PENDING",
-                                          style: Get.textTheme.titleMedium
-                                              ?.copyWith(
-                                                  color: Colors.yellow.shade700,
-                                                  fontWeight: FontWeight.bold)),
-                                  4.verticalSpace,
-                                  Text(
-                                      DateTime.tryParse(controller
+            controller.view.value == WalletViewType.credit
+                ? Expanded(
+                    child: ListView.separated(
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 16),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/coins.svg",
+                                  height: 24,
+                                  width: 24,
+                                ),
+                                8.horizontalSpace,
+                                Expanded(
+                                  child: Text(
+                                      double.tryParse(controller
                                                       .creditHistory?[index]
-                                                      .createdAt ??
+                                                      .amount ??
                                                   "")
-                                              ?.getCompactDisplayDate() ??
+                                              ?.removeZeros
+                                              .toString() ??
                                           "",
-                                      style: Get.textTheme.bodySmall)
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                      case WalletViewType.debit:
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 16),
-                          child: Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
+                                      style: Get.textTheme.titleMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold)),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      SvgPicture.asset(
-                                        "assets/icons/coins.svg",
-                                        height: 24,
-                                        width: 24,
-                                      ),
-                                      8.horizontalSpace,
+                                      controller.creditHistory?[index]
+                                                  .paymentSuccessful ==
+                                              true
+                                          ? Text("SUCCESSFULL",
+                                              style: Get.textTheme.titleMedium
+                                                  ?.copyWith(
+                                                      color: Colors.green,
+                                                      fontWeight:
+                                                          FontWeight.bold))
+                                          : Text("PENDING",
+                                              style: Get.textTheme.titleMedium
+                                                  ?.copyWith(
+                                                      color: Colors
+                                                          .yellow.shade700,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                      4.verticalSpace,
                                       Text(
-                                          controller.debitHistory?[index]
-                                                  .pointUsed
-                                                  .toString() ??
+                                          DateTime.tryParse(controller
+                                                          .creditHistory?[index]
+                                                          .createdAt ??
+                                                      "")
+                                                  ?.getCompactDisplayDate() ??
                                               "",
-                                          style: Get.textTheme.titleMedium
-                                              ?.copyWith(
-                                                  fontWeight: FontWeight.bold)),
+                                          style: Get.textTheme.bodySmall)
                                     ],
                                   ),
-                                  4.verticalSpace,
-                                  Text(
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemCount: controller.creditHistory?.length ?? 0),
+                  )
+                : Expanded(
+                    child: ListView.separated(
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            "assets/icons/coins.svg",
+                                            height: 24,
+                                            width: 24,
+                                          ),
+                                          8.horizontalSpace,
+                                          Flexible(
+                                            child: Text(
+                                                controller.debitHistory?[index]
+                                                        .pointUsed
+                                                        .toString() ??
+                                                    "",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Get.textTheme.titleMedium
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                          ),
+                                        ],
+                                      ),
+                                      4.verticalSpace,
+                                      Text(
+                                          controller.debitHistory?[index]
+                                                  .subscriptionName ??
+                                              "",
+                                          style: Get.textTheme.bodySmall),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
                                       controller.debitHistory?[index]
-                                              .subscriptionName ??
-                                          "",
-                                      style: Get.textTheme.bodySmall),
-                                ],
-                              ),
-                              const Spacer(),
-                              Column(
-                                children: [
-                                  controller.debitHistory?[index]
-                                              .processSuccessful ==
-                                          true
-                                      ? Text("SUCCESSFULL",
-                                          style: Get.textTheme.titleMedium
-                                              ?.copyWith(
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.bold))
-                                      : Text("PENDING",
-                                          style: Get.textTheme.titleMedium
-                                              ?.copyWith(
-                                                  color: Colors.yellow.shade700,
-                                                  fontWeight: FontWeight.bold)),
-                                  4.verticalSpace,
-                                  Text(
-                                      DateTime.tryParse(controller
-                                                      .creditHistory?[index]
-                                                      .createdAt ??
-                                                  "")
-                                              ?.getCompactDisplayDate() ??
-                                          "",
-                                      style: Get.textTheme.bodySmall),
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                    }
-                  },
-                  separatorBuilder: (context, index) => Divider(),
-                  itemCount: () {
-                    switch (controller.view.value) {
-                      case WalletViewType.credit:
-                        return controller.creditHistory?.length ?? 0;
-                      case WalletViewType.debit:
-                        return controller.debitHistory?.length ?? 0;
-                    }
-                  }()),
-            )
+                                                  .processSuccessful ==
+                                              true
+                                          ? Text("SUCCESSFULL",
+                                              style: Get.textTheme.titleMedium
+                                                  ?.copyWith(
+                                                      color: Colors.green,
+                                                      fontWeight:
+                                                          FontWeight.bold))
+                                          : Text("PENDING",
+                                              style: Get.textTheme.titleMedium
+                                                  ?.copyWith(
+                                                      color: Colors
+                                                          .yellow.shade700,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                      4.verticalSpace,
+                                      Text(
+                                          DateTime.tryParse(controller
+                                                          .debitHistory?[index]
+                                                          .createdAt ??
+                                                      "")
+                                                  ?.getCompactDisplayDate() ??
+                                              "",
+                                          style: Get.textTheme.bodySmall),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemCount: controller.debitHistory?.length ?? 0),
+                  )
         ],
       ));
     });

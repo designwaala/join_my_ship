@@ -239,82 +239,83 @@ class HomeView extends GetView<HomeController> {
                 },
               ),
             ),
-            if(UserStates.instance.crewUser?.isVerified == 1)
-            Positioned(
-                bottom: 72,
-                left: 0,
-                right: 0,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: controller.showJobButtons.value
-                      ? (UserStates.instance.crewUser?.userTypeKey ?? 0) >= 3
-                          ? IntrinsicWidth(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: CustomElevatedButon(
-                                            onPressed: () {
-                                              Get.toNamed(Routes.JOB_POST);
-                                            },
-                                            child:
-                                                const Text("Post a new job")),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: CustomElevatedButon(
-                                            onPressed: () {
-                                              Get.toNamed(
-                                                  Routes.EMPLOYER_JOB_POSTS);
-                                            },
-                                            child:
-                                                const Text("View posted jobs")),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          : IntrinsicWidth(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: CustomElevatedButon(
-                                            onPressed: () {
-                                              Get.toNamed(Routes.CREW_REFERRAL);
-                                            },
-                                            child: const Text("Refer a job")),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: CustomElevatedButon(
-                                            onPressed: () {
-                                              Get.toNamed(
-                                                  Routes.EMPLOYER_JOB_POSTS);
-                                            },
-                                            child: const Text(
-                                                "View referred jobs")),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                      : const SizedBox(),
-                ))
+            if (UserStates.instance.crewUser?.isVerified == 1)
+              Positioned(
+                  bottom: 72,
+                  left: 0,
+                  right: 0,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: controller.showJobButtons.value
+                        ? (UserStates.instance.crewUser?.userTypeKey ?? 0) >= 3
+                            ? IntrinsicWidth(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          child: CustomElevatedButon(
+                                              onPressed: () {
+                                                Get.toNamed(Routes.JOB_POST);
+                                              },
+                                              child:
+                                                  const Text("Post a new job")),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          child: CustomElevatedButon(
+                                              onPressed: () {
+                                                Get.toNamed(
+                                                    Routes.EMPLOYER_JOB_POSTS);
+                                              },
+                                              child: const Text(
+                                                  "View posted jobs")),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : IntrinsicWidth(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          child: CustomElevatedButon(
+                                              onPressed: () {
+                                                Get.toNamed(
+                                                    Routes.CREW_REFERRAL);
+                                              },
+                                              child: const Text("Refer a job")),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          child: CustomElevatedButon(
+                                              onPressed: () {
+                                                Get.toNamed(
+                                                    Routes.EMPLOYER_JOB_POSTS);
+                                              },
+                                              child: const Text(
+                                                  "View referred jobs")),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                        : const SizedBox(),
+                  ))
           ],
         ),
       );
@@ -508,8 +509,7 @@ class HomeView extends GetView<HomeController> {
                       children: [
                         Row(
                           children: [
-                            Text(
-                                "${controller.employerCounts?.followCount ?? 0}",
+                            Text("${controller.savedProfiles.value ?? 0}",
                                 style: const TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.w700)),
                             8.horizontalSpace,

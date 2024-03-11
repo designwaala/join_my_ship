@@ -154,10 +154,12 @@ class JobOpeningsController extends GetxController {
 
   Future<void> loadVesselTypes() async {
     vesselList = await getIt<VesselListProvider>().getVesselList();
+    UserStates.instance.vessels = vesselList;
   }
 
   Future<void> loadRanks() async {
     ranks.value = (await getIt<RanksProvider>().getRankList()) ?? [];
+    UserStates.instance.ranks = ranks;
   }
 
   Future<void> loadCOC() async {
