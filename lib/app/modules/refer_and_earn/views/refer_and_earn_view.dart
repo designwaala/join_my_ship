@@ -223,20 +223,19 @@ Let's level up together! 🌈✨
                                               child:
                                                   successToast("Code Copied!"));
                                         },
-                                        child: Expanded(
-                                            flex: 1,
-                                            child: Text("Copy\nCode",
-                                                style: Get.textTheme.bodyMedium
-                                                    ?.copyWith(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.bold))),
+                                        child: Text("Copy\nCode",
+                                            style: Get.textTheme.bodyMedium
+                                                ?.copyWith(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                       ),
                                     ],
                                   ),
                                 ),
                               )),
                           16.verticalSpace,
+                          if (controller.allowRefer.value)
                           TextButton(
                               onPressed: () {
                                 showModalBottomSheet(

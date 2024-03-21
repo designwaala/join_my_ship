@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_my_ship/app/data/providers/applied_refer_code_provider.dart';
+import 'package:join_my_ship/app/data/providers/check_referral_code_apply_provider.dart';
 import 'package:join_my_ship/app/data/providers/user_code_provider.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/extensions/toast_extension.dart';
@@ -18,6 +19,8 @@ class ReferAndEarnController extends GetxController {
   FToast fToast = FToast();
   final parentKey = GlobalKey();
 
+  RxBool allowRefer = true.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -27,6 +30,9 @@ class ReferAndEarnController extends GetxController {
   Future<void> getReferralCode() async {
     isLoading.value = true;
     referralCode = (await getIt<UserCodeProvider>().getUserCode())?.userCode;
+    final response = await getIt<CheckReferralCodeApplyProvider>()
+        .getCheckReferralCodeApply();
+    allowRefer.value = response?.msg?.contains("No refer code is used.") == true;
     isLoading.value = false;
   }
 

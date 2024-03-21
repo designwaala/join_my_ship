@@ -17,6 +17,7 @@ import 'package:join_my_ship/app/data/providers/application_provider.dart';
 import 'package:join_my_ship/app/data/providers/applied_refer_code_provider.dart';
 import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_my_ship/app/data/providers/cdc_issuing_authority_provider.dart';
+import 'package:join_my_ship/app/data/providers/check_referral_code_apply_provider.dart';
 import 'package:join_my_ship/app/data/providers/coc_provider.dart';
 import 'package:join_my_ship/app/data/providers/cop_provider.dart';
 import 'package:join_my_ship/app/data/providers/country_provider.dart';
@@ -188,7 +189,8 @@ void main() async {
     ..registerSingleton(JobPostPlanTopUpProvider())
     ..registerSingleton(UserCodeProvider())
     ..registerSingleton(AppliedReferCodeProvider())
-    ..registerSingleton(JobShareProvider());
+    ..registerSingleton(JobShareProvider())
+    ..registerSingleton(CheckReferralCodeApplyProvider());
 }
 
 notificationListeners() {
