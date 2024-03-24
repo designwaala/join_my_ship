@@ -1,6 +1,24 @@
 import 'package:join_my_ship/app/data/models/country_model.dart';
 import 'package:join_my_ship/main.dart';
 
+class CrewUserList {
+  final int? count;
+  final String? next;
+  final String? previous;
+  final List<CrewUser>? results;
+
+  const CrewUserList({this.count, this.next, this.previous, this.results});
+
+  factory CrewUserList.fromJson(Map<String, dynamic> json) => CrewUserList(
+      count: json['count'],
+      next: json['next'],
+      previous: json['previous'],
+      results: json['results'] != null
+          ? List<CrewUser>.from(
+              json['results'].map((e) => CrewUser.fromJson(e)))
+          : null);
+}
+
 class CrewUser {
   int? id;
   String? password;

@@ -294,7 +294,7 @@ class ProfileView extends GetView<ProfileController> {
                       Text("Options",
                           style: Get.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold, fontSize: 18.sp)),
-                      if (controller.crewUser.value?.userTypeKey == 5)
+                      if (controller.crewUser.value?.userTypeKey == 5  && !controller.isFreeTrialActivated.value)
                         InkWell(
                           onTap: () {
                             showDialog(

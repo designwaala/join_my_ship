@@ -32,10 +32,17 @@ class PreferencesHelper {
       _FCM_TOKEN = "fcm-token",
       _EMPLOYER_TYPE = "employer-type",
       _USER_LINK = "user-link",
-      _USER_CODE = "user-code";
+      _USER_CODE = "user-code",
+      _FREE_TRIAL_AVAILED = "free-trial-availed";
+
+  bool? get freeTrialAvailed =>
+      _sharedPreferences?.getBool(_FREE_TRIAL_AVAILED);
+  Future<void>? setFreeTrialAvailed(bool value) =>
+      _sharedPreferences?.setBool(_FREE_TRIAL_AVAILED, value);
 
   String? get userCode => _sharedPreferences?.getString(_USER_CODE);
-  Future<void>? setUserCode(String? value) => value == null ? null : _sharedPreferences?.setString(_USER_CODE, value);
+  Future<void>? setUserCode(String? value) =>
+      value == null ? null : _sharedPreferences?.setString(_USER_CODE, value);
 
   int? get userDetailId => _sharedPreferences?.getInt(_USER_DETAIL_ID);
   Future<bool>? setUserDetailId(value) =>

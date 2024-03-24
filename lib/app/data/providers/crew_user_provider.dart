@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 class CrewUserProvider extends WrapperConnect {
   CrewUserProvider() {
     httpClient.defaultDecoder = (map) {
+      if (map is Map<String, dynamic> && map['count'] != null) return CrewUserList.fromJson(map);
       if (map is Map<String, dynamic>) return CrewUser.fromJson(map);
       if (map is List)
         return map.map((item) => CrewUser.fromJson(item)).toList();
@@ -336,7 +337,7 @@ class CrewUserProvider extends WrapperConnect {
     return response.body;
   }
 
-  Future<List<CrewUser>> findCrewByRank(String rank) async {
+  Future<CrewUserList?> findCrewByRank(String rank) async {
     final response = await get("crew/search_filter",
         query: {"search_type": "2", "search_key": rank});
     return response.body;

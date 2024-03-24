@@ -529,7 +529,19 @@ class WrapperConnect extends GetConnect {
                   borderRadius: BorderRadius.circular(24)),
               title: Text(
                   jsonDecode(response.body)['message'] ?? "Payment Required"),
-              actions: [FilledButton(onPressed: Get.back, child: Text("OK"))],
+              actions: [
+                OutlinedButton(
+                    style: OutlinedButton.styleFrom(shape: StadiumBorder()),
+                    onPressed: Get.back,
+                    child: Text("OK")),
+                const SizedBox(width: 8),
+                FilledButton(
+                    onPressed: () {
+                      Get.back();
+                      Get.toNamed(Routes.SUBSCRIPTIONS);
+                    },
+                    child: const Text("Buy Credits"))
+              ],
             );
           });
     } else if (response.statusCode >= 300) {
@@ -875,7 +887,16 @@ class WrapperConnect extends GetConnect {
                   borderRadius: BorderRadius.circular(24)),
               title: Text(
                   jsonDecode(response.body)['message'] ?? "Payment Required"),
-              actions: [FilledButton(onPressed: Get.back, child: Text("OK"))],
+              actions: [
+                OutlinedButton(onPressed: Get.back, child: Text("OK")),
+                const SizedBox(width: 8),
+                FilledButton(
+                    onPressed: () {
+                      Get.back();
+                      Get.toNamed(Routes.SUBSCRIPTIONS);
+                    },
+                    child: const Text("Buy Credits"))
+              ],
             );
           });
     } else if (response.statusCode >= 300) {

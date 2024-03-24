@@ -18,6 +18,7 @@ import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboar
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/remote_config.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 import 'package:join_my_ship/widgets/toasts/toast.dart';
 
@@ -49,6 +50,9 @@ class ProfileController extends GetxController
 
   RxBool isStartingJobPostPlan = false.obs;
   RxBool isDeletingAccount = false.obs;
+
+  RxBool isFreeTrialActivated =
+      (PreferencesHelper.instance.freeTrialAvailed == true).obs;
 
   final gradientColors = [
     Color(0xFF371C57),
@@ -103,6 +107,9 @@ class ProfileController extends GetxController
     final response = await getIt<CurrentJobPostProvider>().startFreeTrial();
     if (response?.id != null) {
       fToast.showToast(child: successToast("Trial Started Successfully"));
+      PreferencesHelper.instance.setFreeTrialAvailed(true);
+      isFreeTrialActivated.value = true;
+      Get.back();
     }
     isStartingJobPostPlan.value = false;
   }
@@ -294,7 +301,9 @@ class ProfileController extends GetxController
                                         subscriptionId: selectedSubscription
                                             .value!.planName!.id!);
                                 isBoosting.value = false;
-                                Get.back();
+                                if (boosting?.daysActive != null) {
+                                  Get.back();
+                                }
                               },
                         child: const Text("Boost"))
               ],
@@ -356,48 +365,68 @@ class ProfileController extends GetxController
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [CircularProgressIndicator()],
                     )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: subscriptions
-                              ?.where((e) =>
-                                  e.isTypeKey?.type ==
-                                  PlanType.highlightProfile)
-                              .map((e) => Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        selectedSubscription.value = e;
-                                      },
-                                      child: Card(
-                                        color: selectedSubscription.value?.id ==
-                                                e.id
-                                            ? Get.theme.primaryColor
-                                            : null,
-                                        shape: RoundedRectangleBorder(
-                                            side: selectedSubscription
+                  : SizedBox(
+                      width: Get.width * 0.9,
+                      height: 500,
+                      child: ListView(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          // mainAxisSize: MainAxisSize.min,
+                          children: subscriptions
+                                  ?.where((e) =>
+                                      e.isTypeKey?.type ==
+                                      PlanType.highlightProfile)
+                                  .map((e) => Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            selectedSubscription.value = e;
+                                          },
+                                          child: Card(
+                                            color: selectedSubscription
                                                         .value?.id ==
                                                     e.id
-                                                ? BorderSide(
-                                                    color:
-                                                        Get.theme.primaryColor)
-                                                : BorderSide.none,
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
+                                                ? Get.theme.primaryColor
+                                                : null,
+                                            shape: RoundedRectangleBorder(
+                                                side: selectedSubscription
+                                                            .value?.id ==
+                                                        e.id
+                                                    ? BorderSide(
+                                                        color: Get
+                                                            .theme.primaryColor)
+                                                    : BorderSide.none,
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  4.horizontalSpace,
+                                                  Row(
+                                                    children: [
+                                                      4.horizontalSpace,
+                                                      Text(
+                                                          e.planName
+                                                                  ?.planName ??
+                                                              "",
+                                                          style: Get.textTheme
+                                                              .titleSmall
+                                                              ?.copyWith(
+                                                                  color: selectedSubscription
+                                                                              .value
+                                                                              ?.id ==
+                                                                          e.id
+                                                                      ? Colors
+                                                                          .white
+                                                                      : null)),
+                                                    ],
+                                                  ),
+                                                  8.verticalSpace,
                                                   Text(
-                                                      e.planName?.planName ??
-                                                          "",
+                                                      "Days Active: ${e.daysActive}",
                                                       style: Get
-                                                          .textTheme.titleSmall
+                                                          .textTheme.bodyMedium
                                                           ?.copyWith(
                                                               color: selectedSubscription
                                                                           .value
@@ -405,41 +434,26 @@ class ProfileController extends GetxController
                                                                       e.id
                                                                   ? Colors.white
                                                                   : null)),
-                                                ],
-                                              ),
-                                              8.verticalSpace,
-                                              Text(
-                                                  "Days Active: ${e.daysActive}",
-                                                  style: Get
-                                                      .textTheme.bodyMedium
-                                                      ?.copyWith(
-                                                          color:
-                                                              selectedSubscription
-                                                                          .value
-                                                                          ?.id ==
-                                                                      e.id
-                                                                  ? Colors.white
-                                                                  : null)),
-                                              Text(
-                                                  "Credits Required: ${e.points}",
-                                                  style: Get
-                                                      .textTheme.bodyMedium
-                                                      ?.copyWith(
-                                                          color:
-                                                              selectedSubscription
+                                                  Text(
+                                                      "Credits Required: ${e.points}",
+                                                      style: Get
+                                                          .textTheme.bodyMedium
+                                                          ?.copyWith(
+                                                              color: selectedSubscription
                                                                           .value
                                                                           ?.id ==
                                                                       e.id
                                                                   ? Colors.white
                                                                   : null))
-                                            ],
+                                                ],
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ))
-                              .toList() ??
-                          []),
+                                      ))
+                                  .toList() ??
+                              []),
+                    ),
               actions: [
                 TextButton(onPressed: Get.back, child: Text("Close")),
                 isHighlighting.value
@@ -457,7 +471,9 @@ class ProfileController extends GetxController
                                     .crewHighlight(selectedSubscription
                                         .value!.planName!.id!);
                                 isHighlighting.value = false;
-                                Get.back();
+                                if (highlight?.daysActive != null) {
+                                  Get.back();
+                                }
                               },
                         child: const Text("Highlight"))
               ],
@@ -479,7 +495,8 @@ class ProfileController extends GetxController
               actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
             );
           });
-    } else if (highlight?.success == false && highlight?.message != null) {
+    }
+    /* else if (highlight?.success == false && highlight?.message != null) {
       showDialog(
           context: Get.context!,
           builder: (context) {
@@ -500,7 +517,7 @@ class ProfileController extends GetxController
               actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
             );
           });
-    }
+    } */
   }
 
   int taps = 0;

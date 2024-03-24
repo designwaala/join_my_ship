@@ -28,7 +28,8 @@ class CrewListController extends GetxController {
     }
     isLoading.value = true;
     crewList =
-        await getIt<CrewUserProvider>().findCrewByRank(selectedRank!.name!);
+        (await getIt<CrewUserProvider>().findCrewByRank(selectedRank!.name!))
+            ?.results;
     await UserStates.instance.getRanksIfEmpty();
     isLoading.value = false;
   }

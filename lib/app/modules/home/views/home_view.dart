@@ -83,7 +83,7 @@ class HomeView extends GetView<HomeController> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${UserStates.instance.crewUser?.firstName ?? ""} ${UserStates.instance.crewUser?.lastLogin ?? ""}",
+                                              UserStates.instance.crewUser?.firstName ?? "",
                                               style: Get.textTheme.bodyMedium
                                                   ?.copyWith(
                                                       color: Colors.white)),

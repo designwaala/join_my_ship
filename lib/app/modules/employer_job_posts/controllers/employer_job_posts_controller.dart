@@ -331,9 +331,9 @@ ${getJobShareLink(job.id)}
                                   fToast.showToast(
                                       child: successToast(
                                           "Job Post Boosted Successfully"));
+                                Get.back();
                                 }
                                 isBoosting.value = false;
-                                Get.back();
                               },
                         child: const Text("Boost"))
               ],
