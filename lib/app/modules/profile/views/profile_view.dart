@@ -175,7 +175,8 @@ class ProfileView extends GetView<ProfileController> {
                                     showDialog(
                                         context: context,
                                         barrierDismissible: false,
-                                        builder: (context) => const AlertDialog(
+                                        builder: (context) => AlertDialog(
+                                              shape: alertDialogShape,
                                               title: Text(
                                                   "Please wait while we update your phone number"),
                                               content: Row(
@@ -294,7 +295,8 @@ class ProfileView extends GetView<ProfileController> {
                       Text("Options",
                           style: Get.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold, fontSize: 18.sp)),
-                      if (controller.crewUser.value?.userTypeKey == 5  && !controller.isFreeTrialActivated.value)
+                      if (controller.crewUser.value?.userTypeKey == 5 &&
+                          !controller.isFreeTrialActivated.value)
                         InkWell(
                           onTap: () {
                             showDialog(
@@ -302,6 +304,7 @@ class ProfileView extends GetView<ProfileController> {
                                 builder: (context) {
                                   return Obx(() {
                                     return AlertDialog(
+                                      shape: alertDialogShape,
                                       title: const Text("Job Post Plan"),
                                       content: const Column(
                                         mainAxisSize: MainAxisSize.min,
@@ -425,12 +428,11 @@ class ProfileView extends GetView<ProfileController> {
                               Get.toNamed(Routes.UPDATE_EMAIL);
                             }), */
                         CardObject(
-                            svgPath:
-                                "assets/icons/refer_and_earn.svg",
+                            svgPath: "assets/icons/refer_and_earn.svg",
                             text: "Refer and Earn",
                             onTap: () {
                               Get.toNamed(Routes.REFER_AND_EARN);
-                            }),    
+                            }),
                         CardObject(
                           iconPath: "assets/images/profile/help.png",
                           text: "Help & Feedback",
@@ -518,6 +520,7 @@ class ProfileView extends GetView<ProfileController> {
                               builder: (context) {
                                 return Obx(() {
                                   return AlertDialog(
+                                    shape: alertDialogShape,
                                     title: Text("Delete Account"),
                                     content: Text(
                                         "Are you sure you want to delete your account?"),
@@ -617,7 +620,7 @@ class ProfileView extends GetView<ProfileController> {
                               launchUrl(
                                   Uri.parse(
                                       "https://joinmyship.com/privacypolicy/"),
-                                  mode: LaunchMode.externalApplication);
+                                  mode: LaunchMode.inAppWebView);
                             },
                             child: Text("Privacy Policy",
                                 style: Get.textTheme.bodyMedium
@@ -630,7 +633,7 @@ class ProfileView extends GetView<ProfileController> {
                             launchUrl(
                                 Uri.parse(
                                     "https://joinmyship.com/termsandconditions/"),
-                                mode: LaunchMode.externalApplication);
+                                mode: LaunchMode.inAppWebView);
                           },
                           child: Text("Terms and conditions",
                               style: Get.textTheme.bodyMedium?.copyWith(

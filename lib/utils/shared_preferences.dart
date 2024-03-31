@@ -33,7 +33,12 @@ class PreferencesHelper {
       _EMPLOYER_TYPE = "employer-type",
       _USER_LINK = "user-link",
       _USER_CODE = "user-code",
-      _FREE_TRIAL_AVAILED = "free-trial-availed";
+      _FREE_TRIAL_AVAILED = "free-trial-availed",
+      _RATING_GIVEN = "rating-given";
+
+  bool? get ratingGiven => _sharedPreferences?.getBool(_RATING_GIVEN);
+  Future<void>? setratingGiven(bool value) =>
+      _sharedPreferences?.setBool(_RATING_GIVEN, value);
 
   bool? get freeTrialAvailed =>
       _sharedPreferences?.getBool(_FREE_TRIAL_AVAILED);

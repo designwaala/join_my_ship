@@ -1,4 +1,5 @@
 import 'package:country_picker/country_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,12 +37,15 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         14.verticalSpace,
-                        Text(controller.args?.isUpdateView == true ? "Update Mobile Number" : "Sign In",
+                        Text(
+                            controller.args?.isUpdateView == true
+                                ? "Update Mobile Number"
+                                : "Sign In",
                             style: Get.theme.textTheme.headlineSmall
                                 ?.copyWith(fontWeight: FontWeight.bold)),
-                        if(controller.args?.isUpdateView != true)        
-                        const Text(
-                            "Please sign in to your registered mobile number"),
+                        if (controller.args?.isUpdateView != true)
+                          const Text(
+                              "Please sign in to your registered mobile number"),
                         20.verticalSpace,
                         SizedBox(
                           height: 64,
@@ -175,46 +179,49 @@ class CrewSignInMobileView extends GetView<CrewSignInMobileController> {
                                   "Resend OTP in ${30 - controller.timePassed.value} seconds")),
                           24.verticalSpace
                         ],
-                        const Center(child: Text("Or sign in with")),
-                        20.verticalSpace,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.offAllNamed(Routes.CREW_SIGN_IN_EMAIL);
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.black)),
-                                child: const Icon(
-                                  Icons.email,
-                                  size: 32,
+                        if (FirebaseAuth.instance.currentUser == null) ...[
+                          const Center(child: Text("Or sign in with")),
+                          20.verticalSpace,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Get.offAllNamed(Routes.CREW_SIGN_IN_EMAIL);
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.black)),
+                                  child: const Icon(
+                                    Icons.email,
+                                    size: 32,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        4.verticalSpace,
-                        const Center(child: Text('Email Id')),
-                        const Spacer(),
-                        Divider(),
-                        16.verticalSpace,
-                        SizedBox(
-                          width: double.maxFinite,
-                          height: 64.h,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(64))),
-                              onPressed: () {
-                                Get.toNamed(Routes.CHOOSE_USER);
-                              },
-                              child: const Text("CREATE ACCOUNT")),
-                        )
+                            ],
+                          ),
+                          4.verticalSpace,
+                          const Center(child: Text('Email Id')),
+                          const Spacer(),
+                          Divider(),
+                          16.verticalSpace,
+                          SizedBox(
+                            width: double.maxFinite,
+                            height: 64.h,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(64))),
+                                onPressed: () {
+                                  Get.toNamed(Routes.CHOOSE_USER);
+                                },
+                                child: const Text("CREATE ACCOUNT")),
+                          )
+                        ]
                       ],
                     ),
                   ),

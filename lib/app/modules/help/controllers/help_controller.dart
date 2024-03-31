@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
 
 class HelpController extends GetxController {
-  //TODO: Implement HelpController
+  RxBool isRatingGiven = (PreferencesHelper.instance.ratingGiven == true).obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +18,4 @@ class HelpController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

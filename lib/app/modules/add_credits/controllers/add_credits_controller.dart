@@ -74,9 +74,10 @@ class AddCreditsController extends GetxController {
               // barrierDismissible: false,
               context: Get.context!,
               builder: (context) {
-                return const AlertDialog(
-                  title: Text("Found a Transaction, please wait..."),
-                  content: Row(
+                return AlertDialog(
+                  shape: alertDialogShape,
+                  title: const Text("Found a Transaction, please wait..."),
+                  content: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(),
@@ -211,8 +212,8 @@ class AddCreditsController extends GetxController {
             context: Get.context!,
             builder: (context) {
               return AlertDialog(
-                title: Text("Last Transaction was cancelled"),
-                actions: [FilledButton(onPressed: Get.back, child: Text("OK"))],
+                title: const Text("Last Transaction was cancelled"),
+                actions: [FilledButton(onPressed: Get.back, child: const Text("OK"))],
               );
             });
       } else if (transaction == "pending") {
@@ -221,8 +222,8 @@ class AddCreditsController extends GetxController {
             context: Get.context!,
             builder: (context) {
               return AlertDialog(
-                title: Text("Last Transaction is pending"),
-                actions: [FilledButton(onPressed: Get.back, child: Text("OK"))],
+                title: const Text("Last Transaction is pending"),
+                actions: [FilledButton(onPressed: Get.back, child: const Text("OK"))],
               );
             });
       } else {
