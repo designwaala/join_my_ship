@@ -547,7 +547,9 @@ class ProfileController extends GetxController
 
   @override
   void onClose() {
-    animationController.dispose();
+    if (crewUser.value?.userTypeKey == 5) {
+      animationController.dispose();
+    }
     super.onClose();
   }
 }

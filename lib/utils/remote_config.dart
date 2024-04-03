@@ -52,4 +52,20 @@ class RemoteConfigUtils {
           : List<JobPostTopUpPack>.from(
               jsonDecode(_remoteConfig!.getString("job_post_top_up_packs"))
                   .map((e) => JobPostTopUpPack.fromJson(e)));
+
+  List<String> get iosProductIds {
+    List<String> defaultProductIds = ["goldplan", "silverplan", "platinumplan"];
+    if (_remoteConfig?.getString("ios_product_ids") == null) {
+      return defaultProductIds;
+    } else {
+      final decodedResponse =
+          jsonDecode(_remoteConfig!.getString("ios_product_ids"));
+      if (decodedResponse["product_ids"] == null) {
+        return defaultProductIds;
+      } else {
+        return List<String>.from(
+            decodedResponse["product_ids"].map((e) => "$e"));
+      }
+    }
+  }
 }

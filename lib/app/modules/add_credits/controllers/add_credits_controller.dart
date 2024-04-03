@@ -298,7 +298,7 @@ class AddCreditsController extends GetxController {
   Future<void> _getIOSProducts() async {
     try {
       String encodedProducts =
-          await platformChannel.invokeMethod("getProducts");
+          await platformChannel.invokeMethod("getProducts", RemoteConfigUtils.instance.iosProductIds);
       iosProducts = List<IOSProducts>.from(
           jsonDecode(encodedProducts).map((e) => IOSProducts.fromJson(e)));
       iosProducts.sort((x, y) => ((double.tryParse(x.price ?? "") ?? 0) -

@@ -11,7 +11,7 @@ class SplashView extends GetView<SplashController> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: controller.parentKey,
-        backgroundColor: Get.theme.primaryColor,
+        // backgroundColor: Get.theme.primaryColor,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -19,12 +19,12 @@ class SplashView extends GetView<SplashController> {
               child: AnimatedBuilder(
                   animation: controller.animationController,
                   builder: (context, child) {
-                    return SvgPicture.asset(
-                      'assets/images/logo.svg',
-                      width: controller.animationController.value * 256,
-                      height: controller.animationController.value * 256,
-                      colorFilter:
-                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    return Image.asset(
+                      'assets/images/updated_logo.png',
+                      width: 128 + controller.animationController.value * 128,
+                      height: 128 +controller.animationController.value * 128,
+                      /* colorFilter:
+                          const ColorFilter.mode(Colors.white, BlendMode.srcIn), */
                     );
                   }),
             ),

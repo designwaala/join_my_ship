@@ -117,63 +117,66 @@ class AddCreditsView extends GetView<AddCreditsController> {
                                           ),
                                           const SizedBox(height: 18),
                                           Platform.isIOS
-                                              ? DropdownButton2<IOSProducts>(
-                                                value: controller.iosProducts.firstWhereOrNull((product) => product.id == controller.selectedIOSProduct.value),
-                                                      iconStyleData: IconStyleData(
-                                                        icon: Icon(Icons.keyboard_arrow_down)
-                                                      ),
-                                                      buttonStyleData: ButtonStyleData(
-                                                        padding: EdgeInsets.only(right: 16),
-                                                        decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(10),
-                                                              border: Border.all(color: Color(0xFFA0A0A0))
-                                                            )
-                                                      ),
-                                                      isExpanded: true,
-                                                      items: controller.iosProducts
-                                                          .map((e) => DropdownMenuItem<
-                                                                  IOSProducts>(
-                                                              child: Text(
-                                                                  e.displayName ??
-                                                                      "")))
-                                                          .toList(),
-                                                      onChanged: (value) {
-                                                                                                                                        controller.selectedIOSProduct.value = value?.id;
-                                                                                controller.selectedCurrency.value = controller.creditsModel?.creditCurrencies?.firstWhereOrNull((creditCurrency) => creditCurrency.code == value?.currency);
-                                                      }) ??
-                                                  Column(
-                                                      children:
-                                                          controller.iosProducts
-                                                              .map(
-                                                                  (product) =>
-                                                                      Row(
-                                                                        children: [
-                                                                          Expanded(
-                                                                            child:
-                                                                                InkWell(
-                                                                              onTap: () {
-                                                                                controller.selectedIOSProduct.value = product.id;
-                                                                                controller.selectedCurrency.value = controller.creditsModel?.creditCurrencies?.firstWhereOrNull((creditCurrency) => creditCurrency.code == product.currency);
-                                                                              },
-                                                                              child: Card(
-                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4), side: controller.selectedIOSProduct.value != product.id ? BorderSide(color: Get.theme.colorScheme.tertiary.withOpacity(0.2)) : BorderSide.none),
-                                                                                  color: controller.selectedIOSProduct.value == product.id ? Get.theme.colorScheme.tertiary.withOpacity(0.2) : null,
-                                                                                  elevation: 0,
-                                                                                  child: Padding(
-                                                                                    padding: const EdgeInsets.all(16),
-                                                                                    child: Row(
-                                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                      children: [
-                                                                                        Text(product.displayName ?? ""),
-                                                                                        Text(product.displayPrice ?? "")
-                                                                                      ],
-                                                                                    ),
-                                                                                  )),
+                                              ? DropdownButtonHideUnderline(
+                                                child: DropdownButton2<IOSProducts?>(
+                                                  value: controller.iosProducts.firstWhereOrNull((product) => product.id == controller.selectedIOSProduct.value),
+                                                        iconStyleData: IconStyleData(
+                                                          icon: Icon(Icons.keyboard_arrow_down)
+                                                        ),
+                                                        buttonStyleData: ButtonStyleData(
+                                                          padding: EdgeInsets.only(right: 16),
+                                                          decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(10),
+                                                                border: Border.all(color: Color(0xFFA0A0A0))
+                                                              )
+                                                        ),
+                                                        isExpanded: true,
+                                                        items: controller.iosProducts
+                                                            .map((e) => DropdownMenuItem<
+                                                                    IOSProducts>(
+                                                                      value: e,
+                                                                child: Text(
+                                                                    e.displayName ??
+                                                                        "")))
+                                                            .toList(),
+                                                        onChanged: (value) {
+                                                                                                                                          controller.selectedIOSProduct.value = value?.id;
+                                                                                  controller.selectedCurrency.value = controller.creditsModel?.creditCurrencies?.firstWhereOrNull((creditCurrency) => creditCurrency.code == value?.currency);
+                                                        }) ??
+                                                    Column(
+                                                        children:
+                                                            controller.iosProducts
+                                                                .map(
+                                                                    (product) =>
+                                                                        Row(
+                                                                          children: [
+                                                                            Expanded(
+                                                                              child:
+                                                                                  InkWell(
+                                                                                onTap: () {
+                                                                                  controller.selectedIOSProduct.value = product.id;
+                                                                                  controller.selectedCurrency.value = controller.creditsModel?.creditCurrencies?.firstWhereOrNull((creditCurrency) => creditCurrency.code == product.currency);
+                                                                                },
+                                                                                child: Card(
+                                                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4), side: controller.selectedIOSProduct.value != product.id ? BorderSide(color: Get.theme.colorScheme.tertiary.withOpacity(0.2)) : BorderSide.none),
+                                                                                    color: controller.selectedIOSProduct.value == product.id ? Get.theme.colorScheme.tertiary.withOpacity(0.2) : null,
+                                                                                    elevation: 0,
+                                                                                    child: Padding(
+                                                                                      padding: const EdgeInsets.all(16),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                        children: [
+                                                                                          Text(product.displayName ?? ""),
+                                                                                          Text(product.displayPrice ?? "")
+                                                                                        ],
+                                                                                      ),
+                                                                                    )),
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                        ],
-                                                                      ))
-                                                              .toList())
+                                                                          ],
+                                                                        ))
+                                                                .toList()),
+                                              )
                                               : Form(
                                                   key: controller.formKey,
                                                   child: CustomTextFormField(
