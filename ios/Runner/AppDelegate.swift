@@ -9,10 +9,10 @@ import StoreKit
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
-  private var productIDs = [
+//  private var productIDs = [
 //    "test"
-    "goldplan", "silverplan", "platinumplan"
-  ]
+//    "goldplan", "silverplan", "platinumplan"
+//  ]
     
     
     @Published private(set) var activeTransactions: Set<StoreKit.Transaction> = []
@@ -44,8 +44,11 @@ import StoreKit
                 (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
                 do {
                     if call.method == "getProducts", #available(iOS 15.0, *) {
-                        Task {
-                            await self.getProducts(result: result)
+                        let productIds: Array<String>? = call.arguments as? Array<String>
+                        if productIds != nil {
+                            Task {
+                                await self.getProducts(result: result, productIds: productIds!)
+                            }
                         }
                     }
                     else if call.method == "purchase", #available(iOS 15.0, *) {
@@ -97,10 +100,10 @@ import StoreKit
     
     @MainActor
     @available(iOS 15.0, *)
-    func getProducts(result: FlutterResult) async {
+    func getProducts(result: FlutterResult, productIds : Array<String>) async {
         do {
-            print(productIDs)
-            products = try await Product.products(for: productIDs)
+            print(productIds)
+            products = try await Product.products(for: productIds)
             print("native line 74")
             print("\(products)")
         } catch {
