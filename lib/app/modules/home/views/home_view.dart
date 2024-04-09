@@ -730,7 +730,7 @@ class HomeView extends GetView<HomeController> {
                     margin: const EdgeInsets.symmetric(
                         horizontal: 28, vertical: 16),
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    height: 95.h,
+                    height: 95,
                     width: double.maxFinite,
                     decoration: BoxDecoration(
                         boxShadow: [
@@ -739,7 +739,7 @@ class HomeView extends GetView<HomeController> {
                               blurRadius: 4,
                               offset: const Offset(4, 4))
                         ],
-                        borderRadius: BorderRadius.circular(22.r),
+                        borderRadius: BorderRadius.circular(22),
                         gradient: const LinearGradient(colors: [
                           Color.fromRGBO(1, 66, 211, 1),
                           Color.fromRGBO(92, 197, 255, 1)
@@ -750,14 +750,14 @@ class HomeView extends GetView<HomeController> {
                         10.verticalSpace,
                         Text("Recommended Jobs",
                             style: TextStyle(
-                                fontSize: 16.sp,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white)),
                         6.verticalSpace,
                         Text(
                             "See our recommended jobs for \nyou based on your rank",
                             style: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.white))
                       ],
@@ -768,8 +768,8 @@ class HomeView extends GetView<HomeController> {
                     top: 0,
                     child: Image.asset(
                       "assets/images/dashboard/recommended_jobs.png",
-                      height: 94.h,
-                      width: 99.w,
+                      height: 94,
+                      width: 99
                     ),
                   )
                 ],
@@ -780,7 +780,7 @@ class HomeView extends GetView<HomeController> {
                 28.horizontalSpace,
                 Text("Featured Companies",
                     style: Get.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600, fontSize: 18.sp)),
+                        fontWeight: FontWeight.w600, fontSize: 18)),
                 const Spacer(),
                 TextButton(
                     onPressed: () {
@@ -805,7 +805,7 @@ class HomeView extends GetView<HomeController> {
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.r),
+                      borderRadius: BorderRadius.circular(20),
                       color: Colors.white,
                       boxShadow: const [
                         BoxShadow(
@@ -816,8 +816,8 @@ class HomeView extends GetView<HomeController> {
                   child: Row(
                     children: [
                       Container(
-                        height: 50.h,
-                        width: 50.h,
+                        height: 50,
+                        width: 50,
                         decoration: BoxDecoration(
                             color: Color(int.parse(
                                     "${company.companyName?.split("").firstOrNull?.codeUnitAt(0)}${company.id ?? 0}",

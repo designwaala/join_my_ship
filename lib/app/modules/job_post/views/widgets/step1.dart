@@ -411,7 +411,7 @@ class JobPostStep1 extends GetView<JobPostController> {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(
-                                  vertical: 10.h, horizontal: 45.w),
+                                  vertical: 10, horizontal: 45),
                               backgroundColor: const Color(0xFF407BFF),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(36.21),

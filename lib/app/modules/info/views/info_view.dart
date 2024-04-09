@@ -36,7 +36,7 @@ class InfoView extends GetView<InfoController> {
                                 style: Get.theme.textTheme.headlineMedium
                                     ?.copyWith(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 28.sp,
+                                        fontSize: 28,
                                         color: Colors.black)),
                             20.verticalSpace,
                             Text(

@@ -74,7 +74,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                       24.verticalSpace,
                       SizedBox(
                         width: double.maxFinite,
-                        height: 64.h,
+                        height: 64,
                         child: controller.isVerifying.value
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -140,7 +140,7 @@ class CrewSignInEmailView extends GetView<CrewSignInController> {
                       16.verticalSpace,
                       SizedBox(
                         width: double.maxFinite,
-                        height: 64.h,
+                        height: 64,
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(

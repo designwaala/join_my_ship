@@ -44,8 +44,8 @@ class WalletView extends GetView<WalletController> {
                   bottom: 0,
                   child: Image.asset(
                     "assets/icons/wallet_big_coin.png",
-                    height: 72.h,
-                    width: 110.w,
+                    height: 72,
+                    width: 110,
                   )),
               Positioned(
                   right: 48,
@@ -53,8 +53,8 @@ class WalletView extends GetView<WalletController> {
                   bottom: 48,
                   child: Image.asset(
                     "assets/icons/wallet_small_coin.png",
-                    height: 32.h,
-                    width: 48.w,
+                    height: 32,
+                    width: 48,
                   )),
               Positioned.fill(
                 child: Column(

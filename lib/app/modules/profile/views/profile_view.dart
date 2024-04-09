@@ -41,7 +41,7 @@ class ProfileView extends GetView<ProfileController> {
           return controller.isLoading.value
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -199,9 +199,9 @@ class ProfileView extends GetView<ProfileController> {
                                 }
                               : null,
                           child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 16.w),
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            height: 48.h,
+                            margin: EdgeInsets.symmetric(horizontal: 16),
+                            padding: EdgeInsets.symmetric(horizontal: 4),
+                            height: 48,
                             decoration: BoxDecoration(
                                 border:
                                     Border.all(color: Get.theme.primaryColor),
@@ -209,7 +209,8 @@ class ProfileView extends GetView<ProfileController> {
                                 color: const Color.fromRGBO(59, 61, 146, 0.15)),
                             child: Row(
                               children: [
-                                const Spacer(),
+                                const SizedBox(width: 8),
+                                // const Spacer(),
                                 Icon(
                                   Icons.info,
                                   color: Get.theme.primaryColor,
@@ -223,7 +224,8 @@ class ProfileView extends GetView<ProfileController> {
                                 const Spacer(),
                                 Icon(Icons.arrow_forward_sharp,
                                     color: Get.theme.primaryColor),
-                                const Spacer()
+                                // const Spacer()
+                                const SizedBox(width: 8),
                               ],
                             ),
                           ),
@@ -251,10 +253,10 @@ class ProfileView extends GetView<ProfileController> {
                                 }
                               : null,
                           child: Container(
-                            height: 62.h,
-                            margin: EdgeInsets.symmetric(horizontal: 22.w),
+                            height: 62,
+                            margin: EdgeInsets.symmetric(horizontal: 22),
                             padding: EdgeInsets.symmetric(
-                                horizontal: 18.w, vertical: 6.h),
+                                horizontal: 18, vertical: 6),
                             decoration: BoxDecoration(
                               color: Get.theme.primaryColor,
                               borderRadius: BorderRadius.circular(12.r),
@@ -294,7 +296,7 @@ class ProfileView extends GetView<ProfileController> {
                       ],
                       Text("Options",
                           style: Get.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.bold, fontSize: 18.sp)),
+                              fontWeight: FontWeight.bold, fontSize: 18)),
                       if (controller.crewUser.value?.userTypeKey == 5 &&
                           !controller.isFreeTrialActivated.value)
                         InkWell(
@@ -337,8 +339,8 @@ class ProfileView extends GetView<ProfileController> {
                               builder: (context, _) {
                                 return Container(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 16.h, horizontal: 14.h),
-                                  margin: EdgeInsets.symmetric(vertical: 8.h),
+                                      vertical: 16, horizontal: 14),
+                                  margin: EdgeInsets.symmetric(vertical: 8),
                                   decoration: BoxDecoration(
                                       /* gradient: LinearGradient(
                                           transform: GradientRotation(3.14 / 4),
@@ -474,8 +476,8 @@ class ProfileView extends GetView<ProfileController> {
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
-                                  vertical: 16.h, horizontal: 14.h),
-                              margin: EdgeInsets.symmetric(vertical: 8.h),
+                                  vertical: 16, horizontal: 14),
+                              margin: EdgeInsets.symmetric(vertical: 8),
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   boxShadow: [
@@ -494,18 +496,18 @@ class ProfileView extends GetView<ProfileController> {
                                           size: 20)
                                       : e.svgPath != null
                                           ? SvgPicture.asset(e.svgPath!,
-                                              height: e.height ?? 24.h,
-                                              width: e.width ?? 24.h)
+                                              height: e.height ?? 24,
+                                              width: e.width ?? 24)
                                           : Image.asset(
                                               e.iconPath ?? "",
-                                              height: e.height ?? 24.h,
-                                              width: e.width ?? 24.h,
+                                              height: e.height ?? 24,
+                                              width: e.width ?? 24,
                                             ),
                                   18.horizontalSpace,
                                   Text(e.text,
                                       style: Get.textTheme.bodyMedium?.copyWith(
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 14.sp,
+                                        fontSize: 14,
                                       )),
                                   const Spacer(),
                                   const Icon(Icons.keyboard_arrow_right)
@@ -546,8 +548,8 @@ class ProfileView extends GetView<ProfileController> {
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                              vertical: 16.h, horizontal: 14.h),
-                          margin: EdgeInsets.symmetric(vertical: 8.h),
+                              vertical: 16, horizontal: 14),
+                          margin: EdgeInsets.symmetric(vertical: 8),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
@@ -564,7 +566,7 @@ class ProfileView extends GetView<ProfileController> {
                               18.horizontalSpace,
                               Text("Delete Account",
                                   style: Get.textTheme.bodyMedium?.copyWith(
-                                      fontSize: 14.sp,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.red)),
                               const Spacer(),
@@ -582,8 +584,8 @@ class ProfileView extends GetView<ProfileController> {
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                              vertical: 16.h, horizontal: 14.h),
-                          margin: EdgeInsets.symmetric(vertical: 8.h),
+                              vertical: 16, horizontal: 14),
+                          margin: EdgeInsets.symmetric(vertical: 8),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
@@ -598,13 +600,13 @@ class ProfileView extends GetView<ProfileController> {
                             children: [
                               Image.asset(
                                 "assets/images/profile/sign_out.png",
-                                height: 24.h,
-                                width: 24.h,
+                                height: 24,
+                                width: 24,
                               ),
                               18.horizontalSpace,
                               Text("Log Out",
                                   style: Get.textTheme.bodyMedium?.copyWith(
-                                      fontSize: 14.sp,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.red)),
                               const Spacer(),
@@ -637,7 +639,7 @@ class ProfileView extends GetView<ProfileController> {
                           },
                           child: Text("Terms and conditions",
                               style: Get.textTheme.bodyMedium?.copyWith(
-                                  fontSize: 12.sp,
+                                  fontSize: 12,
                                   color: Get.theme.primaryColor)),
                         ),
                       ),
@@ -646,7 +648,7 @@ class ProfileView extends GetView<ProfileController> {
                         child: Text("www.joinmyship.com",
                             style: Get.textTheme.bodyMedium?.copyWith(
                                 color: Colors.grey,
-                                fontSize: 14.sp,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w400)),
                       ),
                       if (controller.version != null &&

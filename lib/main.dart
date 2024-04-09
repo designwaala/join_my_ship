@@ -124,6 +124,7 @@ void main() async {
         builder: (context, _) {
           return UnFocusGesture(
               child: GetMaterialApp(
+                debugShowCheckedModeBanner: false,
             title: "Application",
             initialRoute: AppPages.INITIAL,
             getPages: AppPages.routes,
