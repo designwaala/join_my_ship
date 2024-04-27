@@ -20,6 +20,7 @@ import 'package:join_my_ship/app/data/providers/follow_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_provider.dart';
 import 'package:join_my_ship/app/data/providers/liked_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_my_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_my_ship/app/modules/crew_job_applications/controllers/crew_job_applications_controller.dart';
@@ -106,11 +107,16 @@ class LikedJobsController extends GetxController {
       loadCOC(),
       loadCOP(),
       loadWatchKeeping(),
+      getSubscription(),
       UserStates.instance.crewUser?.userTypeKey == 2
           ? getJobApplications()
           : Future.value(null)
     ]);
     isLoading.value = false;
+  }
+
+  Future<void> getSubscription() async {
+    UserStates.instance.subscription ??= await getIt<SubscriptionProvider>().getSubscriptions();
   }
 
   Future<void> getJobApplications() async {

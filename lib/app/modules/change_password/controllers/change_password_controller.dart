@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/extensions/toast_extension.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 import 'package:join_my_ship/widgets/circular_progress_indicator_alert_dialog.dart';
 import 'package:join_my_ship/widgets/custom_text_form_field.dart';
@@ -32,6 +35,11 @@ class ChangePasswordController extends GetxController with RequiresRecentLogin {
     fToast.init(parentKey.currentContext!);
   }
 
+  Future<void> _updatePasswordInDjango() async {
+    await getIt<CrewUserProvider>().updateCrewUser(crewId: PreferencesHelper.instance.userId!,
+    crewUser: CrewUser(password: passwordController.text.trim()));
+  }
+
   void changePassword() async {
     if (formKey.currentState!.validate()) {
       showDialog(
@@ -49,6 +57,7 @@ class ChangePasswordController extends GetxController with RequiresRecentLogin {
       await FirebaseAuth.instance.currentUser
           ?.updatePassword(passwordController.text.trim())
           .then((value) {
+        _updatePasswordInDjango();
         fToast.safeShowToast(
             child: successToast("Password changed successfully"));
         Get.back();
@@ -73,6 +82,7 @@ class ChangePasswordController extends GetxController with RequiresRecentLogin {
           await FirebaseAuth.instance.currentUser
               ?.updatePassword(passwordController.text.trim())
               .then((value) {
+            _updatePasswordInDjango();
             fToast.safeShowToast(
                 child: successToast("Password changed successfully"));
             Get.back();

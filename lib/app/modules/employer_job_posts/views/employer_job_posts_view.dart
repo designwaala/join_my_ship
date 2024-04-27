@@ -757,7 +757,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                       content: isLoadingSubscription.value
                                           ? const CircularProgressIndicator()
                                           : Text(
-                                              "Are you sure you want to use\nyour ${UserStates.instance.subscription?.firstWhereOrNull((subs) => subs.isTypeKey?.type == PlanType.highlightPost)?.points ?? ""} credits?",
+                                              "Are you sure you want to use\nyour ${UserStates.instance.subscription?.firstWhereOrNull((subs) => subs.isTypeKey?.type == PlanType.employerHighlight)?.points ?? ""} credits?",
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
                                                 fontSize: 14.5,
@@ -807,7 +807,7 @@ class EmployerJobPostsView extends GetView<EmployerJobPostsController> {
                                       UserStates.instance.subscription
                                               ?.firstWhereOrNull((subs) =>
                                                   subs.isTypeKey?.type ==
-                                                  PlanType.highlightPost)
+                                                  PlanType.employerHighlight)
                                               ?.planName
                                               ?.id ??
                                           -1);

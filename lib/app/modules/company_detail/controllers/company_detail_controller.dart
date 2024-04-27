@@ -18,6 +18,7 @@ import 'package:join_my_ship/app/data/providers/country_provider.dart';
 import 'package:join_my_ship/app/data/providers/follow_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_provider.dart';
 import 'package:join_my_ship/app/data/providers/liked_post_provider.dart';
+import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_my_ship/app/modules/success/controllers/success_controller.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
@@ -109,6 +110,7 @@ class CompanyDetailController extends GetxController {
       loadCOC(),
       loadCOP(),
       loadWatchKeeping(),
+      getSubscriptions(),
       UserStates.instance.crewUser?.userTypeKey == 2
           ? getJobApplications()
           : Future.value(null)
@@ -137,6 +139,10 @@ class CompanyDetailController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  Future<void> getSubscriptions() async {
+    UserStates.instance.subscription ??= await getIt<SubscriptionProvider>().getSubscriptions();
   }
 
   Future<void> getJobApplications() async {

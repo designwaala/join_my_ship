@@ -231,7 +231,7 @@ ${getJobShareLink(job.id)}
                       mainAxisSize: MainAxisSize.min,
                       children: subscriptions
                               ?.where(
-                                  (e) => e.isTypeKey?.type == PlanType.boosting)
+                                  (e) => e.isTypeKey?.type == PlanType.employerBoost)
                               .map((e) => Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(

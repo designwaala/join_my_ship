@@ -120,6 +120,7 @@ class JobOpeningController extends GetxController {
       loadCOC(),
       loadCOP(),
       loadWatchKeeping(),
+      getSubscriptions(),
       UserStates.instance.crewUser?.userTypeKey == 2
           ? getJobApplications()
           : Future.value(null)
@@ -330,7 +331,7 @@ ${getJobShareLink(jobOpening.value?.id)}
                       mainAxisSize: MainAxisSize.min,
                       children: subscriptions
                               ?.where(
-                                  (e) => e.isTypeKey?.type == PlanType.boosting)
+                                  (e) => e.isTypeKey?.type == PlanType.employerBoost)
                               .map((e) => Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(

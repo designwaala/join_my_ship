@@ -205,7 +205,7 @@ class ProfileController extends GetxController
                       mainAxisSize: MainAxisSize.min,
                       children: subscriptions
                               ?.where(
-                                  (e) => e.isTypeKey?.type == PlanType.boosting)
+                                  (e) => e.isTypeKey?.type == PlanType.crewBoost)
                               .map((e) => Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
@@ -374,7 +374,7 @@ class ProfileController extends GetxController
                           children: subscriptions
                                   ?.where((e) =>
                                       e.isTypeKey?.type ==
-                                      PlanType.highlightProfile)
+                                      PlanType.crewHighlight)
                                   .map((e) => Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(

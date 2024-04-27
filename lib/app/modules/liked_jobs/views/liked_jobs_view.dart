@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:join_my_ship/app/data/models/subscription_model.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/extensions/toast_extension.dart';
 import 'package:join_my_ship/utils/remote_config.dart';
@@ -882,8 +883,8 @@ class LikedJobsView extends GetView<LikedJobsController> {
                                           ),
                                           actionsPadding:
                                               const EdgeInsets.only(bottom: 25),
-                                          content: const Text(
-                                            "Are you sure you want to use your 100 credits?",
+                                          content: Text(
+                                            "Are you sure you want to use your ${UserStates.instance.subscription?.firstWhereOrNull((subscription) => subscription.isTypeKey?.type == PlanType.applyJob)?.points?.toString() ?? ""} credits?",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 14.5,

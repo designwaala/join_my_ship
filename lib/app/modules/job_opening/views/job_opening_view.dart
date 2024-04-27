@@ -1089,8 +1089,8 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                                                             actionsPadding:
                                                                                 const EdgeInsets.only(bottom: 25),
                                                                             content:
-                                                                                const Text(
-                                                                              "Are you sure you want to use your 100 credits?",
+                                                                                Text(
+                                                                              "Are you sure you want to use your ${UserStates.instance.subscription?.firstWhereOrNull((subscription) => subscription.isTypeKey?.type == PlanType.applyJob)?.points?.toString() ?? ""} credits?",
                                                                               textAlign: TextAlign.center,
                                                                               style: TextStyle(
                                                                                 fontSize: 14.5,
@@ -1541,7 +1541,7 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                       content: isLoadingSubscription.value
                                           ? const CircularProgressIndicator()
                                           : Text(
-                                              "Are you sure you want to use\nyour ${UserStates.instance.subscription?.firstWhereOrNull((subs) => subs.isTypeKey?.type == PlanType.highlightPost)?.points ?? ""} credits?",
+                                              "Are you sure you want to use\nyour ${UserStates.instance.subscription?.firstWhereOrNull((subs) => subs.isTypeKey?.type == PlanType.employerHighlight)?.points ?? ""} credits?",
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
                                                 fontSize: 14.5,
@@ -1591,7 +1591,7 @@ class JobOpeningView extends GetView<JobOpeningController> {
                                       UserStates.instance.subscription
                                               ?.firstWhereOrNull((subs) =>
                                                   subs.isTypeKey?.type ==
-                                                  PlanType.highlightPost)
+                                                  PlanType.employerHighlight)
                                               ?.planName
                                               ?.id ??
                                           -1);

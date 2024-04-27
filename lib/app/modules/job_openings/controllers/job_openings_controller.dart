@@ -21,6 +21,7 @@ import 'package:join_my_ship/app/data/providers/follow_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_provider.dart';
 import 'package:join_my_ship/app/data/providers/liked_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
+import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_my_ship/app/data/providers/watch_keeping_provider.dart';
 import 'package:join_my_ship/app/modules/crew_job_applications/controllers/crew_job_applications_controller.dart';
@@ -109,11 +110,16 @@ class JobOpeningsController extends GetxController {
       loadCOP(),
       loadWatchKeeping(),
       _getFlags(),
+      getSubscriptions(),
       UserStates.instance.crewUser?.userTypeKey == 2
           ? getJobApplications()
           : Future.value(null)
     ]);
     isLoading.value = false;
+  }
+
+  Future<void> getSubscriptions() async {
+    UserStates.instance.subscription ??= await getIt<SubscriptionProvider>().getSubscriptions();
   }
 
   Future<void> _getFlags() async {

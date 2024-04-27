@@ -119,14 +119,6 @@ class ApplicantDetailController extends GetxController {
           style: TextStyle(color: Colors.blue),
         ),
         actionsPadding: const EdgeInsets.only(bottom: 25),
-        /* content: const Text(
-          "Are you sure you want to use your 100 credits?",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 14.5,
-            fontWeight: FontWeight.w600,
-          ),
-        ), */
         actionsAlignment: MainAxisAlignment.spaceEvenly,
         actions: [
           ElevatedButton(

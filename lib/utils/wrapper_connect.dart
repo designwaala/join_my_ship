@@ -261,7 +261,7 @@ class WrapperConnect extends GetConnect {
 
   Future<void> refreshAccessToken() async {
     final response = await http.post(
-      Uri.parse("http://joinmyship.com/myadmin_api/api/login/refresh/"),
+      Uri.parse("https://joinmyship.com/myadmin_api/api/login/refresh/"),
       body: {"refresh": PreferencesHelper.instance.refreshToken},
     );
     final data = Data.fromJson(jsonDecode(response.body));

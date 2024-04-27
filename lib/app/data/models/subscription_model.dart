@@ -1,20 +1,20 @@
 enum PlanType {
-  highlightProfile,
-  jobPost,
-  boosting,
-  highlightPost,
+  employerHighlight,
+  employerBoost,
+  crewHighlight,
+  crewBoost,
   applyJob;
 
   String get name {
     switch (this) {
-      case PlanType.highlightProfile:
-        return "Hightlight Profile";
-      case PlanType.jobPost:
-        return "Job Post";
-      case PlanType.boosting:
-        return "Boosting";
-      case PlanType.highlightPost:
-        return "Highlight Post";
+      case PlanType.employerHighlight:
+        return "Employer Highlight";
+      case PlanType.employerBoost:
+        return "Employer Boost";
+      case PlanType.crewHighlight:
+        return "Crew Highllight";
+      case PlanType.crewBoost:
+        return "Crew Boost";
       case PlanType.applyJob:
         return "Apply Job";
     }
@@ -71,17 +71,17 @@ class IsTypeKey {
 
   IsTypeKey.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    type = () {
-      switch (json['type_name']) {
-        case "Highlight Profile":
-          return PlanType.highlightProfile;
-        case "Job Post":
-          return PlanType.jobPost;
-        case "Boostig":
-          return PlanType.boosting;
-        case "Highlight Post":
-          return PlanType.highlightPost;
-        case "Apply Job":
+  type = () {
+      switch (json['id']) {
+        case 14:
+          return PlanType.employerBoost;
+        case 13:
+          return PlanType.employerHighlight;
+        case 1:
+          return PlanType.crewHighlight;
+        case 3:
+          return PlanType.crewBoost;
+        case 5:
           return PlanType.applyJob;
       }
     }();
