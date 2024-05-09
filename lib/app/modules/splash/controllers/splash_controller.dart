@@ -5,7 +5,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:join_my_ship/app/data/models/app_version_model.dart';
 import 'package:join_my_ship/app/data/models/crew_user_model.dart';
+import 'package:join_my_ship/app/data/providers/app_version_provider.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_my_ship/app/modules/choose_user/controllers/choose_user_controller.dart';
 import 'package:join_my_ship/app/modules/email_verification_waiting/controllers/email_verification_waiting_controller.dart';
@@ -19,11 +21,14 @@ import 'package:join_my_ship/utils/extensions/string_extensions.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 import 'package:join_my_ship/utils/wrapper_connect.dart';
 import 'package:join_my_ship/widgets/toasts/toast.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashController extends GetxController
     with GetTickerProviderStateMixin, RedirectionMixin {
   late AnimationController animationController;
   final parentKey = GlobalKey();
+
+  AppVersion? appVersion;
 
   @override
   void onInit() {
@@ -56,6 +61,8 @@ mixin RedirectionMixin {
   FToast fToast = FToast();
   CrewUser? user;
   Function eq = const ListEquality().equals;
+
+  RxBool updateApp = false.obs;
 
   Future<void> getUser() async {
     if (FirebaseAuth.instance.currentUser == null) {
@@ -94,6 +101,15 @@ mixin RedirectionMixin {
   }
 
   Future<void> redirection({Function? customRedirection}) async {
+    final appVersion = await getIt<AppVersionProvider>().getAppVersion();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    double currentVersion = double.tryParse(packageInfo.buildNumber) ?? 0.0;
+    double latestVersion = double.tryParse(appVersion?.versionName ?? "") ?? 0.0;
+    if (currentVersion < latestVersion) {
+      updateApp.value = true;
+      return;
+    }
+
     try {
       await Future.wait([getUser(), intentionalDelay()]);
     } catch (e) {

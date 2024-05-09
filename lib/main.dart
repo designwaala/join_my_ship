@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:join_my_ship/app/data/providers/app_version_provider.dart';
 import 'package:join_my_ship/app/data/providers/application_provider.dart';
 import 'package:join_my_ship/app/data/providers/applied_refer_code_provider.dart';
 import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
@@ -191,7 +192,8 @@ void main() async {
     ..registerSingleton(UserCodeProvider())
     ..registerSingleton(AppliedReferCodeProvider())
     ..registerSingleton(JobShareProvider())
-    ..registerSingleton(CheckReferralCodeApplyProvider());
+    ..registerSingleton(CheckReferralCodeApplyProvider())
+    ..registerSingleton(AppVersionProvider());
 }
 
 notificationListeners() {

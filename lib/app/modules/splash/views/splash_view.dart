@@ -22,12 +22,25 @@ class SplashView extends GetView<SplashController> {
                     return Image.asset(
                       'assets/images/updated_logo.png',
                       width: 128 + controller.animationController.value * 128,
-                      height: 128 +controller.animationController.value * 128,
+                      height: 128 + controller.animationController.value * 128,
                       /* colorFilter:
                           const ColorFilter.mode(Colors.white, BlendMode.srcIn), */
                     );
                   }),
             ),
+            Obx(() {
+              return AnimatedCrossFade(
+                  firstChild: const SizedBox(),
+                  secondChild: Padding(
+                    padding: const EdgeInsets.only(top: 32),
+                    child: Text("Please Update App Version",
+                        style: Get.textTheme.headlineSmall),
+                  ),
+                  crossFadeState: controller.updateApp.value
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
+                  duration: const Duration(milliseconds: 300));
+            })
           ],
         ));
   }
