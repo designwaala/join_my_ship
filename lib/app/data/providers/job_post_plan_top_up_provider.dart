@@ -24,10 +24,10 @@ class JobPostPlanTopUpProvider extends WrapperConnect {
   }
 
   Future<JobPostPlanTopUp?> jobPostPlanTopUp(
-      {required JobPostTopUpPack topUpPack}) async {
+      {required int postPurchased, required int pointsUsed}) async {
     final response = await multipartPost('employer/job_post_topup_plan/', {
-      "post_purchased": "${topUpPack.postPurchased}",
-      "points_used": "${topUpPack.pointsUsed}"
+      "post_purchased": "$postPurchased", //eg 5
+      "points_used": "$pointsUsed" //eg 500
     });
     return JobPostPlanTopUp.fromJson(response);
   }

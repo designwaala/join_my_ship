@@ -55,6 +55,7 @@ import 'package:join_my_ship/app/data/providers/sea_service_provider.dart';
 import 'package:join_my_ship/app/data/providers/secondary_users_provider.dart';
 import 'package:join_my_ship/app/data/providers/state_provider.dart';
 import 'package:join_my_ship/app/data/providers/stcw_issuing_authority_provider.dart';
+import 'package:join_my_ship/app/data/providers/subscription_plan_provider.dart';
 import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_my_ship/app/data/providers/user_code_provider.dart';
 import 'package:join_my_ship/app/data/providers/user_details_provider.dart';
@@ -125,7 +126,7 @@ void main() async {
         builder: (context, _) {
           return UnFocusGesture(
               child: GetMaterialApp(
-                debugShowCheckedModeBanner: false,
+            debugShowCheckedModeBanner: false,
             title: "Application",
             initialRoute: AppPages.INITIAL,
             getPages: AppPages.routes,
@@ -193,7 +194,8 @@ void main() async {
     ..registerSingleton(AppliedReferCodeProvider())
     ..registerSingleton(JobShareProvider())
     ..registerSingleton(CheckReferralCodeApplyProvider())
-    ..registerSingleton(AppVersionProvider());
+    ..registerSingleton(AppVersionProvider())
+    ..registerSingleton(SubscriptionPlanProvider());
 }
 
 notificationListeners() {

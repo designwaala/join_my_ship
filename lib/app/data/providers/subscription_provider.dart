@@ -15,8 +15,9 @@ class SubscriptionProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
-  Future<List<Subscription>?> getSubscriptions() async {
-    final response = await get('crew/get_subscripstions');
+  Future<List<Subscription>?> getSubscriptions({int? planType}) async {
+    final response = await get('crew/get_subscripstions',
+        query: {if (planType != null) "plan_type": "$planType"});
     UserStates.instance.subscription = response.body;
     return response.body;
   }

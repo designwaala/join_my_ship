@@ -8,6 +8,8 @@ import 'package:join_my_ship/app/data/models/current_resume_top_up.dart';
 import 'package:join_my_ship/app/data/models/highlight_model.dart';
 import 'package:join_my_ship/app/data/models/job_post_plan_top_up_model.dart';
 import 'package:join_my_ship/app/data/models/job_post_top_up_packs.dart';
+import 'package:join_my_ship/app/data/models/subscription_model.dart';
+import 'package:join_my_ship/app/data/models/subscription_plan_model.dart';
 import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_my_ship/app/data/providers/current_job_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
@@ -16,6 +18,8 @@ import 'package:join_my_ship/app/data/providers/resume_pack_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_pack_buy_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_top_up_buy_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_top_up_provider.dart';
+import 'package:join_my_ship/app/data/providers/subscription_plan_provider.dart';
+import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
 import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/extensions/toast_extension.dart';
@@ -55,7 +59,7 @@ class SubscriptionsController extends GetxController {
   RxBool showJobPostPacks = true.obs;
   RxBool showJobPostTopUpPacks = true.obs;
 
-  RxBool isBuyingJobPostPlan = false.obs;
+  RxnInt jobPostPlanBeingBought = RxnInt();
   RxnInt jobPostTopUpPlan = RxnInt();
 
   RxBool showJobPostPurchases = true.obs;
@@ -63,6 +67,9 @@ class SubscriptionsController extends GetxController {
 
   JobPostPlanTopUp? currentJobPostTopUps;
   List<CurrentJobPostPack>? currentJobPostPacks;
+
+  SubscriptionPlan? jobPostTopUpPack;
+  List<Subscription> jobPostPacks = [];
 
   @override
   void onInit() {
@@ -82,7 +89,8 @@ class SubscriptionsController extends GetxController {
         ? await _employerData()
         : await _crewData();
     if (UserStates.instance.crewUser?.userTypeKey == 5) {
-      getJobPostData();
+      await getJobPostData();
+      await getJobPostPlanAndTopUp();
     }
     isLoading.value = false;
   }
@@ -129,6 +137,14 @@ class SubscriptionsController extends GetxController {
     super.onClose();
   }
 
+  Future<void> getJobPostPlanAndTopUp() async {
+    jobPostTopUpPack =
+        await getIt<SubscriptionPlanProvider>().getSubscriptionPlan(37);
+    jobPostPacks =
+        (await getIt<SubscriptionProvider>().getSubscriptions(planType: 2)) ??
+            [];
+  }
+
   Future<void> buyPlan(int planId) async {
     buyingPlan.value = planId;
     final response = await getIt<ResumePackBuyProvider>().buyResumePack(planId);
@@ -147,19 +163,21 @@ class SubscriptionsController extends GetxController {
     toppingUpPlan.value = null;
   }
 
-  Future<void> buyJobPostPlan() async {
-    isBuyingJobPostPlan.value = true;
-    final response = await getIt<CurrentJobPostProvider>().buyJobPost();
+  Future<void> buyJobPostPlan(int packId) async {
+    jobPostPlanBeingBought.value = packId;
+    final response = await getIt<CurrentJobPostProvider>().buyJobPost(packId);
     if (response?.id != null) {
       fToast.showToast(child: successToast("Job Post Plan Activated"));
     }
-    isBuyingJobPostPlan.value = false;
+    jobPostPlanBeingBought.value = null;
   }
 
   Future<void> topUpJobPostPlan({required JobPostTopUpPack topUpPack}) async {
     jobPostTopUpPlan.value = topUpPack.pointsUsed;
-    final response = await getIt<JobPostPlanTopUpProvider>()
-        .jobPostPlanTopUp(topUpPack: topUpPack);
+    final response = await getIt<JobPostPlanTopUpProvider>().jobPostPlanTopUp(
+        postPurchased: topUpPack.postPurchased ?? 0,
+        pointsUsed:
+            ((topUpPack.postPurchased ?? 0) * (jobPostTopUpPack?.points ?? 0)));
     if (response?.id != null) {
       fToast.safeShowToast(child: successToast("Job Post Plan Topped Up"));
     }

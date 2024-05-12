@@ -375,68 +375,72 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                                     : CrossFadeState.showSecond,
                             duration: const Duration(milliseconds: 300)),
                         16.verticalSpace,
-                        InkWell(
-                          onTap: () {
-                            controller.showJobPostTopUpPurchases.value =
-                                !controller.showJobPostTopUpPurchases.value;
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Job Post Top Up",
-                                  style: Get.textTheme.titleLarge),
-                              Icon(
-                                  controller.showJobPostTopUpPurchases.value
-                                      ? Icons.keyboard_arrow_up
-                                      : Icons.keyboard_arrow_down,
-                                  size: 32)
-                            ],
-                          ),
-                        ),
-                        16.verticalSpace,
-                        AnimatedCrossFade(
-                            firstChild: Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: SizedBox(
-                                width: double.maxFinite,
-                                child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Posts Left: ",
-                                                  style: Get.textTheme.bodyLarge
-                                                      ?.copyWith(
-                                                          color: Colors.blue),
-                                                ),
-                                                8.horizontalSpace,
-                                              ]),
-                                          4.verticalSpace,
-                                          Text(
-                                              "${controller.currentJobPostTopUps?.postsLeft}",
-                                              style: Get.textTheme.titleMedium),
-                                          4.verticalSpace,
-                                        ],
-                                      ),
-                                    )),
-                              ),
+                        if (controller.currentJobPostTopUps?.id != null) ...[
+                          InkWell(
+                            onTap: () {
+                              controller.showJobPostTopUpPurchases.value =
+                                  !controller.showJobPostTopUpPurchases.value;
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Job Post Top Up",
+                                    style: Get.textTheme.titleLarge),
+                                Icon(
+                                    controller.showJobPostTopUpPurchases.value
+                                        ? Icons.keyboard_arrow_up
+                                        : Icons.keyboard_arrow_down,
+                                    size: 32)
+                              ],
                             ),
-                            secondChild: const SizedBox(),
-                            crossFadeState:
-                                controller.showJobPostTopUpPurchases.value
-                                    ? CrossFadeState.showFirst
-                                    : CrossFadeState.showSecond,
-                            duration: const Duration(milliseconds: 300)),
+                          ),
+                          16.verticalSpace,
+                          AnimatedCrossFade(
+                              firstChild: Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: SizedBox(
+                                  width: double.maxFinite,
+                                  child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Posts Left: ",
+                                                    style: Get
+                                                        .textTheme.bodyLarge
+                                                        ?.copyWith(
+                                                            color: Colors.blue),
+                                                  ),
+                                                  8.horizontalSpace,
+                                                ]),
+                                            4.verticalSpace,
+                                            Text(
+                                                "${controller.currentJobPostTopUps?.postsLeft}",
+                                                style:
+                                                    Get.textTheme.titleMedium),
+                                            4.verticalSpace,
+                                          ],
+                                        ),
+                                      )),
+                                ),
+                              ),
+                              secondChild: const SizedBox(),
+                              crossFadeState:
+                                  controller.showJobPostTopUpPurchases.value
+                                      ? CrossFadeState.showFirst
+                                      : CrossFadeState.showSecond,
+                              duration: const Duration(milliseconds: 300)),
+                        ]
                       ]
                     ] else
                       //CREW

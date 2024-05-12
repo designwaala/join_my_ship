@@ -11,9 +11,9 @@ class CurrentJobPostProvider extends WrapperConnect {
     httpClient.baseUrl = baseURL;
   }
 
-  Future<CurrentJobPostPack?> buyJobPost() async {
+  Future<CurrentJobPostPack?> buyJobPost(int packId) async {
     final response = await multipartPost(
-        "employer/apply_plan_job_post/", {"purchase_pack": "2"});
+        "employer/apply_plan_job_post/", {"purchase_pack": "$packId"});
     return CurrentJobPostPack.fromJson(response);
   }
 

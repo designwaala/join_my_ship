@@ -274,69 +274,93 @@ class BuyPlansView extends GetView<SubscriptionsController> {
                     ),
                     16.verticalSpace,
                     AnimatedCrossFade(
-                        firstChild: Column(children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 18, top: 12, bottom: 12, right: 12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      8.verticalSpace,
-                                      Text("Pack 1",
-                                          style: Get.textTheme.titleMedium
-                                              ?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Get.theme.colorScheme
-                                                      .tertiary)),
-                                      Divider(color: Colors.grey.shade600),
-                                      8.verticalSpace,
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            "assets/icons/coins.svg",
-                                            height: 32,
-                                            width: 32,
-                                          ),
-                                          4.horizontalSpace,
-                                          Text("3000",
-                                              style: Get.textTheme.titleLarge),
-                                        ],
-                                      ),
-                                      8.verticalSpace,
-                                      const Text("Post 30 Jobs for a Month"),
-                                      const Text("Validity: 30 days"),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: controller
-                                                .isBuyingJobPostPlan.value
-                                            ? const SizedBox(
-                                                height: 16,
-                                                width: 16,
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              )
-                                            : FilledButton(
-                                                onPressed: controller
-                                                        .isBuyingJobPostPlan
-                                                        .value
-                                                    ? null
-                                                    : () {
-                                                        controller
-                                                            .buyJobPostPlan();
-                                                      },
-                                                child: const Text("Buy Now")),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          )
-                        ]),
+                        firstChild: Column(
+                            children: controller.jobPostPacks
+                                .mapIndexed((index, jobPostPack) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 8),
+                                      child: Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 18,
+                                                top: 12,
+                                                bottom: 12,
+                                                right: 12),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                8.verticalSpace,
+                                                Text("Pack ${index + 1}",
+                                                    style: Get
+                                                        .textTheme.titleMedium
+                                                        ?.copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Get
+                                                                .theme
+                                                                .colorScheme
+                                                                .tertiary)),
+                                                Divider(
+                                                    color:
+                                                        Colors.grey.shade600),
+                                                8.verticalSpace,
+                                                Row(
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      "assets/icons/coins.svg",
+                                                      height: 32,
+                                                      width: 32,
+                                                    ),
+                                                    4.horizontalSpace,
+                                                    Text(
+                                                        "${jobPostPack.points ?? ""}",
+                                                        style: Get.textTheme
+                                                            .titleLarge),
+                                                  ],
+                                                ),
+                                                8.verticalSpace,
+                                                // const Text("Post 30 Jobs for a Month"),
+                                                Text(
+                                                    "Validity: ${jobPostPack.daysActive ?? ""} days"),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: controller
+                                                          .jobPostPlanBeingBought
+                                                          .value == jobPostPack.id
+                                                      ? const SizedBox(
+                                                          height: 16,
+                                                          width: 16,
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        )
+                                                      : FilledButton(
+                                                          onPressed: controller
+                                                                      .jobPostPlanBeingBought
+                                                                      .value ==
+                                                                  jobPostPack.id
+                                                              ? null
+                                                              : () {
+                                                                  if (jobPostPack
+                                                                          .id ==
+                                                                      null) {
+                                                                    return;
+                                                                  }
+                                                                  controller.buyJobPostPlan(
+                                                                      jobPostPack
+                                                                          .id!);
+                                                                },
+                                                          child: const Text(
+                                                              "Buy Now")),
+                                                )
+                                              ],
+                                            ),
+                                          )),
+                                    ))
+                                .toList()),
                         secondChild: const SizedBox(),
                         crossFadeState: controller.showJobPostPacks.value
                             ? CrossFadeState.showFirst
@@ -411,10 +435,20 @@ class BuyPlansView extends GetView<SubscriptionsController> {
                                                       ),
                                                       4.horizontalSpace,
                                                       Text(
-                                                          jobPostTopUpPack
+                                                          ((controller.jobPostTopUpPack
+                                                                              ?.points ??
+                                                                          0) *
+                                                                      (jobPostTopUpPack
+                                                                              .postPurchased ??
+                                                                          0))
+                                                                  .toString() ??
+                                                              ""
+                                                          //We wont  get points used from remote config, rather calculate it based on API response
+                                                          /* jobPostTopUpPack
                                                                   .pointsUsed
                                                                   ?.toString() ??
-                                                              "",
+                                                              "" */
+                                                          ,
                                                           style: Get.textTheme
                                                               .titleLarge),
                                                     ],
