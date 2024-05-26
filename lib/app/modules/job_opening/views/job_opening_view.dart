@@ -342,26 +342,28 @@ class JobOpeningView extends GetView<JobOpeningController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     controller.jobOpening.value?.id == null
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 300,
-                                width: 300,
-                                child: Lottie.asset(
-                                  'assets/animations/no_results.json',
-                                  repeat: false,
+                        ? Center(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 300,
+                                  width: 300,
+                                  child: Lottie.asset(
+                                    'assets/animations/no_results.json',
+                                    repeat: false,
+                                  ),
                                 ),
-                              ),
-                              10.verticalSpace,
-                              const Text(
-                                "No Such Job Found!",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          )
+                                10.verticalSpace,
+                                const Text(
+                                  "No Such Job Found!",
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                        )
                         : controller.buildCaptureWidget.value
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(
