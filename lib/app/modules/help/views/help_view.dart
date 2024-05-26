@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/help_controller.dart';
 
@@ -103,12 +104,17 @@ class HelpView extends GetView<HelpController> {
                               )),
                         ]),
                     12.verticalSpace,
-                    Text(
-                      "www.linkedin.com/in/joinmyship",
-                      style: GoogleFonts.inter(
-                        color: const Color(0xFF000000),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                    InkWell(
+                      onTap: () {
+                        launchUrl(Uri.parse("https://www.linkedin.com/company/joinmyship"));
+                      },
+                      child: Text(
+                        "www.linkedin.com/company/joinmyship",
+                        style: GoogleFonts.inter(
+                          color: const Color(0xFF000000),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     const Spacer(),

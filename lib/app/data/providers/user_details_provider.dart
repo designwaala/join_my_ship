@@ -54,4 +54,10 @@ class UserDetailsProvider extends WrapperConnect {
     }
     return response.body;
   }
+
+  Future<bool?> checkIfFreeTrialIsAvailed() async {
+    final response =
+        await get("employer/check_free_trial_pack/", decoder: (data) => data);
+    return response.body;
+  }
 }

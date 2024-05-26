@@ -28,6 +28,8 @@ class JobProvider extends WrapperConnect {
             host: "joinmyship.com",
             path: "employer/post_job_list",
             queryParameters: {
+          "is_verified": "true",
+          "is_active": "true",
           if (employerId != null) "emp_id": "$employerId",
           if (ranks?.isNotEmpty == true)
             "rank": ranks?.map((e) => e.toString()),

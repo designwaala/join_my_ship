@@ -20,6 +20,7 @@ import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_my_ship/app/data/providers/coc_provider.dart';
 import 'package:join_my_ship/app/data/providers/cop_provider.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/flag_provider.dart';
 import 'package:join_my_ship/app/data/providers/follow_provider.dart';
 import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_provider.dart';
@@ -121,11 +122,16 @@ class JobOpeningController extends GetxController {
       loadCOP(),
       loadWatchKeeping(),
       getSubscriptions(),
+      _getFlags(),
       UserStates.instance.crewUser?.userTypeKey == 2
           ? getJobApplications()
           : Future.value(null)
     ]);
     isLoading.value = false;
+  }
+
+  Future<void> _getFlags() async {
+    UserStates.instance.flags ??= await getIt<FlagProvider>().getFlags();
   }
 
   Future<void> likeJob() async {
@@ -171,6 +177,7 @@ class JobOpeningController extends GetxController {
 
   Future<void> loadVesselTypes() async {
     vesselList = await getIt<VesselListProvider>().getVesselList();
+    UserStates.instance.vessels = vesselList;
   }
 
   Future<void> loadRanks() async {
@@ -330,8 +337,8 @@ ${getJobShareLink(jobOpening.value?.id)}
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: subscriptions
-                              ?.where(
-                                  (e) => e.isTypeKey?.type == PlanType.employerBoost)
+                              ?.where((e) =>
+                                  e.isTypeKey?.type == PlanType.employerBoost)
                               .map((e) => Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
@@ -431,7 +438,7 @@ ${getJobShareLink(jobOpening.value?.id)}
                                   fToast.showToast(
                                       child: successToast(
                                           "Job Post Boosted Successfully"));
-                                Get.back();
+                                  Get.back();
                                 }
                                 isBoosting.value = false;
                               },

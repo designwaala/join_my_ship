@@ -14,6 +14,7 @@ import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
 import 'package:join_my_ship/app/data/providers/current_job_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
+import 'package:join_my_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboarding_controller.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
@@ -51,19 +52,20 @@ class ProfileController extends GetxController
   RxBool isStartingJobPostPlan = false.obs;
   RxBool isDeletingAccount = false.obs;
 
-  RxBool isFreeTrialActivated =
-      (PreferencesHelper.instance.freeTrialAvailed == true).obs;
+  RxBool isFreeTrialActivated = true.obs;
 
   final gradientColors = [
-    Color(0xFF371C57),
-    Color(0xFFB92BD8),
-    Color(0xFF5F25E1),
-    Color(0xFF2D22DD)
+    const Color(0xFF371C57),
+    const Color(0xFFB92BD8),
+    const Color(0xFF5F25E1),
+    const Color(0xFF2D22DD)
   ];
 
   late AnimationController animationController;
   late Animation<Color?> colorTween;
   final double lastValue = 0;
+
+  // RxBool isFreeTrialAvailed = true.obs;
 
   @override
   void onInit() {
@@ -84,10 +86,12 @@ class ProfileController extends GetxController
     isLoading.value = false;
 
     if (crewUser.value?.userTypeKey == 5) {
+      isFreeTrialActivated.value =
+          (await getIt<UserDetailsProvider>().checkIfFreeTrialIsAvailed()) ?? true;
       animationController = AnimationController(
           vsync: this, duration: const Duration(seconds: 5));
 
-      colorTween = ColorTween(begin: Color(0xFF2D22DD), end: Color(0xFFB92BD8))
+      colorTween = ColorTween(begin: const Color(0xFF2D22DD), end: const Color(0xFFB92BD8))
           .animate(CurvedAnimation(
               parent: animationController, curve: Curves.easeOutSine))
         ..addStatusListener((status) {
@@ -200,91 +204,95 @@ class ProfileController extends GetxController
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [CircularProgressIndicator()],
                     )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: subscriptions
-                              ?.where(
-                                  (e) => e.isTypeKey?.type == PlanType.crewBoost)
-                              .map((e) => Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        selectedSubscription.value = e;
-                                      },
-                                      child: Card(
-                                        color: selectedSubscription.value?.id ==
-                                                e.id
-                                            ? Get.theme.primaryColor
-                                            : null,
-                                        shape: RoundedRectangleBorder(
-                                            side: selectedSubscription
-                                                        .value?.id ==
-                                                    e.id
-                                                ? BorderSide(
-                                                    color:
-                                                        Get.theme.primaryColor)
-                                                : BorderSide.none,
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  4.horizontalSpace,
-                                                  Text(
-                                                      e.planName?.planName ??
-                                                          "",
-                                                      style: Get
-                                                          .textTheme.titleSmall
-                                                          ?.copyWith(
-                                                              color: selectedSubscription
-                                                                          .value
-                                                                          ?.id ==
-                                                                      e.id
-                                                                  ? Colors.white
-                                                                  : null)),
-                                                ],
-                                              ),
-                                              8.verticalSpace,
-                                              Text(
-                                                  "Days Active: ${e.daysActive}",
-                                                  style: Get
-                                                      .textTheme.bodyMedium
-                                                      ?.copyWith(
-                                                          color:
-                                                              selectedSubscription
-                                                                          .value
-                                                                          ?.id ==
-                                                                      e.id
-                                                                  ? Colors.white
-                                                                  : null)),
-                                              Text(
-                                                  "Credits Required: ${e.points}",
-                                                  style: Get
-                                                      .textTheme.bodyMedium
-                                                      ?.copyWith(
-                                                          color:
-                                                              selectedSubscription
-                                                                          .value
-                                                                          ?.id ==
-                                                                      e.id
-                                                                  ? Colors.white
-                                                                  : null))
-                                            ],
+                  : SizedBox(
+                    width: Get.width * 0.9,
+                     height: 500,
+                    child: ListView(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisSize: MainAxisSize.min,
+                        children: subscriptions
+                                ?.where((e) =>
+                                    e.isTypeKey?.type == PlanType.crewBoost)
+                                .map((e) => Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                        onTap: () {
+                                          selectedSubscription.value = e;
+                                        },
+                                        child: Card(
+                                          color: selectedSubscription.value?.id ==
+                                                  e.id
+                                              ? Get.theme.primaryColor
+                                              : null,
+                                          shape: RoundedRectangleBorder(
+                                              side: selectedSubscription
+                                                          .value?.id ==
+                                                      e.id
+                                                  ? BorderSide(
+                                                      color:
+                                                          Get.theme.primaryColor)
+                                                  : BorderSide.none,
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    4.horizontalSpace,
+                                                    Text(
+                                                        e.planName?.planName ??
+                                                            "",
+                                                        style: Get
+                                                            .textTheme.titleSmall
+                                                            ?.copyWith(
+                                                                color: selectedSubscription
+                                                                            .value
+                                                                            ?.id ==
+                                                                        e.id
+                                                                    ? Colors.white
+                                                                    : null)),
+                                                  ],
+                                                ),
+                                                8.verticalSpace,
+                                                Text(
+                                                    "Days Active: ${e.daysActive}",
+                                                    style: Get
+                                                        .textTheme.bodyMedium
+                                                        ?.copyWith(
+                                                            color:
+                                                                selectedSubscription
+                                                                            .value
+                                                                            ?.id ==
+                                                                        e.id
+                                                                    ? Colors.white
+                                                                    : null)),
+                                                Text(
+                                                    "Credits Required: ${e.points}",
+                                                    style: Get
+                                                        .textTheme.bodyMedium
+                                                        ?.copyWith(
+                                                            color:
+                                                                selectedSubscription
+                                                                            .value
+                                                                            ?.id ==
+                                                                        e.id
+                                                                    ? Colors.white
+                                                                    : null))
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ))
-                              .toList() ??
-                          []),
+                                    ))
+                                .toList() ??
+                            []),
+                  ),
               actions: [
-                TextButton(onPressed: Get.back, child: Text("Close")),
+                TextButton(onPressed: Get.back, child: const Text("Close")),
                 isBoosting.value
                     ? const CircularProgressIndicator()
                     : FilledButton(
@@ -307,7 +315,7 @@ class ProfileController extends GetxController
                               },
                         child: const Text("Boost"))
               ],
-              actionsPadding: EdgeInsets.only(right: 32, bottom: 16),
+              actionsPadding: const EdgeInsets.only(right: 32, bottom: 16),
             );
           });
         });
@@ -322,7 +330,7 @@ class ProfileController extends GetxController
               actions: [
                 FilledButton(onPressed: Get.back, child: const Text("DONE"))
               ],
-              actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
+              actionsPadding: const EdgeInsets.only(right: 16, bottom: 16),
             );
           });
     }
@@ -455,7 +463,7 @@ class ProfileController extends GetxController
                               []),
                     ),
               actions: [
-                TextButton(onPressed: Get.back, child: Text("Close")),
+                TextButton(onPressed: Get.back, child: const Text("Close")),
                 isHighlighting.value
                     ? const CircularProgressIndicator()
                     : FilledButton(
@@ -477,7 +485,7 @@ class ProfileController extends GetxController
                               },
                         child: const Text("Highlight"))
               ],
-              actionsPadding: EdgeInsets.only(right: 32, bottom: 16),
+              actionsPadding: const EdgeInsets.only(right: 32, bottom: 16),
             );
           });
         });
@@ -492,7 +500,7 @@ class ProfileController extends GetxController
               actions: [
                 FilledButton(onPressed: Get.back, child: const Text("DONE"))
               ],
-              actionsPadding: EdgeInsets.only(right: 16, bottom: 16),
+              actionsPadding: const EdgeInsets.only(right: 16, bottom: 16),
             );
           });
     }
