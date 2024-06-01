@@ -52,7 +52,7 @@ class DottedBorder extends CustomPainter {
           size.height / 2,
           Paint()
             ..color = Get.theme.primaryColor
-            ..strokeWidth = 4
+            ..strokeWidth = 6
             ..style = PaintingStyle.stroke);
     } else {
       for (int i = 0; i < numberOfStories; i++) {
@@ -68,7 +68,7 @@ class DottedBorder extends CustomPainter {
               ..color = seenStoriesIndicies?.contains(i) == true
                   ? Colors.grey
                   : Get.theme.primaryColor
-              ..strokeWidth = 4
+              ..strokeWidth = 6
               ..style = PaintingStyle.stroke);
 
         //the logic of spaces between the arcs is to start the next arc after jumping the length of space

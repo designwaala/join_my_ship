@@ -6,10 +6,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:get_cli/get_cli.dart';
+import 'package:join_my_ship/app/data/models/boosting_model.dart';
 import 'package:join_my_ship/app/modules/boosted_jobs/bindings/boosted_jobs_binding.dart';
 import 'package:join_my_ship/app/modules/job_opening/controllers/job_opening_controller.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/utils/user_details.dart';
+import 'package:join_my_ship/widgets/job_cards/crew_referral_job_card.dart';
 import 'package:story_view/story_view.dart';
 import 'package:collection/collection.dart';
 
@@ -117,258 +119,9 @@ class BoostedJobsView extends GetView<BoostedJobsController> {
                                       slivers: [
                                         SliverFillRemaining(
                                           hasScrollBody: false,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              48.verticalSpace,
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 8),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                        "Tentative Joining Date: ",
-                                                        style: Get.textTheme
-                                                            .bodyLarge),
-                                                    Text(
-                                                      job.postBoost
-                                                              ?.tentativeJoining ??
-                                                          "",
-                                                      style: Get
-                                                          .textTheme.bodyMedium
-                                                          ?.copyWith(
-                                                              fontSize: 14),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 8),
-                                                child: Row(
-                                                  children: [
-                                                    Flexible(
-                                                      child: Text(
-                                                          "Vessel Type: ",
-                                                          maxLines: 2,
-                                                          style: Get.textTheme
-                                                              .bodyLarge),
-                                                    ),
-                                                    Text(controller
-                                                            .vesselList?.vessels
-                                                            ?.map((e) =>
-                                                                e.subVessels ??
-                                                                [])
-                                                            .expand((e) => e)
-                                                            .firstWhereOrNull((e) =>
-                                                                e.id ==
-                                                                job.postBoost
-                                                                    ?.vesselId)
-                                                            ?.name ??
-                                                        ""),
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 8),
-                                                child: Row(
-                                                  children: [
-                                                    Text("GRT: ",
-                                                        style: Get.textTheme
-                                                            .bodyLarge),
-                                                    Text(job.postBoost?.gRT
-                                                            .toString() ??
-                                                        "")
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 3),
-                                                child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: job.postBoost
-                                                            ?.jobRankWithWages
-                                                            ?.map(
-                                                                (rankWithWages) =>
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .symmetric(
-                                                                          vertical:
-                                                                              3),
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.start,
-                                                                        children: [
-                                                                          SvgPicture.asset(
-                                                                              "assets/icons/job.svg"),
-                                                                          10.horizontalSpace,
-                                                                          Flexible(
-                                                                            child:
-                                                                                Text(
-                                                                              "${controller.ranks.firstWhereOrNull((rank) => rank.id == rankWithWages.rankNumber)?.name ?? ""} - ${rankWithWages.wages} USD",
-                                                                              style: const TextStyle(fontSize: 15),
-                                                                              maxLines: 2,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ))
-                                                            .toList() ??
-                                                        []),
-                                              ),
-                                              if (job.postBoost?.jobCoc !=
-                                                      null &&
-                                                  job.postBoost?.jobCoc
-                                                          ?.isNotEmpty ==
-                                                      true)
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 8),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "COC Requirements: ",
-                                                        style: Get.textTheme
-                                                            .bodyLarge,
-                                                      ),
-                                                      Text(job.postBoost?.jobCoc
-                                                              ?.map(
-                                                                (e) =>
-                                                                    "${controller.cocs.firstWhereOrNull((coc) => coc.id == e.cocId)?.name ?? ""} |",
-                                                              )
-                                                              .toString()
-                                                              .removeAll("(")
-                                                              .removeAll(",")
-                                                              .removeAll(
-                                                                  " |)") ??
-                                                          ""),
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (job.postBoost?.jobCop !=
-                                                      null &&
-                                                  job.postBoost?.jobCop
-                                                          ?.isNotEmpty ==
-                                                      true)
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 8),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "COP Requirements: ",
-                                                        style: Get.textTheme
-                                                            .bodyLarge,
-                                                      ),
-                                                      Text(job.postBoost?.jobCop
-                                                              ?.map(
-                                                                (e) =>
-                                                                    "${controller.cops.firstWhereOrNull((cop) => cop.id == e.copId)?.name ?? ""} |",
-                                                              )
-                                                              .toString()
-                                                              .removeAll("(")
-                                                              .removeAll(",")
-                                                              .removeAll(
-                                                                  " |)") ??
-                                                          ""),
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (job.postBoost
-                                                          ?.jobWatchKeeping !=
-                                                      null &&
-                                                  job.postBoost?.jobWatchKeeping
-                                                          ?.isNotEmpty ==
-                                                      true)
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 8),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "Watch-Keeping Requirements: ",
-                                                        style: Get.textTheme
-                                                            .bodyLarge,
-                                                      ),
-                                                      Text(job.postBoost
-                                                              ?.jobWatchKeeping
-                                                              ?.map(
-                                                                (e) =>
-                                                                    "${controller.watchKeepings.firstWhereOrNull((watchKeeping) => watchKeeping.id == e.watchKeepingId)?.name ?? ""} |",
-                                                              )
-                                                              .toString()
-                                                              .removeAll("(")
-                                                              .removeAll(",")
-                                                              .removeAll(
-                                                                  " |)") ??
-                                                          ""),
-                                                    ],
-                                                  ),
-                                                ),
-                                              if (job.postBoost?.mailInfo ==
-                                                  true)
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "Email: ",
-                                                      style: Get
-                                                          .textTheme.bodyLarge,
-                                                    ),
-                                                    Text(
-                                                      job
-                                                              .postBoost
-                                                              ?.employerDetails
-                                                              ?.email ??
-                                                          "",
-                                                      style: const TextStyle(
-                                                          fontSize: 13),
-                                                    ),
-                                                  ],
-                                                ),
-                                              if (job.postBoost?.numberInfo ==
-                                                  true)
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "Mobile: ",
-                                                      style: Get
-                                                          .textTheme.bodyLarge,
-                                                    ),
-                                                    Text(
-                                                      job
-                                                              .postBoost
-                                                              ?.employerDetails
-                                                              ?.number ??
-                                                          "",
-                                                      style: const TextStyle(
-                                                          fontSize: 13),
-                                                    ),
-                                                  ],
-                                                ),
-                                              const Spacer(),
-                                            ],
-                                          ),
+                                          child: job.postBoost?.gRT == null
+                                              ? _referredJob(job)
+                                              : _job(job),
                                         )
                                       ],
                                     )),
@@ -455,5 +208,362 @@ class BoostedJobsView extends GetView<BoostedJobsController> {
                   ],
                 );
         }));
+  }
+
+  Widget _referredJob(Employer job) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        48.verticalSpace,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              Text("Tentative Joining Date: ", style: Get.textTheme.bodyLarge),
+              Text(
+                job.postBoost?.tentativeJoining ?? "",
+                style: Get.textTheme.bodyMedium?.copyWith(fontSize: 14),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              Flexible(
+                child: Text("Vessel Type: ",
+                    maxLines: 2, style: Get.textTheme.bodyLarge),
+              ),
+              Text(controller.vesselList?.vessels
+                      ?.map((e) => e.subVessels ?? [])
+                      .expand((e) => e)
+                      .firstWhereOrNull((e) => e.id == job.postBoost?.vesselId)
+                      ?.name ??
+                  ""),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              Text("Vessel IMO No.: ", style: Get.textTheme.bodyLarge),
+              Text(job.postBoost?.vesselIMO.toString() ?? "")
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              Text("Flag: ", style: Get.textTheme.bodyLarge),
+              Text(UserStates.instance.flags?.firstWhereOrNull((flag) => flag.id == job.postBoost?.flag)?.flagCode ?? "")
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              Text("Joining Port: ", style: Get.textTheme.bodyLarge),
+              Text(job.postBoost?.joiningPort.toString() ?? "")
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 3),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SvgPicture.asset("assets/icons/job.svg"),
+                                10.horizontalSpace,
+                                Flexible(
+                                  child: Text(
+                                    controller.ranks.firstWhereOrNull((rank) => rank.id == job.postBoost?.jobRankWithWages?.firstOrNull?.rankNumber)?.name ?? "",
+                                    style: const TextStyle(fontSize: 15),
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+        ),
+        if (job.postBoost?.jobCoc != null &&
+            job.postBoost?.jobCoc?.isNotEmpty == true)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "COC Requirements: ",
+                  style: Get.textTheme.bodyLarge,
+                ),
+                Text(job.postBoost?.jobCoc
+                        ?.map(
+                          (e) =>
+                              "${controller.cocs.firstWhereOrNull((coc) => coc.id == e.cocId)?.name ?? ""} |",
+                        )
+                        .toString()
+                        .removeAll("(")
+                        .removeAll(",")
+                        .removeAll(" |)") ??
+                    ""),
+              ],
+            ),
+          ),
+        if (job.postBoost?.jobCop != null &&
+            job.postBoost?.jobCop?.isNotEmpty == true)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "COP Requirements: ",
+                  style: Get.textTheme.bodyLarge,
+                ),
+                Text(job.postBoost?.jobCop
+                        ?.map(
+                          (e) =>
+                              "${controller.cops.firstWhereOrNull((cop) => cop.id == e.copId)?.name ?? ""} |",
+                        )
+                        .toString()
+                        .removeAll("(")
+                        .removeAll(",")
+                        .removeAll(" |)") ??
+                    ""),
+              ],
+            ),
+          ),
+        if (job.postBoost?.jobWatchKeeping != null &&
+            job.postBoost?.jobWatchKeeping?.isNotEmpty == true)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Watch-Keeping Requirements: ",
+                  style: Get.textTheme.bodyLarge,
+                ),
+                Text(job.postBoost?.jobWatchKeeping
+                        ?.map(
+                          (e) =>
+                              "${controller.watchKeepings.firstWhereOrNull((watchKeeping) => watchKeeping.id == e.watchKeepingId)?.name ?? ""} |",
+                        )
+                        .toString()
+                        .removeAll("(")
+                        .removeAll(",")
+                        .removeAll(" |)") ??
+                    ""),
+              ],
+            ),
+          ),
+        if (job.postBoost?.mailInfo == true)
+          Row(
+            children: [
+              Text(
+                "Email: ",
+                style: Get.textTheme.bodyLarge,
+              ),
+              Text(
+                job.postBoost?.employerDetails?.email ?? "",
+                style: const TextStyle(fontSize: 13),
+              ),
+            ],
+          ),
+        if (job.postBoost?.numberInfo == true)
+          Row(
+            children: [
+              Text(
+                "Mobile: ",
+                style: Get.textTheme.bodyLarge,
+              ),
+              Text(
+                job.postBoost?.employerDetails?.number ?? "",
+                style: const TextStyle(fontSize: 13),
+              ),
+            ],
+          ),
+        const Spacer(),
+      ],
+    );
+  }
+
+  Widget _job(Employer job) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        48.verticalSpace,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              Text("Tentative Joining Date: ", style: Get.textTheme.bodyLarge),
+              Text(
+                job.postBoost?.tentativeJoining ?? "",
+                style: Get.textTheme.bodyMedium?.copyWith(fontSize: 14),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              Flexible(
+                child: Text("Vessel Type: ",
+                    maxLines: 2, style: Get.textTheme.bodyLarge),
+              ),
+              Text(controller.vesselList?.vessels
+                      ?.map((e) => e.subVessels ?? [])
+                      .expand((e) => e)
+                      .firstWhereOrNull((e) => e.id == job.postBoost?.vesselId)
+                      ?.name ??
+                  ""),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              Text("GRT: ", style: Get.textTheme.bodyLarge),
+              Text(job.postBoost?.gRT.toString() ?? "")
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: job.postBoost?.jobRankWithWages
+                      ?.map((rankWithWages) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 3),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SvgPicture.asset("assets/icons/job.svg"),
+                                10.horizontalSpace,
+                                Flexible(
+                                  child: Text(
+                                    "${controller.ranks.firstWhereOrNull((rank) => rank.id == rankWithWages.rankNumber)?.name ?? ""} - ${rankWithWages.wages} USD",
+                                    style: const TextStyle(fontSize: 15),
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ))
+                      .toList() ??
+                  []),
+        ),
+        if (job.postBoost?.jobCoc != null &&
+            job.postBoost?.jobCoc?.isNotEmpty == true)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "COC Requirements: ",
+                  style: Get.textTheme.bodyLarge,
+                ),
+                Text(job.postBoost?.jobCoc
+                        ?.map(
+                          (e) =>
+                              "${controller.cocs.firstWhereOrNull((coc) => coc.id == e.cocId)?.name ?? ""} |",
+                        )
+                        .toString()
+                        .removeAll("(")
+                        .removeAll(",")
+                        .removeAll(" |)") ??
+                    ""),
+              ],
+            ),
+          ),
+        if (job.postBoost?.jobCop != null &&
+            job.postBoost?.jobCop?.isNotEmpty == true)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "COP Requirements: ",
+                  style: Get.textTheme.bodyLarge,
+                ),
+                Text(job.postBoost?.jobCop
+                        ?.map(
+                          (e) =>
+                              "${controller.cops.firstWhereOrNull((cop) => cop.id == e.copId)?.name ?? ""} |",
+                        )
+                        .toString()
+                        .removeAll("(")
+                        .removeAll(",")
+                        .removeAll(" |)") ??
+                    ""),
+              ],
+            ),
+          ),
+        if (job.postBoost?.jobWatchKeeping != null &&
+            job.postBoost?.jobWatchKeeping?.isNotEmpty == true)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Watch-Keeping Requirements: ",
+                  style: Get.textTheme.bodyLarge,
+                ),
+                Text(job.postBoost?.jobWatchKeeping
+                        ?.map(
+                          (e) =>
+                              "${controller.watchKeepings.firstWhereOrNull((watchKeeping) => watchKeeping.id == e.watchKeepingId)?.name ?? ""} |",
+                        )
+                        .toString()
+                        .removeAll("(")
+                        .removeAll(",")
+                        .removeAll(" |)") ??
+                    ""),
+              ],
+            ),
+          ),
+        if (job.postBoost?.mailInfo == true)
+          Row(
+            children: [
+              Text(
+                "Email: ",
+                style: Get.textTheme.bodyLarge,
+              ),
+              Text(
+                job.postBoost?.employerDetails?.email ?? "",
+                style: const TextStyle(fontSize: 13),
+              ),
+            ],
+          ),
+        if (job.postBoost?.numberInfo == true)
+          Row(
+            children: [
+              Text(
+                "Mobile: ",
+                style: Get.textTheme.bodyLarge,
+              ),
+              Text(
+                job.postBoost?.employerDetails?.number ?? "",
+                style: const TextStyle(fontSize: 13),
+              ),
+            ],
+          ),
+        const Spacer(),
+      ],
+    );
   }
 }

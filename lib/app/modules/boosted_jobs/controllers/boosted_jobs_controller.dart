@@ -7,6 +7,7 @@ import 'package:join_my_ship/app/data/models/vessel_list_model.dart';
 import 'package:join_my_ship/app/data/models/watch_keeping_model.dart';
 import 'package:join_my_ship/app/data/providers/coc_provider.dart';
 import 'package:join_my_ship/app/data/providers/cop_provider.dart';
+import 'package:join_my_ship/app/data/providers/flag_provider.dart';
 import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
 import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
 import 'package:join_my_ship/app/data/providers/watch_keeping_provider.dart';
@@ -50,9 +51,14 @@ class BoostedJobsController extends GetxController {
       loadRanks(),
       loadCOC(),
       loadCOP(),
-      loadWatchKeeping()
+      loadWatchKeeping(),
+      _getFlags(),
     ]);
     isLoading.value = false;
+  }
+
+  Future<void> _getFlags() async {
+    UserStates.instance.flags ??= await getIt<FlagProvider>().getFlags();
   }
 
   Future<void> loadVesselTypes() async {

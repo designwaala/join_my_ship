@@ -17,7 +17,7 @@ class PointHistoryProvider extends WrapperConnect {
 
   Future<List<PointHistory>?> getPointHistory() async {
     final response = await get(
-        "myadmin_api/get_wallet_history/${PreferencesHelper.instance.userId}/",
+        "myadmin_api/get_wallet_history/${PreferencesHelper.instance.userId}",
         query: {"wallet_type":  "1"});
     return response.body;
   }

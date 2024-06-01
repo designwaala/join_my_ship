@@ -68,4 +68,7 @@ class RemoteConfigUtils {
       }
     }
   }
+
+  bool get showDeleteAccountButton =>
+      _remoteConfig?.getBool("show_delete_account_button") ?? true;
 }

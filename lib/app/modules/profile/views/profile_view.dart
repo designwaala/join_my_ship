@@ -412,7 +412,9 @@ class ProfileView extends GetView<ProfileController> {
                             verificationRequired: true,
                             iconPath:
                                 "assets/images/profile/my_subscription.png",
-                            text: "My Subscriptions",
+                            text: 
+                            controller.crewUser.value?.userTypeKey == 2 ?
+                            "My Subscriptions" : "Subscriptions",
                             onTap: () {
                               Get.toNamed(Routes.SUBSCRIPTIONS);
                             }),
@@ -432,6 +434,7 @@ class ProfileView extends GetView<ProfileController> {
                         CardObject(
                             svgPath: "assets/icons/refer_and_earn.svg",
                             text: "Refer and Earn",
+                            verificationRequired: true,
                             onTap: () {
                               Get.toNamed(Routes.REFER_AND_EARN);
                             }),
@@ -515,6 +518,7 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                             ),
                           )),
+                      if (RemoteConfigUtils.instance.showDeleteAccountButton)
                       InkWell(
                         onTap: () {
                           showDialog(
