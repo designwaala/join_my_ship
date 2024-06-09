@@ -32,7 +32,8 @@ class ReferAndEarnController extends GetxController {
     referralCode = (await getIt<UserCodeProvider>().getUserCode())?.userCode;
     final response = await getIt<CheckReferralCodeApplyProvider>()
         .getCheckReferralCodeApply();
-    allowRefer.value = response?.msg?.contains("No refer code is used.") == true;
+    allowRefer.value =
+        response?.msg?.contains("No refer code is used.") == true;
     isLoading.value = false;
   }
 
@@ -53,11 +54,17 @@ class ReferAndEarnController extends GetxController {
       return;
     }
     isApplyingCode.value = true;
-    final response =
-        await getIt<AppliedReferCodeProvider>().applyCode(codeController.text);
-    if (response?.id != null) {
-      fToast.safeShowToast(child: successToast("Referral Code Applied!"));
+    try {
+      final response = await getIt<AppliedReferCodeProvider>()
+          .applyCode(codeController.text);
+      if (response?.id != null) {
+        allowRefer.value = false;
+        fToast.safeShowToast(child: successToast("Referral Code Applied!"));
+      }
+    } catch (e) {
+      fToast.safeShowToast(child: errorToast("Some error occurred"));
+    } finally {
+      isApplyingCode.value = false;
     }
-    isApplyingCode.value = false;
   }
 }

@@ -71,4 +71,10 @@ class RemoteConfigUtils {
 
   bool get showDeleteAccountButton =>
       _remoteConfig?.getBool("show_delete_account_button") ?? true;
+
+  bool get showEditEmailButton =>
+      _remoteConfig?.getBool("show_edit_email_button") ?? true;
+
+  bool get enableInAppReviewAndroid =>
+      _remoteConfig?.getBool("enable_in_app_review_android") ?? false;
 }

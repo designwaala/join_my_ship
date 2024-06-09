@@ -20,7 +20,7 @@ class AppVersionProvider extends WrapperConnect {
 
   Future<AppVersion?> getAppVersion() async {
     final response = appVersion ?? (await get(
-        'myadmin_api/app-version/${Platform.isAndroid ? "1" : "2"}/')).body;
+        'myadmin_api/app-version/${Platform.isAndroid ? "1" : "2"}/', headers: {})).body;
     appVersion = response;
     return response;
   }

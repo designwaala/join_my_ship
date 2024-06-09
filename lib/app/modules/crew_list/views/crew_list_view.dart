@@ -85,7 +85,7 @@ class CrewListView extends GetView<CrewListController> {
                                 horizontal: 8, vertical: 8),
                             itemCount: controller.crewList?.length,
                             itemBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Card(
                                 elevation: 3,
                                 shadowColor:

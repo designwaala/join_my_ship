@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -48,6 +49,11 @@ class _UnFocusGestureState extends State<UnFocusGesture> {
     });
     node = FocusNode();
     super.initState();
+    RemoteConfigUtils.instance.info?.forEach((info) {
+      CachedNetworkImage(
+        imageUrl: info.imagePath ?? "",
+      );
+    });
   }
 
   @override

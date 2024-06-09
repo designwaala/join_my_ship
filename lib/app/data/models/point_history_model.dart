@@ -5,6 +5,7 @@ class PointHistory {
   int? pointUsed;
   bool? processSuccessful;
   String? createdAt;
+  int? operationType;
 
   PointHistory(
       {this.id,
@@ -12,7 +13,8 @@ class PointHistory {
       this.subscriptionName,
       this.pointUsed,
       this.processSuccessful,
-      this.createdAt});
+      this.createdAt,
+      this.operationType});
 
   PointHistory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,6 +23,7 @@ class PointHistory {
     pointUsed = json['point_used'];
     processSuccessful = json['process_successful'];
     createdAt = json['created_at'];
+    operationType = json['operation_type'];
   }
 
   Map<String, dynamic> toJson() {

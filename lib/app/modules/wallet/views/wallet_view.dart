@@ -222,31 +222,42 @@ class WalletView extends GetView<WalletController> {
                                 horizontal: 24, vertical: 16),
                             child: Row(
                               children: [
-                                SvgPicture.asset(
-                                  "assets/icons/coins.svg",
-                                  height: 24,
-                                  width: 24,
-                                ),
-                                8.horizontalSpace,
-                                Expanded(
-                                  child: Text(
-                                      double.tryParse(controller
-                                                      .creditHistory?[index]
-                                                      .amount ??
-                                                  "")
-                                              ?.removeZeros
-                                              .toString() ??
-                                          "",
-                                      style: Get.textTheme.titleMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold)),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          "assets/icons/coins.svg",
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                        8.horizontalSpace,
+                                        Text(
+                                            controller.creditHistory?[index]
+                                                    .pointUsed
+                                                    .toString() ??
+                                                "",
+                                            style: Get.textTheme.titleMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                      ],
+                                    ),
+                                    4.verticalSpace,
+                                    Text(
+                                        controller.creditHistory?[index]
+                                                .subscriptionName ??
+                                            "",
+                                        style: Get.textTheme.bodySmall),
+                                  ],
                                 ),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       controller.creditHistory?[index]
-                                                  .paymentSuccessful ==
+                                                  .processSuccessful ==
                                               true
                                           ? Text("SUCCESSFULL",
                                               style: Get.textTheme.titleMedium

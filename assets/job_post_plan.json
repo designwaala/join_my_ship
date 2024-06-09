@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "name": "7 days - Per Day 1 Job Post",
+        "price": "0.00",
+        "duration_days": 7,
+        "monthly_limit": 1
+    },
+    {
+        "id": 2,
+        "name": "Pack 1 - 30 days - 30 per month - 3000",
+        "price": "3000.00",
+        "duration_days": 30,
+        "monthly_limit": 30
+    }
+]

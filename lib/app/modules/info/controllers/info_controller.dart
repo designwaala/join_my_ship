@@ -3,12 +3,19 @@ import 'package:get/get.dart';
 import 'package:join_my_ship/app/data/models/info_model.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/utils/remote_config.dart';
+import 'package:join_my_ship/utils/shared_preferences.dart';
 
 class InfoController extends GetxController {
   CarouselController carouselController = CarouselController();
   RxInt currentIndex = 0.obs;
 
   List<InfoModel>? infoModel = RemoteConfigUtils.instance.info;
+
+  @override
+  void onInit() {
+    PreferencesHelper.instance.clearAll();
+    super.onInit();
+  }
 
   onNextPressed() {
     if (currentIndex.value < (infoModel?.length ?? 0) - 1) {

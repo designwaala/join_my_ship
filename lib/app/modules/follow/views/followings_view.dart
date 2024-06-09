@@ -238,8 +238,7 @@ class FollowingsView extends GetView<FollowingsController> {
   }
 
   Widget _userCard(CrewUser user, int? followId) {
-    return Obx(() {
-      return InkWell(
+    return InkWell(
         onTap: () {
           Get.toNamed(Routes.APPLICANT_DETAIL,
               arguments: ApplicantDetailArguments(
@@ -288,22 +287,24 @@ class FollowingsView extends GetView<FollowingsController> {
                 ),
                 if ([FollowViewType.following, FollowViewType.savedProfile]
                     .contains(controller.args?.viewType))
-                  controller.unfollowId.value == followId
-                      ? const SizedBox(
-                          height: 16,
-                          width: 16,
-                          child: CircularProgressIndicator())
-                      : InkWell(
-                          onTap: () {
-                            controller.unfollow(followId ?? -1);
-                          },
-                          child: SvgPicture.asset("assets/icons/trash.svg")),
+                  Obx(() {
+                      return controller.unfollowId.value == followId
+                          ? const SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CircularProgressIndicator())
+                          : InkWell(
+                              onTap: () {
+                                controller.unfollow(followId ?? -1);
+                              },
+                              child: SvgPicture.asset("assets/icons/trash.svg"));
+                    }
+                  ),
                 16.horizontalSpace
               ],
             ),
           ),
         ),
       );
-    });
   }
 }

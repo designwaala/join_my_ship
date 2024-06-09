@@ -31,6 +31,7 @@ import 'package:join_my_ship/app/data/providers/flag_provider.dart';
 import 'package:join_my_ship/app/data/providers/follow_provider.dart';
 import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_application_provider.dart';
+import 'package:join_my_ship/app/data/providers/job_post_plan_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_post_plan_top_up_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_coc_post.dart';
@@ -195,7 +196,8 @@ void main() async {
     ..registerSingleton(JobShareProvider())
     ..registerSingleton(CheckReferralCodeApplyProvider())
     ..registerSingleton(AppVersionProvider())
-    ..registerSingleton(SubscriptionPlanProvider());
+    ..registerSingleton(SubscriptionPlanProvider())
+    ..registerSingleton(JobPostPlanProvider());
 }
 
 notificationListeners() {

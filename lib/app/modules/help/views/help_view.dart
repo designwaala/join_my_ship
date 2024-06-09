@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,7 +7,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:join_my_ship/utils/shared_preferences.dart';
+import 'package:open_store/open_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/help_controller.dart';
@@ -106,7 +110,8 @@ class HelpView extends GetView<HelpController> {
                     12.verticalSpace,
                     InkWell(
                       onTap: () {
-                        launchUrl(Uri.parse("https://www.linkedin.com/company/joinmyship"));
+                        launchUrl(Uri.parse(
+                            "https://www.linkedin.com/company/joinmyship"));
                       },
                       child: Text(
                         "www.linkedin.com/company/joinmyship",
@@ -140,11 +145,20 @@ class HelpView extends GetView<HelpController> {
                       10.verticalSpace,
                       InkWell(
                         onTap: () async {
-                          final InAppReview inAppReview = InAppReview.instance;
-                          if (await inAppReview.isAvailable()) {
-                            inAppReview.requestReview();
-                            PreferencesHelper.instance.setratingGiven(true);
-                            controller.isRatingGiven.value = true;
+                          if (RemoteConfigUtils
+                                  .instance.enableInAppReviewAndroid &&
+                              Platform.isAndroid) {
+                            final InAppReview inAppReview =
+                                InAppReview.instance;
+                            if (await inAppReview.isAvailable()) {
+                              inAppReview.requestReview();
+                              PreferencesHelper.instance.setratingGiven(true);
+                              controller.isRatingGiven.value = true;
+                            }
+                          } else {
+                            OpenStore.instance.open(
+                                appStoreId: "",
+                                androidAppBundleId: "com.joinmyship.android");
                           }
                         },
                         child: Row(

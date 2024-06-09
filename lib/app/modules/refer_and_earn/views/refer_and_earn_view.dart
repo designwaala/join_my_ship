@@ -217,8 +217,8 @@ Let's level up together! 🌈✨
                                       InkWell(
                                         onTap: () async {
                                           await Clipboard.setData(
-                                              const ClipboardData(
-                                                  text: "your text"));
+                                              ClipboardData(
+                                                  text: controller.referralCode ?? ""));
                                           controller.fToast.showToast(
                                               child:
                                                   successToast("Code Copied!"));

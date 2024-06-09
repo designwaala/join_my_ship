@@ -6,6 +6,7 @@ import 'package:join_my_ship/app/data/models/current_job_post_pack.dart';
 import 'package:join_my_ship/app/data/models/current_resume_pack.dart';
 import 'package:join_my_ship/app/data/models/current_resume_top_up.dart';
 import 'package:join_my_ship/app/data/models/highlight_model.dart';
+import 'package:join_my_ship/app/data/models/job_post_plan_model.dart';
 import 'package:join_my_ship/app/data/models/job_post_plan_top_up_model.dart';
 import 'package:join_my_ship/app/data/models/job_post_top_up_packs.dart';
 import 'package:join_my_ship/app/data/models/subscription_model.dart';
@@ -13,6 +14,7 @@ import 'package:join_my_ship/app/data/models/subscription_plan_model.dart';
 import 'package:join_my_ship/app/data/providers/boosting_provider.dart';
 import 'package:join_my_ship/app/data/providers/current_job_post_provider.dart';
 import 'package:join_my_ship/app/data/providers/highlight_provider.dart';
+import 'package:join_my_ship/app/data/providers/job_post_plan_provider.dart';
 import 'package:join_my_ship/app/data/providers/job_post_plan_top_up_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_pack_provider.dart';
 import 'package:join_my_ship/app/data/providers/resume_pack_buy_provider.dart';
@@ -69,7 +71,8 @@ class SubscriptionsController extends GetxController {
   List<CurrentJobPostPack>? currentJobPostPacks;
 
   SubscriptionPlan? jobPostTopUpPack;
-  List<Subscription> jobPostPacks = [];
+  // List<Subscription> jobPostPacks = [];
+  List<JobPostPlan> jobPostPacks = [];
 
   @override
   void onInit() {
@@ -141,7 +144,7 @@ class SubscriptionsController extends GetxController {
     jobPostTopUpPack =
         await getIt<SubscriptionPlanProvider>().getSubscriptionPlan(37);
     jobPostPacks =
-        (await getIt<SubscriptionProvider>().getSubscriptions(planType: 2)) ??
+        (await getIt<JobPostPlanProvider>().getJobPostPlan()) ??
             [];
   }
 

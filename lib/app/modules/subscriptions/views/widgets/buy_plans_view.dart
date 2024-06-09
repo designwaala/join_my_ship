@@ -316,7 +316,7 @@ class BuyPlansView extends GetView<SubscriptionsController> {
                                                     ),
                                                     4.horizontalSpace,
                                                     Text(
-                                                        "${jobPostPack.points ?? ""}",
+                                                        "${double.tryParse(jobPostPack.price ?? "") ?? ""}",
                                                         style: Get.textTheme
                                                             .titleLarge),
                                                   ],
@@ -324,7 +324,9 @@ class BuyPlansView extends GetView<SubscriptionsController> {
                                                 8.verticalSpace,
                                                 // const Text("Post 30 Jobs for a Month"),
                                                 Text(
-                                                    "Validity: ${jobPostPack.daysActive ?? ""} days"),
+                                                      "Post ${jobPostPack.monthlyLimit ?? ""} New Jobs"),
+                                                Text(
+                                                    "Validity: ${jobPostPack.durationDays ?? ""} days"),
                                                 Align(
                                                   alignment:
                                                       Alignment.centerRight,

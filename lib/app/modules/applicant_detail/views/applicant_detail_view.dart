@@ -339,12 +339,7 @@ class ApplicantDetailView extends GetView<ApplicantDetailController> {
                                                     .join(", ") ??
                                                 "",
                                             textAlign: TextAlign.end,
-                                            style: Get.textTheme.titleMedium
-                                                ?.copyWith(
-                                                    color:
-                                                        Get.theme.primaryColor,
-                                                    fontWeight:
-                                                        FontWeight.w600))
+                                            style: Get.textTheme.titleMedium)
                                       ]),
                                 if (controller.applicantDetails
                                         ?.sTCWIssuingAuthority?.isNotEmpty ==

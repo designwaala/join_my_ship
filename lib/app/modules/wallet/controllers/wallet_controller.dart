@@ -18,8 +18,8 @@ class WalletController extends GetxController {
   RxBool isLoadingCredits = false.obs;
   RxBool isLoading = false.obs;
 
-  List<Order>? creditHistory;
   List<PointHistory>? debitHistory;
+  List<PointHistory>? creditHistory;
 
   Rx<WalletViewType> view = Rx(WalletViewType.credit);
 
@@ -32,12 +32,9 @@ class WalletController extends GetxController {
 
   Future<void> getTransactions() async {
     isLoading.value = true;
-    await Future.wait([
-      getIt<OrderProvider>().getOrders().then((value) => creditHistory = value),
-      getIt<PointHistoryProvider>()
-          .getPointHistory()
-          .then((value) => debitHistory = value),
-    ]);
+    final history = await getIt<PointHistoryProvider>().getPointHistory();
+    debitHistory = history?.where((e) => e.operationType == 1).toList();
+    creditHistory = history?.where((e) => e.operationType == 0).toList();
     isLoading.value = false;
   }
 
@@ -86,7 +83,7 @@ enum WalletViewType {
                             width: 18,
                           ),
                           8.horizontalSpace,
-                          Text(credit.amount.toString())
+                          Text(credit.pointUsed.toString())
                         ],
                       ),
                     ))

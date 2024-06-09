@@ -10,6 +10,7 @@ import 'package:join_my_ship/app/modules/crew-onboarding/controllers/crew_onboar
 import 'package:join_my_ship/app/modules/crew_sign_in_mobile/controllers/crew_sign_in_mobile_controller.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:join_my_ship/widgets/custom_text_form_field.dart';
 
 class ContactDetails extends GetView<CrewOnboardingController> {
@@ -155,7 +156,7 @@ class ContactDetails extends GetView<CrewOnboardingController> {
                 initialValue: FirebaseAuth.instance.currentUser?.email,
                 readOnly: true,
               ),
-              if (controller.crewUser?.userTypeKey == 2)
+              if (controller.crewUser?.userTypeKey == 2 && RemoteConfigUtils.instance.showEditEmailButton)
                 InkWell(
                   onTap: () {
                     Get.toNamed(Routes.UPDATE_EMAIL);
