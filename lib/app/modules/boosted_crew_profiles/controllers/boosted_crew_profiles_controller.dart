@@ -30,7 +30,8 @@ class BoostedCrewProfilesController extends GetxController {
 
   init() async {
     isLoading.value = true;
-    await Future.wait([loadRanks(), loadCountry()]);
+    await loadRanks();
+    await loadCountry();
     isLoading.value = false;
   }
 

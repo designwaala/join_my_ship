@@ -77,4 +77,7 @@ class RemoteConfigUtils {
 
   bool get enableInAppReviewAndroid =>
       _remoteConfig?.getBool("enable_in_app_review_android") ?? false;
+
+  bool get retrySlashAPICall =>
+      _remoteConfig?.getBool("retry_slash_api_call") ?? false;
 }

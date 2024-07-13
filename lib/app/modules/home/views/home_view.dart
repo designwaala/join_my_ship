@@ -330,7 +330,7 @@ class HomeView extends GetView<HomeController> {
             ClipPath(
               clipper: CustomShape(),
               child: Container(
-                height: 210,
+                height: 210.h,
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: [
                   Color.fromRGBO(1, 66, 211, 1),
@@ -383,7 +383,7 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             Positioned(
-              bottom: 16,
+              bottom: 16.h,
               left: 28,
               right: 28,
               child: PhysicalModel(
@@ -613,7 +613,7 @@ class HomeView extends GetView<HomeController> {
             ClipPath(
               clipper: CustomShape(),
               child: Container(
-                height: 210,
+                height: 210.h,
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: [
                   Color.fromRGBO(1, 66, 211, 1),
@@ -666,7 +666,7 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             Positioned(
-              bottom: 16,
+              bottom: 16.h,
               left: 28,
               right: 28,
               child: PhysicalModel(

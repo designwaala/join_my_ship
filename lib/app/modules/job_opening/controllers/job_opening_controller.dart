@@ -114,8 +114,8 @@ class JobOpeningController extends GetxController {
     isLoading.value = true;
     currentEmployerUser.value = UserStates.instance.crewUser ??
         await getIt<CrewUserProvider>().getCrewUser();
+    await loadJobOpenings();
     await Future.wait([
-      loadJobOpenings(),
       loadVesselTypes(),
       loadRanks(),
       loadCOC(),
@@ -245,6 +245,14 @@ class JobOpeningController extends GetxController {
   }
 
   Future<void> captureWidget() async {
+    if (Platform.isIOS) {
+      Share.share('''
+        Click on this link to view this Job
+        ${getJobShareLink(jobOpening.value?.id)}
+        ''', 
+      subject: "Hey wanna apply to this Job?");
+      return ;
+    }
     buildCaptureWidget.value = true;
     try {
       await Future.delayed(const Duration(milliseconds: 200));

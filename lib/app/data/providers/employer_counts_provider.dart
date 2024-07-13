@@ -15,7 +15,7 @@ class EmployerCountsProvider extends WrapperConnect {
   }
 
   Future<EmployerCounts?> getEmployerCounts() async {
-    final response = await get('employer/get_count_jobs_follow');
+    final response = await get('employer/get_count_jobs_follow/');
     return response.body;
   }
 }

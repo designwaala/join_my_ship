@@ -21,7 +21,7 @@ class ResumePackBuyProvider extends WrapperConnect {
 
   Future<List<CurrentResumePack>?> getCurrentBoughtPacks() async {
     final response = await get(
-        "crew/subscribed_pack_plan/${PreferencesHelper.instance.userId}");
+        "crew/subscribed_pack_plan/${PreferencesHelper.instance.userId}/");
     return response.body;
   }
 }

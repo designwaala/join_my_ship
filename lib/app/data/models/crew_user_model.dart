@@ -68,6 +68,7 @@ class CrewUser {
   int? userStatus;
   bool? isHighlighted;
   String? userCode;
+  bool? isPasswordChange;
 
   CrewUser(
       {this.id,
@@ -117,7 +118,8 @@ class CrewUser {
       this.userLink,
       this.userStatus,
       this.isHighlighted,
-      this.userCode});
+      this.userCode,
+      this.isPasswordChange});
 
   bool get isPrimaryUser => userStatus == 1;
 
@@ -182,6 +184,7 @@ class CrewUser {
     //   });
     // }
     userCode = json['user_code'];
+    isPasswordChange = json['is_password_change'];
   }
 
   Map<String, String> toJson() {

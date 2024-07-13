@@ -101,8 +101,9 @@ class SubscriptionsController extends GetxController {
   Future<void> getJobPostData() async {
     currentJobPostTopUps =
         await getIt<JobPostPlanTopUpProvider>().getJobPostPlanTopUp();
-    currentJobPostPacks =
+    final allJobPostPlans =
         (await getIt<CurrentJobPostProvider>().getCurrentJobPostPacks()) ?? [];
+    currentJobPostPacks = allJobPostPlans.where((e) => e.isActive == true).toList();
   }
 
   Future<void> getPurchases() async {

@@ -46,8 +46,8 @@ class BoostedJobsController extends GetxController {
 
   initialize() async {
     isLoading.value = true;
+    await loadVesselTypes();
     await Future.wait([
-      loadVesselTypes(),
       loadRanks(),
       loadCOC(),
       loadCOP(),

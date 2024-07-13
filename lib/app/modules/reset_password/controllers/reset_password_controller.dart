@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:join_my_ship/app/data/providers/toggle_password_provider.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
 import 'package:join_my_ship/utils/extensions/toast_extension.dart';
@@ -49,6 +50,7 @@ class ResetPasswordController extends GetxController {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim())
           .then((value) {
+        getIt<TogglePasswordProvider>().passwordResetSetRequestInitiate(email: emailController.text.trim());
         fToast.safeShowToast(child: successToast("Passowrd reset email sent"));
         Get.back();
         checkEmailView.value = true;

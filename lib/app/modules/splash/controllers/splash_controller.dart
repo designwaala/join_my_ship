@@ -3,12 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:join_my_ship/app/data/models/app_version_model.dart';
 import 'package:join_my_ship/app/data/models/crew_user_model.dart';
 import 'package:join_my_ship/app/data/providers/app_version_provider.dart';
 import 'package:join_my_ship/app/data/providers/crew_user_provider.dart';
+import 'package:join_my_ship/app/data/providers/password_change_provider.dart';
+import 'package:join_my_ship/app/data/providers/toggle_password_provider.dart';
 import 'package:join_my_ship/app/modules/choose_user/controllers/choose_user_controller.dart';
 import 'package:join_my_ship/app/modules/email_verification_waiting/controllers/email_verification_waiting_controller.dart';
 import 'package:join_my_ship/app/modules/sign_up_email/controllers/sign_up_email_controller.dart';
@@ -64,6 +67,10 @@ mixin RedirectionMixin {
 
   RxBool updateApp = false.obs;
 
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+        encryptedSharedPreferences: true,
+      );
+
   Future<void> getUser() async {
     if (FirebaseAuth.instance.currentUser == null) {
       return;
@@ -82,11 +89,37 @@ mixin RedirectionMixin {
         await getIt<CrewUserProvider>().getAccessTokens();
       }
       if (PreferencesHelper.instance.accessToken.nullIfEmpty() != null) {
+        final token = await FirebaseAuth.instance.currentUser?.getIdToken();
+        print(token);
         user = await getIt<CrewUserProvider>().getCrewUser();
+        _completeChangePassword();
         UserStates.instance.crewUser = user;
       } else {
         print("Access Tokens not found. -> Splash");
       }
+    }
+  }
+
+  Future<void> _completeChangePassword() async {
+    if (user?.isPasswordChange != true) {
+      return;
+    }
+    final password = await FlutterSecureStorage(aOptions: _getAndroidOptions())
+        .read(key: "password");
+    if (password == null) {
+      return;
+    }
+    final response =
+        await getIt<PasswordChangeProvider>().postPasswordChange(password);
+    if (response.message == null) {
+      return;
+    }
+    fToast.safeShowToast(
+        child: successToast(
+            response.message ?? "Password Change was successfull"));
+    if (user?.email != null) {
+      await getIt<TogglePasswordProvider>()
+          .passwordResetRequestTerminate(email: user!.email!);
     }
   }
 
@@ -104,7 +137,8 @@ mixin RedirectionMixin {
     final appVersion = await getIt<AppVersionProvider>().getAppVersion();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     double currentVersion = double.tryParse(packageInfo.buildNumber) ?? 0.0;
-    double latestVersion = double.tryParse(appVersion?.versionName ?? "") ?? 0.0;
+    double latestVersion =
+        double.tryParse(appVersion?.versionName ?? "") ?? 0.0;
     if (currentVersion < latestVersion) {
       updateApp.value = true;
       return;

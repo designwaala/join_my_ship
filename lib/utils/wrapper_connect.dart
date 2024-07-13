@@ -10,6 +10,8 @@ import 'package:join_my_ship/app/data/models/error.dart';
 import 'package:join_my_ship/app/data/models/login_model.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
 import 'package:join_my_ship/main.dart';
+import 'package:join_my_ship/utils/extensions/string_extensions.dart';
+import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:join_my_ship/utils/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:join_my_ship/widgets/top_modal_sheet.dart';
@@ -21,7 +23,7 @@ class WrapperConnect extends GetConnect {
     Get.offAllNamed(Routes.INFO);
   }
 
-  Future<http.Response> _rawGetCore(String url,
+/*   Future<http.Response> _rawGetCore(String url,
       {Map<String, String>? headers}) async {
     FirebaseCrashlytics.instance.log("Making GET request $url}");
     var request = http.Request('GET', Uri.parse("$baseURL/$url"));
@@ -31,9 +33,9 @@ class WrapperConnect extends GetConnect {
     FirebaseCrashlytics.instance
         .log("GET Response $url ${response.body} ${response.statusCode}");
     return response;
-  }
+  } */
 
-  Future<dynamic> rawGet<T>(String url,
+/*   Future<dynamic> rawGet<T>(String url,
       {Map<String, String>? headers, bool softRefresh = false}) async {
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
@@ -60,7 +62,7 @@ class WrapperConnect extends GetConnect {
     }
 
     return jsonDecode(response.body);
-  }
+  } */
 
   Future<dynamic> httpGet<T>(
       {Uri? uri,
@@ -130,7 +132,7 @@ class WrapperConnect extends GetConnect {
         return Response<T>();
       }
     }
-    var response = await super.get<T>(
+    var response = await _getCore<T>(
       url,
       headers: headers ??
           {"Authorization": "Bearer ${PreferencesHelper.instance.accessToken}"},
@@ -141,7 +143,7 @@ class WrapperConnect extends GetConnect {
     if (response.statusCode == 401) {
       print("Refreshing Access Token");
       await refreshAccessToken();
-      response = await super.get<T>(
+      response = await _getCore<T>(
         url,
         headers: headers ??
             {
@@ -156,7 +158,7 @@ class WrapperConnect extends GetConnect {
       if (response.statusCode == 401) {
         print("Refreshing Access Token didnt work, getting new Tokens");
         await getAccessTokens();
-        response = await super.get<T>(
+        response = await _getCore<T>(
           url,
           headers: headers ??
               {
@@ -232,6 +234,49 @@ class WrapperConnect extends GetConnect {
     return response;
   }
 
+  Future<Response<T>> _getCore<T>(
+    String url, {
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+  }) async {
+    var response = await super.get<dynamic>(
+      url,
+      headers: headers,
+      contentType: contentType,
+      query: query,
+      decoder: (data) => data,
+      // decoder: decoder,
+    );
+    if (response.bodyString?.nullIfEmpty() != null) {
+      try {
+        jsonDecode(response.bodyString ?? "");
+      } catch (e, st) {
+        FirebaseCrashlytics.instance.recordError(Exception("Unable to parse response from $url GET API ${RemoteConfigUtils.instance.retrySlashAPICall ? "Retrying": "Not Retrying"}"), st);
+        if (RemoteConfigUtils.instance.retrySlashAPICall) {
+          String correctedUrl = url.substring(url.length - 1) == "/" ? url.substring(0, url.length - 1) : "$url/";
+          response = await super.get<dynamic>(
+            correctedUrl,
+            headers: headers,
+            contentType: contentType,
+            query: query,
+            decoder: decoder ?? httpClient.defaultDecoder,
+          );
+        }
+      }
+    }
+    return Response(
+    request: response.request,
+    statusCode: response.statusCode,
+    bodyBytes: response.bodyBytes,
+    bodyString: response.bodyString,
+    statusText: response.statusText,
+    headers: response.headers,
+    body: decoder?.call(jsonDecode(response.bodyString ?? "")) ?? httpClient.defaultDecoder?.call(jsonDecode(response.bodyString ?? ""))
+    );
+  }
+
   Future<bool> getAccessTokens() async {
     String? idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (idToken == null) {
@@ -285,7 +330,7 @@ class WrapperConnect extends GetConnect {
       print("Access Token not found, getting them");
       await getAccessTokens();
     }
-    var response = await super.post<T>(
+    var response = await _postCore<T>(
       url,
       body,
       headers: headers ??
@@ -298,7 +343,7 @@ class WrapperConnect extends GetConnect {
     if (response.statusCode == 401) {
       print("Refreshing Access Token");
       await refreshAccessToken();
-      response = await super.post<T>(
+      response = await _postCore<T>(
         url,
         body,
         headers: headers ??
@@ -314,7 +359,7 @@ class WrapperConnect extends GetConnect {
       if (response.statusCode == 401) {
         print("Refreshing Access Token didnt work, getting new Tokens");
         await getAccessTokens();
-        response = await super.post<T>(
+        response = await _postCore<T>(
           url,
           body,
           headers: headers ??
@@ -390,6 +435,54 @@ class WrapperConnect extends GetConnect {
     FirebaseCrashlytics.instance.log(
         "POST Response $url ${response.bodyString} ${response.statusCode}");
     return response;
+  }
+
+  Future<Response<T>> _postCore<T>(
+    String? url,
+    dynamic body, {
+    String? contentType,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+    Progress? uploadProgress,
+  }) async {
+    var response = await super.post<dynamic>(
+      url,
+      body,
+      headers: headers,
+      contentType: contentType,
+      query: query,
+      decoder: (data) => data,
+      uploadProgress: uploadProgress,
+    );
+    if (response.bodyString?.nullIfEmpty() != null) {
+      try {
+        jsonDecode(response.bodyString ?? "");
+      } catch (e, st) {
+        FirebaseCrashlytics.instance.recordError(Exception("Unable to parse response from $url POST API ${RemoteConfigUtils.instance.retrySlashAPICall ? "Retrying": "Not Retrying"}"), st);
+        if (RemoteConfigUtils.instance.retrySlashAPICall) {
+          String correctedUrl = (url?.substring(url.length - 1) == "/" ? url?.substring(0, url.length - 1) : "$url/") ?? "";
+          response = await super.post<dynamic>(
+            correctedUrl,
+            body,
+            headers: headers,
+            contentType: contentType,
+            query: query,
+            decoder: decoder ?? httpClient.defaultDecoder,
+            uploadProgress: uploadProgress,
+          );
+        }
+      }
+    }
+    return Response(
+      request: response.request,
+      statusCode: response.statusCode,
+      bodyBytes: response.bodyBytes,
+      bodyString: response.bodyString,
+      statusText: response.statusText,
+      headers: response.headers,
+      body: decoder?.call(jsonDecode(response.bodyString ?? "")) ?? httpClient.defaultDecoder?.call(jsonDecode(response.bodyString ?? ""))
+    );
   }
 
   Future<Map<String, dynamic>> multipartPatch(String url, dynamic body,
@@ -488,6 +581,22 @@ class WrapperConnect extends GetConnect {
     http.StreamedResponse streamedResponse = await request.send();
 
     var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.body.nullIfEmpty() != null) {
+      try {
+        jsonDecode(response.body);
+      } catch (e, st) {
+        FirebaseCrashlytics.instance.recordError(Exception("Unable to parse response from $url PATCH API ${RemoteConfigUtils.instance.retrySlashAPICall ? "Retrying": "Not Retrying"}"), st);
+        if (RemoteConfigUtils.instance.retrySlashAPICall) {
+          String correctedUrl = url.substring(url.length - 1) == "/" ? url.substring(0, url.length - 1) : "$url/";
+          request = http.MultipartRequest('PATCH', Uri.parse("$baseURL$correctedUrl"));
+          request.fields.addAll(body is Map ? body : body.toJson());
+          request.headers.addAll(headers);
+          http.StreamedResponse streamedResponse = await request.send();
+          response = await http.Response.fromStream(streamedResponse);
+        }
+    }
+    }
     if (streamedResponse.statusCode == 200) {
       // print(await streamedResponse.stream.bytesToString());
     } else {
@@ -499,21 +608,21 @@ class WrapperConnect extends GetConnect {
   }
 
   Future<Map<String, dynamic>> multipartPost(String url, dynamic body,
-      {Map<String, dynamic>? headers}) async {
+      {Map<String, String>? headers}) async {
     print(PreferencesHelper.instance.accessToken);
     if (PreferencesHelper.instance.accessToken.isEmpty) {
       print("Access Token not found, getting them");
       await getAccessTokens();
     }
-    var response = await _multipartPostCore(url, body);
+    var response = await _multipartPostCore(url, body, headers: headers);
     if (response.statusCode == 401) {
       print("Refreshing Access Token");
       await refreshAccessToken();
-      response = await _multipartPostCore(url, body);
+      response = await _multipartPostCore(url, body, headers: headers);
       if (response.statusCode == 401) {
         print("Refreshing Access Token didnt work, getting new Tokens");
         await getAccessTokens();
-        response = await _multipartPostCore(url, body);
+        response = await _multipartPostCore(url, body, headers: headers);
         if (response.statusCode == 401) {
           signOut();
         } else if ((response.statusCode ?? 0) >= 300) {
@@ -616,6 +725,23 @@ class WrapperConnect extends GetConnect {
     http.StreamedResponse streamedResponse = await request.send();
 
     var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.body.nullIfEmpty() != null) {
+      try {
+        jsonDecode(response.body);
+      } catch (e, st) {
+        FirebaseCrashlytics.instance.recordError(Exception("Unable to parse response from $url POST API ${RemoteConfigUtils.instance.retrySlashAPICall ? "Retrying": "Not Retrying"}"), st);
+        if (RemoteConfigUtils.instance.retrySlashAPICall) {
+          String correctedUrl = url.substring(url.length - 1) == "/" ? url.substring(0, url.length - 1) : "$url/";
+          request = http.MultipartRequest('POST', Uri.parse("$baseURL$correctedUrl"));
+          request.fields.addAll(body is Map ? body : body.toJson());
+          request.headers.addAll(headers);
+          http.StreamedResponse streamedResponse = await request.send();
+          response = await http.Response.fromStream(streamedResponse);
+        }
+      }
+    }
+
     if (streamedResponse.statusCode == 200) {
       // print(await streamedResponse.stream.bytesToString());
     } else {
@@ -643,8 +769,8 @@ class WrapperConnect extends GetConnect {
       await getAccessTokens();
     }
 
-    var response = await http.patch(Uri.parse("$baseURL$url"),
-        body: body, // is Map ? jsonEncode(body) : body,
+    var response = await _httpPatchCore("$baseURL$url",
+        body, // is Map ? jsonEncode(body) : body,
         headers: headers ??
             {
               "Content-Type": "multipart/form-data",
@@ -654,8 +780,8 @@ class WrapperConnect extends GetConnect {
     if (response.statusCode == 401) {
       print("Refreshing Access Token");
       await refreshAccessToken();
-      response = await http.patch(Uri.parse("$baseURL/$url"),
-          body: jsonEncode(body),
+      response = await _httpPatchCore("$baseURL/$url",
+          jsonEncode(body),
           headers: headers ??
               {
                 "Content-Type": "multipart/form-data",
@@ -666,8 +792,8 @@ class WrapperConnect extends GetConnect {
       if (response.statusCode == 401) {
         print("Refreshing Access Token didnt work, getting new Tokens");
         await getAccessTokens();
-        response = await http.patch(Uri.parse("$baseURL$url"),
-            body: jsonEncode(body),
+        response = await _httpPatchCore("$baseURL$url",
+            jsonEncode(body),
             headers: headers ??
                 {
                   "Content-Type": "multipart/form-data",
@@ -740,6 +866,41 @@ class WrapperConnect extends GetConnect {
     return jsonDecode(response.body);
   }
 
+  Future<http.Response> _httpPatchCore(
+    String? url,
+    dynamic body, {
+    Map<String, String>? headers,
+  }) async {
+    var response = await http.patch(Uri.parse("$baseURL$url"),
+        body: body,
+        headers: headers ??
+            {
+              "Content-Type": "multipart/form-data",
+              "Authorization":
+                  "Bearer ${PreferencesHelper.instance.accessToken}"
+      });
+    
+    if (response.body.nullIfEmpty() != null) {
+      try {
+        jsonDecode(response.body);
+      } catch (e, st) {
+        FirebaseCrashlytics.instance.recordError(Exception("Unable to parse response from $url PATCH API ${RemoteConfigUtils.instance.retrySlashAPICall ? "Retrying": "Not Retrying"}"), st);
+        if (RemoteConfigUtils.instance.retrySlashAPICall) {
+        String correctedUrl = (url?.substring(url.length - 1) == "/" ? url?.substring(0, url.length - 1) : "$url/") ?? "";
+        response = await http.patch(Uri.parse("$baseURL$correctedUrl"),
+          body: body,
+          headers: headers ??
+              {
+                "Content-Type": "multipart/form-data",
+                "Authorization":
+                    "Bearer ${PreferencesHelper.instance.accessToken}"
+        });
+        }
+      }
+    } 
+    return response;
+  }
+  
   @override
   Future<Response<T>> delete<T>(
     String url, {
@@ -754,7 +915,7 @@ class WrapperConnect extends GetConnect {
       print("Access Token not found, getting them");
       await getAccessTokens();
     }
-    var response = await super.delete(
+    var response = await _deleteCore(
       url,
       headers: headers ??
           {"Authorization": "Bearer ${PreferencesHelper.instance.accessToken}"},
@@ -766,7 +927,7 @@ class WrapperConnect extends GetConnect {
     if (response.statusCode == 401) {
       print("Refreshing Access Token");
       await refreshAccessToken();
-      response = await super.delete(
+      response = await _deleteCore(
         url,
         headers: headers ??
             {
@@ -780,7 +941,7 @@ class WrapperConnect extends GetConnect {
       if (response.statusCode == 401) {
         print("Refreshing Access Token didnt work, getting new Tokens");
         await getAccessTokens();
-        response = await super.delete(
+        response = await _deleteCore(
           url,
           headers: headers ??
               {
@@ -856,6 +1017,47 @@ class WrapperConnect extends GetConnect {
     return response;
   }
 
+  Future<Response<T>> _deleteCore<T>(
+    String url, {
+    Map<String, String>? headers,
+    String? contentType,
+    Map<String, dynamic>? query,
+    Decoder<T>? decoder,
+  }) async {
+    var response = await super.delete<dynamic>(
+      url,
+      headers: headers,
+      contentType: contentType,
+      query: query,
+      decoder: (data) => data,
+    );
+    if (response.bodyString?.nullIfEmpty() != null) {
+      try {
+        jsonDecode(response.bodyString ?? "");
+      } catch (e, st) {
+        FirebaseCrashlytics.instance.recordError(Exception("Unable to parse response from $url DELETE API ${RemoteConfigUtils.instance.retrySlashAPICall ? "Retrying": "Not Retrying"}"), st);
+        if (RemoteConfigUtils.instance.retrySlashAPICall) {
+          String correctedUrl = url.substring(url.length - 1) == "/" ? url.substring(0, url.length - 1) : "$url/";
+          response = await super.delete<dynamic>(
+            correctedUrl,
+            headers: headers,
+            contentType: contentType,
+            query: query,
+            decoder: decoder ?? httpClient.defaultDecoder,
+          );
+        }
+      }
+    }
+    return Response(
+      request: response.request,
+      statusCode: response.statusCode,
+      bodyBytes: response.bodyBytes,
+      bodyString: response.bodyString,
+      statusText: response.statusText,
+      headers: response.headers,
+    );
+  }
+  
   Future<int?> multipartDelete(String url, dynamic body,
       {Map<String, dynamic>? headers}) async {
     print(PreferencesHelper.instance.accessToken);
@@ -920,6 +1122,22 @@ class WrapperConnect extends GetConnect {
     http.StreamedResponse streamedResponse = await request.send();
 
     var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.body.nullIfEmpty() != null) {
+      try {
+        jsonDecode(response.body);
+      } catch (e, st) {
+        FirebaseCrashlytics.instance.recordError(Exception("Unable to parse response from $url DELETE API ${RemoteConfigUtils.instance.retrySlashAPICall ? "Retrying": "Not Retrying"}"), st);
+        if (RemoteConfigUtils.instance.retrySlashAPICall) {
+          String correctedUrl = url.substring(url.length - 1) == "/" ? url.substring(0, url.length - 1) : "$url/";
+          request = http.MultipartRequest('DELETE', Uri.parse("$baseURL$correctedUrl"));
+          request.fields.addAll(body is Map ? body : body.toJson());
+          request.headers.addAll(headers);
+          http.StreamedResponse streamedResponse = await request.send();
+          response = await http.Response.fromStream(streamedResponse);
+        }
+      }
+    }
     if (streamedResponse.statusCode == 200) {
       // print(await streamedResponse.stream.bytesToString());
     } else {

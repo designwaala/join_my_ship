@@ -293,7 +293,7 @@ class BuyPlansView extends GetView<SubscriptionsController> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 8.verticalSpace,
-                                                Text("Pack ${index + 1}",
+                                                Text(jobPostPack.name ?? "",
                                                     style: Get
                                                         .textTheme.titleMedium
                                                         ?.copyWith(

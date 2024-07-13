@@ -45,6 +45,7 @@ import 'package:join_my_ship/app/data/providers/login_provider.dart';
 import 'package:join_my_ship/app/data/providers/notification_provider.dart';
 import 'package:join_my_ship/app/data/providers/order_provider.dart';
 import 'package:join_my_ship/app/data/providers/passport_issuing_authority_provider.dart';
+import 'package:join_my_ship/app/data/providers/password_change_provider.dart';
 import 'package:join_my_ship/app/data/providers/point_history_provider.dart';
 import 'package:join_my_ship/app/data/providers/previous_employer_provider.dart';
 import 'package:join_my_ship/app/data/providers/ranks_provider.dart';
@@ -58,6 +59,7 @@ import 'package:join_my_ship/app/data/providers/state_provider.dart';
 import 'package:join_my_ship/app/data/providers/stcw_issuing_authority_provider.dart';
 import 'package:join_my_ship/app/data/providers/subscription_plan_provider.dart';
 import 'package:join_my_ship/app/data/providers/subscription_provider.dart';
+import 'package:join_my_ship/app/data/providers/toggle_password_provider.dart';
 import 'package:join_my_ship/app/data/providers/user_code_provider.dart';
 import 'package:join_my_ship/app/data/providers/user_details_provider.dart';
 import 'package:join_my_ship/app/data/providers/vessel_list_provider.dart';
@@ -197,7 +199,9 @@ void main() async {
     ..registerSingleton(CheckReferralCodeApplyProvider())
     ..registerSingleton(AppVersionProvider())
     ..registerSingleton(SubscriptionPlanProvider())
-    ..registerSingleton(JobPostPlanProvider());
+    ..registerSingleton(JobPostPlanProvider())
+    ..registerSingleton(PasswordChangeProvider())
+    ..registerSingleton(TogglePasswordProvider());
 }
 
 notificationListeners() {
@@ -222,8 +226,10 @@ notificationListeners() {
 _handleLink(Uri uri) async {
   switch (uri.path.split("/")[1]) {
     case "new-user":
+    {
       UserStates.instance.isCrew = false;
-      showDialog(
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        showDialog(
           context: Get.context!,
           builder: (context) {
             return AlertDialog(
@@ -237,12 +243,16 @@ _handleLink(Uri uri) async {
               ),
             );
           });
+      });
+      print(uri.path.split("/").last);
       UserStates.instance.userLink = uri.path.split("/").last;
       PreferencesHelper.instance.setUserLink(uri.path.split("/").last);
       await getIt<CrewUserProvider>()
           .fetchSubUserDetails(uri.path.split("/").last);
       Get.back();
       Get.toNamed(Routes.CHOOSE_EMPLOYER, preventDuplicates: false);
+      break;
+    }
   }
 }
 

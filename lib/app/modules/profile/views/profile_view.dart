@@ -397,7 +397,7 @@ class ProfileView extends GetView<ProfileController> {
                             onTap: () {
                               Get.toNamed(Routes.WALLET);
                             }),
-                        if (controller.crewUser.value?.userTypeKey == 3 &&
+                        if ([3, 4].contains(controller.crewUser.value?.userTypeKey) &&
                             controller.crewUser.value?.isPrimaryUser == true)
                           CardObject(
                               iconPath:

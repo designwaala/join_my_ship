@@ -104,8 +104,8 @@ class CompanyDetailController extends GetxController {
         await getIt<CountryProvider>().getCountry();
     jobs =
         (await getIt<JobProvider>().getJobList(employerId: employer?.id)) ?? [];
+    await loadVesselTypes();
     await Future.wait([
-      loadVesselTypes(),
       loadRanks(),
       loadCOC(),
       loadCOP(),
@@ -213,6 +213,15 @@ class CompanyDetailController extends GetxController {
   }
 
   Future<void> captureWidget(Job job) async {
+    if (Platform.isIOS) {
+      Share.share('''
+        Click on this link to view this Job
+        ${getJobShareLink(job.id)}
+        ''',
+      subject: "Hey wanna apply to this Job?"
+      );
+      return ;
+    }
     jobToBuild = job;
     buildCaptureWidget.value = true;
     try {

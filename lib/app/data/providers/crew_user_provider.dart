@@ -350,7 +350,7 @@ class CrewUserProvider extends WrapperConnect {
   }
 
   Future<List<CrewUser>?> fetchSubUserDetails(String userLink) async {
-    final response = await get<List<CrewUser>?>("crew/referral_list/$userLink",
+    final response = await get<List<CrewUser>?>("crew/referral_list/$userLink/",
         headers: {}, decoder: (map) {
       return List<CrewUser>.from(map.map((x) => CrewUser.fromJson(x)));
     });

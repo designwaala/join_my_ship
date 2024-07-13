@@ -62,12 +62,8 @@ class EmployerJobApplicationsController extends GetxController {
 
   instantiate() async {
     isLoading.value = true;
-
-    await Future.wait([
-      loadJobApplications(),
-      loadRanks(),
-    ]);
-
+    await loadJobApplications();
+    await loadRanks();
     isLoading.value = false;
   }
 

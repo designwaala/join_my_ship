@@ -44,6 +44,14 @@ class CrewJobApplicationsController extends GetxController {
   }
 
   Future<void> captureWidget(Application application) async {
+    if (Platform.isIOS) {
+      Share.share('''
+        Click on this link to view this Job
+        ${getJobShareLink(application.jobData?.id)}
+        ''',
+        subject: "Hey wanna apply to this Job?");
+      return ;
+    }
     applicationToBuild = application;
     buildCaptureWidget.value = true;
     try {

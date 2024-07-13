@@ -51,6 +51,7 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                           firstChild: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: controller.currentPackPurchases
+                                      .where((p0) => p0.isActive == true)
                                       .map((resumePack) => Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 8),
@@ -300,7 +301,8 @@ class ActivePlansView extends GetView<SubscriptionsController> {
                         AnimatedCrossFade(
                             firstChild: Column(
                                 children: controller.currentJobPostPacks
-                                        ?.map((boosting) => Padding(
+                                        ?.where((e) => e.isActive == true)
+                                        .map((boosting) => Padding(
                                               padding: const EdgeInsets.only(
                                                   bottom: 8),
                                               child: SizedBox(
