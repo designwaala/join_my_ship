@@ -47,6 +47,7 @@ class CrewProfileBoostingView extends GetView<BoostingController> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (profile.userBoost?.user?.profilePic != null)
                     CachedNetworkImage(
                       imageUrl: profile.userBoost?.user?.profilePic ?? "",
                       imageBuilder: (context, imageProvider) {

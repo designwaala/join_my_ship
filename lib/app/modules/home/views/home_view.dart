@@ -18,8 +18,10 @@ import 'package:join_my_ship/app/modules/job_openings/controllers/job_openings_c
 import 'package:join_my_ship/app/modules/job_openings/views/job_openings_view.dart';
 import 'package:join_my_ship/app/modules/profile/views/profile_view.dart';
 import 'package:join_my_ship/app/routes/app_pages.dart';
+import 'package:join_my_ship/utils/remote_config.dart';
 import 'package:join_my_ship/utils/user_details.dart';
 import 'package:join_my_ship/widgets/custom_elevated_button.dart';
+import 'package:lottie/lottie.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -83,7 +85,9 @@ class HomeView extends GetView<HomeController> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              UserStates.instance.crewUser?.firstName ?? "",
+                                              UserStates.instance.crewUser
+                                                      ?.firstName ??
+                                                  "",
                                               style: Get.textTheme.bodyMedium
                                                   ?.copyWith(
                                                       color: Colors.white)),
@@ -183,7 +187,42 @@ class HomeView extends GetView<HomeController> {
                               ? _buildBody()
                               : _buildEmployerDashboard();
                         case 2:
-                          return const BoostingView();
+                          {
+                            if (RemoteConfigUtils.instance.showDiscover) {
+                              return const BoostingView();
+                            } else {
+                              return Scaffold(
+                                appBar: AppBar(
+                                  title: const Text('Discover'),
+                                  centerTitle: true,
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.black,
+                                ),
+                                body: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset("assets/animations/error.json",
+                                        height: 232.h, width: 286.w),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24),
+                                      child: Center(
+                                        child: SizedBox(
+                                          child: Text(
+                                              "Coming soon! In the meantime, explore our app to find your dream job.",
+                                              textAlign: TextAlign.center,
+                                              style: Get.textTheme.headlineSmall
+                                                  ?.copyWith(
+                                                      color: Colors
+                                                          .grey.shade700)),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          }
                         case 3:
                           return const SizedBox();
                         case 4:
@@ -767,10 +806,9 @@ class HomeView extends GetView<HomeController> {
                     right: 32,
                     top: 0,
                     child: Image.asset(
-                      "assets/images/dashboard/recommended_jobs.png",
-                      height: 94,
-                      width: 99
-                    ),
+                        "assets/images/dashboard/recommended_jobs.png",
+                        height: 94,
+                        width: 99),
                   )
                 ],
               ),
@@ -779,8 +817,8 @@ class HomeView extends GetView<HomeController> {
               children: [
                 28.horizontalSpace,
                 Text("Featured Companies",
-                    style: Get.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600, fontSize: 18)),
+                    style: Get.textTheme.bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w600, fontSize: 18)),
                 const Spacer(),
                 TextButton(
                     onPressed: () {

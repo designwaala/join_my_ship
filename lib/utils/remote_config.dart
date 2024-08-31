@@ -80,4 +80,7 @@ class RemoteConfigUtils {
 
   bool get retrySlashAPICall =>
       _remoteConfig?.getBool("retry_slash_api_call") ?? false;
+
+  bool get showDiscover =>
+      _remoteConfig?.getBool("show_discover") ?? false;
 }

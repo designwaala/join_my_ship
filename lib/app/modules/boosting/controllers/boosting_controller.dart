@@ -44,6 +44,7 @@ class BoostingController extends GetxController {
   }
 
   getJobBoostings({int? page}) async {
+    try {
     List<Map<String, List<Employer>>> jobBoostings =
         (await getIt<BoostingProvider>().getJobBoosting(page: page)) ?? [];
     if (jobBoostings.isEmpty) {
@@ -51,10 +52,14 @@ class BoostingController extends GetxController {
     } else {
       jobPagingController.appendPage(jobBoostings, (page ?? 0) + 1);
     }
+    } catch (e) {
+      jobPagingController.appendLastPage([]);
+    }
   }
 
   getCrewBoosting({int? page}) async {
-    List<Crew> crews =
+    try {
+      List<Crew> crews =
         (await getIt<BoostingProvider>().getCrewBoosting(page: page))
                 ?.results ??
             [];
@@ -62,6 +67,9 @@ class BoostingController extends GetxController {
       crewPagingController.appendLastPage([]);
     } else {
       crewPagingController.appendPage(crews, (page ?? 0) + 1);
+    }
+    } catch (e) {
+      crewPagingController.appendLastPage([]);
     }
   }
 
